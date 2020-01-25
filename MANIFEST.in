@@ -1,0 +1,3 @@
+include *.rst requirements*.txt
+recursive-include maml *.py
+recursive-exclude maml tests/*.* tests/*
