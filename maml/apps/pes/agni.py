@@ -15,7 +15,7 @@ from monty.io import zopen
 from pymatgen import Structure, Lattice
 from .processing import convert_docs, pool_from, MonteCarloSampler
 from .abstract import Potential, Potentialmaml
-from maml.describer.atomic_describer import AGNIFingerprints
+from maml.describer.atomic import AGNIFingerprints
 from .lammps.calcs import EnergyForceStress
 from sklearn.model_selection import GridSearchCV
 from sklearn.kernel_ridge import KernelRidge

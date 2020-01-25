@@ -2,11 +2,7 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-from __future__ import division, print_function, unicode_literals, \
-    absolute_import
-
 import numpy as np
-import pandas as pd
 from pymatgen import Element
 from .abstract import Potential
 from .processing import pool_from, convert_docs

@@ -233,7 +233,7 @@ class SOAPDescriptor(Describer):
             atom_sigma (float): The width of gaussian atomic density.
                 Default to 0.5.
         """
-        from maml.potential.soap import SOAPotential
+        from maml.apps.pes.soap import SOAPotential
 
         self.cutoff = cutoff
         self.l_max = l_max
@@ -322,7 +322,7 @@ class BPSymmetryFunctions(Describer):
             a_etas (list): The choice of η' in angular symmetry functions.
         """
 
-        from maml.potential.nnp import NNPotential
+        from maml.apps.pes.nnp import NNPotential
 
         self.dmin = dmin
         self.cutoff = cutoff

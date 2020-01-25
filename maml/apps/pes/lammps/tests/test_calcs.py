@@ -13,7 +13,7 @@ from monty.os.path import which
 from pymatgen import Structure, Lattice, Element
 from maml.apps.pes.snap import SNAPotential
 from maml.model.linear_model import LinearModel
-from maml.describer.atomic_describer import BispectrumCoefficients
+from maml.describer.atomic import BispectrumCoefficients
 from maml.apps.pes.lammps.calcs import \
     SpectralNeighborAnalysis, EnergyForceStress, ElasticConstant, LatticeConstant
 

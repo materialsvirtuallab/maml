@@ -8,7 +8,7 @@ import pandas as pd
 from pymatgen.util.testing import PymatgenTest
 
 from maml.describer.general import FuncGenerator, MultiDescriber
-from maml.describer.structural_describer import DistinctSiteProperty
+from maml.describer.structure import DistinctSiteProperty
 
 
 class GeneratorTest(unittest.TestCase):

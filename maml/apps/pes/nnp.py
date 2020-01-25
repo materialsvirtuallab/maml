@@ -2,15 +2,12 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-from __future__ import division, print_function, unicode_literals, \
-    absolute_import
-
 import re
 import os
 import glob
 import subprocess
 import itertools
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict
 
 import numpy as np
 import pandas as pd

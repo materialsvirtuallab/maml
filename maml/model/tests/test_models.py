@@ -9,7 +9,7 @@ import pandas as pd
 from pymatgen.util.testing import PymatgenTest
 
 from maml import Describer
-from maml.describer.structural_describer import DistinctSiteProperty
+from maml.describer.structure import DistinctSiteProperty
 from maml.model.neural_network import MultiLayerPerceptron
 from maml.model.linear_model import LinearModel
 from maml.model.gaussian_process import GaussianProcessRegressionModel
