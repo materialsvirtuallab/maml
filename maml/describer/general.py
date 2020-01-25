@@ -4,7 +4,7 @@
 
 import pandas as pd
 import numpy as np
-from maml.abstract import Describer
+from maml import Describer
 
 
 class MultiDescriber(Describer):

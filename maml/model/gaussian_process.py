@@ -5,7 +5,7 @@
 import warnings
 
 import joblib
-from maml.abstract import Model
+from maml import Model
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process import kernels
 

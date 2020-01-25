@@ -1,5 +1,5 @@
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
-from ..abstract import Describer
+from maml import Describer
 import pandas as pd
 import numpy as np
 

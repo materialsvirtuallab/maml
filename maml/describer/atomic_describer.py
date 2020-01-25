@@ -12,7 +12,7 @@ from monty.os.path import which
 from monty.tempfile import ScratchDir
 from pymatgen.core.periodic_table import get_el_sp
 
-from maml.abstract import Describer
+from maml import Describer
 from maml.apps.pes.processing import pool_from
 
 

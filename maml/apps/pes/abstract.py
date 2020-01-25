@@ -2,8 +2,7 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-import abc
-from maml.abstract import Model
+from maml import Model
 import abc
 from monty.json import MSONable
 

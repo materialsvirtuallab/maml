@@ -6,7 +6,7 @@ import warnings
 
 import joblib
 from sklearn import linear_model
-from maml.abstract import Model
+from maml import Model
 
 
 class LinearModel(Model):

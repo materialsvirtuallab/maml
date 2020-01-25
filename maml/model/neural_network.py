@@ -5,7 +5,7 @@
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from maml.abstract import Model
+from maml import Model
 
 
 class MultiLayerPerceptron(Model):
