@@ -1,5 +1,33 @@
 version: 2
 jobs:
+  lint:
+    working_directory: ~/maml
+      - image: materialsvirtuallab/circle-ci-pmg-py3:3.7.3
+    steps:
+      - checkout
+      - run:
+          command: |
+            pip install --quiet pycodestyle flake8 mypy pydocstyle pylint
+            echo "Checks will be performed in the order of pycodestyle -> flake8 -> mypy -> pydocstyle "
+            echo "It is highly recommended that you use the pre-commit hook provided in pymatgen."
+            echo "Simply copy pre-commit to .git/hooks to check before pushing your code."
+            echo "pycodestyle checks..."
+            pycodestyle maml
+            echo "--- Done ---"
+            echo "flake8 checks..."
+            flake8 --count --show-source --statistics maml
+            # exit-zero treats all errors as warnings.
+            flake8 --count --exit-zero --max-complexity=20 --statistics maml
+            echo "--- Done ---"
+            echo "mypy checks..."
+            mypy pymatgen
+            echo "--- Done ---"
+            echo "pydocstyle checks..."
+            pydocstyle --count maml
+            echo "--- Done ---"
+            echo "pylint checks..."
+            pylint --exit-zero maml
+            echo "--- Done ---"
   py3test:
     working_directory: ~/maml
     docker:
@@ -21,9 +49,6 @@ jobs:
             source activate test-environment
             pip install --quiet -e .
             pytest --cov=maml --cov-report html:coverage_reports maml
-            echo "pycodestyle checks..."
-            pycodestyle maml
-            echo "--- Done ---"
             # coveralls
           no_output_timeout: 3600
       - store_artifacts:
@@ -34,3 +59,4 @@ workflows:
   build_and_test:
     jobs:
       - py3test
+      - lint
