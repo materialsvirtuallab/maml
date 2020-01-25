@@ -2,6 +2,7 @@ version: 2
 jobs:
   lint:
     working_directory: ~/maml
+    docker:
       - image: materialsvirtuallab/circle-ci-pmg-py3:3.7.3
     steps:
       - checkout
