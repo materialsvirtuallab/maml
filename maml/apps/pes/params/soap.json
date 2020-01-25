@@ -1,0 +1,1 @@
+{"l_max": 12, "n_max": 10, "atom_sigma": 0.5, "zeta": 4, "cutoff": 4.0, "cutoff_transition_width": 0.5, "delta": 1.0, "f0": 0.0, "n_sparse": 1000, "covariance_type": "dot_product", "sparse_method": "cur_points", "sparse_jitter": 1e-08, "e0": 0.0, "e0_offset": 0.0}

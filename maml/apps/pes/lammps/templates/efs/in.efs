@@ -1,0 +1,37 @@
+# Input file template for lattice parameters
+
+# --------------- INITIALIZATION ------------------
+clear
+units           metal
+boundary        p p p
+atom_style      charge
+
+# ------------------ ATOM DEFINITION -------------------
+box             tilt large
+read_data       data.static
+
+# ------------------------ FORCE FIELDS -----------------------
+{ff_settings}
+
+#----------------------Run Execution-------------------------
+compute         force all property/atom fx fy fz
+thermo_style    custom pe pxx pyy pzz pxy pxz pyz
+thermo          1
+dump            1 all custom 1 force.dump c_force[*]
+dump_modify     1 sort id
+run             0
+
+variable        energy equal pe
+variable        xx equal pxx*1.0e-4
+variable        yy equal pyy*1.0e-4
+variable        zz equal pzz*1.0e-4
+variable        xy equal pxy*1.0e-4
+variable        xz equal pxz*1.0e-4
+variable        yz equal pyz*1.0e-4
+
+#---------------------------------------------
+
+######################################
+# SIMULATION DONE
+print           "${{energy}}" file energy.txt
+print           "${{xx}} ${{yy}} ${{zz}} ${{xy}} ${{xz}} ${{yz}}" file stress.txt

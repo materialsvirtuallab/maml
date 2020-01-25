@@ -1,0 +1,22 @@
+units  metal
+atom_style charge
+boundary p p p
+
+read_data       data.static
+
+set type 1 charge 0.00
+
+neighbor  2.0 bin
+#neigh_modify    every 1 delay 0 check no
+
+{ff_settings}
+
+dielectric      1.0
+
+fix 1 all nvt temp  300 300 0.1
+
+
+thermo 200
+timestep        0.005
+
+run 10000
