@@ -21,7 +21,7 @@ jobs:
             flake8 --count --exit-zero --max-complexity=20 --statistics maml
             echo "--- Done ---"
             echo "mypy checks..."
-            mypy pymatgen
+            mypy maml
             echo "--- Done ---"
             echo "pydocstyle checks..."
             pydocstyle --count maml
