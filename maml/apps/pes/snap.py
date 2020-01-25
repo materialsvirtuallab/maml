@@ -115,13 +115,6 @@ class SNAPotential(Potential):
         nbc = len(describer.subscripts)
         if describer.quadratic:
             nbc += int((1 + nbc) * nbc / 2)
-        tjm = describer.twojmax
-        diag = describer.diagonalstyle
-        # assert ncoeff == ne * (nbc + 1),\
-        #     '{} coefficients given. '.format(ncoeff) + \
-        #     '{} ({} * ({} + 1)) '.format(ne * (nbc + 1), ne, nbc) + \
-        #     'coefficients expected ' + \
-        #     'for twojmax={} and diagonalstyle={}.'.format(tjm, diag)
 
         coeff_lines = []
         coeff_lines.append('{} {}'.format(ne, nbc + 1))

@@ -364,7 +364,7 @@ class BPSymmetryFunctions(Describer):
                                         names=['point_index', None])
             return points_features
 
-        dmin = sorted(set(structure.distance_matrix.ravel()))[1]
+        # dmin = sorted(set(structure.distance_matrix.ravel()))[1]
         r_etas = self.operator.generate_eta(dmin=self.dmin,
                                             r_cut=self.cutoff,
                                             num_symm2=self.num_symm2)
@@ -372,13 +372,13 @@ class BPSymmetryFunctions(Describer):
         mode_output = 'mode.out'
 
         with ScratchDir('.'):
-            atoms_filename = self.operator.write_cfgs(filename=atoms_filename,
-                                                      cfg_pool=pool_from([structure]))
-            input_filename = self.operator.write_input(mode=1, r_cut=self.cutoff,
-                                                       r_etas=r_etas, a_etas=self.a_etas,
-                                                       scale_feature=False)
+            self.operator.write_cfgs(filename=atoms_filename,
+                                     cfg_pool=pool_from([structure]))
+            self.operator.write_input(mode=1, r_cut=self.cutoff,
+                                      r_etas=r_etas, a_etas=self.a_etas,
+                                      scale_feature=False)
             p = subprocess.Popen(['RuNNer'], stdout=open(mode_output, 'w'))
-            stdout = p.communicate()[0]
+            p.communicate()[0]
 
             descriptors = read_functions_data('function.data')
 

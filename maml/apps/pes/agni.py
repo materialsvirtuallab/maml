@@ -8,11 +8,11 @@ import re
 from io import StringIO
 from maml.kernel import get_kernel
 import pandas as pd
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict
 from scipy.spatial.distance import pdist, squareform
 import numpy as np
 from monty.io import zopen
-from pymatgen import Structure, Lattice
+from pymatgen import Structure
 from .processing import convert_docs, pool_from, MonteCarloSampler
 from .abstract import Potential, Potentialmaml
 from maml.describer.atomic import AGNIFingerprints
@@ -22,11 +22,6 @@ from sklearn.kernel_ridge import KernelRidge
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-
-# coding: utf-8
-# Copyright (c) Materials Virtual Lab
-# Distributed under the terms of the BSD License.
 
 
 class AGNIPotential(Potential):
@@ -63,17 +58,13 @@ class AGNIPotential(Potential):
         with zopen(filename) as f:
             lines = f.read()
 
-        generation = int(re.search('generation (.*)', lines).group(1))
-        num_elements = int(re.search('n_elements (.*)', lines).group(1))
-        element_type = re.search('\nelement(.*)\n', lines).group(1)
-        interaction = re.search('interaction (.*)\n', lines).group(1)
-        cutoff = float(re.search('Rc (.*)\n', lines).group(1))
-        eta_str = re.search('eta (.*)\n', lines).group(1)
-        etas = 1 / np.sqrt(list(map(lambda s: float(s), eta_str.split())))
-        sigma = float(re.search('sigma(.*)\n', lines).group(1))
-        lambd = float(re.search('lambda(.*)\n', lines).group(1))
-        # b = float(re.search('\nb(.*)\n', lines).group(1))
-        num_references = int(re.search('n_train(.*)\n', lines).group(1))
+        element_type = re.search(r'\nelement(.*)\n', lines).group(1)
+        cutoff = float(re.search(r'Rc (.*)\n', lines).group(1))
+        eta_str = re.search(r'eta (.*)\n', lines).group(1)
+        sigma = float(re.search(r'sigma(.*)\n', lines).group(1))
+        lambd = float(re.search(r'lambda(.*)\n', lines).group(1))
+        # b = float(re.search(r'\nb(.*)\n', lines).group(1))
+        num_references = int(re.search(r'n_train(.*)\n', lines).group(1))
 
         self.param['element'] = element_type
         self.param['interaction'] = element_type
@@ -83,14 +74,14 @@ class AGNIPotential(Potential):
         self.param['n_train'] = num_references
         self.param['lambda'] = lambd
 
-        pattern = re.compile('endVar\s*(.*?)(?=\n$|$)', re.S)
+        pattern = re.compile(r'endVar\s*(.*?)(?=\n$|$)', re.S)
 
         def map_format(string):
             return [float(s) for s in string.split()]
+
         references_params = np.array(list(map(map_format,
                                               pattern.findall(lines)[0].split('\n'))))
         assert len(references_params) == num_references
-        indices = references_params[:, 0]
         xU = references_params[:, 1:-2]
         yU = references_params[:, -2]
         alphas = references_params[:, -1]
@@ -220,7 +211,7 @@ class AGNIPotential(Potential):
         """
         train_pool = pool_from(train_structures, energies, forces, stresses)
         _, _, features, targets = self.sample(train_pool, **kwargs)
-        gamma = self.fit(features, targets)
+        self.fit(features, targets)
         return 0
 
     def write_param(self):

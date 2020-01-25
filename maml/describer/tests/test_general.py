@@ -17,9 +17,9 @@ class GeneratorTest(unittest.TestCase):
     def setUpClass(cls):
         cls.data = np.random.rand(100, 3) * 10 - 5
         cls.df = pd.DataFrame(cls.data, columns=["x", "y", "z"])
-        func_dict = {"sin": "np.sin",
+        func_dict = {"sin": "numpy.sin",
                      "sum": "lambda d: d.sum(axis=1)",
-                     "nest": "lambda d: np.log(np.exp(d['x']))"}
+                     "nest": "lambda d: numpy.log(numpy.exp(d['x']))"}
         cls.generator = FuncGenerator(func_dict=func_dict)
 
     def test_describe(self):
@@ -43,7 +43,7 @@ class MultiDescriberTest(PymatgenTest):
         na2o = li2o.copy()
         na2o["Li+"] = "Na+"
         d1 = DistinctSiteProperty(['2c', '1a'], ["Z", "atomic_radius"])
-        d2 = FuncGenerator(func_dict={"exp": "np.exp"}, append=False)
+        d2 = FuncGenerator(func_dict={"exp": "numpy.exp"}, append=False)
         d = MultiDescriber([d1, d2])
 
         results = d.describe(li2o)

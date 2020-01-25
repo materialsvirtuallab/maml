@@ -3,7 +3,7 @@
 # Distributed under the terms of the BSD License.
 
 import pandas as pd
-import numpy as np
+import numpy
 from maml import Describer
 
 
