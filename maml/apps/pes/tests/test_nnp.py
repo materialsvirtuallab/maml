@@ -16,6 +16,7 @@ from maml.apps.pes.nnp import NNPotential
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
 
+
 class NNPitentialTest(unittest.TestCase):
 
     @classmethod
@@ -103,6 +104,7 @@ class NNPitentialTest(unittest.TestCase):
         energy, forces, stress = self.potential.predict(self.test_struct)
         self.assertEqual(len(forces), len(self.test_struct))
         self.assertEqual(len(stress), 6)
+
 
 if __name__ == '__main__':
     unittest.main()

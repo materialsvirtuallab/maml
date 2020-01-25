@@ -119,7 +119,7 @@ class GaussianProcessTest(unittest.TestCase):
             def describe_all(self, n):
                 return pd.DataFrame(n)
 
-        self.gpr = GaussianProcessRegressionModel(describer=DummyDescriber(), \
+        self.gpr = GaussianProcessRegressionModel(describer=DummyDescriber(),
                                                   kernel_category='RBF')
 
     @classmethod
@@ -134,8 +134,8 @@ class GaussianProcessTest(unittest.TestCase):
         y_pred, sigma = self.gpr.predict(x_test, return_std=True)
         upper_bound = y_pred + 1.96 * sigma
         lower_bound = y_pred - 1.96 * sigma
-        self.assertTrue(np.all([l < y and y < u for u, y, l in \
-                                zip(upper_bound, y_test, lower_bound)]))
+        self.assertTrue(np.all([l < y and y < u
+                                for u, y, l in zip(upper_bound, y_test, lower_bound)]))
 
 
 if __name__ == "__main__":

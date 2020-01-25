@@ -55,5 +55,6 @@ class MultiDescriberTest(PymatgenTest):
         self.assertAlmostEqual(df.iloc[0]["exp 2c-Z"], np.exp(3))
         self.assertAlmostEqual(df.iloc[1]["exp 2c-Z"], np.exp(11))
 
+
 if __name__ == "__main__":
     unittest.main()

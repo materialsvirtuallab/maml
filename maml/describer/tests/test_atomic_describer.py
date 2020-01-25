@@ -94,7 +94,7 @@ class SOAPDescriptorTest(unittest.TestCase):
 
     def setUp(self):
         self.unary_struct = Structure.from_spacegroup('Im-3m', Lattice.cubic(3.4268),
-                                [{"Li": 1}], [[0, 0, 0]])
+                                                      [{"Li": 1}], [[0, 0, 0]])
         self.binary_struct = Structure.from_spacegroup(225, Lattice.cubic(5.69169),
                                                        ['Na', 'Cl'],
                                                        [[0, 0, 0], [0, 0, 0.5]])
@@ -125,7 +125,7 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
 
     def setUp(self):
         self.unary_struct = Structure.from_spacegroup('Im-3m', Lattice.cubic(3.4268),
-                                [{"Li": 1}], [[0, 0, 0]])
+                                                      [{"Li": 1}], [[0, 0, 0]])
         self.num_symm2 = 3
         self.a_etas = [0.01, 0.05]
         self.describer = BPSymmetryFunctions(dmin=2.0, cutoff=4.8,
@@ -147,6 +147,7 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
         self.assertEqual(descriptors.shape[0], len(self.unary_struct) * 3)
         self.assertEqual(descriptors.shape[1],
                          self.num_symm2 + len(self.a_etas) * 2 * 4)
+
 
 if __name__ == "__main__":
     unittest.main()

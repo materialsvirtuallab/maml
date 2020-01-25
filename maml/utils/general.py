@@ -1,5 +1,3 @@
-
-
 def serialize_maml_object(instance):
     if instance is None:
         return None
@@ -15,7 +13,7 @@ def serialize_maml_object(instance):
 
 
 def deserialize_maml_object(identifier, module_objects=None,
-                             printable_module_name='object'):
+                            printable_module_name='object'):
     if isinstance(identifier, dict):
         # dealing with configuration dictionary
         config = identifier

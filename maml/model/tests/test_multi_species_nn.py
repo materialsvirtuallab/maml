@@ -16,7 +16,7 @@ class TestMultiSpeciesNN(unittest.TestCase):
         y = [1.0]
         model.fit(x, y, epochs=100, verbose=False)
         pred = model.predict(x)
-        #print(pred)
+        # print(pred)
         self.assertAlmostEqual(y[0], pred[0][0], 1)
 
     def test_base_model(self):

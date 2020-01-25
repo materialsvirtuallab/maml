@@ -112,6 +112,6 @@ class Model(BaseEstimator, MSONable):
             pred_targets = [pred_targets]
         for metric in metrics:
             maml_metric = get(metric)
-            evaluation[metric] = [maml_metric(np.array(target).ravel(), np.array(pred_target).ravel()) for
-                                  target, pred_target in zip(targets, pred_targets)]
+            evaluation[metric] = [maml_metric(np.array(target).ravel(), np.array(pred_target).ravel())
+                                  for target, pred_target in zip(targets, pred_targets)]
         return evaluation

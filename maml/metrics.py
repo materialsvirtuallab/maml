@@ -1,8 +1,7 @@
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-from maml.utils.general_utils import deserialize_maml_object
-from maml.utils.general_utils import serialize_maml_object
+from maml.utils.general import deserialize_maml_object
 
 
 def binary_accuracy(y_true, y_pred):
@@ -13,22 +12,16 @@ mse = MSE = mean_squared_error
 mae = MAE = mean_absolute_error
 
 
-def serialize(metric):
-    return serialize_maml_object(metric)
-
-
-def deserialize(config):
-    return deserialize_maml_object(config,
-                                    module_objects=globals(),
-                                    printable_module_name='metric function')
-
-
 def get(identifier):
     if isinstance(identifier, dict):
         config = {'class_name': identifier['class_name'], 'config': identifier['config']}
-        return deserialize(config)
+        return deserialize_maml_object(config,
+                                       module_objects=globals(),
+                                       printable_module_name='metric function')
     elif isinstance(identifier, str):
-        return deserialize(identifier)
+        return deserialize_maml_object(identifier,
+                                       module_objects=globals(),
+                                       printable_module_name='metric function')
     elif callable(identifier):
         return identifier
     else:

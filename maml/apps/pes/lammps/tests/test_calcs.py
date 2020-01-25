@@ -22,6 +22,7 @@ with open(os.path.join(os.path.dirname(__file__), 'coeff.json')) as f:
     coeff, intercept = json.load(f)
     coeff = np.array(coeff)
 
+
 class SpectralNeighborAnalysisTest(unittest.TestCase):
 
     @staticmethod
@@ -152,6 +153,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         self.assertEqual(snav6.shape, (len(s3), n6 * 6 * len(profile3)))
         self.assertEqual(len(np.unique(elem6)), len(profile3))
 
+
 class EnergyForceStressTest(unittest.TestCase):
 
     @classmethod
@@ -166,7 +168,6 @@ class EnergyForceStressTest(unittest.TestCase):
         shutil.rmtree(cls.test_dir)
 
     def setUp(self):
-
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
         describer1 = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                             element_profile=element_profile,
@@ -194,7 +195,6 @@ class EnergyForceStressTest(unittest.TestCase):
                                                 Lattice.cubic(3.506),
                                                 ['Ni'], [[0, 0, 0]])
 
-
     @unittest.skipIf(not which('lmp_serial'), 'No LAMMPS cmd found.')
     def test_calculate(self):
         calculator1 = EnergyForceStress(ff_settings=self.ff_settings1)
@@ -203,6 +203,7 @@ class EnergyForceStressTest(unittest.TestCase):
         np.testing.assert_array_almost_equal(forces1,
                                              np.zeros((len(self.struct), 3)))
         self.assertEqual(len(stresses1), 6)
+
 
 class ElasticConstantTest(unittest.TestCase):
 
@@ -218,7 +219,6 @@ class ElasticConstantTest(unittest.TestCase):
         shutil.rmtree(cls.test_dir)
 
     def setUp(self):
-
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
         describer = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                            element_profile=element_profile,
@@ -254,7 +254,6 @@ class LatticeConstantTest(unittest.TestCase):
         shutil.rmtree(cls.test_dir)
 
     def setUp(self):
-
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
         describer = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                            element_profile=element_profile,

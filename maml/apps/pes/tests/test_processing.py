@@ -14,6 +14,7 @@ from maml.apps.pes.processing import pool_from, convert_docs
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
 
+
 class PorcessingTest(unittest.TestCase):
 
     @classmethod
@@ -65,6 +66,7 @@ class PorcessingTest(unittest.TestCase):
         test_stresses = df[df['dtype'] == 'stress']['y_orig']
         for stress1, stress2 in zip(test_stresses, np.array(self.test_stresses).ravel()):
             self.assertEqual(stress1, stress2)
+
 
 if __name__ == '__main__':
     unittest.main()
