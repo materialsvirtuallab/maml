@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-from maml.utils.general import deserialize_maml_object
+from .utils.general import deserialize_maml_object
 
 
 def binary_accuracy(y_true, y_pred):
