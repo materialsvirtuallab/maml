@@ -3,7 +3,8 @@
 # Distributed under the terms of the BSD License.
 
 import pandas as pd
-import numpy
+import numpy  # noqa: F401
+
 from maml import Describer
 
 
