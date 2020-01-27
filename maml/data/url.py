@@ -11,11 +11,11 @@ class URLSource(DataSource):
     Load raw data from a URL, e.g., figshare.
     """
 
-    def __init__(self, fmt="csv", read_kwargs=None):
+    def __init__(self, fmt: str = "csv", read_kwargs=None):
         self.fmt = fmt
         self.read_kwargs = read_kwargs or {}
 
-    def get(self, url):
+    def get(self, url: str) -> pd.DataFrame:
         """
         :param url: URL to obtain raw data from.
         """
@@ -29,9 +29,12 @@ class FigshareSource(URLSource):
     Load data from figshare.
     """
 
-    def get(self, file_id):
+    def get(self, file_id: str) -> pd.DataFrame:
         """
-        :param file_id: Figshare file id.
+        Get the data.
+
+        @param file_id: Figshare file id.
+        @return: pandas.DataFrame
         """
         url = "https://ndownloader.figshare.com/files/%s" % file_id
         return super().get(url)
