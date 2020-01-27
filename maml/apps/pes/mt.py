@@ -1,3 +1,7 @@
+"""
+Implements the moment tensor potential
+Shapeev, et al. Multiscale Modeling & Simulation 14.3 (2016): 1153-1173.
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
@@ -18,8 +22,8 @@ import numpy as np
 from pymatgen import Structure, Lattice, Element
 
 from .abstract import Potential
-from .processing import pool_from, convert_docs
 from .lammps.calcs import EnergyForceStress
+from maml.utils.data_conversion import convert_docs, pool_from
 
 module_dir = os.path.dirname(__file__)
 MTini_params = loadfn(os.path.join(module_dir, 'params', 'MTini.json'))

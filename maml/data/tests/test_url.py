@@ -1,3 +1,5 @@
+import unittest
+
 from pymatgen.util.testing import PymatgenTest
 
 from maml.data.url import URLSource, FigshareSource
@@ -18,3 +20,7 @@ class FigshareSourceTest(PymatgenTest):
         df = source.get(12978425)
         print(df)
         assert df.shape == (1929, 81)
+
+
+if __name__ == "__main__":
+    unittest.main()

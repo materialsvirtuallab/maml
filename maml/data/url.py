@@ -1,3 +1,6 @@
+"""
+Get data from url
+"""
 from io import StringIO
 
 import requests
@@ -17,7 +20,8 @@ class URLSource(DataSource):
 
     def get(self, url: str) -> pd.DataFrame:
         """
-        :param url: URL to obtain raw data from.
+        @param url (str): URL to obtain raw data from.
+        @return: pd.DataFrame
         """
         raw = requests.get(url).text
         read = getattr(pd, "read_%s" % self.fmt)

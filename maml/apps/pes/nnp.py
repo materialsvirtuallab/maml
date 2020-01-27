@@ -1,3 +1,10 @@
+"""
+Implements the training utility of neural network potential
+Behler, et al. Physical review letters 98.14 (2007): 146401.
+
+The code calls the n2p2 training utilities in
+Singraber, et al. Journal of chemical theory and computation 15.3 (2019): 1827-1840.
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
@@ -19,8 +26,8 @@ from pymatgen import Structure, Lattice, Element
 from pymatgen.core import units
 
 from .abstract import Potential
-from .processing import pool_from, convert_docs
 from .lammps.calcs import EnergyForceStress
+from maml.utils.data_conversion import convert_docs, pool_from
 
 module_dir = os.path.dirname(__file__)
 NNinput_params = loadfn(os.path.join(module_dir, 'params', 'NNinput.json'))

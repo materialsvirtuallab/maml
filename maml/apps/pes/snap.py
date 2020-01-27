@@ -1,3 +1,10 @@
+"""
+This module implements the training utility for spectral neighbor analysis potential (SNAP)
+Thompson, et al. Journal of Computational Physics 285 (2015): 316-330.
+
+The training utility was originally developed in
+Chen, et al. Physical Review Materials, 1(4), 043603.
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
@@ -6,8 +13,8 @@ import numpy as np
 from pymatgen import Element
 
 from .abstract import Potential
-from .processing import pool_from, convert_docs
 from .lammps.calcs import EnergyForceStress
+from maml.utils.data_conversion import convert_docs, pool_from
 
 
 class SNAPotential(Potential):

@@ -1,3 +1,7 @@
+"""
+This module implements Gaussian approximation potential
+Bartók, Albert P., et al. Physical review letters 104.13 (2010): 136403.
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
@@ -17,7 +21,7 @@ import numpy as np
 from pymatgen import Structure, Lattice, Element
 
 from .abstract import Potential
-from .processing import pool_from, convert_docs
+from maml.utils.data_conversion import pool_from, convert_docs
 from .lammps.calcs import EnergyForceStress
 
 module_dir = os.path.dirname(__file__)

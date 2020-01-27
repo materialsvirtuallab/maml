@@ -1,3 +1,6 @@
+"""
+Data selection methods. Select a subset of data using certain criteria.
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
@@ -43,6 +46,13 @@ class MonteCarloSampler(object):
         self.cost_history.append(self.cost)
 
     def _get_remain_index(self):
+        """
+        Get indices for unselected data
+
+        Returns:
+            list of indices for unselected data entry
+
+        """
         self.index_remain = sorted(list(set(range(self.num_total)) -
                                         set(self.index_selected)))
 

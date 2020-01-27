@@ -1,8 +1,13 @@
+import unittest
+
 from pymatgen.util.testing import PymatgenTest
+from pymatgen import SETTINGS
 
 from maml.data.mp import MaterialsProject
 
 
+@unittest.skipIf(not SETTINGS.get("PMG_MAPI_KEY"),
+                 "PMG_MAPI_KEY environment variable not set")
 class MaterialsProjectTest(PymatgenTest):
 
     def test_get(self):
@@ -14,3 +19,7 @@ class MaterialsProjectTest(PymatgenTest):
         assert df.shape[0] > 700
         assert df.shape[1] == len(features)
         assert set(df.columns) == set(features)
+
+
+if __name__ == "__main__":
+    unittest.main()
