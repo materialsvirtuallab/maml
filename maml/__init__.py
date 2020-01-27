@@ -117,3 +117,13 @@ class Model(BaseEstimator, MSONable):
             evaluation[metric] = [maml_metric(np.array(target).ravel(), np.array(pred_target).ravel())
                                   for target, pred_target in zip(targets, pred_targets)]
         return evaluation
+
+
+class DataSource:
+    """
+    Abstract base class for a data source.
+    """
+
+    @abc.abstractmethod
+    def get(self, *args, **kwargs) -> pd.DataFrame:
+        pass
