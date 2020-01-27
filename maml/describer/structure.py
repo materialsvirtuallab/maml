@@ -1,3 +1,6 @@
+"""
+Structure-wise describers. These describers include structural information.
+"""
 import numpy as np
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 import pandas as pd
@@ -33,6 +36,15 @@ class DistinctSiteProperty(Describer):
         self.symprec = symprec
 
     def describe(self, structure):
+        """
+
+        Args:
+            structure (pymatgen Structure): pymatgen structure for descriptor computation
+
+        Returns:
+            pd.DataFrame that contains the distinct position labeled features
+
+        """
         a = SpacegroupAnalyzer(structure, self.symprec)
         symm = a.get_symmetrized_structure()
         data = []
@@ -47,26 +59,12 @@ class DistinctSiteProperty(Describer):
 
 class CoulombMatrix(Describer):
 
-    def __init__(self, max_sites=None, sorted=False, randomized=False, random_seed=None):
+    def __init__(self, random_seed=None):
 
         """
         Coulomb Matrix to decribe structure
 
         Args:
-            max_sites(int): number of max sites,
-                if input structure has less site in max_sites, the matrix will be padded to
-                the shape of (max_sites, max_sites) with zeros.
-            sorted(bool): if True, returns the matrix sorted by the row norm
-            randomized(bool): if True, returns the randomized matrix
-                              (i) take an arbitrary valid Coulomb matrix C
-                              (ii) compute the norm of each row of this Coulomb matrix: row_norms
-                              (iii) draw a zero-mean unit-variance noise vector ε of the same
-                                    size as row_norms.
-                              (iv)  permute the rows and columns of C with the same permutation
-                                    that sorts row_norms + ε
-                              Montavon, Grégoire, et al.
-                              "Machine learning of molecular electronic properties in chemical
-                              compound space." New Journal of Physics 15.9 (2013): 095003.
             random_seed(int): random seed
 
         """
@@ -78,11 +76,11 @@ class CoulombMatrix(Describer):
 
     def coulomb_mat(self, s):
         """
-        Args
-          s(Structure): input structure
+        Args:
+            s (pymatgen Structure): input structure
 
-        return: np.array
-            Coulomb matrix of the structure
+        Returns:
+            np.ndarray Coulomb matrix of the structure
 
         """
         dis = s.distance_matrix
@@ -109,13 +107,37 @@ class CoulombMatrix(Describer):
 
         return c
 
-    def sorted_coulomb_mat(self, s):
+    def get_sorted_coulomb_mat(self, s):
+        """
+        Returns the matrix sorted by the row norm
 
+        Args:
+            s (pymatgen Structure): pymatgen Structure for computing the Coulomb matrix
+
+        Returns:
+            np.ndarray, sorted Coulomb matrix
+        """
         c = self.coulomb_mat(s)
         return c[np.argsort(np.linalg.norm(c, axis=1))]
 
-    def randomized_coulomb_mat(self, s):
+    def get_randomized_coulomb_mat(self, s):
+        """
+        Returns the randomized matrix
+        (i) take an arbitrary valid Coulomb matrix C
+        (ii) compute the norm of each row of this Coulomb matrix: row_norms
+        (iii) draw a zero-mean unit-variance noise vector ε of the same
+            size as row_norms.
+        (iv)  permute the rows and columns of C with the same permutation
+            that sorts row_norms + ε
+        Montavon, Grégoire, et al.v"Machine learning of molecular electronic properties in chemical
+            compound space." New Journal of Physics 15.9 (2013): 095003.
 
+        Args:
+            s (pymatgen Structure): pymatgen Structure for computing the randomized Coulomb matrix
+
+        Returns:
+            np.ndarray randomized Coulomb matrix
+        """
         c = self.coulomb_mat(s)
         row_norms = np.linalg.norm(c, axis=1)
         rng = np.random.RandomState(self.random_seed)
@@ -123,20 +145,24 @@ class CoulombMatrix(Describer):
         p = np.argsort(row_norms + e)
         return c[p][:, p]
 
-    def describe(self, structure):
+    def describe(self, structure, is_sorted=False, is_randomized=False):
         """
         Args:
             structure(Structure): input structure
+            is_sorted (bool): whether to return sorted matrix
+            is_randomized (bool): whether to return randomized matrix
         Returns:
             pandas.DataFrame.
             The column is index of the structure, which is 0 for single input
             df[0] returns the serials of coulomb_mat raval
         """
-        if self.sorted:
-            c = self.sorted_coulomb_mat(structure)
-        if self.randomized:
-            c = self.randomized_coulomb_mat(structure)
-        if np.all([not self.sorted, not self.randomized]):
+        if is_sorted and is_randomized:
+            raise ValueError("Cannot return two types of matrix")
+        if is_sorted:
+            c = self.get_sorted_coulomb_mat(structure)
+        if is_randomized:
+            c = self.get_randomized_coulomb_mat(structure)
+        if np.all([not is_sorted, not is_randomized]):
             c = self.coulomb_mat(structure)
         return pd.DataFrame(c.ravel())
 
