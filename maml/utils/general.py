@@ -2,6 +2,7 @@
 Utilities to serialize and deserialize maml object
 """
 
+
 def serialize_maml_object(instance):
     """
     Serialize maml objects
