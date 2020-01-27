@@ -2,16 +2,17 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-import os
 import abc
 import io
-import subprocess
 import itertools
+import os
+import subprocess
 
-import numpy as np
 from monty.tempfile import ScratchDir
+import numpy as np
 from pymatgen import Element
 from pymatgen.io.lammps.data import LammpsData
+
 from maml.apps.pes.abstract import Potential
 
 

@@ -4,6 +4,7 @@
 
 import numpy as np
 from pymatgen import Element
+
 from .abstract import Potential
 from .processing import pool_from, convert_docs
 from .lammps.calcs import EnergyForceStress

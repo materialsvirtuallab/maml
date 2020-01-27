@@ -5,9 +5,10 @@
 import warnings
 
 import joblib
-from maml import Model
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process import kernels
+
+from maml import Model
 
 
 class GaussianProcessRegressionModel(Model):

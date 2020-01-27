@@ -3,13 +3,14 @@
 # Distributed under the terms of the BSD License.
 
 import itertools
-import subprocess
 import re
-import numpy as np
-import pandas as pd
+import subprocess
+
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
+import numpy as np
+import pandas as pd
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml import Describer

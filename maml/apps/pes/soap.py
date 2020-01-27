@@ -2,20 +2,20 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-
-import re
+from collections import OrderedDict, defaultdict
 import os
-import yaml
+import re
 import subprocess
 import xml.etree.ElementTree as ET
-from collections import OrderedDict, defaultdict
+import yaml
 
-import numpy as np
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
+import numpy as np
 from pymatgen import Structure, Lattice, Element
+
 from .abstract import Potential
 from .processing import pool_from, convert_docs
 from .lammps.calcs import EnergyForceStress

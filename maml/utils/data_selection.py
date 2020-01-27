@@ -2,9 +2,10 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-import random
-import numpy as np
 from copy import copy
+import random
+
+import numpy as np
 
 
 class MonteCarloSampler(object):

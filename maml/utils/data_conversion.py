@@ -1,6 +1,6 @@
 import pandas as pd
-import numpy as np
 from pymatgen import Structure
+import numpy as np
 
 
 def doc_from(structure, energy=None, force=None, stress=None):

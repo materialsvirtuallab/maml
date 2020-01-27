@@ -1,11 +1,12 @@
 # coding: utf-8
 
 import unittest
-import os
+
 import pandas as pd
 import numpy as np
 from pymatgen import Structure, Element, Lattice
 from pymatgen.util.testing import PymatgenTest
+
 from maml.describer.structure import DistinctSiteProperty, CoulombMatrix
 
 

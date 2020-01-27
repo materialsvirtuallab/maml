@@ -2,9 +2,10 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-from maml import Model
 import abc
 from monty.json import MSONable
+
+from maml import Model
 
 
 class Potential(MSONable):

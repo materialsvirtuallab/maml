@@ -1,13 +1,12 @@
 # coding: utf-8
 
-import unittest
-from pymatgen.util.testing import PymatgenTest
-
 import os
 import tempfile
+import unittest
+
 import numpy as np
 from monty.os.path import which
-from pymatgen import Lattice, Structure, Element
+from pymatgen import Lattice, Structure
 
 from maml.describer.atomic import \
     BispectrumCoefficients, SOAPDescriptor, BPSymmetryFunctions

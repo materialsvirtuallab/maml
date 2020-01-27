@@ -2,12 +2,9 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-import random
 import numpy as np
 import pandas as pd
-from copy import copy
 from pymatgen import Structure
-from maml.utils.data_selection import MonteCarloSampler
 
 
 def doc_from(structure, energy=None, force=None, stress=None):
