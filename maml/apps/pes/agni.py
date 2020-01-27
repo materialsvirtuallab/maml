@@ -1,3 +1,7 @@
+"""
+Implements the training utility for AGNI potential
+Botu et al. International Journal of Quantum Chemistry, 115(16), 1074-1083.
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
@@ -18,7 +22,7 @@ from scipy.spatial.distance import pdist, squareform
 
 from maml.kernel import get_kernel
 from maml.apps.pes.abstract import Potential, Potentialmaml
-from maml.apps.pes.processing import convert_docs, pool_from
+from maml.utils.data_conversion import convert_docs, pool_from
 from maml.utils.data_selection import MonteCarloSampler
 from maml.describer.atomic import AGNIFingerprints
 from maml.apps.pes.lammps.calcs import EnergyForceStress

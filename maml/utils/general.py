@@ -1,4 +1,18 @@
+"""
+Utilities to serialize and deserialize maml object
+"""
+
 def serialize_maml_object(instance):
+    """
+    Serialize maml objects
+    Args:
+        instance (maml object): object to serialize
+
+    Returns:
+        for object that has `get_config` method, return the dictionary after `get_config`,
+        otherwise return str name.
+
+    """
     if instance is None:
         return None
     if hasattr(instance, 'get_config'):
@@ -14,6 +28,18 @@ def serialize_maml_object(instance):
 
 def deserialize_maml_object(identifier, module_objects=None,
                             printable_module_name='object'):
+    """
+    Deserialize maml object from dict, str or callable
+
+    Args:
+        identifier (dict, str): the identifier to deserialize
+        module_objects (dict): objects in the module
+        printable_module_name (str): name for print
+
+    Returns:
+        deserialized maml object
+
+    """
     if isinstance(identifier, dict):
         # dealing with configuration dictionary
         config = identifier

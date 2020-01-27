@@ -1,3 +1,6 @@
+"""
+Multi-species neural networks
+"""
 from keras.layers import Input, Dense, Lambda, Add, Multiply
 from keras.models import Model
 from keras.optimizers import Adam

@@ -1,3 +1,6 @@
+"""
+Compute the kernel between features
+"""
 import numpy as np
 
 from .utils.general import deserialize_maml_object
@@ -7,11 +10,33 @@ from .utils.general import deserialize_maml_object
 # For future development the kernel should be class
 # with tunable parameters, this is particular useful for Bayesian methods
 def rbf(x1, x2, sigma):
+    """
+    Radial basis function
+
+    Args:
+        x1 （np.ndarray): input 1
+        x2 (np.ndarray): input 2
+        sigma (float): width of Gaussian function
+
+    Returns:
+        np.ndarray, Gaussian kernel between each data points in x1 and x2.
+
+    """
     d_squared = np.sum((x1[:, None, :] - x2[None, :, :]) ** 2, axis=2)
     return np.exp(-d_squared / (2 * sigma ** 2))
 
 
 def get_kernel(identifier):
+    """
+    Deserialize kernel from identifier
+
+    Args:
+        identifier (dict, str or callable): Identifier for the kernel
+
+    Returns:
+        Callable, callable kernel that can be applied to inputs.
+
+    """
     if isinstance(identifier, dict):
         config = {'class_name': identifier['class_name'], 'config': identifier['config']}
         return deserialize_maml_object(config, module_objects=globals())

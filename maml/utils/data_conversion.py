@@ -1,3 +1,6 @@
+"""
+Convert data list to docs or pool existing data lists for training
+"""
 import pandas as pd
 from pymatgen import Structure
 import numpy as np

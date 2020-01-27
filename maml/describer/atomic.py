@@ -1,3 +1,6 @@
+"""
+Compute descriptors on per-atom basis
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
@@ -14,7 +17,7 @@ import pandas as pd
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml import Describer
-from maml.apps.pes.processing import pool_from
+from maml.utils.data_conversion import pool_from
 
 
 class BispectrumCoefficients(Describer):
