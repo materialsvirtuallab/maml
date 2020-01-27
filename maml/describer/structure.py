@@ -18,12 +18,14 @@ class DistinctSiteProperty(Describer):
 
     def __init__(self, wyckoffs, properties, symprec=0.1):
         """
-        :param wyckoffs: List of wyckoff symbols. E.g., ["48a", "24c"]
-        :param properties: Sequence of specie properties. E.g.,
-            ["atomic_radius"]. Look at pymatgen.core.periodic_table.Element and
-            pymatgen.core.periodic_table.Specie for support properties (there
-            are a lot!)
-        :param symprec: Symmetry precision for spacegroup determination.
+
+        Args:
+            wyckoffs (list of wyckoff symbols):. E.g., ["48a", "24c"]
+            properties (list): Sequence of specie properties. E.g.,
+                ["atomic_radius"]. Look at pymatgen.core.periodic_table.Element and
+                pymatgen.core.periodic_table.Specie for support properties (there
+                are a lot!)
+            symprec (float): Symmetry precision for spacegroup determination.
         """
         self.wyckoffs = wyckoffs
         self.properties = properties

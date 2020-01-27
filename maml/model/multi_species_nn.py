@@ -12,11 +12,14 @@ def create_atomic_nn(keras_input, layers):
     the output of this function is a number, i.e., the total energy.
     Therefore, the keras_input argument should have a shape of [None, feature_dim].
 
-    :param keras_input: Keras layer, the input dimension is [None, feature_dim], where the None dimension is the nb of
+    Args:
+        keras_input (Keras Layer): the input dimension is [None, feature_dim], where the None dimension is the nb of
         atoms
-    :param layers: list, layer configuration, e.g., [30, 31, 32, 1] indicates
-    that the input dimension is 30, with two hidden layers having 31 and 32 units and 1 output
-    :return: Keras layer, layer object for latter steps
+        layers (list): layer configuration, e.g., [30, 31, 32, 1] indicates
+            that the input dimension is 30, with two hidden layers having 31 and 32 units and 1 output
+
+    Returns:
+        Keras layer, layer object for latter steps
     """
     for i in range(len(layers) - 2):
         keras_input = Dense(layers[i + 1], activation='relu')(keras_input)
@@ -39,10 +42,13 @@ def base_model(layers, species, learning_rate=1e-3):
     (nb_structure, nb_specie_n, feature_dim)], in this case the target y for fitting is a numpy array having
     dimension (nb_structure, 1)
 
-    :param layers: list, number of neurons in each layer for all the species
-    :param species: list, list of species list
-    :param learning_rate: float, learning rate for Adam optimizer
-    :return: keras model
+    Args:
+        layers (list): number of neurons in each layer for all the species
+        species (list): list of species list
+        learning_rate (float): learning rate for Adam optimizer
+
+    Returns:
+        keras model
     """
     outputs = []
     inputs = []

@@ -9,7 +9,7 @@ from monty.json import MSONable
 
 class Potential(MSONable):
     """
-    Abstract Base class for a interatomic Potential.
+    Abstract Base class for an interatomic Potential.
     """
 
     @abc.abstractmethod
@@ -17,14 +17,16 @@ class Potential(MSONable):
         """
         Train interatomic potential with energies, forces and
         stresses corresponding to structures.
-        :param train_structures: List of Pymatgen Structure objects.
-        :param energies: List of DFT-calculated total energies of each structure
-            in structures list.
-        :param forces: List of DFT-calculated (m, 3) forces of each structure
-            with m atoms in structures list. m can be varied with each single
-            structure case.
-        :param stresses: List of DFT-calculated (6, ) virial stresses of each
-            structure in structures list.
+
+        Args:
+            train_structures (list): List of Pymatgen Structure objects.
+            energies (list): List of DFT-calculated total energies of each structure
+                in structures list.
+            forces (list): List of DFT-calculated (m, 3) forces of each structure
+                with m atoms in structures list. m can be varied with each single
+                structure case.
+            stresses (list): List of DFT-calculated (6, ) virial stresses of each
+                structure in structures list.
         """
         pass
 
@@ -33,15 +35,19 @@ class Potential(MSONable):
         """
         Evaluate energies, forces and stresses of structures with trained
         interatomic potential.
-        :param test_structures: List of Pymatgen Structure Objects.
-        :param ref_energies: List of DFT-calculated total energies of each
-            structure in structures list.
-        :param ref_forces: List of DFT-calculated (m, 3) forces of each
-            structure with m atoms in structures list. m can be varied with
-            each single structure case.
-        :param ref_stresses: List of DFT-calculated (6, ) viriral stresses of
-            each structure in structures list.
-        :return: DataFrame of original data and DataFrame of predicted data.
+
+        Args:
+            test_structures (list): List of Pymatgen Structure Objects.
+            ref_energies (list): List of DFT-calculated total energies of each
+                structure in structures list.
+            ref_forces (list): List of DFT-calculated (m, 3) forces of each
+                structure with m atoms in structures list. m can be varied with
+                each single structure case.
+            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses of
+                each structure in structures list.
+
+        Returns:
+             DataFrame of original data and DataFrame of predicted data.
         """
         pass
 
@@ -60,8 +66,9 @@ class Potentialmaml(Model):
         Train interatomic potential with energies, forces and
         stresses corresponding to structures.
 
-        :param train_structures: List of Pymatgen Structure objects.
-        :param targets: targets that can be directly trained
+        Args:
+            train_structures (list): List of Pymatgen Structure objects.
+            targets (list): targets that can be directly trained
         """
         features = self.describer.transform(train_structures)
         self.fit(features, targets, **kwargs)
@@ -71,16 +78,18 @@ class Potentialmaml(Model):
         Evaluate energies, forces and stresses of structures with trained
         interatomic potential.
 
-        :param test_structures: List of Pymatgen Structure Objects.
-        :param ref_energies: List of DFT-calculated total energies of each
-            structure in structures list.
-        :param ref_forces: List of DFT-calculated (m, 3) forces of each
-            structure with m atoms in structures list. m can be varied with
-            each single structure case.
-        :param ref_stresses: List of DFT-calculated (6, ) viriral stresses of
-            each structure in structures list.
+        Args:
+            test_structures (list): List of Pymatgen Structure Objects.
+            ref_energies (list): List of DFT-calculated total energies of each
+                structure in structures list.
+            ref_forces (list): List of DFT-calculated (m, 3) forces of each
+                structure with m atoms in structures list. m can be varied with
+                each single structure case.
+            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses of
+                each structure in structures list.
 
-        :return: DataFrame of original data and DataFrame of predicted data.
+        Returns:
+            DataFrame of original data and DataFrame of predicted data.
         """
         features = self.describer.transform(test_structures)
         evaluation = self.evaluate(features, targets, metrics=metrics, multi_targets=False)

@@ -16,12 +16,14 @@ class MultiDescriber(Describer):
 
     def __init__(self, describers):
         """
-        :param describers: List of describers. Note that the application of the
-            Describers is from left to right. E.g., [Describer1(), Describer2()]
-            will run Describer1.describe on the input object, and then run
-            Describer2 on the output from Describer1.describe. This provides
-            a powerful way to combine multiple describers to generate generic
-            descriptors and basis functions.
+
+        Args:
+            describers (list of describers): Note that the application of the
+                Describers is from left to right. E.g., [Describer1(), Describer2()]
+                will run Describer1.describe on the input object, and then run
+                Describer2 on the output from Describer1.describe. This provides
+                a powerful way to combine multiple describers to generate generic
+                descriptors and basis functions.
         """
         self.describers = describers
 
@@ -41,15 +43,17 @@ class FuncGenerator(Describer):
 
     def __init__(self, func_dict, append=True):
         """
-        :param func_dict: Dict with labels as keys and stringified
-            function as values. The functions arerecovered from strings
-            using eval() built-in function. All functions should be
-            pointing to a NumPy.ufunc since the calculations will be
-            performed on array-like objects. For functions implemented
-            elsewhere other than in NumPy, e.g., functions in
-            scipy.special, please make sure the module is imported.
-        :param append: Whether return the full DataFrame with inputs.
-            Default to True.
+
+        Args:
+            func_dict (dict): Dict with labels as keys and stringified
+                function as values. The functions arerecovered from strings
+                using eval() built-in function. All functions should be
+                pointing to a NumPy.ufunc since the calculations will be
+                performed on array-like objects. For functions implemented
+                elsewhere other than in NumPy, e.g., functions in
+                scipy.special, please make sure the module is imported.
+            append (bool): Whether return the full DataFrame with inputs.
+                Default to True.
         """
         self.func_dict = func_dict
         self.append = append
@@ -58,8 +62,11 @@ class FuncGenerator(Describer):
         """
         Returns description of an object based on all functions.
 
-        :param df: DataFrame with input data.
-        :return: DataFrame with transformed data.
+        Args:
+            df (pd.DataFrame): DataFrame with input data.
+
+        Returns:
+            DataFrame with transformed data.
         """
         collector = []
         for k, v in self.func_dict.items():
