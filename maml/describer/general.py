@@ -1,7 +1,11 @@
+"""
+General Describers. It works with general numeric data or other Describers
+"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
+import numpy
 import pandas as pd
 
 from maml import Describer
@@ -27,6 +31,16 @@ class MultiDescriber(Describer):
         self.describers = describers
 
     def describe(self, obj):
+        """
+        Return the descriptors of obj after a pipeline of describers
+
+        Args:
+            obj (pd.DataFrame): DataFrame with input data.
+
+        Returns:
+            np.ndarray, final features
+
+        """
         desc = obj
         for d in self.describers:
             desc = d.describe(desc)
