@@ -17,9 +17,6 @@ class DistinctSiteProperty(Describer):
 
     # todo: generalize to multiple sites with the same Wyckoff.
 
-    def fit(self, structures, target=None):
-        return self
-
     def __init__(self, wyckoffs, properties, symprec=0.1):
         """
 
