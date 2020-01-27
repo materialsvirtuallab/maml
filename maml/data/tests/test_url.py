@@ -18,7 +18,6 @@ class FigshareSourceTest(PymatgenTest):
     def test_get(self):
         source = FigshareSource()
         df = source.get(12978425)
-        print(df)
         assert df.shape == (1929, 81)
 
 

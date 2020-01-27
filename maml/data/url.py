@@ -15,17 +15,22 @@ class URLSource(DataSource):
     """
 
     def __init__(self, fmt: str = "csv", read_kwargs=None):
+        """
+        @param fmt: The format to read the raw data. It should be something supported by pandas.read_<something>.
+            Defaults to "csv".
+        @param read_kwargs: kwargs passed to the read_<something> command.
+        """
         self.fmt = fmt
         self.read_kwargs = read_kwargs or {}
 
     def get(self, url: str) -> pd.DataFrame:
         """
-        @param url (str): URL to obtain raw data from.
+        @param url: URL to obtain raw data from.
         @return: pd.DataFrame
         """
         raw = requests.get(url).text
-        read = getattr(pd, "read_%s" % self.fmt)
-        return read(StringIO(raw), **self.read_kwargs)
+        read_func = getattr(pd, "read_%s" % self.fmt)
+        return read_func(StringIO(raw), **self.read_kwargs)
 
 
 class FigshareSource(URLSource):
