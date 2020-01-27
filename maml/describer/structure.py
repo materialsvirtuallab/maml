@@ -70,11 +70,9 @@ class CoulombMatrix(Describer):
         """
 
         self.max_sites = None  # For padding
-        self.sorted = sorted
-        self.randomized = randomized
         self.random_seed = random_seed
 
-    def coulomb_mat(self, s):
+    def get_coulomb_mat(self, s):
         """
         Args:
             s (pymatgen Structure): input structure
@@ -117,7 +115,7 @@ class CoulombMatrix(Describer):
         Returns:
             np.ndarray, sorted Coulomb matrix
         """
-        c = self.coulomb_mat(s)
+        c = self.get_coulomb_mat(s)
         return c[np.argsort(np.linalg.norm(c, axis=1))]
 
     def get_randomized_coulomb_mat(self, s):
@@ -138,7 +136,7 @@ class CoulombMatrix(Describer):
         Returns:
             np.ndarray randomized Coulomb matrix
         """
-        c = self.coulomb_mat(s)
+        c = self.get_coulomb_mat(s)
         row_norms = np.linalg.norm(c, axis=1)
         rng = np.random.RandomState(self.random_seed)
         e = rng.normal(size=row_norms.size)
@@ -163,7 +161,7 @@ class CoulombMatrix(Describer):
         if is_randomized:
             c = self.get_randomized_coulomb_mat(structure)
         if np.all([not is_sorted, not is_randomized]):
-            c = self.coulomb_mat(structure)
+            c = self.get_coulomb_mat(structure)
         return pd.DataFrame(c.ravel())
 
     def describe_all(self, structures):
