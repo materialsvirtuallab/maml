@@ -1,3 +1,6 @@
+"""
+Get data from url
+"""
 from io import StringIO
 
 import requests
@@ -17,7 +20,11 @@ class URLSource(DataSource):
 
     def get(self, url):
         """
-        :param url: URL to obtain raw data from.
+        Args:
+            url (str): URL to obtain raw data from.
+
+        Returns:
+            str data file
         """
         raw = requests.get(url).text
         read = getattr(pd, "read_%s" % self.fmt)
@@ -31,7 +38,11 @@ class FigshareSource(URLSource):
 
     def get(self, file_id):
         """
-        :param file_id: Figshare file id.
+        Args:
+            file_id (int): Figshare file id.
+
+        Returns:
+            data
         """
         url = "https://ndownloader.figshare.com/files/%s" % file_id
         return super().get(url)
