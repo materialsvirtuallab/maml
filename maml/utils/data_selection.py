@@ -1,9 +1,10 @@
-"""
-Data selection methods. Select a subset of data using certain criteria.
-"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
+
+"""
+Data selection methods. Select a subset of data using certain criteria.
+"""
 
 from copy import copy
 import random
@@ -11,7 +12,7 @@ import random
 import numpy as np
 
 
-class MonteCarloSampler(object):
+class MonteCarloSampler:
     """
     Sample a subset from the dataset to achieve some criteria using simulated annealing.
     For example, one needs to subset the data so that a fraction
