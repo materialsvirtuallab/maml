@@ -6,6 +6,7 @@ Compute descriptors on per-atom basis
 # Distributed under the terms of the BSD License.
 
 import itertools
+import logging
 import re
 import subprocess
 
@@ -16,11 +17,21 @@ import numpy as np
 import pandas as pd
 from pymatgen.core.periodic_table import get_el_sp
 
-from maml import Describer
+from maml import BaseDescriber
 from maml.utils.data_conversion import pool_from
 
 
-class BispectrumCoefficients(Describer):
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
+class _BaseSiteDescriber(BaseDescriber):
+    def get_type(self):
+        return 'site'
+
+
+class BispectrumCoefficients(_BaseSiteDescriber):
     """
     Bispectrum coefficients to describe the local environment of each
     atom in a quantitative way.
@@ -28,7 +39,9 @@ class BispectrumCoefficients(Describer):
     """
 
     def __init__(self, rcutfac, twojmax, element_profile, rfac0=0.99363,
-                 rmin0=0, diagonalstyle=3, quadratic=False, pot_fit=False):
+                 rmin0=0, diagonalstyle=3, quadratic=False,
+                 pot_fit=False, include_stress=False, memory=None, verbose=False,
+                 n_jobs=0, **kwargs):
         """
 
         Args:
@@ -47,10 +60,15 @@ class BispectrumCoefficients(Describer):
                 default to 3.
             quadratic (bool): Whether including quadratic terms.
                 Default to False.
-            pot_fit (bool): Whether to output in potential fitting
-                format. Default to False, i.e., returning the bispectrum
-                coefficients for each site.
-
+            pot_fit (bool): Whether combine the dataframe for potential
+                fitting
+            include_stress (bool): Wether to include stress components
+            memory (None, str or joblib.Memory): whether to cache to
+                the str path
+            verbose (bool): whether to show progress for featurization
+            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+                If this value is set to negative or greater than the total cpu
+                then n_jobs is set to the number of cpu on system
         """
         from maml.apps.pes.lammps.calcs import SpectralNeighborAnalysis
         self.calculator = SpectralNeighborAnalysis(rcutfac, twojmax,
@@ -67,7 +85,13 @@ class BispectrumCoefficients(Describer):
         self.elements = sorted(element_profile.keys(),
                                key=lambda sym: get_el_sp(sym).X)
         self.quadratic = quadratic
+        self.include_stress = include_stress
         self.pot_fit = pot_fit
+        if not self.pot_fit and self.include_stress:
+            logger.warning("Only potential fitting needs include_stress")
+            logger.warning("Changing include_stress = False")
+            self.include_stress = False
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
 
     @property
     def subscripts(self):
@@ -79,14 +103,12 @@ class BispectrumCoefficients(Describer):
         return self.calculator.get_bs_subscripts(self.twojmax,
                                                  self.diagonalstyle)
 
-    def describe(self, structure, include_stress=False):
+    def transform_one(self, structure):
         """
         Returns data for one input structure.
 
         Args:
             structure (Structure): Input structure.
-            include_stress (bool): Whether to include stress descriptors.
-
         Returns:
             DataFrame.
 
@@ -106,22 +128,6 @@ class BispectrumCoefficients(Describer):
             the sequence of ['xx', 'yy', 'zz', 'yz', 'xz', 'xy'].
 
         """
-        return self.describe_all([structure], include_stress).xs(0, level='input_index')
-
-    def describe_all(self, structures, include_stress=False):
-        """
-        Returns data for all input structures in a single DataFrame.
-
-        Args:
-            structures (Structure): Input structures as a list.
-            include_stress (bool): Whether to include stress descriptors.
-
-        Returns:
-            DataFrame with indices of input list preserved. To retrieve
-            the data for structures[i], use
-            df.xs(i, level='input_index').
-
-        """
         columns = list(map(lambda s: '-'.join(['%d' % i for i in s]),
                            self.subscripts))
         if self.quadratic:
@@ -129,11 +135,12 @@ class BispectrumCoefficients(Describer):
                                                     for i, j, k in s]),
                                 itertools.combinations_with_replacement(self.subscripts, 2)))
 
-        raw_data = self.calculator.calculate(structures)
+        raw_data = self.calculator.calculate([structure])
 
-        def process(output, combine, idx, include_stress):
+        def process(output, combine):
             b, db, vb, e = output
             df = pd.DataFrame(b, columns=columns)
+
             if combine:
                 df_add = pd.DataFrame({'element': e, 'n': np.ones(len(e))})
                 df_b = df_add.join(df)
@@ -150,11 +157,11 @@ class BispectrumCoefficients(Describer):
                             for i in df_b.index for d in 'xyz']
                 df_db = pd.DataFrame(dbs, index=db_index,
                                      columns=hstack_b.columns)
-                if include_stress:
+                if self.include_stress:
                     vbs = np.split(vb.sum(axis=0), len(self.elements))
                     vbs = np.hstack([np.insert(v.reshape(-1, len(columns)),
                                                0, 0, axis=1) for v in vbs])
-                    volume = structures[idx].volume
+                    volume = structure.volume
                     vbs = vbs / volume * 160.21766208  # from eV to GPa
                     vb_index = ['xx', 'yy', 'zz', 'yz', 'xz', 'xy']
                     df_vb = pd.DataFrame(vbs, index=vb_index,
@@ -164,39 +171,44 @@ class BispectrumCoefficients(Describer):
                     df = pd.concat([hstack_b, df_db])
             return df
 
-        df = pd.concat([process(d, self.pot_fit, i, include_stress)
-                        for i, d in enumerate(raw_data)],
-                       keys=range(len(raw_data)), names=["input_index", None])
-        return df
+        return process(raw_data[0], self.pot_fit)
+
+    def get_type(self):
+        if self.pot_fit:
+            return 'structure'
+        super().get_type()
 
 
-class AGNIFingerprints(Describer):
+class AGNIFingerprints(_BaseSiteDescriber):
     """
     Fingerprints for AGNI (Adaptive, Generalizable and Neighborhood
     Informed) force field. Elemental systems only.
-
     """
 
-    def __init__(self, r_cut, etas):
+    def __init__(self, r_cut, etas, memory=None, verbose=False, n_jobs=0,
+                 **kwargs):
         """
-
         Args:
             r_cut (float): Cutoff distance.
             etas (numpy.array): All eta parameters in 1D array.
+            memory (None, str or joblib.Memory): whether to cache to
+                the str path
+            verbose (bool): whether to show progress for featurization
+            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+                If this value is set to negative or greater than the total cpu
+                then n_jobs is set to the number of cpu on system
         """
         self.r_cut = r_cut
         self.etas = etas
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
 
-    def describe(self, structure):
+    def transform_one(self, structure):
         """
         Calculate fingerprints for all sites in a structure.
-
         Args:
             structure (Structure): Input structure.
-
         Returns:
             DataFrame.
-
         """
         all_neighbors = structure.get_all_neighbors(self.r_cut)
         fingerprints = []
@@ -215,18 +227,14 @@ class AGNIFingerprints(Describer):
                           columns=self.etas)
         return df
 
-    def describe_all(self, structures):
-        return pd.concat([self.describe(s) for s in structures],
-                         keys=range(len(structures)),
-                         names=['input_index', None])
 
-
-class SOAPDescriptor(Describer):
+class SOAPDescriptor(_BaseSiteDescriber):
     """
     Smooth Overlap of Atomic Position (SOAP) descriptor.
     """
 
-    def __init__(self, cutoff, l_max=8, n_max=8, atom_sigma=0.5):
+    def __init__(self, cutoff, l_max=8, n_max=8, atom_sigma=0.5, memory=None,
+                 verbose=False, n_jobs=0, **kwargs):
         """
 
         Args:
@@ -236,6 +244,9 @@ class SOAPDescriptor(Describer):
             n_max (int): The number of radial basis function. Default to 8.
             atom_sigma (float): The width of gaussian atomic density.
                 Default to 0.5.
+            memory (None, str or joblib.Memory): whether to cache to
+                the str path
+            verbose (bool): whether to show progress for featurization
         """
         from maml.apps.pes.soap import SOAPotential
 
@@ -244,8 +255,9 @@ class SOAPDescriptor(Describer):
         self.n_max = n_max
         self.atom_sigma = atom_sigma
         self.operator = SOAPotential()
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
 
-    def describe(self, structure):
+    def transform_one(self, structure):
         """
         Returns data for one input structure.
 
@@ -280,7 +292,7 @@ class SOAPDescriptor(Describer):
                            "{}".format(' '.join(descriptor_command)) + "}")
 
         with ScratchDir('.'):
-            atoms_filename = self.operator.write_cfgs(filename=atoms_filename,
+            _ = self.operator.write_cfgs(filename=atoms_filename,
                                                       cfg_pool=pool_from([structure]))
             descriptor_output = 'output'
             p = subprocess.Popen(exe_command, stdout=open(descriptor_output, 'w'))
@@ -306,24 +318,26 @@ class SOAPDescriptor(Describer):
 
         return descriptors
 
-    def describe_all(self, structures):
-        return pd.concat([self.describe(s) for s in structures],
-                         keys=range(len(structures)),
-                         names=['input_index', None])
 
-
-class BPSymmetryFunctions(Describer):
+class BPSymmetryFunctions(_BaseSiteDescriber):
     """
     Behler-Parrinello symmetry function descriptor.
     """
 
-    def __init__(self, dmin, cutoff, num_symm2, a_etas):
+    def __init__(self, dmin, cutoff, num_symm2, a_etas,
+                 memory=None, verbose=False, n_jobs=0, **kwargs):
         """
         Args:
             dmin (float): The minimum interatomic distance accepted.
             cutoff (float): Cutoff radius.
             num_symm2 (int): The number of radial symmetry functions.
             a_etas (list): The choice of η' in angular symmetry functions.
+            memory (None, str or joblib.Memory): whether to cache to
+                the str path
+            verbose (bool): whether to show progress for featurization
+            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+                If this value is set to negative or greater than the total cpu
+                then n_jobs is set to the number of cpu on system
         """
 
         from maml.apps.pes.nnp import NNPotential
@@ -333,8 +347,9 @@ class BPSymmetryFunctions(Describer):
         self.num_symm2 = num_symm2
         self.a_etas = a_etas
         self.operator = NNPotential()
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
 
-    def describe(self, structure):
+    def transform_one(self, structure):
         """
         Returns data for one input structure.
 
@@ -387,8 +402,3 @@ class BPSymmetryFunctions(Describer):
             descriptors = read_functions_data('function.data')
 
         return pd.DataFrame(descriptors)
-
-    def describe_all(self, structures):
-        return pd.concat([self.describe(s) for s in structures],
-                         keys=range(len(structures)),
-                         names=['input_index', None])

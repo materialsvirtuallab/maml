@@ -16,17 +16,24 @@ class URLSource(DataSource):
 
     def __init__(self, fmt: str = "csv", read_kwargs=None):
         """
-        @param fmt: The format to read the raw data. It should be something supported by pandas.read_<something>.
+
+        Args:
+            fmt: The format to read the raw data. It should be something supported by pandas.read_<something>.
             Defaults to "csv".
-        @param read_kwargs: kwargs passed to the read_<something> command.
+            read_kwargs: kwargs passed to the read_<something> command.
         """
         self.fmt = fmt
         self.read_kwargs = read_kwargs or {}
 
     def get(self, url: str) -> pd.DataFrame:
         """
-        @param url: URL to obtain raw data from.
-        @return: pd.DataFrame
+        Get url data source
+
+        Args:
+            url: URL to obtain raw data from.
+
+        Returns:
+            pd.DataFrame
         """
         raw = requests.get(url).text
         read_func = getattr(pd, "read_%s" % self.fmt)
@@ -40,10 +47,13 @@ class FigshareSource(URLSource):
 
     def get(self, file_id: str) -> pd.DataFrame:
         """
-        Get the data.
+        Get data from Figshare
+        Args:
+            file_id: file id
 
-        @param file_id: Figshare file id.
-        @return: pandas.DataFrame
+        Returns:
+            data frame
         """
+
         url = "https://ndownloader.figshare.com/files/%s" % file_id
         return super().get(url)

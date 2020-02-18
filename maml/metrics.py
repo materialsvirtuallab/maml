@@ -25,7 +25,7 @@ mse = MSE = mean_squared_error
 mae = MAE = mean_absolute_error
 
 
-def get(identifier):
+def get_metric(identifier):
     """
     Deserialize function metrics from identifier. The identifier can be object, string or dict
 

@@ -11,7 +11,7 @@ from monty.os.path import which
 from monty.serialization import loadfn
 from maml.apps.pes.snap import SNAPotential
 from maml.model.linear_model import LinearModel
-from maml.describer.atomic import BispectrumCoefficients
+from maml.describer.site import BispectrumCoefficients
 
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))

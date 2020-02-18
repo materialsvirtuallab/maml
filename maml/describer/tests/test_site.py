@@ -8,7 +8,7 @@ import numpy as np
 from monty.os.path import which
 from pymatgen import Lattice, Structure
 
-from maml.describer.atomic import \
+from maml.describer.site import \
     BispectrumCoefficients, SOAPDescriptor, BPSymmetryFunctions
 
 
@@ -46,7 +46,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
                 np.testing.assert_equal(bc.subscripts, from_lmp_doc(tjm, d))
 
     @unittest.skipIf(not which("lmp_serial"), "No LAMMPS cmd found")
-    def test_describe(self):
+    def test_transform(self):
         s = Structure.from_spacegroup(225, Lattice.cubic(5.69169),
                                       ['Na', 'Cl'],
                                       [[0, 0, 0], [0, 0, 0.5]])
@@ -61,19 +61,20 @@ class BispectrumCoefficientsTest(unittest.TestCase):
 
         bc_atom = BispectrumCoefficients(5, 3, profile, diagonalstyle=2,
                                          quadratic=False, pot_fit=False)
-        df_atom = bc_atom.describe_all(structures)
+        df_atom = bc_atom.transform(structures)
+
         for i, s in enumerate(structures):
             df_s = df_atom.xs(i, level='input_index')
             self.assertEqual(df_s.shape, (len(s), 4))
-            self.assertTrue(df_s.equals(bc_atom.describe(s)))
+            self.assertTrue(df_s.equals(bc_atom.transform_one(s)))
 
         bc_pot = BispectrumCoefficients(5, 3, profile, diagonalstyle=2,
-                                        quadratic=False, pot_fit=True)
-        df_pot = bc_pot.describe_all(structures, include_stress=True)
+                                        quadratic=False, pot_fit=True, include_stress=True)
+        df_pot = bc_pot.transform(structures)
         for i, s in enumerate(structures):
             df_s = df_pot.xs(i, level='input_index')
             self.assertEqual(df_s.shape, ((1 + len(s) * 3 + 6, 10)))
-            self.assertTrue(df_s.equals(bc_pot.describe(s, include_stress=True)))
+            self.assertTrue(df_s.equals(bc_pot.transform_one(s)))
             sna = df_s.iloc[0]
             for specie in ['Na', 'Cl']:
                 self.assertAlmostEqual(
@@ -100,17 +101,17 @@ class SOAPDescriptorTest(unittest.TestCase):
         self.describer = SOAPDescriptor(cutoff=4.8, l_max=8, n_max=8)
 
     @unittest.skipIf(not which('quip'), 'No quip cmd found.')
-    def test_describe(self):
-        unary_descriptors = self.describer.describe(self.unary_struct)
-        binary_descriptors = self.describer.describe(self.binary_struct)
+    def test_transform(self):
+        unary_descriptors = self.describer.transform_one(self.unary_struct)
+        binary_descriptors = self.describer.transform_one(self.binary_struct)
         self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct))
         self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct))
 
     @unittest.skipIf(not which('quip'), 'No quip cmd found.')
     def test_describe_all(self):
-        unary_descriptors = self.describer.describe_all([self.unary_struct] * 3)
+        unary_descriptors = self.describer.transform([self.unary_struct] * 3)
         self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct) * 3)
-        binary_descriptors = self.describer.describe_all([self.binary_struct] * 3)
+        binary_descriptors = self.describer.transform([self.binary_struct] * 3)
         self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct) * 3)
 
 
@@ -133,8 +134,8 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
 
     @unittest.skipIf(not which('RuNNerMakesym'), 'No RuNNerMakesym cmd found.')
     @unittest.skipIf(not which('RuNNer'), 'No RuNNer cmd found.')
-    def test_describe(self):
-        unary_descriptors = self.describer.describe(self.unary_struct)
+    def test_transform(self):
+        unary_descriptors = self.describer.transform_one(self.unary_struct)
         self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct))
         self.assertEqual(unary_descriptors.shape[1],
                          self.num_symm2 + len(self.a_etas) * 2 * 4)
@@ -142,7 +143,7 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
     @unittest.skipIf(not which('RuNNerMakesym'), 'No RuNNerMakesym cmd found.')
     @unittest.skipIf(not which('RuNNer'), 'No RuNNer cmd found.')
     def test_describe_all(self):
-        descriptors = self.describer.describe([self.unary_struct] * 3)
+        descriptors = self.describer.transform_one([self.unary_struct] * 3)
         self.assertEqual(descriptors.shape[0], len(self.unary_struct) * 3)
         self.assertEqual(descriptors.shape[1],
                          self.num_symm2 + len(self.a_etas) * 2 * 4)

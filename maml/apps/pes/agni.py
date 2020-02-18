@@ -24,7 +24,7 @@ from maml.kernel import get_kernel
 from maml.apps.pes.abstract import Potential, Potentialmaml
 from maml.utils.data_conversion import convert_docs, pool_from
 from maml.utils.data_selection import MonteCarloSampler
-from maml.describer.atomic import AGNIFingerprints
+from maml.describer.site import AGNIFingerprints
 from maml.apps.pes.lammps.calcs import EnergyForceStress
 
 
