@@ -11,12 +11,6 @@ from tqdm import tqdm
 from .util import _check_objs_consistency
 
 
-_ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
-
-_DESCRIBER_TYPES = ["composition", "site", "structure", "general",
-                    "band_structure", "spectrum"]
-
-
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -35,8 +29,6 @@ class BaseDescriber(BaseEstimator, TransformerMixin,
     The BaseDescriber provides ways to
 
     """
-
-    _allowed_data = None  # for object type check purposes
 
     def __init__(self, memory=None, verbose=True, n_jobs=0, **kwargs):
         """
@@ -88,10 +80,6 @@ class BaseDescriber(BaseEstimator, TransformerMixin,
             One or a list of pandas data frame/numpy ndarray
         """
 
-        # check object consistency
-        if self._allowed_data is not None:
-            _check_objs_consistency(objs, self._allowed_data)
-
         cached_transform_one = self.memory.cache(_transform_one)
 
         if self.verbose:
@@ -124,10 +112,6 @@ class BaseDescriber(BaseEstimator, TransformerMixin,
             return features_final
         else:
             return features_final[0]
-
-    @abc.abstractmethod
-    def get_type(self):
-        pass
 
 
 def _transform_one(describer: BaseDescriber, obj: Any):

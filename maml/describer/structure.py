@@ -8,12 +8,7 @@ import pandas as pd
 from maml import BaseDescriber
 
 
-class _BaseStructDescriber(BaseDescriber):
-    def get_type(self):
-        return 'structure'
-
-
-class DistinctSiteProperty(_BaseStructDescriber):
+class DistinctSiteProperty(BaseDescriber):
     """
     Constructs a describer based on properties of distinct sites in a
     structure. For now, this assumes that there is only one type of species in
@@ -67,7 +62,7 @@ class DistinctSiteProperty(_BaseStructDescriber):
         return pd.DataFrame([data], columns=names)
 
 
-class CoulombMatrix(_BaseStructDescriber):
+class CoulombMatrix(BaseDescriber):
     def __init__(self, random_seed=None, memory=None, verbose=False,
                  n_jobs=0, **kwargs):
 

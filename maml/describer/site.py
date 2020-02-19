@@ -26,12 +26,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class _BaseSiteDescriber(BaseDescriber):
-    def get_type(self):
-        return 'site'
-
-
-class BispectrumCoefficients(_BaseSiteDescriber):
+class BispectrumCoefficients(BaseDescriber):
     """
     Bispectrum coefficients to describe the local environment of each
     atom in a quantitative way.
@@ -173,13 +168,8 @@ class BispectrumCoefficients(_BaseSiteDescriber):
 
         return process(raw_data[0], self.pot_fit)
 
-    def get_type(self):
-        if self.pot_fit:
-            return 'structure'
-        super().get_type()
 
-
-class AGNIFingerprints(_BaseSiteDescriber):
+class AGNIFingerprints(BaseDescriber):
     """
     Fingerprints for AGNI (Adaptive, Generalizable and Neighborhood
     Informed) force field. Elemental systems only.
@@ -228,7 +218,7 @@ class AGNIFingerprints(_BaseSiteDescriber):
         return df
 
 
-class SOAPDescriptor(_BaseSiteDescriber):
+class SOAPDescriptor(BaseDescriber):
     """
     Smooth Overlap of Atomic Position (SOAP) descriptor.
     """
@@ -319,7 +309,7 @@ class SOAPDescriptor(_BaseSiteDescriber):
         return descriptors
 
 
-class BPSymmetryFunctions(_BaseSiteDescriber):
+class BPSymmetryFunctions(BaseDescriber):
     """
     Behler-Parrinello symmetry function descriptor.
     """
