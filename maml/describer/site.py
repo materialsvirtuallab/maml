@@ -2,6 +2,7 @@
 This module provides local environment describers.
 """
 import re
+import logging
 import itertools
 import numpy as np
 import pandas as pd
@@ -17,14 +18,10 @@ from maml.base.describer import BaseDescriber
 from maml.utils.data_conversion import pool_from
 
 
-<<<<<<< HEAD
-=======
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-
->>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
 class BispectrumCoefficients(BaseDescriber):
     """
     Bispectrum coefficients to describe the local environment of each atom.
@@ -117,56 +114,17 @@ class BispectrumCoefficients(BaseDescriber):
         return process(raw_data[0], self.pot_fit)
 
 
-<<<<<<< HEAD
 class SmoothOverlapAtomicPosition(BaseDescriber):
-=======
-class AGNIFingerprints(BaseDescriber):
->>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
     """
     Smooth overlap of atomic positions (SOAP) to describe the local environment
     of each atom.
     """
-    def __init__(self, cutoff, l_max=8, n_max=8, atom_sigma=0.5,
-                 memory=None, verbose=False, n_jobs=0):
-        """
-        Args:
-<<<<<<< HEAD
-            cutoff (float): The cutoff distance.
-=======
-            structure (Structure): Input structure.
-        Returns:
-            DataFrame.
-        """
-        all_neighbors = structure.get_all_neighbors(self.r_cut)
-        fingerprints = []
-        for i, an in enumerate(all_neighbors):
-            center = structure[i].coords
-            coords, distances = zip(*[(site.coords, d) for (site, d) in an])
-            v = (np.array(coords) - center)[:, :, None]
-            d = np.array(distances)[:, None, None]
-            e = np.array(self.etas)[None, None, :]
-            cf = 0.5 * (np.cos(np.pi * d / self.r_cut) + 1)
-            fpi = np.sum(v / d * np.exp(-(d / e) ** 2) * cf, axis=0)
-            fingerprints.append(fpi)
-        index = ["%d_%s" % (i, d) for i in range(len(structure))
-                 for d in "xyz"]
-        df = pd.DataFrame(np.vstack(fingerprints), index=index,
-                          columns=self.etas)
-        return df
-
-
-class SOAPDescriptor(BaseDescriber):
-    """
-    Smooth Overlap of Atomic Position (SOAP) descriptor.
-    """
-
     def __init__(self, cutoff, l_max=8, n_max=8, atom_sigma=0.5, memory=None,
                  verbose=False, n_jobs=0, **kwargs):
         """
 
         Args:
             cutoff (float): Cutoff radius.
->>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
             l_max (int): The band limit of spherical harmonics basis function.
                 Default to 8.
             n_max (int): The number of radial basis function. Default to 8.
@@ -247,11 +205,7 @@ class SOAPDescriptor(BaseDescriber):
         return descriptors
 
 
-<<<<<<< HEAD
-class BPSymmetryFunction(BaseDescriber):
-=======
 class BPSymmetryFunctions(BaseDescriber):
->>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
     """
     Behler-Parrinello symmetry function to describe the local environment
     of each atom.
