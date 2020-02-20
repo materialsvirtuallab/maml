@@ -25,9 +25,11 @@ class BaseModel:
             targets: Union[List, np.ndarray] = None, **kwargs):
         """
         Args:
-            features (list or np.ndarray): Numerical input feature list or numpy array with dim (m, n)
-                where m is the number of data and n is the feature dimension
-            targets (list or np.ndarray): Numerical output target list, or numpy array with dim (m, )
+            features (list or np.ndarray): Numerical input feature list or
+                numpy array with dim (m, n) where m is the number of data and
+                n is the feature dimension.
+            targets (list or np.ndarray): Numerical output target list, or
+                numpy array with dim (m, ).
         """
         self.model.fit(features, targets, **kwargs)
 
@@ -45,12 +47,6 @@ class BaseModel:
 
     def predict_obj(self, obj: Any):
         return self._predict(self.describer.transform(obj))
-
-    def train(self, objs: List[Any], targets: List = None):
-        pass
-
-    def __getstate__(self):
-        pass
 
 
 class PotentialMixin:
