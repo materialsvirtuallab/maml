@@ -2,8 +2,8 @@
 Structure-wise describers. These describers include structural information.
 """
 import numpy as np
-from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 import pandas as pd
+from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from maml import BaseDescriber
 

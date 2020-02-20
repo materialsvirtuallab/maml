@@ -1,133 +1,84 @@
 """
-Compute descriptors on per-atom basis
+This module provides local environment describers.
 """
-# coding: utf-8
-# Copyright (c) Materials Virtual Lab
-# Distributed under the terms of the BSD License.
-
-import itertools
-import logging
 import re
+import itertools
+import numpy as np
+import pandas as pd
 import subprocess
 
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-import numpy as np
-import pandas as pd
-from pymatgen.core.periodic_table import get_el_sp
 
-from maml import BaseDescriber
+from pymatgen import Element
+from pymatgen.core.periodic_table import get_el_sp
+from maml.base.describer import BaseDescriber
 from maml.utils.data_conversion import pool_from
 
 
+<<<<<<< HEAD
+=======
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+>>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
 class BispectrumCoefficients(BaseDescriber):
     """
-    Bispectrum coefficients to describe the local environment of each
-    atom in a quantitative way.
-
+    Bispectrum coefficients to describe the local environment of each atom.
+    Lammps is required to perform this computation.
     """
-
-    def __init__(self, rcutfac, twojmax, element_profile, rfac0=0.99363,
-                 rmin0=0, diagonalstyle=3, quadratic=False,
-                 pot_fit=False, include_stress=False, memory=None, verbose=False,
-                 n_jobs=0, **kwargs):
+    def __init__(self, cutoff, twojmax, element_profile, quadratic=False,
+                 pot_fit=False, include_stress=False,
+                 memory=None, verbose=False, n_jobs=0):
         """
-
         Args:
-            rcutfac (float): Global cutoff distance.
+            cutoff (float): The cutoff distance.
             twojmax (int): Band limit for bispectrum components.
-            element_profile (dict): Parameters (cutoff factor 'r' and
-                weight 'w') related to each element, e.g.,
+            element_profile (dict): Parameters (cutoff factor 'r' and weight 'w')
+                related to each element, e.g.,
                 {'Na': {'r': 0.3, 'w': 0.9},
                  'Cl': {'r': 0.7, 'w': 3.0}}
-            rfac0 (float): Parameter in distance to angle conversion.
-                Set between (0, 1), default to 0.99363.
-            rmin0 (float): Parameter in distance to angle conversion.
-                Default to 0.
-            diagonalstyle (int): Parameter defining which bispectrum
-                components are generated. Choose among 0, 1, 2 and 3,
-                default to 3.
             quadratic (bool): Whether including quadratic terms.
                 Default to False.
-            pot_fit (bool): Whether combine the dataframe for potential
-                fitting
-            include_stress (bool): Wether to include stress components
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
+            pot_fit (bool): Whether combine the dataframe for potential fitting.
+            include_stress (bool): Wether to include stress components.
+            memory (str/joblib.Memory): Whether to cache to the str path.
+            verbose (bool): Whether to show progress for featurization.
             n_jobs (int): number of parallel jobs. 0 means no parallel computations.
                 If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+                then n_jobs is set to the number of cpu on system.
         """
         from maml.apps.pes.lammps.calcs import SpectralNeighborAnalysis
-        self.calculator = SpectralNeighborAnalysis(rcutfac, twojmax,
-                                                   element_profile,
-                                                   rfac0, rmin0,
-                                                   diagonalstyle,
-                                                   quadratic)
-        self.rcutfac = rcutfac
+        self.calculator = SpectralNeighborAnalysis(rcut=cutoff,
+                                                   twojmax=twojmax,
+                                                   element_profile=element_profile,
+                                                   quadratic=quadratic)
         self.twojmax = twojmax
-        self.element_profile = element_profile
-        self.rfac0 = rfac0
-        self.rmin0 = rmin0
-        self.diagonalstyle = diagonalstyle
-        self.elements = sorted(element_profile.keys(),
-                               key=lambda sym: get_el_sp(sym).X)
+        self.elements = sorted(element_profile.keys(), key=lambda x: Element(x))
         self.quadratic = quadratic
-        self.include_stress = include_stress
         self.pot_fit = pot_fit
-        if not self.pot_fit and self.include_stress:
-            logger.warning("Only potential fitting needs include_stress")
-            logger.warning("Changing include_stress = False")
-            self.include_stress = False
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
+        self.include_stress = include_stress
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
 
     @property
     def subscripts(self):
         """
         The subscripts (2j1, 2j2, 2j) of all bispectrum components
         involved.
-
         """
-        return self.calculator.get_bs_subscripts(self.twojmax,
-                                                 self.diagonalstyle)
+        return self.calculator.get_bs_subscripts(self.twojmax)
 
     def transform_one(self, structure):
         """
-        Returns data for one input structure.
-
         Args:
-            structure (Structure): Input structure.
-        Returns:
-            DataFrame.
-
-            In regular format, the columns are the subscripts of
-            bispectrum components, while indices are the site indices
-            in input structure.
-
-            In potential fitting format, to match the sequence of
-            [energy, f_x[0], f_y[0], ..., f_z[N], v_xx, ..., v_xy], the
-            bispectrum coefficients are summed up by each specie and
-            normalized by a factor of No. of atoms (in the 1st row),
-            while the derivatives in each direction are preserved, with
-            the columns being the subscripts of bispectrum components
-            with each specie and the indices being
-            [0, '0_x', '0_y', ..., 'N_z'], and the virial contributions
-            (in GPa) are summed up for all atoms for each component in
-            the sequence of ['xx', 'yy', 'zz', 'yz', 'xz', 'xy'].
-
+            structure (Structure): Pymatgen Structure object.
         """
-        columns = list(map(lambda s: '-'.join(['%d' % i for i in s]),
-                           self.subscripts))
+        columns = list(map(lambda s: '-'.join(['%d' % i for i in s]), self.subscripts))
         if self.quadratic:
-            columns += list(map(lambda s: '-'.join(['%d%d%d' % (i, j, k)
-                                                    for i, j, k in s]),
+            columns += list(map(lambda s: '-'.join(['%d%d%d' % (i, j, k) for i, j, k in s]),
                                 itertools.combinations_with_replacement(self.subscripts, 2)))
 
         raw_data = self.calculator.calculate([structure])
@@ -135,7 +86,6 @@ class BispectrumCoefficients(BaseDescriber):
         def process(output, combine):
             b, db, vb, e = output
             df = pd.DataFrame(b, columns=columns)
-
             if combine:
                 df_add = pd.DataFrame({'element': e, 'n': np.ones(len(e))})
                 df_b = df_add.join(df)
@@ -148,8 +98,7 @@ class BispectrumCoefficients(BaseDescriber):
                 dbs = np.split(db, len(self.elements), axis=1)
                 dbs = np.hstack([np.insert(d.reshape(-1, len(columns)),
                                            0, 0, axis=1) for d in dbs])
-                db_index = ['%d_%s' % (i, d)
-                            for i in df_b.index for d in 'xyz']
+                db_index = ['%d_%s' % (i, d) for i in df_b.index for d in 'xyz']
                 df_db = pd.DataFrame(dbs, index=db_index,
                                      columns=hstack_b.columns)
                 if self.include_stress:
@@ -159,8 +108,7 @@ class BispectrumCoefficients(BaseDescriber):
                     volume = structure.volume
                     vbs = vbs / volume * 160.21766208  # from eV to GPa
                     vb_index = ['xx', 'yy', 'zz', 'yz', 'xz', 'xy']
-                    df_vb = pd.DataFrame(vbs, index=vb_index,
-                                         columns=hstack_b.columns)
+                    df_vb = pd.DataFrame(vbs, index=vb_index, columns=hstack_b.columns)
                     df = pd.concat([hstack_b, df_db, df_vb])
                 else:
                     df = pd.concat([hstack_b, df_db])
@@ -169,33 +117,22 @@ class BispectrumCoefficients(BaseDescriber):
         return process(raw_data[0], self.pot_fit)
 
 
+<<<<<<< HEAD
+class SmoothOverlapAtomicPosition(BaseDescriber):
+=======
 class AGNIFingerprints(BaseDescriber):
+>>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
     """
-    Fingerprints for AGNI (Adaptive, Generalizable and Neighborhood
-    Informed) force field. Elemental systems only.
+    Smooth overlap of atomic positions (SOAP) to describe the local environment
+    of each atom.
     """
-
-    def __init__(self, r_cut, etas, memory=None, verbose=False, n_jobs=0,
-                 **kwargs):
+    def __init__(self, cutoff, l_max=8, n_max=8, atom_sigma=0.5,
+                 memory=None, verbose=False, n_jobs=0):
         """
         Args:
-            r_cut (float): Cutoff distance.
-            etas (numpy.array): All eta parameters in 1D array.
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
-        """
-        self.r_cut = r_cut
-        self.etas = etas
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
-
-    def transform_one(self, structure):
-        """
-        Calculate fingerprints for all sites in a structure.
-        Args:
+<<<<<<< HEAD
+            cutoff (float): The cutoff distance.
+=======
             structure (Structure): Input structure.
         Returns:
             DataFrame.
@@ -229,35 +166,35 @@ class SOAPDescriptor(BaseDescriber):
 
         Args:
             cutoff (float): Cutoff radius.
+>>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
             l_max (int): The band limit of spherical harmonics basis function.
                 Default to 8.
             n_max (int): The number of radial basis function. Default to 8.
-            atom_sigma (float): The width of gaussian atomic density.
-                Default to 0.5.
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
+            atom_sigma (float): The width of gaussian atomic density. Default to 0.5.
+            memory (str/joblib.Memory): Whether to cache to the str path.
+            verbose (bool): Whether to show progress for featurization.
+            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+                If this value is set to negative or greater than the total cpu
+                then n_jobs is set to the number of cpu on system.
         """
-        from maml.apps.pes.soap import SOAPotential
-
+        from maml.apps.pes.gap import GAPotential
+        self.operator = GAPotential()
         self.cutoff = cutoff
         self.l_max = l_max
         self.n_max = n_max
         self.atom_sigma = atom_sigma
-        self.operator = SOAPotential()
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
 
     def transform_one(self, structure):
         """
-        Returns data for one input structure.
-
         Args:
-            structure (Structure): Input structure.
+            structure (Structure): Pymatgen Structure object.
         """
         if not which('quip'):
             raise RuntimeError("quip has not been found.\n",
                                "Please refer to https://github.com/libAtoms/QUIP for ",
                                "further detail.")
+
         atoms_filename = 'structure.xyz'
 
         exe_command = ['quip']
@@ -268,6 +205,7 @@ class SOAPDescriptor(BaseDescriber):
         descriptor_command.append("l_max" + '=' + '{}'.format(self.l_max))
         descriptor_command.append("n_max" + '=' + '{}'.format(self.n_max))
         descriptor_command.append("atom_sigma" + '=' + '{}'.format(self.atom_sigma))
+
         atomic_numbers = [str(num) for num in np.unique(structure.atomic_numbers)]
         n_Z = len(atomic_numbers)
         n_species = len(atomic_numbers)
@@ -282,7 +220,7 @@ class SOAPDescriptor(BaseDescriber):
                            "{}".format(' '.join(descriptor_command)) + "}")
 
         with ScratchDir('.'):
-            _ = self.operator.write_cfgs(filename=atoms_filename,
+            atoms_filename = self.operator.write_cfgs(filename=atoms_filename,
                                                       cfg_pool=pool_from([structure]))
             descriptor_output = 'output'
             p = subprocess.Popen(exe_command, stdout=open(descriptor_output, 'w'))
@@ -309,86 +247,97 @@ class SOAPDescriptor(BaseDescriber):
         return descriptors
 
 
+<<<<<<< HEAD
+class BPSymmetryFunction(BaseDescriber):
+=======
 class BPSymmetryFunctions(BaseDescriber):
+>>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
     """
-    Behler-Parrinello symmetry function descriptor.
+    Behler-Parrinello symmetry function to describe the local environment
+    of each atom.
     """
-
-    def __init__(self, dmin, cutoff, num_symm2, a_etas,
-                 memory=None, verbose=False, n_jobs=0, **kwargs):
+    def __init__(self, cutoff, r_etas, r_shift, a_etas, zetas, lambdas,
+                 memory=None, verbose=False, n_jobs=0):
         """
         Args:
-            dmin (float): The minimum interatomic distance accepted.
-            cutoff (float): Cutoff radius.
-            num_symm2 (int): The number of radial symmetry functions.
-            a_etas (list): The choice of η' in angular symmetry functions.
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            cutoff (float): The cutoff distance.
+            r_etas (numpy.ndarray): η in radial function.
+            r_shift (numpy.ndarray): Rs in radial function.
+            a_etas (numpy.ndarray): η in angular function.
+            zetas (numpy.ndarray): ζ in angular function.
+            lambdas (numpy.ndarray): λ in angular function. Default to (1, -1).
         """
-
-        from maml.apps.pes.nnp import NNPotential
-
-        self.dmin = dmin
         self.cutoff = cutoff
-        self.num_symm2 = num_symm2
-        self.a_etas = a_etas
-        self.operator = NNPotential()
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
+        self.r_etas = np.array(r_etas)[None, :, None]
+        self.r_shift = np.array(r_shift)[None, None, :]
+        self.a_etas = np.array(a_etas)[None, :, None, None]
+        self.zetas = np.array(zetas)[None, None, :, None]
+        self.lambdas = np.array(lambdas)[None, None, None, :]
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
 
     def transform_one(self, structure):
         """
-        Returns data for one input structure.
+        Args:
+            structure (Structure): Pymatgen Structure object.
+        """
+        elements = sorted(structure.symbol_set, key=lambda sym: get_el_sp(sym).X)
+        all_neighbors = structure.get_all_neighbors(self.cutoff)
+        data = []
+
+        for atom_idx, neighbors in enumerate(all_neighbors):
+            center = structure[atom_idx].coords
+            site_symmfuncs = []
+            sorted_neighbors = sorted(neighbors, key=lambda neighbor: neighbor.species_string)
+            temp_dict = {element: [(neighbor.coords, neighbor.nn_distance) for neighbor in group]
+                         for element, group in itertools.groupby(sorted_neighbors,
+                         key=lambda neighbor: neighbor.species_string)}
+
+            for specie in elements:
+                distances = np.array([nn_distance for _, nn_distance
+                                         in temp_dict[specie]])[:, None, None]
+                g2 = np.sum(np.exp(-self.r_etas * (distances - self.r_shift) ** 2)
+                            * self._fc(distances), axis=0)
+                site_symmfuncs.extend(g2.ravel().tolist())
+
+            for specie1, specie2 in itertools.combinations_with_replacement(elements, 2):
+
+                group1, group2 = temp_dict[specie1], temp_dict[specie2]
+
+                c = itertools.combinations(range(len(group1)), 2) if specie1 == specie2 \
+                    else itertools.product(range(len(group1)), range(len(group2)))
+                index_combination = np.array(list(c)).T
+
+                coords_group1 = np.array([coords for coords, _ in group1])
+                coords_group2 = np.array([coords for coords, _ in group2])
+                distances_group1 = np.array([nn_distance for _, nn_distance in group1])
+                distances_group2 = np.array([nn_distance for _, nn_distance in group2])
+
+                v1 = coords_group1[index_combination[0]]
+                v2 = coords_group2[index_combination[1]]
+                d1 = distances_group1[index_combination[0]]
+                d2 = distances_group2[index_combination[1]]
+                d3 = np.linalg.norm(v1 - v2, axis=1)
+                cosines = np.sum((v1 - center) * (v2 - center), axis=1) / (d1 * d2)
+                cosines = cosines[:, None, None, None]
+                distances = np.stack((d1, d2, d3))
+                cutoffs = np.prod(self._fc(distances), axis=0)
+                cutoffs = np.atleast_1d(cutoffs)[:, None, None, None]
+                powers = np.sum(distances ** 2, axis=0)[:, None, None, None]
+                g4 = np.sum((1 + self.lambdas * cosines) ** self.zetas *
+                            np.exp(-self.a_etas * powers) * cutoffs *
+                            2.0 ** (1 - self.zetas), axis=0)
+                site_symmfuncs.extend(g4.ravel().tolist())
+
+            data.append(site_symmfuncs)
+        df = pd.DataFrame(data)
+        return df
+
+    def _fc(self, r):
+        """
+        Cutoff function to decay the symmetry functions at vicinity of radial cutoff.
 
         Args:
-            structure (Structure): Input structure.
+            r (float): The pair distance.
         """
-        if not which('RuNNer'):
-            raise RuntimeError("RuNNer has not been found.")
-        if not which("RuNNerMakesym"):
-            raise RuntimeError("RuNNerMakesym has not been found.")
-
-        def read_functions_data(filename):
-            """
-            Read structure features from file.
-
-            Args:
-                filename (str): The functions file to be read.
-            """
-            with zopen(filename, 'rt') as f:
-                lines = f.read()
-
-            block_pattern = re.compile(r'(\n\s+\d+\n|^\s+\d+\n)(.+?)(?=\n\s+\d+\n|$)', re.S)
-            points_features = []
-            for (num_neighbor, block) in block_pattern.findall(lines):
-                point_features = pd.DataFrame([feature.split()[1:]
-                                               for feature in block.split('\n')[:-1]],
-                                              dtype=np.float32)
-                points_features.append(point_features)
-            points_features = pd.concat(points_features,
-                                        keys=range(len(block_pattern.findall(lines))),
-                                        names=['point_index', None])
-            return points_features
-
-        # dmin = sorted(set(structure.distance_matrix.ravel()))[1]
-        r_etas = self.operator.generate_eta(dmin=self.dmin,
-                                            r_cut=self.cutoff,
-                                            num_symm2=self.num_symm2)
-        atoms_filename = 'input.data'
-        mode_output = 'mode.out'
-
-        with ScratchDir('.'):
-            self.operator.write_cfgs(filename=atoms_filename,
-                                     cfg_pool=pool_from([structure]))
-            self.operator.write_input(mode=1, r_cut=self.cutoff,
-                                      r_etas=r_etas, a_etas=self.a_etas,
-                                      scale_feature=False)
-            p = subprocess.Popen(['RuNNer'], stdout=open(mode_output, 'w'))
-            p.communicate()[0]
-
-            descriptors = read_functions_data('function.data')
-
-        return pd.DataFrame(descriptors)
+        decay = 0.5 * (np.cos(np.pi * r / self.cutoff) + 1) * (r <= self.cutoff)
+        return decay

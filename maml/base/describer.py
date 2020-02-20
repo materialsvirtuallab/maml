@@ -1,45 +1,47 @@
 import abc
 import logging
+from tqdm import tqdm
 from typing import Any
 
-from joblib import cpu_count, Parallel, delayed
 import pandas as pd
-from sklearn.base import BaseEstimator, TransformerMixin
+from monty.json import MSONable
+from joblib import cpu_count, Parallel, delayed
 from sklearn.utils.validation import check_memory
-from tqdm import tqdm
-
-from .util import _check_objs_consistency
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
+<<<<<<< HEAD
+_ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
+
+_DESCRIBER_TYPES = ["composition", "site", "structure",
+                    "general", "band_structure", "spectrum"]
+
+=======
+>>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class BaseDescriber(BaseEstimator, TransformerMixin,
-                    metaclass=abc.ABCMeta):
+class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABCMeta):
     """
-    Base class for a Describer, i.e., something that converts an object to a
-    describer, typically a numerical representation useful for machine
-    learning.
-    The output for the describer can be a single DataFrame/np.ndarray or
-    a list of DataFrame/np.ndarray. This depends on the multioutput entry in
-    the self._get_tags()
-
-    The BaseDescriber provides ways to
-
+    Base class for a Describer. A describer converts an object to a descriptor,
+    typically a numerical representation useful for machine learning.
+    The output for the describer can be a single DataFrame/numpy.ndarray or
+    a list of DataFrame/numpy.ndarray. This depends on the multioutput entry in
+    the self._get_tags().
     """
 
     def __init__(self, memory=None, verbose=True, n_jobs=0, **kwargs):
         """
 
         Args:
-            memory (None, str or joblib.Memory): provide path (str) or Memory for
-                caching the computational results, default None means no cache
-            verbose (bool): whether to show the progress of feature calculations
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+            memory (str/joblib.Memory): The path or Memory for caching the computational
+                results, default None means no cache.
+            verbose (bool): Whether to show the progress of feature calculations.
+            n_jobs (int): The number of parallel jobs. 0 means no parallel computations.
                 If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+                then n_jobs is set to the number of cpu on system.
             **kwargs:
         """
         self.memory = check_memory(memory)
@@ -56,30 +58,31 @@ class BaseDescriber(BaseEstimator, TransformerMixin,
         data.
 
         Args:
-            objs: a list of objects
-            targets: optional, a list of targets
-
-        Returns: self
+            objs (list): A list of objects.
+            targets (list): Optional. A list of targets.
         """
-
         return self
 
-    @abc.abstractmethod
     def transform_one(self, obj):
-        pass
+        """
+        Transform an object.
+        """
+        raise NotImplementedError
 
     def transform(self, objs):
         """
         Transform a list of objs. If the return data is DataFrame,
-        use df.xs(index, level='input_index') to get the result
-        for the i-th object
+        use df.xs(index, level='input_index') to get the result for the i-th object.
 
         Args:
-            objs: a list of objects
+            objs (list): A list of objects.
         Returns:
             One or a list of pandas data frame/numpy ndarray
         """
+<<<<<<< HEAD
+=======
 
+>>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
         cached_transform_one = self.memory.cache(_transform_one)
 
         if self.verbose:
@@ -99,23 +102,26 @@ class BaseDescriber(BaseEstimator, TransformerMixin,
         if not multi_output:
             features = [features]
 
-        feature_temp = features[0][0]
-        is_pandas = hasattr(feature_temp, 'iloc')
+        is_pandas = hasattr(features[0][0], 'iloc')
 
-        features_final = [pd.concat(i, keys=range(len(i)), names=['input_index', None]
-                                    ) for i in list(*zip(features))]
+        concated_features = [pd.concat(feature, keys=range(len(feature)), names=['input_index', None])
+                          for feature in list(*zip(features))]
 
         if not is_pandas:
-            features_final = [i.values for i in features_final]
+            concated_features = [features.values for features in concated_features]
 
         if multi_output:
-            return features_final
+            return concated_features
         else:
+<<<<<<< HEAD
+            return concated_features[0]
+=======
             return features_final[0]
+>>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
 
 
 def _transform_one(describer: BaseDescriber, obj: Any):
     """
-    Just a wrapper to make a pure function
+    A wrapper to make a pure function.
     """
     return describer.transform_one(obj)

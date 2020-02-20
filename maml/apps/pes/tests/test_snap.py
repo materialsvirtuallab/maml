@@ -2,19 +2,24 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-import unittest
-import tempfile
+from __future__ import division, print_function, unicode_literals, \
+    absolute_import
+
 import os
 import shutil
+import unittest
+import tempfile
 
 from monty.os.path import which
 from monty.serialization import loadfn
-from maml.apps.pes.snap import SNAPotential
-from maml.model.linear_model import LinearModel
-from maml.describer.site import BispectrumCoefficients
+from mlearn.potentials.snap import SNAPotential
+from mlearn.models import LinearModel
+from mlearn.describers import BispectrumCoefficients
 
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
+coeff_file = os.path.join(os.path.dirname(__file__), 'SNAP', 'SNAPotential.snapcoeff')
+param_file = os.path.join(os.path.dirname(__file__), 'SNAP', 'SNAPotential.snapparam')
 
 
 @unittest.skipIf(not which('lmp_serial'), 'No LAMMPS cmd found.')
@@ -55,7 +60,7 @@ class SNAPotentialTest(unittest.TestCase):
             self.test_energies.append(d['outputs']['energy'])
             self.test_forces.append(d['outputs']['forces'])
             self.test_stresses.append(d['outputs']['virial_stress'])
-        self.test_struct = d['structure']
+        self.test_struct = self.test_pool[-1]['structure']
 
     def test_train(self):
         self.potential1.train(train_structures=self.test_structures,
@@ -108,6 +113,10 @@ class SNAPotentialTest(unittest.TestCase):
         energy, forces, stress = self.potential2.predict(self.test_struct)
         self.assertEqual(len(forces), len(self.test_struct))
         self.assertEqual(len(stress), 6)
+
+    def test_from_config(self):
+        snap = SNAPotential.from_config(param_file, coeff_file)
+        self.assertTrue(getattr(snap.model.model, 'coef_') is not None)
 
 
 if __name__ == '__main__':

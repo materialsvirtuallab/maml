@@ -7,5 +7,4 @@ Define abstract base classes.
 """
 from .data import BaseDataSource
 from .describer import BaseDescriber
-from .model import BaseModel, Model
-
+from .model import BaseModel

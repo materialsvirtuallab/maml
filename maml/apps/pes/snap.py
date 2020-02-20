@@ -1,26 +1,25 @@
-"""
-This module implements the training utility for spectral neighbor analysis potential (SNAP)
-Thompson, et al. Journal of Computational Physics 285 (2015): 316-330.
-
-The training utility was originally developed in
-Chen, et al. Physical Review Materials, 1(4), 043603.
-"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-import numpy as np
-from pymatgen import Element
+"""This module provides SNAP interatomic potential class."""
 
-from .abstract import Potential
-from .lammps.calcs import EnergyForceStress
-from maml.utils.data_conversion import convert_docs, pool_from
+import re
+import numpy as np
+from monty.io import zopen
+from pymatgen import Element
+from maml.apps.pes import Potential
+from mlearn.models import LinearModel
+from maml.describer import BispectrumCoefficients
+from maml.apps.pes.lammps.calcs import EnergyForceStress
+from maml.utils.data_conversion import pool_from, convert_docs
 
 
 class SNAPotential(Potential):
     """
     This class implements Spectral Neighbor Analysis Potential.
     """
+
     pair_style = 'pair_style        snap'
     pair_coeff = 'pair_coeff        * * {coeff_file} {elements} {param_file} {specie}'
 
@@ -31,7 +30,7 @@ class SNAPotential(Potential):
         features for structures and to train the parameters.
 
         Args:
-            model (Model): Model to perform supervised learning with
+            model (LinearModel): Model to perform supervised learning with
                 atomic descriptos as features and properties as targets.
             name (str): Name of force field.
         """
@@ -64,7 +63,7 @@ class SNAPotential(Potential):
     def evaluate(self, test_structures, ref_energies, ref_forces, ref_stresses):
         """
         Evaluate energies, forces and stresses of structures with trained
-        interatomic potential.
+        interatomic potentials.
 
         Args:
             test_structures ([Structure]): List of Pymatgen Structure Objects.
@@ -96,9 +95,6 @@ class SNAPotential(Potential):
         Returns:
             energy, forces, stress
         """
-        # outputs = self.model.predict([structure])
-        # energy = outputs[0]
-        # forces = outputs[1:].reshape(len(structure), 3)
         calculator = EnergyForceStress(ff_settings=self)
         energy, forces, stress = calculator.calculate(structures=[structure])[0]
         return energy, forces, stress
@@ -114,7 +110,6 @@ class SNAPotential(Potential):
         coeff_file = '{}.snapcoeff'.format(self.name)
 
         model = self.model
-        # ncoeff = len(model.coef)
         describer = self.model.describer
         profile = describer.element_profile
         elements = [element.symbol for element
@@ -152,13 +147,63 @@ class SNAPotential(Potential):
 
     def save(self, filename):
         """
-        Save parameters of the potential.
+        Save parameters of the potentials.
 
         Args:
-            filename (str): The file to store parameters of potential.
+            filename (str): The file to store parameters of potentials.
 
         Returns:
             (str)
         """
         self.model.save(filename=filename)
         return filename
+
+    @staticmethod
+    def from_config(param_file, coeff_file, **kwargs):
+        """
+        Initialize potentials with parameters file and coefficient file.
+
+        Args:
+            param_file (str): The file storing the configuration of potentials.
+            coeff_file (str): The file storing the coefficients of potentials.
+
+        Return:
+            SNAPotential.
+        """
+        with open(coeff_file) as f:
+            coeff_lines = f.readlines()
+        coeff_lines = [line for line in coeff_lines if not line.startswith('#')]
+        specie, r, w = coeff_lines[1].split()
+        r, w = float(r), int(w)
+        element_profile = {specie: {'r': r, 'w': w}}
+
+        rcut_pattern = re.compile(r'rcutfac (.*?)\n', re.S)
+        twojmax_pattern = re.compile(r'twojmax (\d*)\n', re.S)
+        rfac_pattern = re.compile(r'rfac0 (.*?)\n', re.S)
+        rmin_pattern = re.compile(r'rmin0 (.*?)\n', re.S)
+        diagonalstyle_pattern = re.compile(r'diagonalstyle (.*?)\n', re.S)
+        quadratic_pattern = re.compile(r'quadraticflag (.*?)(?=\n|$)', re.S)
+
+        with zopen(param_file, 'rt') as f:
+            param_lines = f.read()
+
+        rcut = float(rcut_pattern.findall(param_lines)[-1])
+        twojmax = int(twojmax_pattern.findall(param_lines)[-1])
+        rfac = float(rfac_pattern.findall(param_lines)[-1])
+        rmin = int(rmin_pattern.findall(param_lines)[-1])
+        diagonal = int(diagonalstyle_pattern.findall(param_lines)[-1])
+        if quadratic_pattern.findall(param_lines):
+            quadratic = bool(int(quadratic_pattern.findall(param_lines)[-1]))
+        else:
+            quadratic = False
+
+        describer = BispectrumCoefficients(rcutfac=rcut, twojmax=twojmax,
+                                           rfac0=rfac, element_profile=element_profile,
+                                           rmin0=rmin, diagonalstyle=diagonal, quadratic=quadratic,
+                                           pot_fit=True)
+        model = LinearModel(describer=describer, **kwargs)
+        model.model.coef_ = np.array(coeff_lines[2:], dtype=np.float)
+        model.model.intercept_ = 0
+        snap = SNAPotential(model=model)
+        snap.specie = Element(specie)
+        return snap

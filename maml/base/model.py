@@ -7,7 +7,7 @@ import numpy as np
 from .describer import BaseDescriber
 
 
-class Model:
+class BaseModel:
     """
     Abstract Base class for a Model. Basically, it usually wraps around a deep
     learning package, e.g., the Sequential Model in Keras, but provides for
@@ -17,8 +17,7 @@ class Model:
         describer (BaseDescriber): Describer that converts object into features
         model (Any): ML models, for example, sklearn model or keras model
     """
-    def __init__(self, describer: BaseDescriber = None,
-                 model: Any = None, **kwargs):
+    def __init__(self, describer: BaseDescriber = None, model: Any = None, **kwargs):
         self.describer = describer
         self.model = model
 
