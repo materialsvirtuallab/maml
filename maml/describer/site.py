@@ -4,9 +4,9 @@ This module provides local environment describers.
 import re
 import logging
 import itertools
+import subprocess
 import numpy as np
 import pandas as pd
-import subprocess
 
 from monty.io import zopen
 from monty.os.path import which
@@ -94,11 +94,10 @@ class BispectrumCoefficients(BaseDescriber):
                 hstack_b = hstack_b.to_frame().T / n_atoms
                 hstack_b.fillna(0, inplace=True)
                 dbs = np.split(db, len(self.elements), axis=1)
-                dbs = np.hstack([np.insert(d.reshape(-1, len(columns)),
-                                           0, 0, axis=1) for d in dbs])
+                dbs = np.hstack([np.insert(d.reshape(-1, len(columns)), 0, 0, axis=1)
+                                 for d in dbs])
                 db_index = ['%d_%s' % (i, d) for i in df_b.index for d in 'xyz']
-                df_db = pd.DataFrame(dbs, index=db_index,
-                                     columns=hstack_b.columns)
+                df_db = pd.DataFrame(dbs, index=db_index, columns=hstack_b.columns)
                 if self.include_stress:
                     vbs = np.split(vb.sum(axis=0), len(self.elements))
                     vbs = np.hstack([np.insert(v.reshape(-1, len(columns)),

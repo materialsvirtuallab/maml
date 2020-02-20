@@ -5,8 +5,10 @@
 """This module provides SNAP interatomic potential class."""
 
 import re
+import itertools
 import numpy as np
 from monty.io import zopen
+
 from pymatgen import Element
 from maml.apps.pes import Potential
 from maml.model.linear_model import LinearModel
@@ -37,7 +39,8 @@ class SNAPotential(Potential):
         self.name = name if name else 'SNAPotential'
         self.model = model
 
-    def train(self, train_structures, energies, forces, stresses=None, **kwargs):
+    def train(self, train_structures, train_energies, train_forces,
+              train_stresses=None, **kwargs):
         """
         Training data with model.
 
@@ -45,42 +48,43 @@ class SNAPotential(Potential):
             train_structures ([Structure]): The list of Pymatgen Structure object.
                 energies ([float]): The list of total energies of each structure
                 in structures list.
-            energies ([float]): List of total energies of each structure in
+            train_energies ([float]): List of total energies of each structure in
                 structures list.
-            forces ([np.array]): List of (m, 3) forces array of each structure
-                with m atoms in structures list. m can be varied with each
-                single structure case.
-            stresses (list): List of (6, ) virial stresses of each
+            train_forces ([np.array]): List of (m, 3) forces array of each
+                structure with m atoms in structures list. m can be varied with
+                each single structure case.
+            train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
         """
-        train_pool = pool_from(train_structures, energies, forces, stresses)
+        train_pool = pool_from(train_structures, train_energies, train_forces,
+                               train_stresses)
         _, df = convert_docs(train_pool)
         ytrain = df['y_orig'] / df['n']
         xtrain = self.model.describer.transform(train_structures)
         self.model.fit(features=xtrain, targets=ytrain, **kwargs)
-        self.specie = Element(train_structures[0].symbol_set[0])
+        self.elements = sorted(set(itertools.chain(*[struct.symbol_set
+                            for struct in train_structures])), key=lambda x: Element(x))
 
-    def evaluate(self, test_structures, ref_energies, ref_forces, ref_stresses):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses):
         """
         Evaluate energies, forces and stresses of structures with trained
-        interatomic potentials.
+        machinea learning potentials.
 
         Args:
             test_structures ([Structure]): List of Pymatgen Structure Objects.
-            ref_energies ([float]): List of DFT-calculated total energies of
+            test_energies ([float]): List of DFT-calculated total energies of
                 each structure in structures list.
-            ref_forces ([np.array]): List of DFT-calculated (m, 3) forces of
+            test_forces ([np.array]): List of DFT-calculated (m, 3) forces of
                 each structure with m atoms in structures list. m can be varied
                 with each single structure case.
-            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses
+            test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
         """
-        predict_pool = pool_from(test_structures, ref_energies,
-                                 ref_forces, ref_stresses)
+        predict_pool = pool_from(test_structures, test_energies, test_forces,
+                                 test_stresses)
         _, df_orig = convert_docs(predict_pool)
-
         _, df_predict = convert_docs(pool_from(test_structures))
-        outputs = self.model.predict(inputs=test_structures, override=True)
+        outputs = self.model.predict_obj(objs=test_structures)
         df_predict['y_orig'] = df_predict['n'] * outputs
 
         return df_orig, df_predict

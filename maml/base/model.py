@@ -38,15 +38,19 @@ class BaseModel:
         Predict the values given a set of inputs based on fitted model.
 
         Args:
-            features: array-like input features
+            features (np.ndarray): array-like input features
 
         Returns:
             List of output objects
         """
         return self.model.predict(features)
 
-    def predict_obj(self, obj: Any):
-        return self._predict(self.describer.transform(obj))
+    def predict_obj(self, objs: Any):
+        """
+        Predict the values given a set of objects. Usually Pymatgen
+            Structure objects.
+        """
+        return self._predict(self.describer.transform(objs))
 
 
 class PotentialMixin:
