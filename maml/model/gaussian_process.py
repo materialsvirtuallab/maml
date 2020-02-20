@@ -8,18 +8,15 @@ Gaussian process models
 import warnings
 
 import joblib
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process import kernels
+from sklearn.gaussian_process import GaussianProcessRegressor, kernels
 
-from maml import Model
+from maml import BaseModel
 
 
-class GaussianProcessRegressionModel(Model):
+class GaussianProcessRegressionModel(BaseModel):
     """
-    Gaussian Process Regression Model
-
+    Gaussian Process Regression Model.
     """
-
     def __init__(self, describer, kernel_category='RBF', restarts=10, **kwargs):
         """
 

@@ -9,7 +9,7 @@ import numpy as np
 from monty.io import zopen
 from pymatgen import Element
 from maml.apps.pes import Potential
-from mlearn.models import LinearModel
+from maml.model.linear_model import LinearModel
 from maml.describer import BispectrumCoefficients
 from maml.apps.pes.lammps.calcs import EnergyForceStress
 from maml.utils.data_conversion import pool_from, convert_docs
@@ -36,7 +36,6 @@ class SNAPotential(Potential):
         """
         self.name = name if name else 'SNAPotential'
         self.model = model
-        self.specie = None
 
     def train(self, train_structures, energies, forces, stresses=None, **kwargs):
         """
@@ -57,7 +56,8 @@ class SNAPotential(Potential):
         train_pool = pool_from(train_structures, energies, forces, stresses)
         _, df = convert_docs(train_pool)
         ytrain = df['y_orig'] / df['n']
-        self.model.fit(inputs=train_structures, outputs=ytrain, **kwargs)
+        xtrain = self.model.describer.transform(train_structures)
+        self.model.fit(features=xtrain, targets=ytrain, **kwargs)
         self.specie = Element(train_structures[0].symbol_set[0])
 
     def evaluate(self, test_structures, ref_energies, ref_forces, ref_stresses):

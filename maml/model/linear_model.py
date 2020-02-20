@@ -1,5 +1,5 @@
 """
-Linear models
+Linear model.
 """
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
@@ -26,8 +26,9 @@ class LinearModel(BaseModel):
         self.regressor = regressor
         self.kwargs = kwargs
         lr = getattr(linear_model, regressor)
-        self.model = lr(**kwargs)
-        super().__init__(describer=describer)
+        model = lr(**kwargs)
+        self.model = model
+        super().__init__(describer=describer, model=model)
 
     @property
     def coef(self):

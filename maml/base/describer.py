@@ -49,16 +49,16 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             logger.info(f"Using {n_jobs} jobs for computation")
         self.n_jobs = n_jobs
 
-    def fit(self, objs, targets=None, **kwargs):
-        """
-        The fit function is used when describers have parameters that are dependent on the
-        data.
-
-        Args:
-            objs (list): A list of objects.
-            targets (list): Optional. A list of targets.
-        """
-        return self
+    # def fit(self, objs, targets=None, **kwargs):
+    #     """
+    #     The fit function is used when describers have parameters that are dependent on the
+    #     data.
+    #
+    #     Args:
+    #         objs (list): A list of objects.
+    #         targets (list): Optional. A list of targets.
+    #     """
+    #     return self
 
     def transform_one(self, obj):
         """

@@ -121,7 +121,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
     of each atom.
     """
     def __init__(self, cutoff, l_max=8, n_max=8, atom_sigma=0.5, memory=None,
-                 verbose=False, n_jobs=0, **kwargs):
+                 verbose=False, n_jobs=0):
         """
 
         Args:
