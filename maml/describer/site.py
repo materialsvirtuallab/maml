@@ -22,6 +22,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+
 class BispectrumCoefficients(BaseDescriber):
     """
     Bispectrum coefficients to describe the local environment of each atom.

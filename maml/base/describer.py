@@ -10,14 +10,11 @@ from sklearn.utils.validation import check_memory
 from sklearn.base import BaseEstimator, TransformerMixin
 
 
-<<<<<<< HEAD
 _ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
 
 _DESCRIBER_TYPES = ["composition", "site", "structure",
                     "general", "band_structure", "spectrum"]
 
-=======
->>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -79,10 +76,6 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         Returns:
             One or a list of pandas data frame/numpy ndarray
         """
-<<<<<<< HEAD
-=======
-
->>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
         cached_transform_one = self.memory.cache(_transform_one)
 
         if self.verbose:
@@ -113,11 +106,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         if multi_output:
             return concated_features
         else:
-<<<<<<< HEAD
             return concated_features[0]
-=======
-            return features_final[0]
->>>>>>> e9910256b5a5e7e3997245648bddfcf04cc428aa
 
 
 def _transform_one(describer: BaseDescriber, obj: Any):
