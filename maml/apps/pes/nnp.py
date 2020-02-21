@@ -46,7 +46,7 @@ class NNPotential(Potential):
             name (str): Name of force field.
         """
         self.name = name if name else "NNPotential"
-        self.specie = None
+        self.elements = None
         self.weights = []
         self.bs = []
         self.atom_energy = None
@@ -60,8 +60,8 @@ class NNPotential(Potential):
     def _line_up(self, structure, energy, forces, virial_stress):
         """
         Convert input structure, energy, forces, virial_stress to
-        proper configuration format for RuNNer usage. Note that
-        RuNNer takes bohr as length unit and Hatree as energy unit.
+        proper configuration format for n2p2 usage. Note that
+        n2p2 takes bohr as length unit and Hartree as energy unit.
 
         Args:
             structure (Structure): Pymatgen Structure object.
@@ -70,12 +70,7 @@ class NNPotential(Potential):
                 (num_atoms, 3).
             virial_stress (list): stress should has 6 distinct
                 elements arranged in order [xx, yy, zz, xy, yz, xz].
-
-        Returns:
         """
-        if len(structure.symbol_set) > 1:
-            raise ValueError("Structure is not unary.")
-
         inputs = OrderedDict(Size=structure.num_sites,
                              SuperCell=structure.lattice,
                              AtomData=(structure, forces),
@@ -113,6 +108,7 @@ class NNPotential(Potential):
                 structure and energy/forces properties.
         """
         lines = []
+        elements = []
         for dataset in cfg_pool:
             if isinstance(dataset['structure'], dict):
                 structure = Structure.from_dict(dataset['structure'])
@@ -124,11 +120,9 @@ class NNPotential(Potential):
 
             lines.append(self._line_up(structure, energy, forces, virial_stress))
 
-            # dist = np.unique(structure.distance_matrix.ravel())[1]
-            # if self.shortest_distance > dist:
-            #     self.shortest_distance = dist
+            elements.extend(structure.species)
 
-        self.specie = Element(structure.symbol_set[0])
+        self.elements = sorted(set(elements))
 
         with open(filename, 'w') as f:
             f.write('\n'.join(lines))
@@ -242,9 +236,8 @@ class NNPotential(Potential):
                        '{neighbor_atom2}    {a_eta:.7f} {lambd:>2d} {zeta:.7f}   ' \
                        '{rcut:.7f}'
 
-        specie = self.specie.name
-        lines = [head_formatter.format('number_of_elements', value=1),
-                 head_formatter.format('elements', value=specie)]
+        lines = [head_formatter.format('number_of_elements', value=len(self.elements)),
+                 head_formatter.format('elements', value=' '.join(self.elements))]
 
         PARAMS = {'general': ['cutoff_type', 'scale_features', 'scale_min_short',
                               'scale_max_short', 'hidden_layers'],
@@ -261,8 +254,9 @@ class NNPotential(Potential):
                                  'kalman_etatau', 'kalman_etamax']}
         if self.fitted:
             if self.param.get('atom_energy'):
-                lines.append(head_formatter.format('atom_energy',
-                                                   value=' '.join([specie, str(self.param.get('atom_energy'))])))
+                for specie in self.elements:
+                    lines.append(head_formatter.format('atom_energy',
+                        value=' '.join([specie, str(self.param.get('atom_energy').get(specie))])))
             for tag in PARAMS.get('general'):
                 if tag == 'scale_features':
                     lines.append(NNinput_params.get('general').get(tag).get(self.param.get(tag)))
@@ -270,11 +264,11 @@ class NNPotential(Potential):
                     layers = self.param.get('hidden_layers')
                     activations = self.param.get('activations')
                     lines.append(head_formatter.format('global_hidden_layers_short',
-                                                       value=len(layers)))
+                                            value=len(layers)))
                     lines.append(head_formatter.format('global_nodes_short',
-                                                       value=' '.join([str(i) for i in layers])))
+                                            value=' '.join([str(i) for i in layers])))
                     lines.append(head_formatter.format('global_activation_short',
-                                                       value=' '.join([activations] * len(layers) + ['l'])))
+                                            value=' '.join([activations] * len(layers) + ['l'])))
                 else:
                     lines.append(head_formatter.format(tag, value=self.param.get(tag)))
             if self.normalized_nodes:
@@ -284,30 +278,33 @@ class NNPotential(Potential):
                 lines.append(head_formatter.format(tag, value=self.param.get(tag)))
             lines.append('use_short_forces')
 
-            central_atom, neighbor_atom1, neighbor_atom2 = specie, specie, specie
-
             r_cut = self.param.get('r_cut')
             r_cut /= self.bohr_to_angstrom
             r_shift = np.array(self.param.get('r_shift'))
             r_shift /= self.bohr_to_angstrom
 
-            for r_eta, rs in itertools.product(self.param.get('r_etas'), r_shift):
-                lines.append(type2_format.format(central_atom=central_atom,
-                                                 neighbor_atom=neighbor_atom1,
-                                                 r_eta=r_eta, rs=rs, rcut=r_cut))
-
-            for a_eta, lambd, zeta in itertools.product(self.param.get('a_etas'),
-                                                        self.param.get('lambdas'),
-                                                        self.param.get('zetas')):
-                lines.append(type3_format.format(central_atom=central_atom,
-                                                 neighbor_atom1=neighbor_atom1,
-                                                 neighbor_atom2=neighbor_atom2,
-                                                 a_eta=a_eta, lambd=lambd,
-                                                 zeta=zeta, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1 in self.elements:
+                    for r_eta, rs in itertools.product(self.param.get('r_etas'), r_shift):
+                        lines.append(type2_format.format(central_atom=central_atom,
+                                                         neighbor_atom=neighbor_atom1,
+                                                         r_eta=r_eta, rs=rs, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1, neighbor_atom2 \
+                        in itertools.combinations_with_replacement(self.elements, 2):
+                    for a_eta, lambd, zeta in itertools.product(self.param.get('a_etas'),
+                                                                self.param.get('lambdas'),
+                                                                self.param.get('zetas')):
+                        lines.append(type3_format.format(central_atom=central_atom,
+                                                         neighbor_atom1=neighbor_atom1,
+                                                         neighbor_atom2=neighbor_atom2,
+                                                         a_eta=a_eta, lambd=lambd,
+                                                         zeta=zeta, rcut=r_cut))
         else:
             if kwargs.get('atom_energy'):
-                lines.append(head_formatter.format('atom_energy',
-                                                   value=' '.join([specie, str(kwargs.get('atom_energy'))])))
+                for specie in self.elements:
+                    lines.append(head_formatter.format('atom_energy',
+                            value=' '.join([specie, str(kwargs.get('atom_energy').get(specie))])))
                 self.param.update({'atom_energy': kwargs.get('atom_energy')})
             for tag in PARAMS.get('general'):
                 if tag == 'scale_features':
@@ -341,8 +338,6 @@ class NNPotential(Potential):
                 self.param.update({tag: value})
             lines.append('use_short_forces')
 
-            central_atom, neighbor_atom1, neighbor_atom2 = specie, specie, specie
-
             r_cut = kwargs.get('r_cut') if kwargs.get('r_cut') is not None \
                 else NNinput_params.get('symmetry_function').get('r_cut')
             self.param.update({'r_cut': r_cut})
@@ -365,17 +360,23 @@ class NNPotential(Potential):
                 else NNinput_params.get('symmetry_function').get('lambdas')
             self.param.update({'lambdas': lambdas})
 
-            for r_eta, rs in itertools.product(r_etas, r_shift):
-                lines.append(type2_format.format(central_atom=central_atom,
-                                                 neighbor_atom=neighbor_atom1,
-                                                 r_eta=r_eta, rs=rs, rcut=r_cut))
-
-            for a_eta, lambd, zeta in itertools.product(a_etas, lambdas, zetas):
-                lines.append(type3_format.format(central_atom=central_atom,
-                                                 neighbor_atom1=neighbor_atom1,
-                                                 neighbor_atom2=neighbor_atom2,
-                                                 a_eta=a_eta, lambd=lambd,
-                                                 zeta=zeta, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1 in self.elements:
+                    for r_eta, rs in itertools.product(self.param.get('r_etas'), r_shift):
+                        lines.append(type2_format.format(central_atom=central_atom,
+                                                         neighbor_atom=neighbor_atom1,
+                                                         r_eta=r_eta, rs=rs, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1, neighbor_atom2 \
+                        in itertools.combinations_with_replacement(self.elements, 2):
+                    for a_eta, lambd, zeta in itertools.product(self.param.get('a_etas'),
+                                                                self.param.get('lambdas'),
+                                                                self.param.get('zetas')):
+                        lines.append(type3_format.format(central_atom=central_atom,
+                                                         neighbor_atom1=neighbor_atom1,
+                                                         neighbor_atom2=neighbor_atom2,
+                                                         a_eta=a_eta, lambd=lambd,
+                                                         zeta=zeta, rcut=r_cut))
 
             self.num_symm_functions = len(list(itertools.product(r_etas, r_shift))) \
                 + len(list(itertools.product(a_etas, lambdas, zetas)))
@@ -507,8 +508,6 @@ class NNPotential(Potential):
             scaling_lines = f.readlines()
         scaling_param = pd.DataFrame([line.split() for line in scaling_lines
                                       if '#' not in line])
-        # scaling_param.column = ['e_index', 'sf_index', 'sf_min', 'sf_max', \
-        #                         'sf_mean', 'sf_sigma']
         self.scaling_param = scaling_param
 
     def read_cfgs(self, filename='output.data'):
@@ -625,7 +624,7 @@ class NNPotential(Potential):
 
             rc = p_train.returncode
             if rc != 0:
-                error_msg = 'RuNNer exited with return code %d' % rc
+                error_msg = 'n2p2 exited with return code %d' % rc
                 msg = stdout.decode("utf-8").split('\n')[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg)
@@ -695,7 +694,7 @@ class NNPotential(Potential):
 
                 rc = p.returncode
                 if rc != 0:
-                    error_msg = 'RuNNer exited with return code %d' % rc
+                    error_msg = 'n2p2 exited with return code %d' % rc
                     msg = stdout.decode("utf-8").split('\n')[:-1]
                     try:
                         error_line = [i for i, m in enumerate(msg)
