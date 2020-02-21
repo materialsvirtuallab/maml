@@ -138,7 +138,7 @@ class NNPotential(Potential):
 
             kwargs:
                 General nnp settings:
-                    atom_energy (None): Free atom reference energy.
+                    atom_energy (dict): Free atom reference energy for each specie.
                     cutoff_type (int): Type of cutoff function. Default to 1
                         (i.e., cosine function).
                     scale_features (int): Determine the method to scale the
@@ -417,8 +417,8 @@ class NNPotential(Potential):
         with open(filename, 'r') as f:
             lines = f.readlines()
         df = pd.DataFrame([line.split() for line in lines if "#" not in line])
-        self.elements = [element for element in np.ravel(df[df[0] == 'elements'])[1:]
-                         if element is not None]
+        self.elements = sorted([element for element in np.ravel(df[df[0] == 'elements'])[1:]
+                                if element is not None], key=lambda x: Element(x))
 
         atom_energy = {}
         for atom, energy in zip(np.array(df[df[0] == 'atom_energy'])[:, 1],
@@ -446,8 +446,8 @@ class NNPotential(Potential):
             value = str_formatify(np.array(df[df[0] == tag])[0][1])
             param.update({tag: value})
 
-        r_cut = np.sort(df[(df[0] == 'symfunction_short') & (df[2] == '2')][6],
-                        dtype=np.float)[0]
+        r_cut = np.sort(np.array(df[(df[0] == 'symfunction_short') & (df[2] == '2')][6],
+                                 dtype=np.float))[0]
         r_cut = float('{:.1f}'.format(r_cut * units.bohr_to_angstrom))
         param.update({'r_cut': r_cut})
         r_etas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '2')][4]),
