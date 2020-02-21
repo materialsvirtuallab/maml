@@ -5,7 +5,6 @@
 """This module provides SNAP interatomic potential class."""
 
 import re
-import itertools
 import numpy as np
 from monty.io import zopen
 
@@ -154,7 +153,7 @@ class SNAPotential(Potential):
         Returns:
             (str)
         """
-        self.model.save(filename=filename)
+        self.model.save(model_fname=filename)
         return filename
 
     @staticmethod
@@ -172,15 +171,16 @@ class SNAPotential(Potential):
         with open(coeff_file) as f:
             coeff_lines = f.readlines()
         coeff_lines = [line for line in coeff_lines if not line.startswith('#')]
-        specie, r, w = coeff_lines[1].split()
-        r, w = float(r), int(w)
-        element_profile = {specie: {'r': r, 'w': w}}
+        element_profile = {}
+        ne, nbc = coeff_lines[0].split()
+        ne, nbc = int(ne), int(nbc)
+        for n in range(ne):
+            specie, r, w = coeff_lines[1 + n * (nbc + 1)].split()
+            r, w = float(r), int(w)
+            element_profile[specie] = {'r': r, 'w': w}
 
         rcut_pattern = re.compile(r'rcutfac (.*?)\n', re.S)
         twojmax_pattern = re.compile(r'twojmax (\d*)\n', re.S)
-        rfac_pattern = re.compile(r'rfac0 (.*?)\n', re.S)
-        rmin_pattern = re.compile(r'rmin0 (.*?)\n', re.S)
-        diagonalstyle_pattern = re.compile(r'diagonalstyle (.*?)\n', re.S)
         quadratic_pattern = re.compile(r'quadraticflag (.*?)(?=\n|$)', re.S)
 
         with zopen(param_file, 'rt') as f:
@@ -188,21 +188,18 @@ class SNAPotential(Potential):
 
         rcut = float(rcut_pattern.findall(param_lines)[-1])
         twojmax = int(twojmax_pattern.findall(param_lines)[-1])
-        rfac = float(rfac_pattern.findall(param_lines)[-1])
-        rmin = int(rmin_pattern.findall(param_lines)[-1])
-        diagonal = int(diagonalstyle_pattern.findall(param_lines)[-1])
         if quadratic_pattern.findall(param_lines):
             quadratic = bool(int(quadratic_pattern.findall(param_lines)[-1]))
         else:
             quadratic = False
 
-        describer = BispectrumCoefficients(rcutfac=rcut, twojmax=twojmax,
-                                           rfac0=rfac, element_profile=element_profile,
-                                           rmin0=rmin, diagonalstyle=diagonal, quadratic=quadratic,
-                                           pot_fit=True)
+        describer = BispectrumCoefficients(cutoff=rcut, twojmax=twojmax,
+                                           element_profile=element_profile,
+                                           quadratic=quadratic, pot_fit=True)
         model = LinearModel(describer=describer, **kwargs)
-        model.model.coef_ = np.array(coeff_lines[2:], dtype=np.float)
+        coef = np.array(np.concatenate([coeff_lines[(2 + nbc * n + n):
+                (2 + nbc * (n+1) + n)] for n in range(ne)]), dtype=np.float)
+        model.model.coef_ = coef
         model.model.intercept_ = 0
         snap = SNAPotential(model=model)
-        snap.specie = Element(specie)
         return snap
