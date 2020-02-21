@@ -508,12 +508,10 @@ class NudgedElasticBand(LMPStaticCalculator):
         with open(os.path.join(template_dir, 'in.neb'), 'r') as f:
             neb_template = f.read()
 
-        unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice,
-                                       alat=self.alat)
+        unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice, alat=self.alat)
         lattice_calculator = LatticeConstant(ff_settings=self.ff_settings)
         a, _, _ = lattice_calculator.calculate([unit_cell])[0]
-        unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice,
-                                       alat=a)
+        unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice, alat=a)
 
         if self.lattice == 'fcc':
             start_idx, final_idx = 95, 49

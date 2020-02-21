@@ -15,10 +15,10 @@ read_data       data.supercell
 
 # make a vacancy
 
-group {specie} type 1
+group 		{specie} type 1
 
-group del id {del_id}
-delete_atoms group del compress no
+group 		del id {del_id}
+delete_atoms 	group del compress no
  
 # choose potential
 
@@ -28,6 +28,6 @@ delete_atoms group del compress no
 fix 1 all box/relax iso 0.0 vmax 0.001
 
 min_style       cg
-minimize	    1.0e-6 1.0e-4 1000 10000
+minimize	1.0e-6 1.0e-4 1000 10000
 
 write_data      {relaxed_file}
