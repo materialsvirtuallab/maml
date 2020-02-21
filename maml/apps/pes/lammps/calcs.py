@@ -91,7 +91,7 @@ class LMPStaticCalculator(object):
         ff_elements = None
         if hasattr(self, 'element_profile'):
             ff_elements = self.element_profile.keys()
-        if hasattr(self.ff_settings, 'elements'):
+        if hasattr(self, 'ff_settings') and hasattr(self.ff_settings, 'elements'):
             ff_elements = self.ff_settings.elements
         with ScratchDir('.'):
             input_file = self._setup()
