@@ -47,13 +47,13 @@ class NNPotential(Potential):
         """
         self.name = name if name else "NNPotential"
         self.elements = None
-        self.weights = []
-        self.bs = []
+        self.weights = {}
+        self.bs = {}
         self.atom_energy = None
         self.normalized_nodes = None
         self.epochs = None
         self.param = param if param else {}
-        self.weight_param = weight_param if weight_param else None
+        self.weight_param = weight_param if weight_param else {}
         self.scaling_param = scaling_param if scaling_param else None
         self.fitted = False
 
@@ -88,8 +88,8 @@ class NNPotential(Potential):
                 'atom{:>16.9f}{:>16.9f}{:>16.9f}{:>4s}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}'
             for i, (site, force) in enumerate(zip(structure, forces)):
                 lines.append(format_float.format(*site.coords / self.bohr_to_angstrom,
-                                                 site.species_string, 0.0, 0.0,
-                                                 *np.array(force) * self.eV_to_Ha * self.bohr_to_angstrom))
+                                site.species_string, 0.0, 0.0,
+                                *np.array(force) * self.eV_to_Ha * self.bohr_to_angstrom))
         if 'Energy' in inputs:
             lines.append('energy  {:f}'.format(energy * self.eV_to_Ha))
 
@@ -122,7 +122,7 @@ class NNPotential(Potential):
 
             elements.extend(structure.species)
 
-        self.elements = sorted(set(elements))
+        self.elements = [element.name for element in sorted(set(elements))]
 
         with open(filename, 'w') as f:
             f.write('\n'.join(lines))
@@ -378,8 +378,10 @@ class NNPotential(Potential):
                                                          a_eta=a_eta, lambd=lambd,
                                                          zeta=zeta, rcut=r_cut))
 
-            self.num_symm_functions = len(list(itertools.product(r_etas, r_shift))) \
-                + len(list(itertools.product(a_etas, lambdas, zetas)))
+            self.num_symm_functions \
+                = sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + \
+                  sum([len(list(itertools.product(a_etas, lambdas, zetas)))
+                        for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
             self.layer_sizes = [self.num_symm_functions] + self.param.get('hidden_layers')
 
         with open(filename, 'w') as f:
@@ -415,11 +417,13 @@ class NNPotential(Potential):
         with open(filename, 'r') as f:
             lines = f.readlines()
         df = pd.DataFrame([line.split() for line in lines if "#" not in line])
-        specie = Element(np.array(df[df[0] == 'elements'][1])[0])
-        self.specie = specie
-        self.suffix = '{:0>3d}'.format(specie.Z)
+        self.elements = [element for element in np.ravel(df[df[0] == 'elements'])[1:]
+                         if element is not None]
 
-        atom_energy = float(np.array(df[df[0] == 'atom_energy'][2])[0])
+        atom_energy = {}
+        for atom, energy in zip(np.array(df[df[0] == 'atom_energy'])[:, 1],
+                                np.array(df[df[0] == 'atom_energy'])[:, 2]):
+            atom_energy[atom] = float(energy)
         param.update({'atom_energy': atom_energy})
         for tag in PARAMS.get('general'):
             if tag == 'scale_features':
@@ -427,7 +431,8 @@ class NNPotential(Potential):
                     if len(df[df[0] == 'scale_symmetry_functions']) != 0 else 0
                 param.update({'scale_features': scale_features})
             elif tag == 'hidden_layers':
-                hidden_layers = [int(neuron) for neuron in np.array(df[df[0] == 'global_nodes_short'])[0][1:] if neuron]
+                hidden_layers = [int(neuron) for neuron
+                                 in np.array(df[df[0] == 'global_nodes_short'])[0][1:] if neuron]
                 param.update({'hidden_layers': hidden_layers})
                 activations = np.array(df[df[0] == 'global_activation_short'])[0][1]
                 param.update({'activations': activations})
@@ -441,43 +446,45 @@ class NNPotential(Potential):
             value = str_formatify(np.array(df[df[0] == tag])[0][1])
             param.update({tag: value})
 
-        r_cut = np.array(df[(df[0] == 'symfunction_short') & (df[2] == '2')][6],
-                         dtype=np.float)[0]
+        r_cut = np.sort(df[(df[0] == 'symfunction_short') & (df[2] == '2')][6],
+                        dtype=np.float)[0]
         r_cut = float('{:.1f}'.format(r_cut * units.bohr_to_angstrom))
         param.update({'r_cut': r_cut})
-        r_etas = np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '2')][4]),
-                          dtype=np.float).tolist()
+        r_etas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '2')][4]),
+                                  dtype=np.float)).tolist()
         param.update({'r_etas': r_etas})
-        r_shift = np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '2')][5]),
-                           dtype=np.float)
+        r_shift = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '2')][5]),
+                                   dtype=np.float)).tolist()
         r_shift = [float('{:.1f}'.format(r * units.bohr_to_angstrom)) for r in r_shift]
         param.update({'r_shift': r_shift})
-        a_etas = np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][5]),
-                          dtype=np.float).tolist()
+        a_etas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][5]),
+                                  dtype=np.float)).tolist()
         param.update({'a_etas': a_etas})
-        lambdas = np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][6]),
-                           dtype=np.int).tolist()
+        lambdas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][6]),
+                                   dtype=np.int)).tolist()
         param.update({'lambdas': lambdas})
-        zetas = np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][7]),
-                         dtype=np.float).tolist()
+        zetas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][7]),
+                                 dtype=np.float)).tolist()
         param.update({'zetas': zetas})
-        self.num_symm_functions = len(list(itertools.product(r_etas, r_shift))) \
-            + len(list(itertools.product(a_etas, lambdas, zetas)))
+        self.num_symm_functions = \
+            sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + \
+            sum([len(list(itertools.product(a_etas, lambdas, zetas))) \
+                    for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
         self.layer_sizes = [self.num_symm_functions] + hidden_layers
         self.param = param
 
-    def load_weights(self, weights_filename):
+    def load_weights(self, weights_filename, specie):
         """
         Load weights file of trained Neural Network Potential.
 
         Args
             weights_filename (str): The weights file.
+            specie (str): The name of specie.
         """
         with open(weights_filename) as f:
             weights_lines = f.readlines()
 
-        weight_param = pd.DataFrame([line.split() for line in weights_lines
-                                     if "#" not in line])
+        weight_param = pd.DataFrame([line.split() for line in weights_lines if "#" not in line])
         weight_param.columns = ['value', 'type', 'index', 'start_layer',
                                 'start_neuron', 'end_layer', 'end_neuron']
 
@@ -488,14 +495,14 @@ class NNPotential(Potential):
             weights = np.reshape(np.array(weights_group['value'], dtype=np.float),
                                  (self.layer_sizes[layer_index - 1],
                                   self.layer_sizes[layer_index]))
-            self.weights.append(weights)
+            self.weights[specie].append(weights)
 
             bs_group = weight_param[(weight_param['type'] == 'b') &
                                     (weight_param['start_layer'] == str(layer_index))]
             bs = np.array(bs_group['value'], dtype=np.float)
-            self.bs.append(bs)
+            self.bs[specie].append(bs)
 
-        self.weight_param = weight_param
+        self.weight_param[specie] = weight_param
 
     def load_scaler(self, scaling_filename):
         """
@@ -559,23 +566,24 @@ class NNPotential(Potential):
         """
         if self.weight_param is None or self.scaling_param is None:
             raise RuntimeError("The parameters should be provided.")
-        weights_filename = '.'.join(['weights', self.suffix, 'data'])
-        weight_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6s}{:>6s}{:>6s}'
-        bias_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6}'
-        lines = []
-        for i in range(self.weight_param.shape[0]):
-            if self.weight_param.iloc[i]['type'] == 'a':
-                lines.append(weight_formatter.format(*self.weight_param.iloc[i]))
-            else:
-                lines.append(bias_formatter.format(*self.weight_param.iloc[i]))
+        for specie in self.elements:
+            weights_filename = '.'.join(['weights', str(Element(specie).number).zfill(3), 'data'])
+            weight_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6s}{:>6s}{:>6s}'
+            bias_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6}'
+            lines = []
+            for i in range(self.weight_param[specie].shape[0]):
+                if self.weight_param[specie].iloc[i]['type'] == 'a':
+                    lines.append(weight_formatter.format(*self.weight_param[specie].iloc[i]))
+                else:
+                    lines.append(bias_formatter.format(*self.weight_param[specie].iloc[i]))
 
-        with open(weights_filename, 'w') as f:
-            f.writelines('\n'.join(lines))
+            with open(weights_filename, 'w') as f:
+                f.writelines('\n'.join(lines))
 
         scaling_filename = 'scaling.data'
         scaling_formatter = '{:>4s}{:>5s}  {:>22s} {:>22s} {:>22s} {:.>22s}'
         scaling_lines = []
-        for i in range(self.num_symm_functions):
+        for i in range(self.num_symm_functions * len(self.elements)):
             scaling_lines.append(scaling_formatter.format(*self.scaling_param.iloc[i]))
         with open(scaling_filename, 'w') as f:
             f.writelines('\n'.join(scaling_lines))
@@ -586,8 +594,8 @@ class NNPotential(Potential):
 
         return ff_settings
 
-    def train(self, train_structures, energies=None, forces=None, stresses=None,
-              **kwargs):
+    def train(self, train_structures, train_energies=None, train_forces=None,
+              train_stresses=None, **kwargs):
         """
         Training data with moment tensor method.
 
@@ -595,23 +603,23 @@ class NNPotential(Potential):
             train_structures ([Structure]): The list of Pymatgen Structure object.
                 energies ([float]): The list of total energies of each structure
                 in structures list.
-            energies ([float]): List of total energies of each structure in
+            train_energies ([float]): List of total energies of each structure in
                 structures list.
-            forces ([np.array]): List of (m, 3) forces array of each structure
+            train_forces ([np.array]): List of (m, 3) forces array of each structure
                 with m atoms in structures list. m can be varied with each
                 single structure case.
-            stresses (list): List of (6, ) virial stresses of each
+            train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
             kwargs: Parameters in write_input method.
         """
         if not which('nnp-train'):
             raise RuntimeError("NNP Trainer has not been found.")
 
-        train_pool = pool_from(train_structures, energies, forces, stresses)
+        train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
         atoms_filename = 'input.data'
 
         with ScratchDir('.'):
-            atoms_filename = self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)
+            _ = self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)
             output = 'training_output'
 
             input_filename = self.write_input(**kwargs)
@@ -646,29 +654,30 @@ class NNPotential(Potential):
                 np.array([line for line in forces_rmse_pattern.findall(error_lines)],
                          dtype=np.float).T
 
-            weights_filename_pattern = 'weights*{}.out'.format(self.param.get('epochs'))
-            weights_filename = glob.glob(weights_filename_pattern)[0]
-
-            self.suffix = weights_filename.split('.')[1]
-
-            self.load_weights(weights_filename)
+            for specie in self.elements:
+                weights_filename= 'weights.{}.{}.out'.format(str(Element(specie).number).zfill(3),
+                                                             str(self.param['epochs']).zfill(6))
+                self.weights[specie] = []
+                self.bs[specie] = []
+                self.weight_param[specie] = []
+                self.load_weights(weights_filename, specie)
             self.load_scaler('scaling.data')
 
         return rc
 
-    def evaluate(self, test_structures, ref_energies, ref_forces, ref_stresses):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses):
         """
         Evaluate energies, forces and stresses of structures with trained
         interatomic potentials.
 
         Args:
             test_structures ([Structure]): List of Pymatgen Structure Objects.
-            ref_energies ([float]): List of DFT-calculated total energies of
+            test_energies ([float]): List of DFT-calculated total energies of
                 each structure in structures list.
-            ref_forces ([np.array]): List of DFT-calculated (m, 3) forces of
+            test_forces ([np.array]): List of DFT-calculated (m, 3) forces of
                 each structure with m atoms in structures list. m can be varied
                 with each single structure case.
-            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses
+            test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
         """
         if not which('nnp-predict'):
@@ -677,8 +686,8 @@ class NNPotential(Potential):
         original_file = 'input.data'
         predict_file = 'output.data'
 
-        predict_pool = pool_from(test_structures, ref_energies,
-                                 ref_forces, ref_stresses)
+        predict_pool = pool_from(test_structures, test_energies, test_forces,
+                                 test_stresses)
         with ScratchDir('.'):
             _, _ = self.write_param()
             original_file = self.write_cfgs(original_file, cfg_pool=predict_pool)
