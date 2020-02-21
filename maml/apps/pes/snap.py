@@ -171,8 +171,7 @@ class SNAPotential(Potential):
         """
         with open(coeff_file) as f:
             coeff_lines = f.readlines()
-        coeff_lines = [line for line in coeff_lines if not line.startswith('#')
-                       and not line.startswith(' ')]
+        coeff_lines = [line for line in coeff_lines if not line.startswith('#')]
         element_profile = {}
         ne, nbc = coeff_lines[0].split()
         ne, nbc = int(ne), int(nbc)
