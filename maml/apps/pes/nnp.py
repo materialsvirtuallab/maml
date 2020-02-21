@@ -481,6 +481,11 @@ class NNPotential(Potential):
             weights_filename (str): The weights file.
             specie (str): The name of specie.
         """
+        if not self.weights.get(specie) or not self.bs.get(specie) or not self.weight_param:
+            self.weights[specie] = []
+            self.bs[specie] = []
+            self.weight_param[specie] = []
+
         with open(weights_filename) as f:
             weights_lines = f.readlines()
 
@@ -665,7 +670,7 @@ class NNPotential(Potential):
 
         return rc
 
-    def evaluate(self, test_structures, test_energies, test_forces, test_stresses):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses=None):
         """
         Evaluate energies, forces and stresses of structures with trained
         interatomic potentials.
