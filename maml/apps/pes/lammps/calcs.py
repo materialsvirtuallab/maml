@@ -526,7 +526,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             raise ValueError("Lattice type is invalid.")
 
         super_cell = unit_cell * scale_factor
-        super_cell_ld = LammpsData.from_structure(super_cell, atom_style='atomic')
+        super_cell_ld = LammpsData.from_structure(super_cell, ff_elements=self.ff_settings.elements)
         super_cell_ld.write_file('data.supercell')
 
         with open('in.relax', 'w') as f:
@@ -569,8 +569,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                 error_msg += msg[-1]
             raise RuntimeError(error_msg)
 
-        final_relaxed_struct = LammpsData.from_file('final.relaxed',
-                                                    atom_style='atomic').structure
+        final_relaxed_struct = LammpsData.from_file('final.relaxed').structure
 
         lines = ['{}'.format(final_relaxed_struct.num_sites)]
 
