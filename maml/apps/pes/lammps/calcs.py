@@ -693,8 +693,7 @@ class DefectFormation(LMPStaticCalculator):
                                        alat=self.alat)
         lattice_calculator = LatticeConstant(ff_settings=self.ff_settings)
         a, _, _ = lattice_calculator.calculate([unit_cell])[0]
-        unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice,
-                                       alat=a)
+        unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice, alat=a)
 
         if self.lattice == 'fcc':
             idx, scale_factor = 95, [3, 3, 3]
@@ -709,7 +708,8 @@ class DefectFormation(LMPStaticCalculator):
         efs_calculator = EnergyForceStress(ff_settings=self.ff_settings)
         energy_per_atom = efs_calculator.calculate([super_cell])[0][0] / len(super_cell)
 
-        super_cell_ld = LammpsData.from_structure(super_cell, atom_style='atomic')
+        super_cell_ld = LammpsData.from_structure(super_cell,
+                                                  ff_elements=self.ff_settings.elements)
         super_cell_ld.write_file('data.supercell')
 
         input_file = 'in.defect'

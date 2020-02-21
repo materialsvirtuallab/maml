@@ -2,10 +2,10 @@
 
 units           metal
 
-atom_style      atomic
+atom_style      charge
 atom_modify     map array
 boundary        p p p
-atom_modify	sort 0 0.0
+atom_modify	    sort 0 0.0
 
 # unit cell
 
@@ -15,10 +15,10 @@ read_data       data.supercell
 
 # make a vacancy
 
-group {specie} type 1
+group           {specie} type 1
 
-group del id {del_id}
-delete_atoms group del compress no
+group           del id {del_id}
+delete_atoms    group del compress no
 
 # choose potential
 
