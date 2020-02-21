@@ -293,7 +293,7 @@ class ElasticConstant(LMPStaticCalculator):
 
     def __init__(self, ff_settings, potential_type='external',
                  deformation_size=1e-6, jiggle=1e-5, lattice='bcc', alat=5.0,
-                 maxiter=400, maxeval=1000):
+                 num_species=1, atom_type=1, maxiter=400, maxeval=1000):
         """
         Args:
             ff_settings (list/Potential): Configure the force field settings for LAMMPS
@@ -308,10 +308,15 @@ class ElasticConstant(LMPStaticCalculator):
                 prevent atoms from staying on saddle points.
             lattice (str): The lattice type of structure. e.g. bcc or diamond.
             alat (float): The lattice constant of specific lattice and specie.
+            num_species (int): The number of species contained in ff_settings.
+                Default to single element.
+            atom_type (int): The specified atom type if more than 1 species
+                contained in the ff_settings.
             maxiter (float): The maximum number of iteration. Default to 400.
             maxeval (float): The maximum number of evaluation. Default to 1000.
         """
         self.ff_settings = ff_settings
+        elements = ff_settings.elements
         self.write_command = self._RESTART_CONFIG[potential_type]['write_command']
         self.read_command = self._RESTART_CONFIG[potential_type]['read_command']
         self.restart_file = self._RESTART_CONFIG[potential_type]['restart_file']
@@ -319,6 +324,13 @@ class ElasticConstant(LMPStaticCalculator):
         self.jiggle = jiggle
         self.lattice = lattice
         self.alat = alat
+        if num_species != len(elements):
+            raise ValueError("Number of species don't match with number of "
+                             "elements in potential.")
+        self.num_species = num_species
+        if isinstance(atom_type, str):
+            atom_type = elements.index(atom_type) + 1
+        self.atom_type = atom_type
         self.maxiter = maxiter
         self.maxeval = maxeval
 
@@ -348,7 +360,10 @@ class ElasticConstant(LMPStaticCalculator):
             f.write(init_template.format(deformation_size=self.deformation_size,
                                          jiggle=self.jiggle, maxiter=self.maxiter,
                                          maxeval=self.maxeval, lattice=self.lattice,
-                                         alat=self.alat))
+                                         alat=self.alat, num_species=self.num_species,
+                                         atom_type=self.atom_type,
+                                         masses='\n'.join(['mass {} {}'.format(i+1, i+1)
+                                                            for i in range(self.num_species)])))
         with open('potential.mod', 'w') as f:
             f.write(potential_template.format(ff_settings='\n'.join(ff_settings)))
         with open('displace.mod', 'w') as f:
@@ -362,8 +377,7 @@ class ElasticConstant(LMPStaticCalculator):
         """
         with ScratchDir('.'):
             input_file = self._setup()
-            p = subprocess.Popen([self.LMP_EXE, '-in', input_file],
-                                 stdout=subprocess.PIPE)
+            p = subprocess.Popen([self.LMP_EXE, '-in', input_file], stdout=subprocess.PIPE)
             stdout = p.communicate()[0]
             rc = p.returncode
             if rc != 0:
