@@ -63,7 +63,8 @@ class SNAPotential(Potential):
         xtrain = self.model.describer.transform(train_structures)
         self.model.fit(features=xtrain, targets=ytrain, **kwargs)
 
-    def evaluate(self, test_structures, test_energies, test_forces, test_stresses):
+    def evaluate(self, test_structures, test_energies, test_forces,
+                 test_stresses=None):
         """
         Evaluate energies, forces and stresses of structures with trained
         machinea learning potentials.
