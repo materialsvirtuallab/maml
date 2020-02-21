@@ -12,9 +12,11 @@ import itertools
 
 import numpy as np
 from monty.tempfile import ScratchDir
-from maml.apps.pes import Potential
+
 from pymatgen.io.lammps.data import LammpsData
 from pymatgen import Structure, Lattice, Element
+
+from maml.apps.pes import Potential
 
 
 def _pretty_input(lines):
@@ -38,7 +40,6 @@ class LMPStaticCalculator(object):
     """
     Abstract class to perform static structure property calculation
     using LAMMPS.
-
     """
 
     LMP_EXE = 'lmp_serial'
@@ -84,17 +85,19 @@ class LMPStaticCalculator(object):
             varies with different subclasses.
 
         """
-        for s in structures:
-            assert self._sanity_check(s) is True, \
+        for struct in structures:
+            assert self._sanity_check(struct) is True, \
                 'Incompatible structure found'
         ff_elements = None
         if hasattr(self, 'element_profile'):
             ff_elements = self.element_profile.keys()
+        if hasattr(self.ff_settings, 'elements'):
+            ff_elements = self.ff_settings.elements
         with ScratchDir('.'):
             input_file = self._setup()
             data = []
-            for s in structures:
-                ld = LammpsData.from_structure(s, ff_elements)
+            for struct in structures:
+                ld = LammpsData.from_structure(struct, ff_elements)
                 ld.write_file('data.static')
                 p = subprocess.Popen([self.LMP_EXE, '-in', input_file],
                                      stdout=subprocess.PIPE)
