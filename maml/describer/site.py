@@ -54,8 +54,10 @@ class BispectrumCoefficients(BaseDescriber):
                                                    twojmax=twojmax,
                                                    element_profile=element_profile,
                                                    quadratic=quadratic)
+        self.rcutfac = cutoff
         self.twojmax = twojmax
         self.elements = sorted(element_profile.keys(), key=lambda x: Element(x))
+        self.element_profile = element_profile
         self.quadratic = quadratic
         self.pot_fit = pot_fit
         self.include_stress = include_stress

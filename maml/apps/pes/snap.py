@@ -23,7 +23,7 @@ class SNAPotential(Potential):
     """
 
     pair_style = 'pair_style        snap'
-    pair_coeff = 'pair_coeff        * * {coeff_file} {elements} {param_file} {specie}'
+    pair_coeff = 'pair_coeff        * * {coeff_file} {elements} {param_file} {elements}'
 
     def __init__(self, model, name=None):
         """
@@ -38,6 +38,7 @@ class SNAPotential(Potential):
         """
         self.name = name if name else 'SNAPotential'
         self.model = model
+        self.elements = self.model.describer.elements
 
     def train(self, train_structures, train_energies, train_forces,
               train_stresses=None, **kwargs):
@@ -62,8 +63,6 @@ class SNAPotential(Potential):
         ytrain = df['y_orig'] / df['n']
         xtrain = self.model.describer.transform(train_structures)
         self.model.fit(features=xtrain, targets=ytrain, **kwargs)
-        self.elements = sorted(set(itertools.chain(*[struct.symbol_set
-                            for struct in train_structures])), key=lambda x: Element(x))
 
     def evaluate(self, test_structures, test_energies, test_forces, test_stresses):
         """
@@ -107,8 +106,6 @@ class SNAPotential(Potential):
         """
         Write parameter and coefficient file to perform lammps calculation.
         """
-        if not self.specie:
-            raise ValueError("No specie given!")
 
         param_file = '{}.snapparam'.format(self.name)
         coeff_file = '{}.snapcoeff'.format(self.name)
@@ -116,16 +113,14 @@ class SNAPotential(Potential):
         model = self.model
         describer = self.model.describer
         profile = describer.element_profile
-        elements = [element.symbol for element
-                    in sorted([Element(e) for e in profile.keys()])]
-        ne = len(elements)
+        ne = len(self.elements)
         nbc = len(describer.subscripts)
         if describer.quadratic:
             nbc += int((1 + nbc) * nbc / 2)
 
         coeff_lines = []
         coeff_lines.append('{} {}'.format(ne, nbc + 1))
-        for element, coeff in zip(elements, np.split(model.coef, ne)):
+        for element, coeff in zip(self.elements, np.split(model.coef, ne)):
             coeff_lines.append('{} {} {}'.format(element,
                                                  profile[element]['r'],
                                                  profile[element]['w']))
@@ -134,19 +129,19 @@ class SNAPotential(Potential):
             f.write('\n'.join(coeff_lines))
 
         param_lines = []
-        keys = ['rcutfac', 'twojmax', 'rfac0', 'rmin0', 'diagonalstyle']
-        param_lines.extend(['{} {}'.format(k, getattr(describer, k))
-                            for k in keys])
+        keys = ['rcutfac', 'twojmax']
+        param_lines.extend(['{} {}'.format(k, getattr(describer, k)) for k in keys])
+        param_lines.extend(['rfac0 0.99363', 'rmin0 0'])
         param_lines.append('quadraticflag {}'.format(int(describer.quadratic)))
         param_lines.append('bzeroflag 0')
         with open(param_file, 'w') as f:
             f.write('\n'.join(param_lines))
 
-        pair_coeff = self.pair_coeff.format(elements=' '.join(elements),
-                                            specie=self.specie.name,
+        pair_style = self.pair_style
+        pair_coeff = self.pair_coeff.format(elements=' '.join(self.elements),
                                             coeff_file=coeff_file,
                                             param_file=param_file)
-        ff_settings = [self.pair_style, pair_coeff]
+        ff_settings = [pair_style, pair_coeff]
         return ff_settings
 
     def save(self, filename):
