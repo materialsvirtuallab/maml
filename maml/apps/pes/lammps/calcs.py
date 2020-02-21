@@ -569,7 +569,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                 error_msg += msg[-1]
             raise RuntimeError(error_msg)
 
-        final_relaxed_struct = LammpsData.from_file('final.relaxed').structure
+        final_relaxed_struct = LammpsData.from_file('final.relaxed', atom_style='charge').structure
 
         lines = ['{}'.format(final_relaxed_struct.num_sites)]
 
