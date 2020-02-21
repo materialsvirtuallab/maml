@@ -177,7 +177,7 @@ class SNAPotential(Potential):
         ne, nbc = int(ne), int(nbc)
         for n in range(ne):
             specie, r, w = coeff_lines[1 + n * (nbc + 1)].split()
-            r, w = float(r), int(w)
+            r, w = float(r), float(w)
             element_profile[specie] = {'r': r, 'w': w}
 
         rcut_pattern = re.compile(r'rcutfac (.*?)\n', re.S)
