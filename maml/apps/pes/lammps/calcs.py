@@ -293,7 +293,7 @@ class ElasticConstant(LMPStaticCalculator):
 
     def __init__(self, ff_settings, potential_type='external',
                  deformation_size=1e-6, jiggle=1e-5, lattice='bcc', alat=5.0,
-                 num_species=1, atom_type=1, maxiter=400, maxeval=1000):
+                 atom_type=1, maxiter=400, maxeval=1000):
         """
         Args:
             ff_settings (list/Potential): Configure the force field settings for LAMMPS
@@ -308,8 +308,6 @@ class ElasticConstant(LMPStaticCalculator):
                 prevent atoms from staying on saddle points.
             lattice (str): The lattice type of structure. e.g. bcc or diamond.
             alat (float): The lattice constant of specific lattice and specie.
-            num_species (int): The number of species contained in ff_settings.
-                Default to single element.
             atom_type (int): The specified atom type if more than 1 species
                 contained in the ff_settings.
             maxiter (float): The maximum number of iteration. Default to 400.
@@ -324,10 +322,7 @@ class ElasticConstant(LMPStaticCalculator):
         self.jiggle = jiggle
         self.lattice = lattice
         self.alat = alat
-        if num_species != len(elements):
-            raise ValueError("Number of species don't match with number of "
-                             "elements in potential.")
-        self.num_species = num_species
+        self.num_species = len(elements)
         if isinstance(atom_type, str):
             atom_type = elements.index(atom_type) + 1
         self.atom_type = atom_type
@@ -417,8 +412,8 @@ class LatticeConstant(LMPStaticCalculator):
     def __init__(self, ff_settings):
         """
         Args:
-            ff_settings (list/Potential): Configure the force field settings for LAMMPS
-                calculation, if given a Potential object, should apply
+            ff_settings (list/Potential): Configure the force field settings for
+                LAMMPS calculation, if given a Potential object, should apply
                 Potential.write_param method to get the force field setting.
         """
         self.ff_settings = ff_settings
