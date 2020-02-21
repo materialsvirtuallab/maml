@@ -734,7 +734,7 @@ class NNPotential(Potential):
         return energy, forces, stress
 
     @staticmethod
-    def from_config(input_filename, scaling_filename, weights_filename):
+    def from_config(input_filename, scaling_filename, weights_filenames):
         """
         Initialize potentials with parameters file.
 
@@ -743,13 +743,17 @@ class NNPotential(Potential):
                 Neural Network Potential.
             scaling_filename (str): The file storing scaling info of
                 Neural Network Potential.
-            weights_filename (str): The file storing weights of
+            weights_filenames (list): List of files storing weights of each specie in
                 Neural Network Potential.
         """
         nnp = NNPotential()
         nnp.load_input(input_filename)
         nnp.load_scaler(scaling_filename)
-        nnp.load_weights(weights_filename)
+        if len(nnp.elements) != len(weights_filenames):
+            raise ValueError("{} weights files should be given to "
+                             "{}".format(len(nnp.elements), ' '.join(nnp.elements)))
+        for weights_filename, specie in zip(weights_filenames, nnp.elements):
+            nnp.load_weights(weights_filename, specie)
         nnp.fitted = True
 
         return nnp
