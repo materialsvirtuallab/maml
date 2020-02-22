@@ -361,11 +361,6 @@ class GAPotential(Potential):
             np.savetxt(param_file, element_param[element], fmt='%.20e')
         tree.write(xml_filename)
 
-        gpcoordinates = list(root.iter('gpCoordinates'))[0]
-        param_filename = "{}.soapparam".format(self.name)
-        gpcoordinates.set('sparseX_filename', param_filename)
-        np.savetxt(param_filename, self.param.get('param'), fmt='%.20e')
-
         pair_coeff = self.pair_coeff.format(xml_filename,
                                             '\"Potential xml_label={}\"'.
                                             format(self.param.get('potential_label')),
