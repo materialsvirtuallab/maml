@@ -100,7 +100,7 @@ class MTPotential(Potential):
             lines.append(format_str.format('AtomData:  id', 'type',
                 'cartes_x', 'cartes_y', 'cartes_z', 'fx', 'fy', 'fz'))
             for i, (site, force) in enumerate(zip(structure, forces)):
-                lines.append(format_float.format(i+1, self.elements.index(site.specie),
+                lines.append(format_float.format(i+1, self.elements.index(str(site.specie)),
                                                  *site.coords, *force))
         if 'Energy' in inputs:
             lines.append(' Energy')
