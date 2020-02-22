@@ -1,10 +1,10 @@
 MTP
 version = 1.1.0
 potential_name = MTP1m
-species_count = 1
+species_count = %d
 potential_tag = 
 radial_basis_type = RBChebyshev
-	min_dist = 4
+	min_dist = %f
 	max_dist = %f
 	radial_basis_size = %d
 	radial_funcs_count = 2
