@@ -6,6 +6,7 @@
 
 import re
 import os
+import itertools
 import subprocess
 import ruamel.yaml as yaml
 import xml.etree.ElementTree as ET
@@ -155,10 +156,8 @@ class GAPotential(Potential):
             size = int(size)
             lattice_str = lattice_pattern.findall(block)[0]
             lattice = Lattice(list(map(lambda s: float(s), lattice_str.split())))
-            # energy_str = energy_pattern.findall(block)[0]
             energy_str = energy_pattern.findall(block)[-1]
             energy = float(energy_str)
-            # stress_str = stress_pattern.findall(block)[0]
             stress_str = stress_pattern.findall(block)[0][1]
             virial_stress = np.array(list(map(lambda s: float(s), stress_str.split())))
             virial_stress = [virial_stress[i] for i in [0, 4, 8, 1, 5, 6]]
@@ -254,6 +253,15 @@ class GAPotential(Potential):
             raise RuntimeError("gap_fit has not been found.\n",
                                "Please refer to https://github.com/libAtoms/QUIP for ",
                                "further detail.")
+
+        gap_sorted_elements = []
+        for struct in train_structures:
+            for specie in struct.species:
+                if str(specie) not in gap_sorted_elements:
+                    gap_sorted_elements.append(str(specie))
+
+        self.elements = sorted(gap_sorted_elements, key=lambda x: Element(x))
+
         atoms_filename = 'train.xyz'
         xml_filename = 'train.xml'
         train_pool = pool_from(train_structures, energies, forces, stresses)
@@ -290,8 +298,6 @@ class GAPotential(Potential):
         if use_stress:
             exe_command.append('virial_parameter_name=dft_virial')
         exe_command.append('gp_file={}'.format(xml_filename))
-
-        print(exe_command)
 
         with ScratchDir('.'):
             self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)

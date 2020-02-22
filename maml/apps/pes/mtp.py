@@ -595,12 +595,13 @@ class MTPotential(Potential):
         return filename
 
     @staticmethod
-    def from_config(filename):
+    def from_config(filename, elements):
         """
         Initialize potentials with parameters file.
 
-        ARgs:
-            filename: The file storing parameters of potentials.
+        Args:
+            filename (str): The file storing parameters of potentials.
+            elements (list): The list of elements.
 
         Returns:
             MTPotential
@@ -608,7 +609,9 @@ class MTPotential(Potential):
         if filename.endswith('.yaml'):
             with open(filename) as f:
                 param = yaml.load(f)
-            return MTPotential(param)
+            mtp = MTPotential(param)
+            mtp.elements = elements
+            return mtp
         if filename.endswith('.mtp'):
             def load_config(filename):
                 param = OrderedDict()
@@ -622,4 +625,6 @@ class MTPotential(Potential):
                     param[key] = value
                 return param
             param = load_config(filename)
-            return MTPotential(param=param)
+            mtp = MTPotential(param)
+            mtp.elements = elements
+            return mtp
