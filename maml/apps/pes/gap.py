@@ -6,8 +6,8 @@
 
 import re
 import os
-import ruamel.yaml as yaml
 import subprocess
+import ruamel.yaml as yaml
 import xml.etree.ElementTree as ET
 from collections import OrderedDict, defaultdict
 
@@ -290,6 +290,8 @@ class GAPotential(Potential):
         if use_stress:
             exe_command.append('virial_parameter_name=dft_virial')
         exe_command.append('gp_file={}'.format(xml_filename))
+
+        print(exe_command)
 
         with ScratchDir('.'):
             self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)

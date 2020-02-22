@@ -166,7 +166,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         descriptor_command.append("n_max" + '=' + '{}'.format(self.n_max))
         descriptor_command.append("atom_sigma" + '=' + '{}'.format(self.atom_sigma))
 
-        atomic_numbers = [str(num) for num in np.unique(structure.atomic_numbers)]
+        atomic_numbers = [str(element.number) for element in sorted(np.unique(structure.species))]
         n_Z = len(atomic_numbers)
         n_species = len(atomic_numbers)
         Z = '{' + '{}'.format(' '.join(atomic_numbers)) + '}'
