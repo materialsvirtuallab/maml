@@ -8,7 +8,6 @@ import re
 import numpy as np
 from monty.io import zopen
 
-from pymatgen import Element
 from maml.apps.pes import Potential
 from maml.model.linear_model import LinearModel
 from maml.describer import BispectrumCoefficients

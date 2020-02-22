@@ -43,6 +43,7 @@ class GAPotential(Potential):
         """
         self.name = name if name else "GAPotential"
         self.param = param if param else {}
+        self.elements = None
         self.specie = None
 
     def _line_up(self, structure, energy, forces, virial_stress):
@@ -89,7 +90,8 @@ class GAPotential(Potential):
         if 'AtomData' in inputs:
             format_str = '{:<10s}{:>16f}{:>16f}{:>16f}{:>8d}{:>16f}{:>16f}{:>16f}'
             for i, (site, force) in enumerate(zip(structure, forces)):
-                lines.append(format_str.format(site.species_string, *site.coords, site.specie.Z, *force))
+                lines.append(format_str.format(site.species_string, *site.coords, site.specie.Z,
+                                               *force))
         return '\n'.join(lines)
 
     def write_cfgs(self, filename, cfg_pool):
@@ -270,6 +272,7 @@ class GAPotential(Potential):
             param = kwargs.get(param_name) if kwargs.get(param_name) \
                 else soap_params.get(param_name)
             gap_command.append(param_name + '=' + '{}'.format(param))
+        gap_command.append('add_species=T')
         exe_command.append("gap=" + "{" + "{}".format(' '.join(gap_command)) + "}")
 
         for param_name in preprocess_params:
