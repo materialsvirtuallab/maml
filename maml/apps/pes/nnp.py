@@ -6,7 +6,6 @@
 
 import re
 import os
-import glob
 import itertools
 import subprocess
 from collections import OrderedDict
