@@ -6,7 +6,6 @@
 
 import re
 import os
-import itertools
 import subprocess
 import ruamel.yaml as yaml
 import xml.etree.ElementTree as ET
@@ -18,6 +17,7 @@ from monty.os.path import which
 from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
 from pymatgen import Structure, Lattice, Element
+from pymatgen.core.periodic_table import get_el_sp
 
 from maml.apps.pes import Potential
 from maml.apps.pes.lammps.calcs import EnergyForceStress
@@ -45,7 +45,6 @@ class GAPotential(Potential):
         self.name = name if name else "GAPotential"
         self.param = param if param else {}
         self.elements = None
-        self.specie = None
 
     def _line_up(self, structure, energy, forces, virial_stress):
         """
@@ -320,14 +319,20 @@ class GAPotential(Potential):
                 tree = ET.parse(xml_file)
                 root = tree.getroot()
                 potential_label = root.tag
-                gpcoordinates = list(root.iter('gpCoordinates'))[0]
-                param_file = gpcoordinates.get('sparseX_filename')
-                param = np.loadtxt(param_file)
-                return tree, param, potential_label
+                element_param = {}
+                for gpcoordinates in list(root.iter('gpCoordinates')):
+                    gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
+                    gp_descriptor_text = gp_descriptor.findtext('.')
+                    Z_pattern = re.compile(' Z=(.*?) ', re.S)
+                    element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
+                    param = np.loadtxt(gpcoordinates.get('sparseX_filename'))
+                    element_param[element] = param.tolist()
 
-            tree, param, potential_label = get_xml(xml_filename)
+                return tree, element_param, potential_label
+
+            tree, element_param, potential_label = get_xml(xml_filename)
             self.param['xml'] = tree
-            self.param['param'] = param
+            self.param['element_param'] = element_param
             self.param['potential_label'] = potential_label
 
         return rc
@@ -343,15 +348,28 @@ class GAPotential(Potential):
             raise RuntimeError("The xml and parameters should be provided.")
         tree = self.param.get('xml')
         root = tree.getroot()
+        element_param = self.param.get('element_param')
+        atomic_numbers = []
+        for i, gpcoordinates in enumerate(list(root.iter('gpCoordinates'))):
+            gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
+            gp_descriptor_text = gp_descriptor.findtext('.')
+            Z_pattern = re.compile(' Z=(.*?) ', re.S)
+            element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
+            atomic_numbers.append(Element(element).number)
+            param_file = "{}.soapparam".format(element)
+            gpcoordinates.set('sparseX_filename', param_file)
+            np.savetxt(param_file, element_param[element], fmt='%.20e')
+        tree.write(xml_filename)
+
         gpcoordinates = list(root.iter('gpCoordinates'))[0]
         param_filename = "{}.soapparam".format(self.name)
         gpcoordinates.set('sparseX_filename', param_filename)
         np.savetxt(param_filename, self.param.get('param'), fmt='%.20e')
-        tree.write(xml_filename)
+
         pair_coeff = self.pair_coeff.format(xml_filename,
                                             '\"Potential xml_label={}\"'.
                                             format(self.param.get('potential_label')),
-                                            self.specie.Z)
+                                            ' '.join(atomic_numbers))
         ff_settings = [self.pair_style, pair_coeff]
         return ff_settings
 
