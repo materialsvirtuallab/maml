@@ -431,8 +431,8 @@ class MTPotential(Potential):
                                "for further detail.")
         train_pool = pool_from(train_structures, train_energies, train_forces,
                                train_stresses)
-        self.elements = sorted(set(itertools.chain(*[struct.species
-                                                     for struct in train_structures])))
+        elements = sorted(set(itertools.chain(*[struct.species for struct in train_structures])))
+        self.elements = [str(element) for element in elements]
 
         atoms_filename = 'train.cfgs'
 
@@ -461,8 +461,7 @@ class MTPotential(Potential):
             save_fitted_mtp = '.'.join(
                 [unfitted_mtp.split('.')[0]+'_fitted', unfitted_mtp.split('.')[1]])
 
-            p = subprocess.Popen(['mpirun', '-n', '24', 'mlp', 'train',
-                                  unfitted_mtp, atoms_filename,
+            p = subprocess.Popen(['mlp', 'train', unfitted_mtp, atoms_filename,
                                   '--max-iter={}'.format(max_iter),
                                   '--trained-pot-name={}'.format(save_fitted_mtp),
                                   '--curr-pot-name={}'.format(unfitted_mtp),
