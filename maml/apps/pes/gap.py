@@ -355,7 +355,7 @@ class GAPotential(Potential):
             gp_descriptor_text = gp_descriptor.findtext('.')
             Z_pattern = re.compile(' Z=(.*?) ', re.S)
             element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
-            atomic_numbers.append(Element(element).number)
+            atomic_numbers.append(str(Element(element).number))
             param_file = "{}.soapparam".format(element)
             gpcoordinates.set('sparseX_filename', param_file)
             np.savetxt(param_file, element_param[element], fmt='%.20e')
