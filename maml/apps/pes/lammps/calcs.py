@@ -42,7 +42,7 @@ class LMPStaticCalculator(object):
     using LAMMPS.
     """
 
-    LMP_EXE = 'lmp_serial'
+    LMP_EXE = 'lmp_mpi'
     _COMMON_CMDS = ['units metal',
                     'atom_style charge',
                     'box tilt large',
