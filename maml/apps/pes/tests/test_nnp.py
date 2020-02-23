@@ -11,7 +11,7 @@ import numpy as np
 from monty.os.path import which
 from monty.serialization import loadfn
 from pymatgen import Structure
-from mlearn.potentials.nnp import NNPotential
+from maml.apps.pes.nnp import NNPotential
 
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
@@ -71,7 +71,8 @@ class NNPitentialTest(unittest.TestCase):
                              forces=self.test_forces,
                              stresses=self.test_stresses,
                              atom_energy=-4.14, r_cut=5.0,
-                             hidden_layers=hidden_layers, activations=activations,
+                             hidden_layers=hidden_layers,
+                             activations=activations,
                              epochs=1)
         self.assertTrue(self.potential.train_energy_rmse is not None)
         self.assertTrue(self.potential.train_forces_rmse is not None)
@@ -82,34 +83,36 @@ class NNPitentialTest(unittest.TestCase):
     @unittest.skipIf(not which('nnp-predict'), 'No nnp-train cmd found.')
     def test_evaluate(self):
         self.potential.train(train_structures=self.test_structures,
-                             energies=self.test_energies,
-                             forces=self.test_forces,
-                             stresses=self.test_stresses,
+                             train_energies=self.test_energies,
+                             train_forces=self.test_forces,
+                             train_stresses=self.test_stresses,
                              atom_energy=-4.14, r_cut=5.0,
                              epochs=1)
 
         df_orig, df_tar = \
             self.potential.evaluate(test_structures=self.test_structures,
-                                    ref_energies=self.test_energies,
-                                    ref_forces=self.test_forces,
-                                    ref_stresses=self.test_stresses)
+                                    test_energies=self.test_energies,
+                                    test_forces=self.test_forces,
+                                    test_stresses=self.test_stresses)
         self.assertEqual(df_orig.shape[0], df_tar.shape[0])
 
     @unittest.skipIf(not which('nnp-train'), 'No nnp-train cmd found.')
     @unittest.skipIf(not which('lmp_serial'), 'No LAMMPS cmd found.')
-    def test_predict(self):
+    def test_predict_efs(self):
         self.potential.train(train_structures=self.test_structures,
-                             energies=self.test_energies,
-                             forces=self.test_forces,
-                             stresses=self.test_stresses,
+                             train_energies=self.test_energies,
+                             train_forces=self.test_forces,
+                             train_stresses=self.test_stresses,
                              atom_energy=-4.14, r_cut=5.0,
                              epochs=1)
-        energy, forces, stress = self.potential.predict(self.test_struct)
+        energy, forces, stress = self.potential.predict_efs(self.test_struct)
         self.assertEqual(len(forces), len(self.test_struct))
         self.assertEqual(len(stress), 6)
 
     def test_from_config(self):
-        nnp = NNPotential.from_config(input_file, scaling_file, weights_file)
+        nnp = NNPotential.from_config(input_filename=input_file,
+                                      scaling_filename=scaling_file,
+                                      weights_filenames=[weights_file])
         self.assertTrue(nnp.fitted)
 
 

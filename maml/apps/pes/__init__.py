@@ -2,59 +2,56 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-"""This package contains Potential classes representing Interatomic Potentials."""
+"""This package contains PotentialMixin classes representing Interatomic Potentials."""
 
 import abc
-import six
-from monty.json import MSONable
+from maml.base.model import BaseModel
 
 
-class Potential(six.with_metaclass(abc.ABCMeta, MSONable)):
+class PotentialMixin(BaseModel):
     """
-    Abstract Base class for a Interatomic Potential.
+    Abstract base class for a Interatomic Potential.
     """
 
     @abc.abstractmethod
-    def train(self, train_structures, energies, forces, stresses, **kwargs):
+    def train(self, train_structures, train_energies, train_forces, train_stresses,
+              **kwargs):
         """
-        Train interatomic potentials with energies, forces and
-        stresses corresponding to structures.
+        Train interatomic potentials with energies, forces ann stresses corresponding
+            to structures.
 
         Args:
             train_structures (list): List of Pymatgen Structure objects.
-            energies (list): List of DFT-calculated total energies of each structure
-                in structures list.
-            forces (list): List of DFT-calculated (m, 3) forces of each structure
-                with m atoms in structures list. m can be varied with each single
-                structure case.
-            stresses (list): List of DFT-calculated (6, ) virial stresses of each
+            train_energies (list): List of DFT-calculated total energies of each
                 structure in structures list.
+            train_forces (list): List of DFT-calculated (m, 3) forces of each
+                structure with m atoms in structures list. m can be varied with
+                each single structure case.
+            train_stresses (list): List of DFT-calculated (6, ) virial stresses of
+                each structure in structures list.
         """
-        pass
+        raise NotImplementedError
 
     @abc.abstractmethod
-    def evaluate(self, test_structures, ref_energies, ref_forces, ref_stresses):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses):
         """
         Evaluate energies, forces and stresses of structures with trained
         interatomic potentials.
 
         Args:
             test_structures (list): List of Pymatgen Structure Objects.
-            ref_energies (list): List of DFT-calculated total energies of each
+            test_energies (list): List of DFT-calculated total energies of each
                 structure in structures list.
-            ref_forces (list): List of DFT-calculated (m, 3) forces of each
+            test_forces (list): List of DFT-calculated (m, 3) forces of each
                 structure with m atoms in structures list. m can be varied with
                 each single structure case.
-            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses of
+            test_stresses (list): List of DFT-calculated (6, ) viriral stresses of
                 each structure in structures list.
-
-        Returns:
-            DataFrame of original data and DataFrame of predicted data.
         """
-        pass
+        raise NotImplementedError
 
     @abc.abstractmethod
-    def predict(self, structure):
+    def predict_efs(self, structure):
         """
         Predict energy, forces and stresses of the structure.
 
@@ -64,4 +61,5 @@ class Potential(six.with_metaclass(abc.ABCMeta, MSONable)):
         Returns:
             energy, forces, stress
         """
-        pass
+        raise NotImplementedError
+

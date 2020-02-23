@@ -87,7 +87,7 @@ class SNAPotential(Potential):
 
         return df_orig, df_predict
 
-    def predict(self, structure):
+    def predict_efs(self, structure):
         """
         Predict energy, forces and stresses of the structure.
 
