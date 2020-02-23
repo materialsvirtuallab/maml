@@ -51,16 +51,3 @@ class BaseModel:
             Structure objects.
         """
         return self._predict(self.describer.transform(objs))
-
-
-class PotentialMixin:
-    _model_type = 'potential'
-
-    @abc.abstractmethod
-    def predict_efs(self, include_force=False, include_stress=False):
-        pass
-
-    @abc.abstractmethod
-    def run_md(self, time_step: float=1.0, n_steps: int=10000,
-               temperature: float=300.0, ensemble: str='nve'):
-        pass

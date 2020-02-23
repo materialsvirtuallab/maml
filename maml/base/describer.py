@@ -25,8 +25,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     Base class for a Describer. A describer converts an object to a descriptor,
     typically a numerical representation useful for machine learning.
     The output for the describer can be a single DataFrame/numpy.ndarray or
-    a list of DataFrame/numpy.ndarray. This depends on the multioutput entry in
-    the self._get_tags().
+    a list of DataFrame/numpy.ndarray.
     """
 
     def __init__(self, memory=None, verbose=True, n_jobs=0, **kwargs):
