@@ -3,53 +3,22 @@
 import os
 import tempfile
 import unittest
+import itertools
 
 import numpy as np
 from monty.os.path import which
 from pymatgen import Lattice, Structure
 
 from maml.describer.site import \
-    BispectrumCoefficients, SOAPDescriptor, BPSymmetryFunctions
+    BispectrumCoefficients, SmoothOverlapAtomicPosition, BPSymmetryFunctions
 
 
 class BispectrumCoefficientsTest(unittest.TestCase):
 
-    @staticmethod
-    def test_subscripts():
-
-        def from_lmp_doc(twojmax, diagonal):
-            js = []
-            for j1 in range(0, twojmax + 1):
-                if diagonal == 2:
-                    js.append([j1, j1, j1])
-                elif diagonal == 1:
-                    for j in range(0, min(twojmax, 2 * j1) + 1, 2):
-                        js.append([j1, j1, j])
-                elif diagonal == 0:
-                    for j2 in range(0, j1 + 1):
-                        for j in range(j1 - j2, min(twojmax, j1 + j2) + 1, 2):
-                            js.append([j1, j2, j])
-                elif diagonal == 3:
-                    for j2 in range(0, j1 + 1):
-                        for j in range(j1 - j2, min(twojmax, j1 + j2) + 1, 2):
-                            if j >= j1:
-                                js.append([j1, j2, j])
-            return js
-
-        profile = {"Mo": {"r": 0.5, "w": 1}}
-        for d in range(4):
-            for tjm in range(11):
-                bc = BispectrumCoefficients(1.0, twojmax=tjm,
-                                            element_profile=profile,
-                                            quadratic=False,
-                                            diagonalstyle=d)
-                np.testing.assert_equal(bc.subscripts, from_lmp_doc(tjm, d))
-
     @unittest.skipIf(not which("lmp_serial"), "No LAMMPS cmd found")
     def test_transform(self):
-        s = Structure.from_spacegroup(225, Lattice.cubic(5.69169),
-                                      ['Na', 'Cl'],
-                                      [[0, 0, 0], [0, 0, 0.5]])
+        s = Structure.from_spacegroup('Fm-3m', Lattice.cubic(5.69169),
+                                      ['Na', 'Cl'], [[0, 0, 0], [0, 0, 0.5]])
         profile = dict(Na=dict(r=0.3, w=0.9),
                        Cl=dict(r=0.7, w=3.0))
         s *= [2, 2, 2]
@@ -59,7 +28,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
             inds = np.random.randint(16, size=n)
             s.remove_sites(inds)
 
-        bc_atom = BispectrumCoefficients(5, 3, profile, diagonalstyle=2,
+        bc_atom = BispectrumCoefficients(cutoff=5, twojmax=3, element_profile=profile,
                                          quadratic=False, pot_fit=False)
         df_atom = bc_atom.transform(structures)
 
@@ -68,7 +37,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
             self.assertEqual(df_s.shape, (len(s), 4))
             self.assertTrue(df_s.equals(bc_atom.transform_one(s)))
 
-        bc_pot = BispectrumCoefficients(5, 3, profile, diagonalstyle=2,
+        bc_pot = BispectrumCoefficients(cutoff=5, twojmax=3, element_profile=profile,
                                         quadratic=False, pot_fit=True, include_stress=True)
         df_pot = bc_pot.transform(structures)
         for i, s in enumerate(structures):
@@ -84,7 +53,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
                                               np.zeros(len(s) * 3 + 6))
 
 
-class SOAPDescriptorTest(unittest.TestCase):
+class SmoothOverlapAtomicPositionTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -93,22 +62,21 @@ class SOAPDescriptorTest(unittest.TestCase):
         os.chdir(cls.test_dir)
 
     def setUp(self):
-        self.unary_struct = Structure.from_spacegroup('Im-3m', Lattice.cubic(3.4268),
-                                                      [{"Li": 1}], [[0, 0, 0]])
-        self.binary_struct = Structure.from_spacegroup(225, Lattice.cubic(5.69169),
-                                                       ['Na', 'Cl'],
-                                                       [[0, 0, 0], [0, 0, 0.5]])
-        self.describer = SOAPDescriptor(cutoff=4.8, l_max=8, n_max=8)
+        self.unary_struct = Structure.from_spacegroup("Im-3m", Lattice.cubic(3.4268),
+                                                      ["Li"], [[0, 0, 0]])
+        self.binary_struct = Structure.from_spacegroup("Fm-3m", Lattice.cubic(5.69169),
+                                                       ['Na', 'Cl'], [[0, 0, 0], [0, 0, 0.5]])
+        self.describer = SmoothOverlapAtomicPosition(cutoff=4.8, l_max=8, n_max=8)
 
     @unittest.skipIf(not which('quip'), 'No quip cmd found.')
-    def test_transform(self):
+    def test_transform_one(self):
         unary_descriptors = self.describer.transform_one(self.unary_struct)
         binary_descriptors = self.describer.transform_one(self.binary_struct)
         self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct))
         self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct))
 
     @unittest.skipIf(not which('quip'), 'No quip cmd found.')
-    def test_describe_all(self):
+    def test_transform(self):
         unary_descriptors = self.describer.transform([self.unary_struct] * 3)
         self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct) * 3)
         binary_descriptors = self.describer.transform([self.binary_struct] * 3)
@@ -124,29 +92,49 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
         os.chdir(cls.test_dir)
 
     def setUp(self):
-        self.unary_struct = Structure.from_spacegroup('Im-3m', Lattice.cubic(3.4268),
-                                                      [{"Li": 1}], [[0, 0, 0]])
-        self.num_symm2 = 3
+        self.unary_struct = Structure.from_spacegroup("Im-3m", Lattice.cubic(3.4268),
+                                                      ["Li"], [[0, 0, 0]])
+        self.binary_struct = Structure.from_spacegroup("Fm-3m", Lattice.cubic(5.69169),
+                                                       ['Na', 'Cl'], [[0, 0, 0], [0, 0, 0.5]])
+        self.r_etas = [0.01, 0.02, 0.05]
+        self.r_shift = [0]
+        self.zetas = [1.0, 4.0]
         self.a_etas = [0.01, 0.05]
-        self.describer = BPSymmetryFunctions(dmin=2.0, cutoff=4.8,
-                                             num_symm2=self.num_symm2,
-                                             a_etas=self.a_etas)
+        self.lambdas = [-1, 1]
+        self.describer = BPSymmetryFunctions(cutoff=4.8, r_etas=self.r_etas,
+                                             a_etas=self.a_etas, zetas=self.zetas)
 
-    @unittest.skipIf(not which('RuNNerMakesym'), 'No RuNNerMakesym cmd found.')
-    @unittest.skipIf(not which('RuNNer'), 'No RuNNer cmd found.')
-    def test_transform(self):
+    def test_transform_one(self):
         unary_descriptors = self.describer.transform_one(self.unary_struct)
+        binary_descriptors = self.describer.transform_one(self.binary_struct)
+        unary_elements = set(self.unary_struct.species)
+        binary_elements = set(self.binary_struct.species)
         self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct))
         self.assertEqual(unary_descriptors.shape[1],
-                         self.num_symm2 + len(self.a_etas) * 2 * 4)
+                         len(self.r_etas) * len(self.r_shift) * len(unary_elements) +
+                         len(self.a_etas) * len(self.zetas) * len(self.lambdas)
+                         * len(list(itertools.combinations_with_replacement(unary_elements, 2))))
+        self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct))
+        self.assertEqual(binary_descriptors.shape[1],
+                         len(self.r_etas) * len(self.r_shift) * len(binary_elements) +
+                         len(self.a_etas) * len(self.zetas) * len(self.lambdas)
+                         * len(list(itertools.combinations_with_replacement(binary_elements, 2))))
 
-    @unittest.skipIf(not which('RuNNerMakesym'), 'No RuNNerMakesym cmd found.')
-    @unittest.skipIf(not which('RuNNer'), 'No RuNNer cmd found.')
-    def test_describe_all(self):
-        descriptors = self.describer.transform_one([self.unary_struct] * 3)
-        self.assertEqual(descriptors.shape[0], len(self.unary_struct) * 3)
-        self.assertEqual(descriptors.shape[1],
-                         self.num_symm2 + len(self.a_etas) * 2 * 4)
+    def test_transform(self):
+        unary_descriptors = self.describer.transform([self.unary_struct] * 3)
+        binary_descriptors = self.describer.transform([self.binary_struct] * 3)
+        unary_elements = set(self.unary_struct.species)
+        binary_elements = set(self.binary_struct.species)
+        self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct) * 3)
+        self.assertEqual(unary_descriptors.shape[1],
+                         len(self.r_etas) * len(self.r_shift) * len(unary_elements) +
+                         len(self.a_etas) * len(self.zetas) * len(self.lambdas)
+                         * len(list(itertools.combinations_with_replacement(unary_elements, 2))))
+        self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct) * 3)
+        self.assertEqual(binary_descriptors.shape[1],
+                         len(self.r_etas) * len(self.r_shift) * len(binary_elements) +
+                         len(self.a_etas) * len(self.zetas) * len(self.lambdas)
+                         * len(list(itertools.combinations_with_replacement(binary_elements, 2))))
 
 
 if __name__ == "__main__":
