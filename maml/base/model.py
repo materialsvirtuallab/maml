@@ -1,9 +1,6 @@
-import abc
 from typing import Any, Union, List
 
-import joblib
 import numpy as np
-
 from .describer import BaseDescriber
 
 
@@ -33,17 +30,17 @@ class BaseModel:
         """
         self.model.fit(features, targets, **kwargs)
 
-    def _predict(self, features: np.ndarray):
+    def _predict(self, features: np.ndarray, **kwargs):
         """
         Predict the values given a set of inputs based on fitted model.
 
         Args:
-            features (np.ndarray): array-like input features
+            features (np.ndarray): array-like input features.
 
         Returns:
-            List of output objects
+            List of output objects.
         """
-        return self.model.predict(features)
+        return self.model.predict(features, **kwargs)
 
     def predict_obj(self, objs: Any):
         """
