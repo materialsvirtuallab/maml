@@ -63,3 +63,17 @@ class PotentialMixin(BaseModel):
         """
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def write_param(self):
+        """
+        Write optimized weights file to perform energy and force prediction via
+        lammps calculation.
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def from_connfig(self, **kwargs):
+        """
+        Initialize potentials with parameters file.
+        """
+        raise NotImplementedError
