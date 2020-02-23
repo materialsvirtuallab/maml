@@ -189,8 +189,8 @@ class GAPotential(Potential):
         _, df = convert_docs(docs=data_pool)
         return data_pool, df
 
-    def train(self, train_structures, energies=None, forces=None, stresses=None,
-              default_sigma=[0.0005, 0.1, 0.05, 0.01],
+    def train(self, train_structures, train_energies, train_forces,
+              train_stresses=None, default_sigma=[0.0005, 0.1, 0.05, 0.01],
               use_energies=True, use_forces=True, use_stress=False, **kwargs):
         """
         Training data with gaussian process regression.
@@ -199,12 +199,12 @@ class GAPotential(Potential):
             train_structures ([Structure]): The list of Pymatgen Structure object.
                 energies ([float]): The list of total energies of each structure
                 in structures list.
-            energies ([float]): List of total energies of each structure in
+            train_energies ([float]): List of total energies of each structure in
                 structures list.
-            forces ([np.array]): List of (m, 3) forces array of each structure
+            train_forces ([np.array]): List of (m, 3) forces array of each structure
                 with m atoms in structures list. m can be varied with each
                 single structure case.
-            stresses (list): List of (6, ) virial stresses of each
+            train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
             default_sigma (list): Error criteria in energies, forces, stress
                 and hessian. Should have 4 numbers.
@@ -263,7 +263,8 @@ class GAPotential(Potential):
 
         atoms_filename = 'train.xyz'
         xml_filename = 'train.xml'
-        train_pool = pool_from(train_structures, energies, forces, stresses)
+        train_pool = pool_from(train_structures, train_energies, train_forces,
+                               train_stresses)
 
         exe_command = ["gap_fit"]
         exe_command.append('at_file={}'.format(atoms_filename))
@@ -368,21 +369,20 @@ class GAPotential(Potential):
         ff_settings = [self.pair_style, pair_coeff]
         return ff_settings
 
-    def evaluate(self, test_structures, ref_energies=None, ref_forces=None,
-                 ref_stresses=None, predict_energies=True,
-                 predict_forces=True, predict_stress=False):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses=None,
+                 predict_energies=True, predict_forces=True, predict_stress=False):
         """
         Evaluate energies, forces and stresses of structures with trained
         interatomic potentials.
 
         Args:
             test_structures ([Structure]): List of Pymatgen Structure Objects.
-            ref_energies ([float]): List of DFT-calculated total energies of
+            test_energies ([float]): List of DFT-calculated total energies of
                 each structure in structures list.
-            ref_forces ([np.array]): List of DFT-calculated (m, 3) forces of
+            test_forces ([np.array]): List of DFT-calculated (m, 3) forces of
                 each structure with m atoms in structures list. m can be varied
                 with each single structure case.
-            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses
+            test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
             predict_energies (bool): Whether to predict energies of configurations.
             predict_forces (bool): Whether to predict forces of configurations.
@@ -396,8 +396,8 @@ class GAPotential(Potential):
         xml_file = 'predict.xml'
         original_file = 'original.xyz'
         predict_file = 'predict.xyz'
-        predict_pool = pool_from(test_structures, ref_energies,
-                                 ref_forces, ref_stresses)
+        predict_pool = pool_from(test_structures, test_energies, test_forces,
+                                 test_stresses)
 
         with ScratchDir('.'):
             _ = self.write_param(xml_file)
@@ -471,11 +471,19 @@ class GAPotential(Potential):
                 tree = ET.parse(xml_file)
                 root = tree.getroot()
                 potential_label = root.tag
-                gpcoordinates = list(root.iter('gpCoordinates'))[0]
-                param_file = gpcoordinates.get('sparseX_filename')
-                param = np.loadtxt(param_file)
-                return tree, param, potential_label
+                element_param = {}
 
-            tree, param, potential_label = get_xml(filename)
-            parameters = dict(xml=tree, param=param, potential_label=potential_label)
+                for gpcoordinates in list(root.iter('gpCoordinates')):
+                    gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
+                    gp_descriptor_text = gp_descriptor.findtext('.')
+                    Z_pattern = re.compile(' Z=(.*?) ', re.S)
+                    element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
+                    param = np.loadtxt(gpcoordinates.get('sparseX_filename'))
+                    element_param[element] = param.tolist()
+
+                return tree, element_param, potential_label
+
+            tree, element_param, potential_label = get_xml(filename)
+            parameters = dict(xml=tree, element_param=element_param,
+                              potential_label=potential_label)
             return GAPotential(param=parameters)

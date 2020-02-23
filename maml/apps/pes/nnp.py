@@ -598,8 +598,8 @@ class NNPotential(Potential):
 
         return ff_settings
 
-    def train(self, train_structures, train_energies=None, train_forces=None,
-              train_stresses=None, **kwargs):
+    def train(self, train_structures, train_energies, train_forces, train_stresses=None,
+              **kwargs):
         """
         Training data with moment tensor method.
 
