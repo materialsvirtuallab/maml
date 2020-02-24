@@ -8,6 +8,7 @@ import os
 import abc
 import io
 import subprocess
+import shutil
 import itertools
 
 import numpy as np
@@ -41,8 +42,15 @@ class LMPStaticCalculator(object):
     Abstract class to perform static structure property calculation
     using LAMMPS.
     """
-
-    LMP_EXE = 'lmp_mpi'
+    
+    LMP_EXE = None
+    for lmp_exe in ["lmp_mpi", "lmp_serial"]:
+        if shutil.which(lmp_exe) is not None:
+            LMP_EXE = lmp_exe
+    if LMP_EXE is None:
+        raise ValueError("lammps executable not found in path, "
+            "check lmp_mpi or lmp_serial")
+            
     _COMMON_CMDS = ['units metal',
                     'atom_style charge',
                     'box tilt large',
