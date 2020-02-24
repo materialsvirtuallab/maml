@@ -249,8 +249,8 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
                          key=lambda neighbor: neighbor.species_string)}
 
             for specie in elements:
-                distances = np.array([nn_distance for _, nn_distance
-                                         in temp_dict[specie]])[:, None, None]
+                distances = np.array([nn_distance for _, nn_distance 
+                                      in temp_dict[specie]])[:, None, None]
                 g2 = np.sum(np.exp(-self.r_etas * (distances - self.r_shift) ** 2)
                             * self._fc(distances), axis=0)
                 site_symmfuncs.extend(g2.ravel().tolist())

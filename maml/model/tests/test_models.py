@@ -128,8 +128,8 @@ class GaussianProcessTest(unittest.TestCase):
         y_pred, sigma = self.gpr._predict(x_test, return_std=True)
         upper_bound = y_pred + 1.96 * sigma
         lower_bound = y_pred - 1.96 * sigma
-        self.assertTrue(np.all([l < y and y < u
-                for u, y, l in zip(upper_bound, y_test, lower_bound)]))
+        self.assertTrue(np.all([l < y and y < u 
+                                for u, y, l in zip(upper_bound, y_test, lower_bound)]))
 
 
 if __name__ == "__main__":

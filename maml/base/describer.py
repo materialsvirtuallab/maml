@@ -81,7 +81,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         if not multi_output:
             features = [features]
         batched_features = [self._batch_features(i) for i in 
-            list(*zip(features))]
+                            list(*zip(features))]
         return batched_features if multi_output else batched_features[0]
 
     def _batch_features(self, features):
@@ -105,7 +105,8 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
 class OutDataFrameConcat:
     def _batch_features(self, features):
         concated_features = pd.concat(features, 
-            keys=range(len(features)), names=['input_index', None])
+                                      keys=range(len(features)), 
+                                      names=['input_index', None])
         return concated_features
 
 
