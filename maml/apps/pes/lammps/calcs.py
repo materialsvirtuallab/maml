@@ -259,7 +259,7 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
         cutoffs = [self.element_profile[e]['r'] * self.rcutfac for e in el_in_seq]
         weights = [self.element_profile[e]['w'] for e in el_in_seq]
         compute_args += ' '.join([str(p) for p in cutoffs + weights])
-        compute_args += ' diagonal 3 rmin0 0 quadraticflag {}'.format(int(self.quadratic))
+        compute_args += ' rmin0 0 quadraticflag {}'.format(int(self.quadratic))
         add_args = lambda l: l + compute_args if l.startswith('compute') else l
         CMDS = list(map(add_args, self._CMDS))
         CMDS[2] += ' bzeroflag 0'

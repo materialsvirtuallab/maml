@@ -72,7 +72,7 @@ class PotentialMixin(BaseModel):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def from_connfig(self, **kwargs):
+    def from_config(self, **kwargs):
         """
         Initialize potentials with parameters file.
         """
