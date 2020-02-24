@@ -5,6 +5,7 @@ from typing import Any
 
 import pandas as pd
 from monty.json import MSONable
+import numpy as np
 from joblib import cpu_count, Parallel, delayed
 from sklearn.utils.validation import check_memory
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -48,17 +49,6 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             logger.info(f"Using {n_jobs} jobs for computation")
         self.n_jobs = n_jobs
 
-    # def fit(self, objs, targets=None, **kwargs):
-    #     """
-    #     The fit function is used when describers have parameters that are dependent on the
-    #     data.
-    #
-    #     Args:
-    #         objs (list): A list of objects.
-    #         targets (list): Optional. A list of targets.
-    #     """
-    #     return self
-
     def transform_one(self, obj):
         """
         Transform an object.
@@ -86,26 +76,42 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         else:
             features = Parallel(n_jobs=self.n_jobs)(
                 delayed(cached_transform_one)(self, obj) for obj in objs)
-
-        # process the outputs
-        tags = self._get_tags()  # this is from BaseEstimator
-        multi_output = tags['multioutput']
-
+        
+        multi_output = self._is_multi_output()
         if not multi_output:
             features = [features]
+        batched_features = [self._batch_features(i) for i in 
+            list(*zip(features))]
+        return batched_features if multi_output else batched_features[0]
 
-        is_pandas = hasattr(features[0][0], 'iloc')
+    def _batch_features(self, features):
+        """implement ways to combine list of features to one object.
+        Default is simply return the original list
+        
+        Arguments:
+            features (list): list of feature outputs from transform
+        
+        Returns:
+            list of features
+        """
+        return features
+    
+    def _is_multi_output(self):
+        tags = self._get_tags()
+        multi_output = tags["multioutput"]  # this is from BaseEstimator
+        return multi_output
 
-        concated_features = [pd.concat(feature, keys=range(len(feature)), names=['input_index', None])
-                          for feature in list(*zip(features))]
 
-        if not is_pandas:
-            concated_features = [features.values for features in concated_features]
+class OutDataFrameConcat:
+    def _batch_features(self, features):
+        concated_features = pd.concat(features, 
+            keys=range(len(features)), names=['input_index', None])
+        return concated_features
 
-        if multi_output:
-            return concated_features
-        else:
-            return concated_features[0]
+
+class OutStackFirstDim:
+    def _batch_features(self, features):
+        return np.stack(features)
 
 
 def _transform_one(describer: BaseDescriber, obj: Any):

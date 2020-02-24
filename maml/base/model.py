@@ -1,3 +1,5 @@
+import pickle
+import joblib
 from typing import Any, Union, List
 
 import numpy as np
@@ -28,7 +30,11 @@ class BaseModel:
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
         """
-        self.model.fit(features, targets, **kwargs)
+        return self.model.fit(features, targets, **kwargs)
+
+    def train(self, objs, targets):
+        features = self.describer.transform(objs)
+        return self.fit(features, targets)
 
     def _predict(self, features: np.ndarray, **kwargs):
         """
@@ -48,3 +54,54 @@ class BaseModel:
             Structure objects.
         """
         return self._predict(self.describer.transform(objs))
+
+
+class SklearnMixin:
+    """
+    Sklearn model save and load functionality
+    """
+    def save(self, filename):
+        """Save the model and describer
+        
+        Arguments:
+            filename (str): filename for save
+        """
+        joblib.dump({"model" : self.model,
+            "describer": self.describer}, filename)
+    
+    def load(self, filename):
+        m = joblib.load(filename)
+        self.model = m["model"]
+        self.describer = m["describer"]
+    
+    @classmethod
+    def from_file(cls, filename, **kwargs):
+        instance = cls(**kwargs)
+        instance.load(filename)
+        return instance
+
+
+class KerasMixin:
+    """keras model mixin with save and load functionality
+    """
+    def save(self, filename):
+        joblib.dump(self.describer, filename)
+        self.model.save(filename + '.hdf5')
+    
+    def load(self, filename):
+        from keras.models import load_model
+        self.describer = joblib.load(filename)
+        self.model = load_model(filename + '.hdf5')
+
+    @classmethod
+    def from_file(cls, filename, **kwargs):
+        instance = cls(**kwargs)
+        instance.load(filename)
+        return instance
+
+
+class ModelWithSklearn(BaseModel, SklearnMixin):
+    pass
+
+class ModelWithKeras(BaseModel, KerasMixin):
+    pass

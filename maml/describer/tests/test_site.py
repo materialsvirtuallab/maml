@@ -31,10 +31,9 @@ class BispectrumCoefficientsTest(unittest.TestCase):
         bc_atom = BispectrumCoefficients(cutoff=5, twojmax=3, element_profile=profile,
                                          quadratic=False, pot_fit=False)
         df_atom = bc_atom.transform(structures)
-
         for i, s in enumerate(structures):
             df_s = df_atom.xs(i, level='input_index')
-            self.assertEqual(df_s.shape, (len(s), 4))
+            self.assertEqual(df_s.shape, (len(s), 8))
             self.assertTrue(df_s.equals(bc_atom.transform_one(s)))
 
         bc_pot = BispectrumCoefficients(cutoff=5, twojmax=3, element_profile=profile,
@@ -42,7 +41,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
         df_pot = bc_pot.transform(structures)
         for i, s in enumerate(structures):
             df_s = df_pot.xs(i, level='input_index')
-            self.assertEqual(df_s.shape, ((1 + len(s) * 3 + 6, 10)))
+            self.assertEqual(df_s.shape, ((1 + len(s) * 3 + 6, 18)))
             self.assertTrue(df_s.equals(bc_pot.transform_one(s)))
             sna = df_s.iloc[0]
             for specie in ['Na', 'Cl']:
@@ -101,8 +100,8 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
         self.zetas = [1.0, 4.0]
         self.a_etas = [0.01, 0.05]
         self.lambdas = [-1, 1]
-        self.describer = BPSymmetryFunctions(cutoff=4.8, r_etas=self.r_etas,
-                                             a_etas=self.a_etas, zetas=self.zetas)
+        self.describer = BPSymmetryFunctions(cutoff=4.8, r_etas=self.r_etas, r_shift=self.r_shift, 
+                                             lambdas=self.lambdas, a_etas=self.a_etas, zetas=self.zetas)
 
     def test_transform_one(self):
         unary_descriptors = self.describer.transform_one(self.unary_struct)

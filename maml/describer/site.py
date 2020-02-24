@@ -14,7 +14,7 @@ from monty.tempfile import ScratchDir
 
 from pymatgen import Element
 from pymatgen.core.periodic_table import get_el_sp
-from maml.base.describer import BaseDescriber
+from maml.base.describer import BaseDescriber, OutDataFrameConcat
 from maml.utils.data_conversion import pool_from
 
 
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class BispectrumCoefficients(BaseDescriber):
+class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
     """
     Bispectrum coefficients to describe the local environment of each atom.
     Lammps is required to perform this computation.
@@ -116,7 +116,7 @@ class BispectrumCoefficients(BaseDescriber):
         return process(raw_data[0], self.pot_fit)
 
 
-class SmoothOverlapAtomicPosition(BaseDescriber):
+class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
     """
     Smooth overlap of atomic positions (SOAP) to describe the local environment
     of each atom.
@@ -207,7 +207,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         return descriptors
 
 
-class BPSymmetryFunctions(BaseDescriber):
+class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
     """
     Behler-Parrinello symmetry function to describe the local environment
     of each atom.

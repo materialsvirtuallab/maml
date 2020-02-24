@@ -5,10 +5,10 @@ import numpy as np
 import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
-from maml import BaseDescriber
+from maml import BaseDescriber, OutDataFrameConcat
 
 
-class DistinctSiteProperty(BaseDescriber):
+class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
     """
     Constructs a describer based on properties of distinct sites in a
     structure. For now, this assumes that there is only one type of species in
@@ -62,7 +62,7 @@ class DistinctSiteProperty(BaseDescriber):
         return pd.DataFrame([data], columns=names)
 
 
-class CoulombMatrix(BaseDescriber):
+class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
     def __init__(self, random_seed=None, memory=None, verbose=False,
                  n_jobs=0, **kwargs):
 
