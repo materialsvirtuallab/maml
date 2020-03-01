@@ -1,8 +1,8 @@
-import pickle
 import joblib
 from typing import Any, Union, List
 
 import numpy as np
+from sklearn.base import TransformerMixin
 from .describer import BaseDescriber
 
 
@@ -13,10 +13,10 @@ class BaseModel:
     transparent conversion of arbitrary input and outputs.
 
     Args:
-        describer (BaseDescriber): Describer that converts object into features
+        describer (TransformerMixin): Describer that converts object into features
         model (Any): ML models, for example, sklearn model or keras model
     """
-    def __init__(self, describer: BaseDescriber = None, model: Any = None, **kwargs):
+    def __init__(self, describer: TransformerMixin = None, model: Any = None, **kwargs):
         self.describer = describer
         self.model = model
 
