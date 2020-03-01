@@ -4,12 +4,13 @@
 
 """This module provides SNAP interatomic potential class."""
 
-import re
-import numpy as np
 from monty.io import zopen
+import numpy as np
+import re
+from sklearn.linear_model import LinearRegression
 
 from maml.apps.pes import Potential
-from maml.model.linear_model import LinearModel
+from maml import ModelWithSklearn
 from maml.describer import BispectrumCoefficients
 from maml.apps.pes.lammps.calcs import EnergyForceStress
 from maml.utils.data_conversion import pool_from, convert_docs
@@ -196,7 +197,8 @@ class SNAPotential(Potential):
         describer = BispectrumCoefficients(cutoff=rcut, twojmax=twojmax,
                                            element_profile=element_profile,
                                            quadratic=quadratic, pot_fit=True)
-        model = LinearModel(describer=describer, **kwargs)
+        model = ModelWithSklearn(describer=describer,
+                                 model=LinearRegression(), **kwargs)
         coef = np.array(np.concatenate([coeff_lines[(2 + nbc * n + n):
                 (2 + nbc * (n+1) + n)] for n in range(ne)]), dtype=np.float)
         model.model.coef_ = coef

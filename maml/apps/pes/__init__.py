@@ -77,3 +77,7 @@ class PotentialMixin(BaseModel):
         Initialize potentials with parameters file.
         """
         raise NotImplementedError
+
+
+class Potential(BaseModel, PotentialMixin):
+    pass
