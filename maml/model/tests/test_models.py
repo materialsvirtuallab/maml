@@ -5,15 +5,16 @@ import os
 import shutil
 import tempfile
 
+from monty.tempfile import ScratchDir
 import numpy as np
 import pandas as pd
 from pymatgen.util.testing import PymatgenTest
+from sklearn.linear_model import LinearRegression
+from sklearn.gaussian_process import GaussianProcessRegressor
 
-from maml import BaseDescriber
-from maml.model.linear_model import LinearModel
+from maml import BaseDescriber, ModelWithSklearn
 from maml.describer.structure import DistinctSiteProperty
 from maml.model.neural_network import MultiLayerPerceptron
-from maml.model.gaussian_process import GaussianProcessRegressionModel
 
 
 class NeuralNetTest(PymatgenTest):
@@ -44,8 +45,9 @@ class NeuralNetTest(PymatgenTest):
 
     def test_model_save_load(self):
         self.nn.train(objs=self.structures, targets=self.energies, epochs=2)
-        self.nn.save("test.h5")
-        self.nn2.load("test.h5")
+        with ScratchDir('.'):
+            self.nn.save("test.h5")
+            self.nn2.load("test.h5")
         self.assertEqual(self.nn.predict_objs([self.na2o])[0][0],
                          self.nn2.predict_objs([self.na2o])[0][0])
 
@@ -66,8 +68,7 @@ class LinearModelTest(unittest.TestCase):
             def transform(self, objs):
                 return pd.DataFrame(objs)
 
-        self.lm = LinearModel(DummyDescriber())
-
+        self.lm = ModelWithSklearn(describer=DummyDescriber(), model=LinearRegression())
         self.test_dir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -80,15 +81,16 @@ class LinearModelTest(unittest.TestCase):
         y_test = x_test.dot(self.coef) + self.intercept
         y_pred = self.lm._predict(x_test)
         np.testing.assert_array_almost_equal(y_test, y_pred)
-        np.testing.assert_array_almost_equal(self.coef, self.lm.coef)
-        self.assertAlmostEqual(self.intercept, self.lm.intercept)
+        np.testing.assert_array_almost_equal(self.coef, self.lm.model.coef_)
+        self.assertAlmostEqual(self.intercept, self.lm.model.intercept_)
 
     def model_save_load(self):
-        self.lm.save(os.path.join(self.test_dir, 'test_lm.save'))
-        ori = self.lm.model.coef_
-        self.lm.load(os.path.join(self.test_dir, 'test_lm.save'))
-        loaded = self.lm.model.coef_
-        self.assertAlmostEqual(ori, loaded)
+        with ScratchDir('.'):
+            self.lm.save('test_lm.save')
+            ori = self.lm.model.coef_
+            self.lm.load('test_lm.save')
+            loaded = self.lm.model.coef_
+            self.assertAlmostEqual(ori, loaded)
 
 
 class GaussianProcessTest(unittest.TestCase):
@@ -108,8 +110,8 @@ class GaussianProcessTest(unittest.TestCase):
             def transform(self, objs):
                 return pd.DataFrame(objs)
 
-        self.gpr = GaussianProcessRegressionModel(describer=DummyDescriber(),
-                                                  kernel_category='RBF')
+        self.gpr = ModelWithSklearn(describer=DummyDescriber(),
+                                    model=GaussianProcessRegressor())
 
     @classmethod
     def tearDownClass(cls):
