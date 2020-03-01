@@ -24,9 +24,9 @@ class NeuralNetTest(PymatgenTest):
 
     def setUp(self):
         self.nn = MultiLayerPerceptron(describer=DistinctSiteProperty(['2c'], ["Z"]),
-                                       layer_sizes=[25, 5])
+                                       hidden_layer_sizes=[25, 5], input_dim=1)
         self.nn2 = MultiLayerPerceptron(describer=DistinctSiteProperty(['2c'], ["Z"]),
-                                        layer_sizes=[25, 5])
+                                        hidden_layer_sizes=[25, 5], input_dim=1)
         self.li2o = self.get_structure("Li2O")
         self.na2o = self.li2o.copy()
         self.na2o["Li+"] = "Na+"
@@ -39,20 +39,15 @@ class NeuralNetTest(PymatgenTest):
         shutil.rmtree(cls.test_dir)
 
     def test_fit_predict(self):
-        features = self.nn.describer.transform(self.structures)
-        self.nn.fit(features=features, outputs=self.energies, epochs=100)
-        # Given this is a fairly simple model, we should get close to exact.
-        # self.assertEqual(round(self.nn.predict([self.na2o])[0][0]), 4, 3)
-        self.assertTrue(3 <= round(self.nn.predict_obj([self.na2o])[0][0]) <= 4)
+        self.nn.train(objs=self.structures, targets=self.energies, epochs=2)
+        self.assertTrue(self.nn.predict_objs([self.na2o]).shape == (1, 1))
 
     def test_model_save_load(self):
-        model_fname = os.path.join(self.test_dir, 'test_nnmodel.h5')
-        scaler_fname = os.path.join(self.test_dir, 'test_nnscaler.save')
-        self.nn.fit(inputs=self.structures, outputs=self.energies, epochs=100)
-        self.nn.save(model_fname=model_fname, scaler_fname=scaler_fname)
-        self.nn2.load(model_fname=model_fname, scaler_fname=scaler_fname)
-        self.assertEqual(self.nn.predict_obj([self.na2o])[0][0],
-                         self.nn2.predict_obj([self.na2o])[0][0])
+        self.nn.train(objs=self.structures, targets=self.energies, epochs=2)
+        self.nn.save("test.h5")
+        self.nn2.load("test.h5")
+        self.assertEqual(self.nn.predict_objs([self.na2o])[0][0],
+                         self.nn2.predict_objs([self.na2o])[0][0])
 
 
 class LinearModelTest(unittest.TestCase):

@@ -9,6 +9,7 @@ import numpy as np
 from joblib import cpu_count, Parallel, delayed
 from sklearn.utils.validation import check_memory
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.pipeline import Pipeline
 
 
 _ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
@@ -48,6 +49,9 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             n_jobs = cpu_count()
             logger.info(f"Using {n_jobs} jobs for computation")
         self.n_jobs = n_jobs
+
+    def fit(self, x, y=None):
+        return self
 
     def transform_one(self, obj):
         """
@@ -120,3 +124,9 @@ def _transform_one(describer: BaseDescriber, obj: Any):
     A wrapper to make a pure function.
     """
     return describer.transform_one(obj)
+
+
+class SequentialDescriber(Pipeline):
+    def __init__(self, describers, **kwargs):
+        steps = [(i.__class__.__name__, i) for i in describers]
+        super().__init__(steps, **kwargs)

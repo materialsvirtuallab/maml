@@ -6,5 +6,6 @@
 Define abstract base classes.
 """
 from .data import BaseDataSource
-from .describer import BaseDescriber, OutDataFrameConcat, OutStackFirstDim
+from .describer import BaseDescriber, OutDataFrameConcat, OutStackFirstDim, \
+    SequentialDescriber
 from .model import BaseModel, ModelWithKeras, ModelWithSklearn

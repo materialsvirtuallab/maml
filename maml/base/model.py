@@ -32,9 +32,9 @@ class BaseModel:
         """
         return self.model.fit(features, targets, **kwargs)
 
-    def train(self, objs, targets):
-        features = self.describer.transform(objs)
-        return self.fit(features, targets)
+    def train(self, objs, targets, **kwargs):
+        features = self.describer.fit_transform(objs)
+        return self.fit(features, targets, **kwargs)
 
     def _predict(self, features: np.ndarray, **kwargs):
         """
@@ -48,7 +48,7 @@ class BaseModel:
         """
         return self.model.predict(features, **kwargs)
 
-    def predict_obj(self, objs: Any):
+    def predict_objs(self, objs: Any):
         """
         Predict the values given a set of objects. Usually Pymatgen
             Structure objects.
