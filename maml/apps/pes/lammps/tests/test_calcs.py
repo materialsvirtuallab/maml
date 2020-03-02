@@ -14,8 +14,9 @@ import shutil
 import numpy as np
 from monty.os.path import which
 from pymatgen import Structure, Lattice, Element
+from sklearn.linear_model import LinearRegression
 
-from maml.model.linear_model import LinearModel
+from maml import ModelWithSklearn
 from maml.apps.pes.snap import SNAPotential
 from maml.describer.site import BispectrumCoefficients
 from maml.apps.pes.lammps.calcs import SpectralNeighborAnalysis, EnergyForceStress, \
@@ -39,7 +40,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         self.structure2 = Structure.from_spacegroup("Fm-3m", Lattice.cubic(5.69169),
                                                     ['Na', 'Cl'], [[0, 0, 0], [0, 0, 0.5]])
         self.structure3 = Structure.from_spacegroup("Pm-3m", Lattice.cubic(3.88947),
-                                ['Ca', 'Ti', 'O'], [[0.5, 0.5, 0.5], [0, 0, 0], [0, 0, 0.5]])
+                                                    ['Ca', 'Ti', 'O'], [[0.5, 0.5, 0.5], [0, 0, 0], [0, 0, 0.5]])
 
     @classmethod
     def tearDownClass(cls):
@@ -145,7 +146,7 @@ class EnergyForceStressTest(unittest.TestCase):
                                             element_profile=element_profile,
                                             quadratic=False,
                                             pot_fit=True)
-        model1 = LinearModel(describer=describer1)
+        model1 = ModelWithSklearn(describer=describer1, model=LinearRegression())
         model1.model.coef_ = coeff
         model1.model.intercept_ = intercept
         snap1 = SNAPotential(model=model1)
@@ -155,7 +156,7 @@ class EnergyForceStressTest(unittest.TestCase):
                                             element_profile=element_profile,
                                             quadratic=True,
                                             pot_fit=True)
-        model2 = LinearModel(describer=describer2)
+        model2 = ModelWithSklearn(describer=describer2, model=LinearRegression())
         model2.model.coef_ = coeff
         model2.model.intercept_ = intercept
         snap2 = SNAPotential(model=model2)
@@ -191,7 +192,7 @@ class ElasticConstantTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = LinearModel(describer=describer)
+        model = ModelWithSklearn(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
@@ -225,7 +226,7 @@ class LatticeConstantTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = LinearModel(describer=describer)
+        model = ModelWithSklearn(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
@@ -261,7 +262,7 @@ class NudgedElasticBandTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = LinearModel(describer=describer)
+        model = ModelWithSklearn(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
@@ -300,7 +301,7 @@ class DefectFormationTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = LinearModel(describer=describer)
+        model = ModelWithSklearn(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
