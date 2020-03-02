@@ -17,16 +17,15 @@ from monty.tempfile import ScratchDir
 from pymatgen.io.lammps.data import LammpsData
 from pymatgen import Structure, Lattice, Element
 
-from maml.apps.pes import PotentialMixin
-
 
 def _pretty_input(lines):
+    def prettify(l):
+        return l.split()[0].ljust(width) + ' '.join(l.split()[1:]) \
+            if not (len(l.split()) == 0 or l.strip().startswith('#')) else l
     clean_lines = [l.strip('\n') for l in lines]
     commands = [l for l in clean_lines if len(l.strip()) > 0]
     keys = [c.split()[0] for c in commands if not c.split()[0].startswith('#')]
     width = max([len(k) for k in keys]) + 4
-    prettify = lambda l: l.split()[0].ljust(width) + ' '.join(l.split()[1:]) \
-        if not (len(l.split()) == 0 or l.strip().startswith('#')) else l
     new_lines = map(prettify, clean_lines)
     return '\n'.join(new_lines)
 
@@ -42,15 +41,15 @@ class LMPStaticCalculator(object):
     Abstract class to perform static structure property calculation
     using LAMMPS.
     """
-    
+
     LMP_EXE = None
     for lmp_exe in ["lmp_mpi", "lmp_serial"]:
         if shutil.which(lmp_exe) is not None:
             LMP_EXE = lmp_exe
     if LMP_EXE is None:
         raise ValueError("lammps executable not found in path, "
-            "check lmp_mpi or lmp_serial")
-            
+                         "check lmp_mpi or lmp_serial")
+
     _COMMON_CMDS = ['units metal',
                     'atom_style charge',
                     'box tilt large',
@@ -235,12 +234,14 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
             List of all subscripts [2j1, 2j2, 2j].
 
         """
+
         subs = itertools.product(range(twojmax + 1), repeat=3)
+
         filters = [lambda x: True if x[0] >= x[1] else False,
                    lambda x: True if x[2] >= x[0] else False]
-        j_filter = lambda x: True if x[2] in range(x[0] - x[1],
-                            min(twojmax, x[0] + x[1]) + 1, 2) else False
-        filters.append(j_filter)
+        j_filter = [lambda x: True if
+                    x[2] in range(x[0] - x[1], min(twojmax, x[0] + x[1]) + 1, 2) else False]
+        filters.extend(j_filter)
         for f in filters:
             subs = filter(f, subs)
         return list(subs)
@@ -254,13 +255,15 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
         return len(self.get_bs_subscripts(self.twojmax))
 
     def _setup(self):
+
+        def add_args(l):
+            return l + compute_args if l.startswith('compute') else l
         compute_args = '1 0.99363 {} '.format(self.twojmax)
         el_in_seq = sorted(self.element_profile.keys(), key=lambda x: Element(x))
         cutoffs = [self.element_profile[e]['r'] * self.rcutfac for e in el_in_seq]
         weights = [self.element_profile[e]['w'] for e in el_in_seq]
         compute_args += ' '.join([str(p) for p in cutoffs + weights])
         compute_args += ' rmin0 0 quadraticflag {}'.format(int(self.quadratic))
-        add_args = lambda l: l + compute_args if l.startswith('compute') else l
         CMDS = list(map(add_args, self._CMDS))
         CMDS[2] += ' bzeroflag 0'
         CMDS[3] += ' bzeroflag 0'
@@ -366,7 +369,7 @@ class ElasticConstant(LMPStaticCalculator):
                                          alat=self.alat, num_species=self.num_species,
                                          atom_type=self.atom_type,
                                          masses='\n'.join(['mass {} {}'.format(i+1, i+1)
-                                                            for i in range(self.num_species)])))
+                                                           for i in range(self.num_species)])))
         with open('potential.mod', 'w') as f:
             f.write(potential_template.format(ff_settings='\n'.join(ff_settings)))
         with open('displace.mod', 'w') as f:

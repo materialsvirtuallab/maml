@@ -41,9 +41,9 @@ def feed(attribute, kwargs, dictionary, tab='\t'):
         (str)
     """
     tmp = kwargs.get(attribute) if kwargs.get(attribute) \
-                    else dictionary.get(attribute).get('value')
+        else dictionary.get(attribute).get('value')
     return tab + dictionary.get(attribute).get('name'), str(tmp), \
-                    dictionary.get(attribute).get('comment')
+        dictionary.get(attribute).get('comment')
 
 
 class MTPotential(Potential):
@@ -98,7 +98,7 @@ class MTPotential(Potential):
             format_str = '{:>14s}{:>5s}{:>15s}{:>14s}{:>14s}{:>13s}{:>13s}{:>13s}'
             format_float = '{:>14d}{:>5d}{:>15f}{:>14f}{:>14f}{:>13f}{:>13f}{:>13f}'
             lines.append(format_str.format('AtomData:  id', 'type',
-                'cartes_x', 'cartes_y', 'cartes_z', 'fx', 'fy', 'fz'))
+                                           'cartes_x', 'cartes_y', 'cartes_z', 'fx', 'fy', 'fz'))
             for i, (site, force) in enumerate(zip(structure, forces)):
                 lines.append(format_float.format(i+1, self.elements.index(str(site.specie)),
                                                  *site.coords, *force))
@@ -297,7 +297,7 @@ class MTPotential(Potential):
 
         if Abinitio:
             lines.append(format_str.format(MTini_params.get('Abinitio').get('name'),
-                            str(Abinitio), MTini_params.get('Abinitio').get('comment')))
+                                           str(Abinitio), MTini_params.get('Abinitio').get('comment')))
             abinitio = MTini_params.get('Abinitio').get(str(Abinitio))
             lines.append(format_str.format(abinitio.get('name'), '',
                                            abinitio.get('comment')))
@@ -306,7 +306,7 @@ class MTPotential(Potential):
 
         if MLIP:
             lines.append(format_str.format(MTini_params.get('MLIP').get('name'),
-                            'mtpr', MTini_params.get('MLIP').get('comment')))
+                                           'mtpr', MTini_params.get('MLIP').get('comment')))
             mlip = MTini_params.get('MLIP')
             if kwargs.get('load_from'):
                 load_from = mlip.get('load_from')
@@ -332,7 +332,7 @@ class MTPotential(Potential):
             if kwargs.get('Write_cfgs'):
                 write_cfgs = mlip.get('Write_cfgs')
                 lines.append(format_str.format('\t'+write_cfgs.get('name'),
-                                kwargs.get('Write_cfgs'), write_cfgs.get('comment')))
+                                               kwargs.get('Write_cfgs'), write_cfgs.get('comment')))
 
         if Driver:
             lines.append(format_str.format(MTini_params.get('Driver').get('name'),
@@ -355,6 +355,10 @@ class MTPotential(Potential):
             filename (str): The configuration file to be read.
 
         """
+
+        def formatify(string):
+            return [float(s) for s in string.split()]
+
         if not self.elements:
             raise ValueError("No species given.")
 
@@ -363,12 +367,11 @@ class MTPotential(Potential):
             lines = f.read()
 
         block_pattern = re.compile('BEGIN_CFG\n(.*?)\nEND_CFG', re.S)
-        size_pattern = re.compile('Size\n(.*?)\n SuperCell', re.S|re.I)
-        lattice_pattern = re.compile('SuperCell\n(.*?)\n AtomData', re.S|re.I)
+        size_pattern = re.compile('Size\n(.*?)\n SuperCell', re.S | re.I)
+        lattice_pattern = re.compile('SuperCell\n(.*?)\n AtomData', re.S | re.I)
         position_pattern = re.compile('fz\n(.*?)\n Energy', re.S)
         energy_pattern = re.compile('Energy\n(.*?)\n (?=PlusStress|Stress)', re.S)
         stress_pattern = re.compile('xy\n(.*?)(?=\n|$)', re.S)
-        formatify = lambda string: [float(s) for s in string.split()]
         for block in block_pattern.findall(lines):
             d = {'outputs': {}}
             size_str = size_pattern.findall(block)[0]
@@ -400,8 +403,8 @@ class MTPotential(Potential):
         return data_pool, df
 
     def train(self, train_structures, train_energies, train_forces, train_stresses=None,
-                    unfitted_mtp=None, max_dist=5, radial_basis_size=8, max_iter=500,
-                    energy_weight=1, force_weight=1e-2, stress_weight=0):
+              unfitted_mtp=None, max_dist=5, radial_basis_size=8, max_iter=500,
+              energy_weight=1, force_weight=1e-2, stress_weight=0):
         """
         Training data with moment tensor method.
 
@@ -478,7 +481,7 @@ class MTPotential(Potential):
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
                     error_msg += ', '.join([e for e in msg[error_line:]])
-                except:
+                except Exception as e:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
@@ -557,7 +560,7 @@ class MTPotential(Potential):
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
                     error_msg += ', '.join([e for e in msg[error_line:]])
-                except:
+                except Exception as e:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
             if not os.path.exists(predict_file):

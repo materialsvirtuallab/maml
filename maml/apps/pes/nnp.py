@@ -87,8 +87,8 @@ class NNPotential(Potential):
                 'atom{:>16.9f}{:>16.9f}{:>16.9f}{:>4s}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}'
             for i, (site, force) in enumerate(zip(structure, forces)):
                 lines.append(format_float.format(*site.coords / self.bohr_to_angstrom,
-                                site.species_string, 0.0, 0.0,
-                                *np.array(force) * self.eV_to_Ha * self.bohr_to_angstrom))
+                                                 site.species_string, 0.0, 0.0,
+                                                 *np.array(force) * self.eV_to_Ha * self.bohr_to_angstrom))
         if 'Energy' in inputs:
             lines.append('energy  {:f}'.format(energy * self.eV_to_Ha))
 
@@ -254,8 +254,12 @@ class NNPotential(Potential):
         if self.fitted:
             if self.param.get('atom_energy'):
                 for specie in self.elements:
-                    lines.append(head_formatter.format('atom_energy',
-                        value=' '.join([specie, str(self.param.get('atom_energy').get(specie))])))
+                    lines.append(
+                        head_formatter.format(
+                            'atom_energy',
+                            value=' '.join(
+                                [specie, str(self.param.get('atom_energy').get(specie))]
+                            )))
             for tag in PARAMS.get('general'):
                 if tag == 'scale_features':
                     lines.append(NNinput_params.get('general').get(tag).get(self.param.get(tag)))
@@ -263,11 +267,11 @@ class NNPotential(Potential):
                     layers = self.param.get('hidden_layers')
                     activations = self.param.get('activations')
                     lines.append(head_formatter.format('global_hidden_layers_short',
-                                            value=len(layers)))
+                                                       value=len(layers)))
                     lines.append(head_formatter.format('global_nodes_short',
-                                            value=' '.join([str(i) for i in layers])))
+                                                       value=' '.join([str(i) for i in layers])))
                     lines.append(head_formatter.format('global_activation_short',
-                                            value=' '.join([activations] * len(layers) + ['l'])))
+                                                       value=' '.join([activations] * len(layers) + ['l'])))
                 else:
                     lines.append(head_formatter.format(tag, value=self.param.get(tag)))
             if self.normalized_nodes:
@@ -302,7 +306,9 @@ class NNPotential(Potential):
         else:
             if kwargs.get('atom_energy'):
                 for specie in self.elements:
-                    lines.append(head_formatter.format('atom_energy',
+                    lines.append(
+                        head_formatter.format(
+                            'atom_energy',
                             value=' '.join([specie, str(kwargs.get('atom_energy').get(specie))])))
                 self.param.update({'atom_energy': kwargs.get('atom_energy')})
             for tag in PARAMS.get('general'):
@@ -379,8 +385,9 @@ class NNPotential(Potential):
 
             self.num_symm_functions \
                 = sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + \
-                  sum([len(list(itertools.product(a_etas, lambdas, zetas)))
-                        for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
+                sum([len(list(itertools.product(a_etas, lambdas, zetas)))
+                     for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
+
             self.layer_sizes = [self.num_symm_functions] + self.param.get('hidden_layers')
 
         with open(filename, 'w') as f:
@@ -410,8 +417,11 @@ class NNPotential(Potential):
                                  'write_neuronstats', 'kalman_type', 'kalman_epsilon',
                                  'kalman_q0', 'kalman_qtau', 'kalman_qmin', 'kalman_eta',
                                  'kalman_etatau', 'kalman_etamax']}
-        str_formatify = lambda string: float(string) if '.' in string or 'e' in string \
-            else int(string)
+
+        def str_formatify(string):
+            return float(string) if '.' in string \
+                                    or 'e' in string else int(string)
+
         param = {}
         with open(filename, 'r') as f:
             lines = f.readlines()
@@ -467,8 +477,8 @@ class NNPotential(Potential):
         param.update({'zetas': zetas})
         self.num_symm_functions = \
             sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + \
-            sum([len(list(itertools.product(a_etas, lambdas, zetas))) \
-                    for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
+            sum([len(list(itertools.product(a_etas, lambdas, zetas)))
+                 for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
         self.layer_sizes = [self.num_symm_functions] + hidden_layers
         self.param = param
 
@@ -659,8 +669,8 @@ class NNPotential(Potential):
                          dtype=np.float).T
 
             for specie in self.elements:
-                weights_filename= 'weights.{}.{}.out'.format(str(Element(specie).number).zfill(3),
-                                                             str(self.param['epochs']).zfill(6))
+                weights_filename = 'weights.{}.{}.out'.format(
+                    str(Element(specie).number).zfill(3), str(self.param['epochs']).zfill(6))
                 self.weights[specie] = []
                 self.bs[specie] = []
                 self.weight_param[specie] = []

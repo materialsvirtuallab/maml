@@ -1,1 +1,0 @@
-"""Unittests for LAMMPS calculators."""

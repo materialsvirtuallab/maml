@@ -200,7 +200,7 @@ class SNAPotential(Potential):
         model = ModelWithSklearn(describer=describer,
                                  model=LinearRegression(), **kwargs)
         coef = np.array(np.concatenate([coeff_lines[(2 + nbc * n + n):
-                (2 + nbc * (n+1) + n)] for n in range(ne)]), dtype=np.float)
+                                                    (2 + nbc * (n+1) + n)] for n in range(ne)]), dtype=np.float)
         model.model.coef_ = coef
         model.model.intercept_ = 0
         snap = SNAPotential(model=model)
