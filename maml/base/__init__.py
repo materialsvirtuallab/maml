@@ -5,7 +5,6 @@
 """
 Define abstract base classes.
 """
-from .data import BaseDataSource
-from .describer import BaseDescriber, OutDataFrameConcat, OutStackFirstDim, \
-    SequentialDescriber
-from .model import BaseModel, ModelWithKeras, ModelWithSklearn
+from .data import BaseDataSource  # noqa
+from .describer import BaseDescriber, OutDataFrameConcat, OutStackFirstDim, SequentialDescriber  # noqa
+from .model import BaseModel, ModelWithKeras, ModelWithSklearn  # noqa

@@ -80,7 +80,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         else:
             features = Parallel(n_jobs=self.n_jobs)(
                 delayed(cached_transform_one)(self, obj) for obj in objs)
-        
+
         multi_output = self._is_multi_output()
         if not multi_output:
             features = [features]
@@ -91,15 +91,15 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     def _batch_features(self, features):
         """implement ways to combine list of features to one object.
         Default is simply return the original list
-        
+
         Arguments:
             features (list): list of feature outputs from transform
-        
+
         Returns:
             list of features
         """
         return features
-    
+
     def _is_multi_output(self):
         tags = self._get_tags()
         multi_output = tags["multioutput"]  # this is from BaseEstimator

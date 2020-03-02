@@ -2,6 +2,6 @@
 materials machine learning package
 """
 
-from .base import BaseDescriber, OutDataFrameConcat, OutStackFirstDim
-from .base import BaseModel, ModelWithSklearn, ModelWithKeras, SequentialDescriber
-from .base import BaseDataSource
+from .base import BaseDescriber, OutDataFrameConcat, OutStackFirstDim  # noqa
+from .base import BaseModel, ModelWithSklearn, ModelWithKeras, SequentialDescriber  # noqa
+from .base import BaseDataSource  # noqa

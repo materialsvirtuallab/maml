@@ -11,11 +11,12 @@ import subprocess
 import shutil
 import itertools
 
-import numpy as np
 from monty.tempfile import ScratchDir
-
 from pymatgen.io.lammps.data import LammpsData
 from pymatgen import Structure, Lattice, Element
+import numpy as np
+
+from maml.apps.pes import Potential
 
 
 def _pretty_input(lines):

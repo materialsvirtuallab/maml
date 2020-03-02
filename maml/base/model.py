@@ -3,7 +3,6 @@ from typing import Any, Union, List
 
 import numpy as np
 from sklearn.base import TransformerMixin
-from .describer import BaseDescriber
 
 
 class BaseModel:
@@ -62,18 +61,18 @@ class SklearnMixin:
     """
     def save(self, filename):
         """Save the model and describer
-        
+
         Arguments:
             filename (str): filename for save
         """
         joblib.dump({"model": self.model,
                      "describer": self.describer}, filename)
-    
+
     def load(self, filename):
         m = joblib.load(filename)
         self.model = m["model"]
         self.describer = m["describer"]
-    
+
     @classmethod
     def from_file(cls, filename, **kwargs):
         instance = cls(**kwargs)
@@ -87,7 +86,7 @@ class KerasMixin:
     def save(self, filename):
         joblib.dump(self.describer, filename)
         self.model.save(filename + '.hdf5')
-    
+
     def load(self, filename):
         from keras.models import load_model
         self.describer = joblib.load(filename)
