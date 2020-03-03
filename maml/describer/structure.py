@@ -1,9 +1,13 @@
 """
 Structure-wise describers. These describers include structural information.
 """
+from typing import List, Union
+
+from joblib import Memory
 import numpy as np
 import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+from pymatgen import Structure
 
 from maml import BaseDescriber, OutDataFrameConcat
 
@@ -17,8 +21,14 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
 
     # todo: generalize to multiple sites with the same Wyckoff.
 
-    def __init__(self, wyckoffs, properties, symprec=0.1,
-                 memory=None, verbose=False, n_jobs=0, **kwargs):
+    def __init__(self,
+                 wyckoffs: List[str],
+                 properties: List[str],
+                 symprec: float = 0.1,
+                 memory: Union[Memory, str] = None,
+                 verbose: bool = False,
+                 n_jobs: int = 0,
+                 **kwargs):
         """
 
         Args:
@@ -38,9 +48,9 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
         self.wyckoffs = wyckoffs
         self.properties = properties
         self.symprec = symprec
-        super().__init__(memory=memory, verbose=verbose, **kwargs)
+        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
 
-    def transform_one(self, structure):
+    def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
 
         Args:
@@ -63,8 +73,12 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
 
 
 class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
-    def __init__(self, random_seed=None, memory=None, verbose=False,
-                 n_jobs=0, **kwargs):
+    def __init__(self,
+                 random_seed: int = None,
+                 memory: Union[Memory, str] = None,
+                 verbose: bool = False,
+                 n_jobs: int = 0,
+                 **kwargs):
 
         """
         Coulomb Matrix to decribe structure
@@ -83,7 +97,7 @@ class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
         self.random_seed = random_seed
         super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
 
-    def get_coulomb_mat(self, s):
+    def get_coulomb_mat(self, s: Structure) -> np.ndarray:
         """
         Args:
             s (pymatgen Structure): input structure
@@ -116,12 +130,11 @@ class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
 
         return c
 
-    def transform_one(self, s):
+    def transform_one(self, s: Structure) -> pd.DataFrame:
         """
         Args:
-            structure(Structure): input structure
-            is_sorted (bool): whether to return sorted matrix
-            is_randomized (bool): whether to return randomized matrix
+            s (Structure): input structure
+
         Returns:
             pandas.DataFrame.
             The column is index of the structure, which is 0 for single input
@@ -135,11 +148,26 @@ class RandomizedCoulombMatrix(CoulombMatrix):
     """
     Randomized CoulombMatrix
     """
-    def __init__(self, random_seed=None, memory=None, verbose=False, n_jobs=0, **kwargs):
+    def __init__(self,
+                 random_seed: int = None,
+                 memory: Union[Memory, str] = None,
+                 verbose: bool = False,
+                 n_jobs: int = 0,
+                 **kwargs):
+        """
+        Args:
+            random_seed (int): random seed
+            memory (None, str or joblib.Memory): whether to cache to
+                the str path
+            verbose (bool): whether to show progress for featurization
+            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+                If this value is set to negative or greater than the total cpu
+                then n_jobs is set to the number of cpu on system
+        """
         super().__init__(random_seed=random_seed, memory=memory,
                          verbose=verbose, n_jobs=n_jobs, **kwargs)
 
-    def get_randomized_coulomb_mat(self, s):
+    def get_randomized_coulomb_mat(self, s: Structure) -> pd.DataFrame:
         """
         Returns the randomized matrix
         (i) take an arbitrary valid Coulomb matrix C
@@ -155,7 +183,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
             s (pymatgen Structure): pymatgen Structure for computing the randomized Coulomb matrix
 
         Returns:
-            np.ndarray randomized Coulomb matrix
+            pd.DataFrame randomized Coulomb matrix
         """
         c = self.get_coulomb_mat(s)
         row_norms = np.linalg.norm(c, axis=1)
@@ -164,7 +192,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         p = np.argsort(row_norms + e)
         return pd.DataFrame(c[p][:, p].ravel())
 
-    def transform_one(self, s):
+    def transform_one(self, s: Structure) -> pd.DataFrame:
         return self.get_randomized_coulomb_mat(s)
 
 
@@ -172,11 +200,26 @@ class SortedCoulombMatrix(CoulombMatrix):
     """
     Sorted CoulombMatrix
     """
-    def __init__(self, random_seed=None, memory=None, verbose=False, n_jobs=0, **kwargs):
+    def __init__(self,
+                 random_seed: int = None,
+                 memory: Union[Memory, str] = None,
+                 verbose: bool = False,
+                 n_jobs: int = 0,
+                 **kwargs):
+        """
+        Args:
+            random_seed (int): random seed
+            memory (None, str or joblib.Memory): whether to cache to
+                the str path
+            verbose (bool): whether to show progress for featurization
+            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+                If this value is set to negative or greater than the total cpu
+                then n_jobs is set to the number of cpu on system
+        """
         super().__init__(random_seed=random_seed, memory=memory,
                          verbose=verbose, n_jobs=n_jobs, **kwargs)
 
-    def get_sorted_coulomb_mat(self, s):
+    def get_sorted_coulomb_mat(self, s: Structure) -> pd.DataFrame:
         """
         Returns the matrix sorted by the row norm
 
@@ -184,10 +227,10 @@ class SortedCoulombMatrix(CoulombMatrix):
             s (pymatgen Structure): pymatgen Structure for computing the Coulomb matrix
 
         Returns:
-            np.ndarray, sorted Coulomb matrix
+            pd.DataFrame, sorted Coulomb matrix
         """
         c = self.get_coulomb_mat(s)
         return pd.DataFrame(c[np.argsort(np.linalg.norm(c, axis=1))].ravel())
 
-    def transform_one(self, s):
+    def transform_one(self, s: Structure) -> pd.DataFrame:
         return self.get_sorted_coulomb_mat(s)

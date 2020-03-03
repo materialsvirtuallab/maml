@@ -1,12 +1,12 @@
 import abc
 import logging
 from tqdm import tqdm
-from typing import Any
+from typing import Any, Union, List
 
 import pandas as pd
 from monty.json import MSONable
 import numpy as np
-from joblib import cpu_count, Parallel, delayed
+from joblib import cpu_count, Parallel, delayed, Memory
 from sklearn.utils.validation import check_memory
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
@@ -30,7 +30,11 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     a list of DataFrame/numpy.ndarray.
     """
 
-    def __init__(self, memory=None, verbose=True, n_jobs=0, **kwargs):
+    def __init__(self,
+                 memory: Union[str, Memory] = None,
+                 verbose: bool = True,
+                 n_jobs: int = 0,
+                 **kwargs):
         """
 
         Args:
@@ -50,16 +54,16 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             logger.info(f"Using {n_jobs} jobs for computation")
         self.n_jobs = n_jobs
 
-    def fit(self, x, y=None):
+    def fit(self, x: Any, y: Any = None) -> "BaseDescriber":
         return self
 
-    def transform_one(self, obj):
+    def transform_one(self, obj: Any) -> np.ndarray:
         """
         Transform an object.
         """
         raise NotImplementedError
 
-    def transform(self, objs):
+    def transform(self, objs: List[Any]) -> Any:
         """
         Transform a list of objs. If the return data is DataFrame,
         use df.xs(index, level='input_index') to get the result for the i-th object.
@@ -88,7 +92,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
                             list(*zip(features))]
         return batched_features if multi_output else batched_features[0]
 
-    def _batch_features(self, features):
+    def _batch_features(self, features: List) -> List:
         """implement ways to combine list of features to one object.
         Default is simply return the original list
 
@@ -100,14 +104,17 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         return features
 
-    def _is_multi_output(self):
+    def _is_multi_output(self) -> bool:
         tags = self._get_tags()
         multi_output = tags["multioutput"]  # this is from BaseEstimator
         return multi_output
 
 
 class OutDataFrameConcat:
-    def _batch_features(self, features):
+    """
+    Concate the output dataframe lists into one dataframe
+    """
+    def _batch_features(self, features) -> pd.DataFrame:
         concated_features = pd.concat(features, 
                                       keys=range(len(features)), 
                                       names=['input_index', None])
@@ -115,11 +122,17 @@ class OutDataFrameConcat:
 
 
 class OutStackFirstDim:
-    def _batch_features(self, features):
+    """
+    Stack the output arrays into a higher dimensional array.
+    For example if the output is a list of n arrays with shape
+    (m, 3), the final output would be a tensor of shape (n, m, 3)
+
+    """
+    def _batch_features(self, features) -> np.ndarray:
         return np.stack(features)
 
 
-def _transform_one(describer: BaseDescriber, obj: Any):
+def _transform_one(describer: BaseDescriber, obj: Any) -> np.ndarray:
     """
     A wrapper to make a pure function.
     """

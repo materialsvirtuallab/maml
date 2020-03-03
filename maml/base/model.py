@@ -20,7 +20,7 @@ class BaseModel:
         self.model = model
 
     def fit(self, features: Union[List, np.ndarray],
-            targets: Union[List, np.ndarray] = None, **kwargs):
+            targets: Union[List, np.ndarray] = None, **kwargs) -> "BaseModel":
         """
         Args:
             features (list or np.ndarray): Numerical input feature list or
@@ -29,13 +29,16 @@ class BaseModel:
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
         """
-        return self.model.fit(features, targets, **kwargs)
+        self.model.fit(features, targets, **kwargs)
+        return self
 
-    def train(self, objs, targets, **kwargs):
+    def train(self,
+              objs: Union[List, np.ndarray],
+              targets: Union[List, np.ndarray], **kwargs) -> "BaseModel":
         features = self.describer.fit_transform(objs)
         return self.fit(features, targets, **kwargs)
 
-    def _predict(self, features: np.ndarray, **kwargs):
+    def _predict(self, features: np.ndarray, **kwargs) -> np.ndarray:
         """
         Predict the values given a set of inputs based on fitted model.
 
@@ -47,7 +50,7 @@ class BaseModel:
         """
         return self.model.predict(features, **kwargs)
 
-    def predict_objs(self, objs: Any):
+    def predict_objs(self, objs: Union[List, np.ndarray]) -> np.ndarray:
         """
         Predict the values given a set of objects. Usually Pymatgen
             Structure objects.
@@ -59,7 +62,7 @@ class SklearnMixin:
     """
     Sklearn model save and load functionality
     """
-    def save(self, filename):
+    def save(self, filename: str):
         """Save the model and describer
 
         Arguments:
@@ -68,13 +71,30 @@ class SklearnMixin:
         joblib.dump({"model": self.model,
                      "describer": self.describer}, filename)
 
-    def load(self, filename):
+    def load(self, filename: str):
+        """
+        Load model parameters from filename
+        Args:
+            filename (str): model file name
+
+        Returns: None
+
+        """
         m = joblib.load(filename)
         self.model = m["model"]
         self.describer = m["describer"]
 
     @classmethod
-    def from_file(cls, filename, **kwargs):
+    def from_file(cls, filename: str, **kwargs):
+        """
+        Load the model from file
+        Args:
+            filename (str): filename
+            **kwargs:
+
+        Returns:
+
+        """
         instance = cls(**kwargs)
         instance.load(filename)
         return instance
@@ -83,17 +103,17 @@ class SklearnMixin:
 class KerasMixin:
     """keras model mixin with save and load functionality
     """
-    def save(self, filename):
+    def save(self, filename: str):
         joblib.dump(self.describer, filename)
         self.model.save(filename + '.hdf5')
 
-    def load(self, filename):
+    def load(self, filename: str):
         from keras.models import load_model
         self.describer = joblib.load(filename)
         self.model = load_model(filename + '.hdf5')
 
     @classmethod
-    def from_file(cls, filename, **kwargs):
+    def from_file(cls, filename: str, **kwargs):
         instance = cls(**kwargs)
         instance.load(filename)
         return instance

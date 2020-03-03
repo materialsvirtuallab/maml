@@ -5,15 +5,17 @@ import re
 import logging
 import itertools
 import subprocess
+from typing import Dict, List, Union
 import numpy as np
 import pandas as pd
 
+from joblib import Memory
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-
-from pymatgen import Element
+from pymatgen import Element, Structure
 from pymatgen.core.periodic_table import get_el_sp
+
 from maml.base.describer import BaseDescriber, OutDataFrameConcat
 from maml.utils.data_conversion import pool_from
 
@@ -28,9 +30,16 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
     Bispectrum coefficients to describe the local environment of each atom.
     Lammps is required to perform this computation.
     """
-    def __init__(self, cutoff, twojmax, element_profile, quadratic=False,
-                 pot_fit=False, include_stress=False,
-                 memory=None, verbose=False, n_jobs=0):
+    def __init__(self,
+                 cutoff: float,
+                 twojmax: int,
+                 element_profile: Dict,
+                 quadratic: bool = False,
+                 pot_fit: bool = False,
+                 include_stress: bool = False,
+                 memory: Union[Memory, str] = None,
+                 verbose: bool = False,
+                 n_jobs: int = 0):
         """
         Args:
             cutoff (float): The cutoff distance.
@@ -64,14 +73,14 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
         super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
 
     @property
-    def subscripts(self):
+    def subscripts(self) -> List:
         """
         The subscripts (2j1, 2j2, 2j) of all bispectrum components
         involved.
         """
         return self.calculator.get_bs_subscripts(self.twojmax)
 
-    def transform_one(self, structure):
+    def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
         Args:
             structure (Structure): Pymatgen Structure object.
@@ -120,8 +129,14 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
     Smooth overlap of atomic positions (SOAP) to describe the local environment
     of each atom.
     """
-    def __init__(self, cutoff, l_max=8, n_max=8, atom_sigma=0.5, memory=None,
-                 verbose=False, n_jobs=0):
+    def __init__(self,
+                 cutoff: float,
+                 l_max: int = 8,
+                 n_max: int = 8,
+                 atom_sigma: float = 0.5,
+                 memory: Union[Memory, str] = None,
+                 verbose: bool = False,
+                 n_jobs: int = 0):
         """
 
         Args:
@@ -144,7 +159,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
         self.atom_sigma = atom_sigma
         super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
 
-    def transform_one(self, structure):
+    def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
         Args:
             structure (Structure): Pymatgen Structure object.
@@ -179,8 +194,8 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                            "{}".format(' '.join(descriptor_command)) + "}")
 
         with ScratchDir('.'):
-            atoms_filename = self.operator.write_cfgs(filename=atoms_filename,
-                                                      cfg_pool=pool_from([structure]))
+            _ = self.operator.write_cfgs(filename=atoms_filename,
+                                         cfg_pool=pool_from([structure]))
             descriptor_output = 'output'
             p = subprocess.Popen(exe_command, stdout=open(descriptor_output, 'w'))
             stdout = p.communicate()[0]
@@ -211,8 +226,16 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
     Behler-Parrinello symmetry function to describe the local environment
     of each atom.
     """
-    def __init__(self, cutoff, r_etas, r_shift, a_etas, zetas, lambdas,
-                 memory=None, verbose=False, n_jobs=0):
+    def __init__(self,
+                 cutoff: float,
+                 r_etas: np.ndarray,
+                 r_shift: np.ndarray,
+                 a_etas: np.ndarray,
+                 zetas: np.ndarray,
+                 lambdas: np.ndarray,
+                 memory: Union[Memory, str] = None,
+                 verbose: bool = False,
+                 n_jobs: int = 0):
         """
         Args:
             cutoff (float): The cutoff distance.
@@ -221,6 +244,11 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
             a_etas (numpy.ndarray): η in angular function.
             zetas (numpy.ndarray): ζ in angular function.
             lambdas (numpy.ndarray): λ in angular function. Default to (1, -1).
+            memory (str/joblib.Memory): Whether to cache to the str path.
+            verbose (bool): Whether to show progress for featurization.
+            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
+                If this value is set to negative or greater than the total cpu
+                then n_jobs is set to the number of cpu on system.
         """
         self.cutoff = cutoff
         self.r_etas = np.array(r_etas)[None, :, None]
@@ -230,7 +258,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
         self.lambdas = np.array(lambdas)[None, None, None, :]
         super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
 
-    def transform_one(self, structure):
+    def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
         Args:
             structure (Structure): Pymatgen Structure object.
@@ -287,7 +315,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
         df = pd.DataFrame(data)
         return df
 
-    def _fc(self, r):
+    def _fc(self, r: float) -> np.ndarray:
         """
         Cutoff function to decay the symmetry functions at vicinity of radial cutoff.
 
