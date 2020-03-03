@@ -112,7 +112,6 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                 else:
                     df = pd.concat([hstack_b, df_db])
             return df
-
         return process(raw_data[0], self.pot_fit)
 
 

@@ -5,10 +5,10 @@ Materials Project DataSource
 import pandas as pd
 from pymatgen.ext.matproj import MPRester
 
-from maml import DataSource
+from maml import BaseDataSource
 
 
-class MaterialsProject(DataSource):
+class MaterialsProject(BaseDataSource):
     """
     Query the Materials Project for Data.
     """

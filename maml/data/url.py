@@ -6,10 +6,10 @@ from io import StringIO
 import requests
 import pandas as pd
 
-from maml import DataSource
+from maml import BaseDataSource
 
 
-class URLSource(DataSource):
+class URLSource(BaseDataSource):
     """
     Load raw data from a URL, e.g., figshare.
     """

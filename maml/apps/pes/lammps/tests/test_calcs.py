@@ -13,7 +13,7 @@ import shutil
 
 import numpy as np
 from monty.os.path import which
-from pymatgen import Structure, Lattice, Element
+from pymatgen import Structure, Lattice
 from sklearn.linear_model import LinearRegression
 
 from maml import ModelWithSklearn
@@ -181,6 +181,8 @@ class ElasticConstantTest(unittest.TestCase):
         cls.this_dir = os.path.dirname(os.path.abspath(__file__))
         cls.test_dir = tempfile.mkdtemp()
         os.chdir(cls.test_dir)
+        print(os.getcwd())
+        print(os.listdir('.'))
 
     @classmethod
     def tearDownClass(cls):

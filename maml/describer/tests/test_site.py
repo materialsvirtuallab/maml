@@ -41,7 +41,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
         df_pot = bc_pot.transform(structures)
         for i, s in enumerate(structures):
             df_s = df_pot.xs(i, level='input_index')
-            self.assertEqual(df_s.shape, ((1 + len(s) * 3 + 6, 18)))
+            self.assertEqual(df_s.shape, (1 + len(s) * 3 + 6, 18))
             self.assertTrue(df_s.equals(bc_pot.transform_one(s)))
             sna = df_s.iloc[0]
             for specie in ['Na', 'Cl']:

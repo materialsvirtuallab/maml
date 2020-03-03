@@ -9,8 +9,10 @@ import tempfile
 
 from monty.os.path import which
 from monty.serialization import loadfn
+from sklearn.linear_model import LinearRegression
+
 from maml.apps.pes.snap import SNAPotential
-from maml.model.linear_model import LinearModel
+from maml import ModelWithSklearn
 from maml.describer.site import BispectrumCoefficients
 
 CWD = os.getcwd()
@@ -39,13 +41,13 @@ class SNAPotentialTest(unittest.TestCase):
                                                  element_profile=profile,
                                                  quadratic=False,
                                                  pot_fit=True)
-        model1 = LinearModel(describer=self.describer1)
+        model1 = ModelWithSklearn(describer=self.describer1, model=LinearRegression())
         self.potential1 = SNAPotential(model=model1, name='test')
         self.describer2 = BispectrumCoefficients(cutoff=4.6, twojmax=6,
                                                  element_profile=profile,
                                                  quadratic=True,
                                                  pot_fit=True)
-        model2 = LinearModel(describer=self.describer2)
+        model2 = ModelWithSklearn(describer=self.describer2, model=LinearRegression())
         self.potential2 = SNAPotential(model=model2, name='test')
         self.test_pool = test_datapool
         self.test_structures = []

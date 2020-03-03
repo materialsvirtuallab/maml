@@ -120,7 +120,7 @@ class SNAPotential(Potential):
 
         coeff_lines = []
         coeff_lines.append('{} {}'.format(ne, nbc + 1))
-        for element, coeff in zip(self.elements, np.split(model.coef, ne)):
+        for element, coeff in zip(self.elements, np.split(model.model.coef_, ne)):
             coeff_lines.append('{} {} {}'.format(element,
                                                  profile[element]['r'],
                                                  profile[element]['w']))

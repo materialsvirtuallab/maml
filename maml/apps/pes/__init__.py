@@ -8,7 +8,7 @@ import abc
 from maml.base.model import BaseModel
 
 
-class PotentialMixin(BaseModel):
+class PotentialMixin:
     """
     Abstract base class for a Interatomic Potential.
     """
