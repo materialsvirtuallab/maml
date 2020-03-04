@@ -8,6 +8,7 @@ jobs:
       - checkout
       - run:
           command: |
+            pip install pip --upgrade
             pip install --quiet pycodestyle flake8 mypy pydocstyle pylint
             echo "Checks will be performed in the order of pycodestyle -> flake8 -> mypy -> pydocstyle "
             echo "It is highly recommended that you use the pre-commit hook provided in pymatgen."
