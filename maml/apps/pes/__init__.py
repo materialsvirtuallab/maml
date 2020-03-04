@@ -79,5 +79,5 @@ class PotentialMixin:
         raise NotImplementedError
 
 
-class Potential(PotentialMixin, BaseModel):
+class Potential(PotentialMixin, BaseModel):  # type: ignore
     pass

@@ -25,7 +25,7 @@ class URLSource(BaseDataSource):
         self.fmt = fmt
         self.read_kwargs = read_kwargs or {}
 
-    def get(self, url: str) -> pd.DataFrame:
+    def get(self, url: str) -> pd.DataFrame:  # type: ignore
         """
         Get url data source
 
@@ -45,7 +45,7 @@ class FigshareSource(URLSource):
     Load data from figshare.
     """
 
-    def get(self, file_id: str) -> pd.DataFrame:
+    def get(self, file_id: str) -> pd.DataFrame:  # type: ignore
         """
         Get data from Figshare
         Args:

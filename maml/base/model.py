@@ -2,7 +2,7 @@ import joblib
 from typing import Any, Union, List
 
 import numpy as np
-from sklearn.base import TransformerMixin, BaseEstimator
+from sklearn.base import TransformerMixin
 
 from maml.base import DummyDescriber
 
@@ -34,7 +34,7 @@ class BaseModel:
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
         """
-        self.model.fit(features, targets, **kwargs)  # ignore
+        self.model.fit(features, targets, **kwargs)  # type: ignore
         return self
 
     def train(self,
@@ -53,7 +53,7 @@ class BaseModel:
         Returns:
             List of output objects.
         """
-        return self.model.predict(features, **kwargs)  # ignore
+        return self.model.predict(features, **kwargs)  # type: ignore
 
     def predict_objs(self, objs: Union[List, np.ndarray]) -> np.ndarray:
         """
@@ -100,7 +100,7 @@ class SklearnMixin:
         Returns:
 
         """
-        instance = cls(**kwargs)
+        instance = cls(**kwargs)  # type: ignore
         instance.load(filename)
         return instance
 
@@ -120,7 +120,7 @@ class KerasMixin:
 
     @classmethod
     def from_file(cls, filename: str, **kwargs):
-        instance = cls(**kwargs)
+        instance = cls(**kwargs)  # type: ignore
         instance.load(filename)
         return instance
 
