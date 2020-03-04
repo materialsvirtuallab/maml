@@ -197,8 +197,8 @@ class SNAPotential(Potential):
         describer = BispectrumCoefficients(cutoff=rcut, twojmax=twojmax,
                                            element_profile=element_profile,
                                            quadratic=quadratic, pot_fit=True)
-        model = ModelWithSklearn(describer=describer,
-                                 model=LinearRegression(), **kwargs)
+        model = ModelWithSklearn(model=LinearRegression(),
+                                 describer=describer, **kwargs)
         coef = np.array(np.concatenate([coeff_lines[(2 + nbc * n + n):
                         (2 + nbc * (n+1) + n)] for n in range(ne)]), dtype=np.float)
         model.model.coef_ = coef

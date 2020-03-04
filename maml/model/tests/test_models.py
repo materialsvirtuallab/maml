@@ -68,7 +68,7 @@ class LinearModelTest(unittest.TestCase):
             def transform(self, objs):
                 return pd.DataFrame(objs)
 
-        self.lm = ModelWithSklearn(describer=DummyDescriber(), model=LinearRegression())
+        self.lm = ModelWithSklearn(model=LinearRegression(), describer=DummyDescriber())
         self.test_dir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -110,8 +110,8 @@ class GaussianProcessTest(unittest.TestCase):
             def transform(self, objs):
                 return pd.DataFrame(objs)
 
-        self.gpr = ModelWithSklearn(describer=DummyDescriber(),
-                                    model=GaussianProcessRegressor())
+        self.gpr = ModelWithSklearn(model=GaussianProcessRegressor(), describer=DummyDescriber())
+
 
     @classmethod
     def tearDownClass(cls):
@@ -125,7 +125,7 @@ class GaussianProcessTest(unittest.TestCase):
         y_pred, sigma = self.gpr._predict(x_test, return_std=True)
         upper_bound = y_pred + 1.96 * sigma
         lower_bound = y_pred - 1.96 * sigma
-        self.assertTrue(np.all([l < y and y < u 
+        self.assertTrue(np.all([l < y and y < u
                                 for u, y, l in zip(upper_bound, y_test, lower_bound)]))
 
 

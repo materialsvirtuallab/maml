@@ -73,4 +73,4 @@ class MultiLayerPerceptron(ModelWithKeras):
         lr = kwargs.get('lr', 1e-3)
         metrics = kwargs.get("metrics", None)
         model = construct_mlp(hidden_layer_sizes, input_dim, lr, activation, loss, metrics)
-        super().__init__(describer, model)
+        super().__init__(model=model, describer=describer)
