@@ -4,9 +4,9 @@
 
 """This module provides SNAP interatomic potential class."""
 
-from monty.io import zopen
-import numpy as np
 import re
+import numpy as np
+from monty.io import zopen
 from sklearn.linear_model import LinearRegression
 
 from maml.apps.pes import Potential
@@ -200,7 +200,7 @@ class SNAPotential(Potential):
         model = ModelWithSklearn(describer=describer,
                                  model=LinearRegression(), **kwargs)
         coef = np.array(np.concatenate([coeff_lines[(2 + nbc * n + n):
-                                                    (2 + nbc * (n+1) + n)] for n in range(ne)]), dtype=np.float)
+                                    (2 + nbc * (n+1) + n)] for n in range(ne)]), dtype=np.float)
         model.model.coef_ = coef
         model.model.intercept_ = 0
         snap = SNAPotential(model=model)

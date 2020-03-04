@@ -101,7 +101,8 @@ class SklearnMixin:
 
 
 class KerasMixin:
-    """keras model mixin with save and load functionality
+    """
+    keras model mixin with save and load functionality
     """
     def save(self, filename: str):
         joblib.dump(self.describer, filename)
@@ -120,12 +121,14 @@ class KerasMixin:
 
 
 class ModelWithSklearn(BaseModel, SklearnMixin):
-    """MAML model with sklearn model as estimator
+    """
+    MAML model with sklearn model as estimator
     """
     pass
 
 
 class ModelWithKeras(BaseModel, KerasMixin):
-    """MAML model with keras model as estimators
+    """
+    MAML model with keras model as estimators
     """
     pass
