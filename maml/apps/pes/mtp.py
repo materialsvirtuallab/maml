@@ -100,7 +100,7 @@ class MTPotential(Potential):
             lines.append(format_str.format('AtomData:  id', 'type',
                                            'cartes_x', 'cartes_y', 'cartes_z', 'fx', 'fy', 'fz'))
             for i, (site, force) in enumerate(zip(structure, forces)):
-                lines.append(format_float.format(i+1, self.elements.index(str(site.specie)),
+                lines.append(format_float.format(i + 1, self.elements.index(str(site.specie)),
                                                  *site.coords, *force))
         if 'Energy' in inputs:
             lines.append(' Energy')
@@ -318,20 +318,20 @@ class MTPotential(Potential):
                                                'TRUE', calc_efs.get('comment')))
             if kwargs.get('Fit'):
                 fit = mlip.get('Fit')
-                lines.append(format_str.format('\t'+fit.get('name'), 'true', fit.get('comment')))
+                lines.append(format_str.format('\t' + fit.get('name'), 'true', fit.get('comment')))
                 for attribute in PARAMS['MLIP']['Fit']:
                     lines.append(format_str.format(*feed(attribute, kwargs, fit, tab='\t\t')))
 
             if kwargs.get('Select'):
                 select = mlip.get('Select')
-                lines.append(format_str.format('\t'+select.get('name'),
+                lines.append(format_str.format('\t' + select.get('name'),
                                                'true', select.get('comment')))
                 for attribute in PARAMS['MLIP']['Select']:
                     lines.append(format_str.format(*feed(attribute, kwargs, select, tab='\t\t')))
 
             if kwargs.get('Write_cfgs'):
                 write_cfgs = mlip.get('Write_cfgs')
-                lines.append(format_str.format('\t'+write_cfgs.get('name'),
+                lines.append(format_str.format('\t' + write_cfgs.get('name'),
                                                kwargs.get('Write_cfgs'), write_cfgs.get('comment')))
 
         if Driver:
@@ -462,7 +462,7 @@ class MTPotential(Potential):
                 f.write(s)
 
             save_fitted_mtp = '.'.join(
-                [unfitted_mtp.split('.')[0]+'_fitted', unfitted_mtp.split('.')[1]])
+                [unfitted_mtp.split('.')[0] + '_fitted', unfitted_mtp.split('.')[1]])
 
             p = subprocess.Popen(['mlp', 'train', unfitted_mtp, atoms_filename,
                                   '--max-iter={}'.format(max_iter),

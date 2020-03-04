@@ -366,7 +366,7 @@ class ElasticConstant(LMPStaticCalculator):
                                          maxeval=self.maxeval, lattice=self.lattice,
                                          alat=self.alat, num_species=self.num_species,
                                          atom_type=self.atom_type,
-                                         masses='\n'.join(['mass {} {}'.format(i+1, i+1)
+                                         masses='\n'.join(['mass {} {}'.format(i + 1, i + 1)
                                                            for i in range(self.num_species)])))
         with open('potential.mod', 'w') as f:
             f.write(potential_template.format(ff_settings='\n'.join(ff_settings)))
