@@ -18,4 +18,5 @@ build
 .mypy_cache
 .coverage
 __pycache__
+.vscode
 
