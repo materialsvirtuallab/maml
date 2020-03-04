@@ -83,7 +83,7 @@ class SNAPotential(Potential):
                                  test_stresses)
         _, df_orig = convert_docs(predict_pool)
         _, df_predict = convert_docs(pool_from(test_structures))
-        outputs = self.model.predict_obj(objs=test_structures)
+        outputs = self.model.predict_objs(objs=test_structures)
         df_predict['y_orig'] = df_predict['n'] * outputs
 
         return df_orig, df_predict
