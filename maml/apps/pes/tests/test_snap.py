@@ -66,7 +66,7 @@ class SNAPotentialTest(unittest.TestCase):
                               train_energies=self.test_energies,
                               train_forces=self.test_forces,
                               train_stresses=self.test_stresses)
-        self.assertEqual(len(self.potential1.model.coef),
+        self.assertEqual(len(self.potential1.model.model.coef_),
                          len(self.describer1.subscripts) + 1)
         self.potential2.train(train_structures=self.test_structures,
                               train_energies=self.test_energies,

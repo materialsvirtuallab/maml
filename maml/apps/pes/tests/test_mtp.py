@@ -46,6 +46,7 @@ class MTPotentialTest(unittest.TestCase):
         self.test_struct = self.test_pool[-1]['structure']
 
     def test_write_read_cfgs(self):
+        self.potential.elements = ['Mo']
         self.potential.write_cfg('test.cfgs', cfg_pool=self.test_pool)
         datapool, df = self.potential.read_cfgs('test.cfgs')
         self.assertEqual(len(self.test_pool), len(datapool))
@@ -95,7 +96,7 @@ class MTPotentialTest(unittest.TestCase):
         self.assertEqual(len(stress), 6)
 
     def test_from_config(self):
-        mtp = MTPotential.from_config(config_file)
+        mtp = MTPotential.from_config(config_file, elements=['Mo'])
         self.assertIsNotNone(mtp.param)
 
 
