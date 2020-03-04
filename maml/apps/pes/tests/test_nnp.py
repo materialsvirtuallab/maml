@@ -86,7 +86,7 @@ class NNPitentialTest(unittest.TestCase):
                              train_energies=self.test_energies,
                              train_forces=self.test_forces,
                              train_stresses=self.test_stresses,
-                             atom_energy=-4.14, r_cut=5.0,
+                             atom_energy={'Mo': -4.14}, r_cut=5.0,
                              epochs=1)
 
         df_orig, df_tar = \

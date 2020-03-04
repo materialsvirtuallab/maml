@@ -73,7 +73,7 @@ class SNAPotentialTest(unittest.TestCase):
                               train_forces=self.test_forces,
                               train_stresses=self.test_stresses)
         nss = len(self.describer2.subscripts)
-        self.assertEqual(len(self.potential2.model.coef),
+        self.assertEqual(len(self.potential2.model.model.coef_),
                          nss + int((1 + nss) * nss / 2) + 1)
 
     def test_evaluate(self):
