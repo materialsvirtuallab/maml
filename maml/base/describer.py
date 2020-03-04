@@ -1,6 +1,6 @@
 import abc
 import logging
-from tqdm import tqdm
+from tqdm import tqdm  # ignore
 from typing import Any, Union, List
 
 import pandas as pd
@@ -88,7 +88,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         multi_output = self._is_multi_output()
         if not multi_output:
             features = [features]
-        batched_features = [self._batch_features(i) for i in 
+        batched_features = [self._batch_features(i) for i in
                             list(*zip(features))]
         return batched_features if multi_output else batched_features[0]
 
@@ -137,6 +137,14 @@ def _transform_one(describer: BaseDescriber, obj: Any) -> np.ndarray:
     A wrapper to make a pure function.
     """
     return describer.transform_one(obj)
+
+
+class DummyDescriber(BaseDescriber):
+    """
+    Dummy Describer that does nothing
+    """
+    def transform_one(self, obj: Any):
+        return obj
 
 
 class SequentialDescriber(Pipeline):

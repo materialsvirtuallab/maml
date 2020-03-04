@@ -1,8 +1,11 @@
 import joblib
 from typing import Any, Union, List
 
+from keras.models import Model as KerasModel
 import numpy as np
-from sklearn.base import TransformerMixin
+from sklearn.base import TransformerMixin, BaseEstimator
+
+from maml.base import DummyDescriber
 
 
 class BaseModel:
@@ -12,10 +15,13 @@ class BaseModel:
     transparent conversion of arbitrary input and outputs.
 
     Args:
-        describer (TransformerMixin): Describer that converts object into features
         model (Any): ML models, for example, sklearn model or keras model
+        describer (TransformerMixin): Describer that converts object into features
     """
-    def __init__(self, describer: TransformerMixin = None, model: Any = None, **kwargs):
+    def __init__(self, model: Union[BaseEstimator, KerasModel] = None,
+                 describer: TransformerMixin = None, **kwargs):
+        if describer is None:
+            describer = DummyDescriber()
         self.describer = describer
         self.model = model
 
@@ -29,7 +35,7 @@ class BaseModel:
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
         """
-        self.model.fit(features, targets, **kwargs)
+        self.model.fit(features, targets, **kwargs)  # ignore
         return self
 
     def train(self,
@@ -48,7 +54,7 @@ class BaseModel:
         Returns:
             List of output objects.
         """
-        return self.model.predict(features, **kwargs)
+        return self.model.predict(features, **kwargs)  # ignore
 
     def predict_objs(self, objs: Union[List, np.ndarray]) -> np.ndarray:
         """
@@ -121,11 +127,23 @@ class KerasMixin:
 
 class ModelWithSklearn(BaseModel, SklearnMixin):
     """MAML model with sklearn model as estimator
+
+    Args:
+        model (Any): ML models, for example, sklearn model or keras model
+        describer (TransformerMixin): Describer that converts object into features
     """
-    pass
+    def __init__(self, model: Union[BaseEstimator, KerasModel],
+                 describer: TransformerMixin = None, **kwargs):
+        super().__init__(model=model, describer=describer, **kwargs)
 
 
 class ModelWithKeras(BaseModel, KerasMixin):
     """MAML model with keras model as estimators
+
+    Args:
+        model (Any): ML models, for example, sklearn model or keras model
+        describer (TransformerMixin): Describer that converts object into features
     """
-    pass
+    def __init__(self, model: Union[BaseEstimator, KerasModel],
+                 describer: TransformerMixin = None, **kwargs):
+        super().__init__(model=model, describer=describer, **kwargs)
