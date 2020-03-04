@@ -107,7 +107,8 @@ class SklearnMixin:
 
 
 class KerasMixin:
-    """keras model mixin with save and load functionality
+    """
+    keras model mixin with save and load functionality
     """
     def save(self, filename: str):
         joblib.dump(self.describer, filename)

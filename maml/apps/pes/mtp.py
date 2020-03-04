@@ -614,7 +614,7 @@ class MTPotential(Potential):
                 param = yaml.load(f)
             mtp = MTPotential(param)
             mtp.elements = elements
-            return mtp
+
         if filename.endswith('.mtp'):
             def load_config(filename):
                 param = OrderedDict()
@@ -628,6 +628,7 @@ class MTPotential(Potential):
                     param[key] = value
                 return param
             param = load_config(filename)
-            mtp = MTPotential(param)
+            mtp = MTPotential(param=param)
             mtp.elements = elements
-            return mtp
+
+        return mtp

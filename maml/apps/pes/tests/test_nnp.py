@@ -67,10 +67,10 @@ class NNPitentialTest(unittest.TestCase):
         hidden_layers = [15, 15]
         activations = 't'
         self.potential.train(train_structures=self.test_structures,
-                             energies=self.test_energies,
-                             forces=self.test_forces,
-                             stresses=self.test_stresses,
-                             atom_energy=-4.14, r_cut=5.0,
+                             train_energies=self.test_energies,
+                             train_forces=self.test_forces,
+                             train_stresses=self.test_stresses,
+                             atom_energy={'Mo': -4.14}, r_cut=5.0,
                              hidden_layers=hidden_layers,
                              activations=activations,
                              epochs=1)
@@ -86,7 +86,7 @@ class NNPitentialTest(unittest.TestCase):
                              train_energies=self.test_energies,
                              train_forces=self.test_forces,
                              train_stresses=self.test_stresses,
-                             atom_energy=-4.14, r_cut=5.0,
+                             atom_energy={'Mo': -4.14}, r_cut=5.0,
                              epochs=1)
 
         df_orig, df_tar = \
@@ -103,7 +103,7 @@ class NNPitentialTest(unittest.TestCase):
                              train_energies=self.test_energies,
                              train_forces=self.test_forces,
                              train_stresses=self.test_stresses,
-                             atom_energy=-4.14, r_cut=5.0,
+                             atom_energy={'Mo': -4.14}, r_cut=5.0,
                              epochs=1)
         energy, forces, stress = self.potential.predict_efs(self.test_struct)
         self.assertEqual(len(forces), len(self.test_struct))
