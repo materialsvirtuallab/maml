@@ -31,7 +31,7 @@ MTini_params = loadfn(os.path.join(module_dir, 'params', 'MTini.json'))
 
 
 def feed(attribute, kwargs, dictionary, tab='\t'):
-    """
+    r"""
     Args:
         attribute (str): Attribute to be operated.
         kwargs (dict): Generic parameters.
@@ -116,6 +116,15 @@ class MTPotential(Potential):
         return '\n'.join(lines)
 
     def write_cfg(self, filename, cfg_pool):
+        """
+        Write configurations to file
+        Args:
+            filename (str): filename
+            cfg_pool (list): list of configurations
+
+        Returns:
+
+        """
         if not self.elements:
             raise ValueError("No species given.")
 

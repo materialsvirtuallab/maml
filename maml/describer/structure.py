@@ -73,16 +73,17 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
 
 
 class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
+    """
+    Coulomb Matrix to decribe structure
+
+    """
     def __init__(self,
                  random_seed: int = None,
                  memory: Union[Memory, str] = None,
                  verbose: bool = False,
                  n_jobs: int = 0,
                  **kwargs):
-
         """
-        Coulomb Matrix to decribe structure
-
         Args:
             random_seed (int): random seed
             memory (None, str or joblib.Memory): whether to cache to
@@ -193,6 +194,14 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         return pd.DataFrame(c[p][:, p].ravel())
 
     def transform_one(self, s: Structure) -> pd.DataFrame:
+        """
+        Transform one structure to descriptors
+        Args:
+            s (Structure): pymatgen structure
+
+        Returns: pandas dataframe descriptors
+
+        """
         return self.get_randomized_coulomb_mat(s)
 
 
@@ -233,4 +242,12 @@ class SortedCoulombMatrix(CoulombMatrix):
         return pd.DataFrame(c[np.argsort(np.linalg.norm(c, axis=1))].ravel())
 
     def transform_one(self, s: Structure) -> pd.DataFrame:
+        """
+        Transform one structure into descriptor
+        Args:
+            s (Structure): pymatgen Structure
+
+        Returns: pd.DataFrame descriptors
+
+        """
         return self.get_sorted_coulomb_mat(s)

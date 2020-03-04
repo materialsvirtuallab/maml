@@ -1,3 +1,6 @@
+"""
+MAML model base classes
+"""
 import joblib
 from typing import Any, Union, List
 
@@ -12,13 +15,14 @@ class BaseModel:
     Abstract Base class for a Model. Basically, it usually wraps around a deep
     learning package, e.g., the Sequential Model in Keras, but provides for
     transparent conversion of arbitrary input and outputs.
-
-    Args:
-        model (Any): ML models, for example, sklearn model or keras model
-        describer (TransformerMixin): Describer that converts object into features
     """
     def __init__(self, model: Any = None,
                  describer: TransformerMixin = None, **kwargs):
+        """
+        Args:
+            model (Any): ML models, for example, sklearn model or keras model
+            describer (TransformerMixin): Describer that converts object into features
+        """
         if describer is None:
             describer = DummyDescriber()
         self.describer = describer
@@ -40,6 +44,17 @@ class BaseModel:
     def train(self,
               objs: Union[List, np.ndarray],
               targets: Union[List, np.ndarray], **kwargs) -> "BaseModel":
+        """
+        Train the model from object, target pairs
+
+        Args:
+            objs (list of objects): List of objects
+            targets (list): list of float or np.ndarray
+            **kwargs:
+
+        Returns: self
+
+        """
         features = self.describer.fit_transform(objs)
         return self.fit(features, targets, **kwargs)
 
@@ -97,7 +112,7 @@ class SklearnMixin:
             filename (str): filename
             **kwargs:
 
-        Returns:
+        Returns: object instance
 
         """
         instance = cls(**kwargs)  # type: ignore
@@ -110,16 +125,38 @@ class KerasMixin:
     keras model mixin with save and load functionality
     """
     def save(self, filename: str):
+        """Save the model and describer
+
+        Arguments:
+            filename (str): filename for save
+        """
         joblib.dump(self.describer, filename)
         self.model.save(filename + '.hdf5')
 
     def load(self, filename: str):
+        """
+        Load model parameters from filename
+        Args:
+            filename (str): model file name
+
+        Returns: None
+
+        """
         from keras.models import load_model
         self.describer = joblib.load(filename)
         self.model = load_model(filename + '.hdf5')
 
     @classmethod
     def from_file(cls, filename: str, **kwargs):
+        """
+        Load the model from file
+        Args:
+            filename (str): filename
+            **kwargs:
+
+        Returns: object instance
+
+        """
         instance = cls(**kwargs)  # type: ignore
         instance.load(filename)
         return instance
@@ -127,23 +164,25 @@ class KerasMixin:
 
 class ModelWithSklearn(BaseModel, SklearnMixin):
     """MAML model with sklearn model as estimator
-
-    Args:
-        model (Any): ML models, for example, sklearn model or keras model
-        describer (TransformerMixin): Describer that converts object into features
     """
     def __init__(self, model: Any,
                  describer: TransformerMixin = None, **kwargs):
+        """
+        Args:
+            model (Any): ML models, for example, sklearn model or keras model
+            describer (TransformerMixin): Describer that converts object into features
+        """
         super().__init__(model=model, describer=describer, **kwargs)
 
 
 class ModelWithKeras(BaseModel, KerasMixin):
     """MAML model with keras model as estimators
-
-    Args:
-        model (Any): ML models, for example, sklearn model or keras model
-        describer (TransformerMixin): Describer that converts object into features
     """
     def __init__(self, model: Any,
                  describer: TransformerMixin = None, **kwargs):
+        """
+        Args:
+            model (Any): ML models, for example, sklearn model or keras model
+            describer (TransformerMixin): Describer that converts object into features
+        """
         super().__init__(model=model, describer=describer, **kwargs)

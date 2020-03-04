@@ -80,4 +80,8 @@ class PotentialMixin:
 
 
 class Potential(PotentialMixin, BaseModel):  # type: ignore
+    """
+    Potential model that can be used to fit struccture-[energy, force, stress]
+    pairs
+    """
     pass

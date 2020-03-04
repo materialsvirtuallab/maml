@@ -65,11 +65,28 @@ def deserialize_maml_object(identifier, module_objects=None,
         return fn
 
 
-def load_pickle(filename: str):
+def load_pickle(filename: str) -> Any:
+    """
+    Load pickled file to objection
+
+    Args:
+        filename: filename
+
+    Returns: obj
+
+    """
     with open(filename, 'rb') as f:
         return pickle.load(f)
 
 
-def to_pickle(obj: Any, filename: str):
+def to_pickle(obj: Any, filename: str) -> None:
+    """
+    Dump picklable object to file
+
+    Args:
+        obj: object
+        filename: file name
+
+    """
     with open(filename, 'wb') as f:
         pickle.dump(obj, f)

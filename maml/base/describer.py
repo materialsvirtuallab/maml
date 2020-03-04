@@ -1,3 +1,6 @@
+"""
+MAML describer base classes
+"""
 import abc
 import logging
 from tqdm import tqdm  # ignore
@@ -55,6 +58,16 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         self.n_jobs = n_jobs
 
     def fit(self, x: Any, y: Any = None) -> "BaseDescriber":
+        """
+        Place holder for fit API
+
+        Args:
+            x: Any inputs
+            y: Any outputs
+
+        Returns: self
+
+        """
         return self
 
     def transform_one(self, obj: Any) -> np.ndarray:
@@ -114,7 +127,17 @@ class OutDataFrameConcat:
     """
     Concate the output dataframe lists into one dataframe
     """
-    def _batch_features(self, features) -> pd.DataFrame:
+    def _batch_features(self, features: List[pd.DataFrame]) -> pd.DataFrame:
+        """
+        Batch together a list of features by concatenating
+        them into one pandas dataframe
+
+        Args:
+            features (list): list of pandas data frame features
+
+        Returns: pd.DataFrame
+
+        """
         concated_features = pd.concat(features, 
                                       keys=range(len(features)), 
                                       names=['input_index', None])
@@ -129,12 +152,28 @@ class OutStackFirstDim:
 
     """
     def _batch_features(self, features) -> np.ndarray:
+        """
+        Batch together a list of features by stacking them
+        into a higher-dimensional np.ndarray
+
+        Args:
+            features (list): list of np.ndarray frame features
+
+        Returns: np.ndarray
+
+        """
         return np.stack(features)
 
 
 def _transform_one(describer: BaseDescriber, obj: Any) -> np.ndarray:
     """
     A wrapper to make a pure function.
+
+    Args:
+        describer (BaseDescriber): a describer
+
+    Returns:
+        np.ndarray
     """
     return describer.transform_one(obj)
 
@@ -144,10 +183,29 @@ class DummyDescriber(BaseDescriber):
     Dummy Describer that does nothing
     """
     def transform_one(self, obj: Any):
+        """
+        Does nothing but return the original features
+
+        Args:
+            obj: Any inputs
+
+        Returns: Any outputs
+
+        """
         return obj
 
 
 class SequentialDescriber(Pipeline):
-    def __init__(self, describers, **kwargs):
+    """
+    A thin wrapper of sklearn Pipeline
+    """
+    def __init__(self, describers: List, **kwargs):
+        """
+        Put a list of describers into one pipeline
+        Args:
+            describers (list): a list of describers that will be applied
+                consecutively
+            **kwargs:
+        """
         steps = [(i.__class__.__name__, i) for i in describers]
         super().__init__(steps, **kwargs)

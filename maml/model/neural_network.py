@@ -50,15 +50,6 @@ def construct_mlp(hidden_layer_sizes: List[int],
 class MultiLayerPerceptron(ModelWithKeras):
     """
     Multi-layer perceptron model with keras model as predictor
-
-    Args:
-        describer (Describer): Describer to convert obj to features
-        hidden_layer_sizes (list of int): hidden layer sizes for MLP
-        input_dim (int): feature size
-        preprocessor (TransformerMixin): sklearn transformer mixin that works
-            on numerical values and outputs transformed values.
-        activation (str): activation function for neural networks
-        loss (str): loss function
     """
     def __init__(self,
                  describer: BaseDescriber,
@@ -68,6 +59,16 @@ class MultiLayerPerceptron(ModelWithKeras):
                  activation: str = "relu",
                  loss: str = "mse",
                  **kwargs):
+        """
+        Args:
+            describer (Describer): Describer to convert obj to features
+            hidden_layer_sizes (list of int): hidden layer sizes for MLP
+            input_dim (int): feature size
+            preprocessor (TransformerMixin): sklearn transformer mixin that works
+                on numerical values and outputs transformed values.
+            activation (str): activation function for neural networks
+            loss (str): loss function
+        """
 
         describer = SequentialDescriber([describer, preprocessor])
         lr = kwargs.get('lr', 1e-3)
