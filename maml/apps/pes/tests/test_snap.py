@@ -16,9 +16,10 @@ from maml import ModelWithSklearn
 from maml.describer.site import BispectrumCoefficients
 
 CWD = os.getcwd()
-test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
-coeff_file = os.path.join(os.path.dirname(__file__), 'SNAP', 'SNAPotential.snapcoeff')
-param_file = os.path.join(os.path.dirname(__file__), 'SNAP', 'SNAPotential.snapparam')
+DIR = os.path.abspath(os.path.dirname(__file__))
+test_datapool = loadfn(os.path.join(DIR, 'datapool.json'))
+coeff_file = os.path.join(DIR, 'SNAP', 'SNAPotential.snapcoeff')
+param_file = os.path.join(DIR, 'SNAP', 'SNAPotential.snapparam')
 
 
 @unittest.skipIf(not which('lmp_serial'), 'No LAMMPS cmd found.')

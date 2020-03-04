@@ -14,7 +14,8 @@ from monty.serialization import loadfn
 from maml.apps.pes.gap import GAPotential
 
 CWD = os.getcwd()
-test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
+test_datapool = loadfn(os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                    'datapool.json'))
 
 
 class GAPotentialTest(unittest.TestCase):

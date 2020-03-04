@@ -23,7 +23,7 @@ from maml.apps.pes.lammps.calcs import SpectralNeighborAnalysis, EnergyForceStre
     ElasticConstant, LatticeConstant, NudgedElasticBand, DefectFormation
 
 CWD = os.getcwd()
-with open(os.path.join(os.path.dirname(__file__), 'coeff.json')) as f:
+with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'coeff.json')) as f:
     coeff, intercept = json.load(f)
     coeff = np.array(coeff)
 

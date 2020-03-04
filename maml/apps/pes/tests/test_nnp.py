@@ -14,10 +14,11 @@ from pymatgen import Structure
 from maml.apps.pes.nnp import NNPotential
 
 CWD = os.getcwd()
-test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
-input_file = os.path.join(os.path.dirname(__file__), 'NNP', 'input.nn')
-scaling_file = os.path.join(os.path.dirname(__file__), 'NNP', 'scaling.data')
-weights_file = os.path.join(os.path.dirname(__file__), 'NNP', 'weights.data')
+DIR = os.path.abspath(os.path.dirname(__file__))
+test_datapool = loadfn(os.path.join(DIR, 'datapool.json'))
+input_file = os.path.join(DIR, 'NNP', 'input.nn')
+scaling_file = os.path.join(DIR, 'NNP', 'scaling.data')
+weights_file = os.path.join(DIR, 'NNP', 'weights.data')
 
 
 class NNPitentialTest(unittest.TestCase):

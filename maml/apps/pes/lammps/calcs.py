@@ -47,9 +47,6 @@ class LMPStaticCalculator(object):
     for lmp_exe in ["lmp_mpi", "lmp_serial"]:
         if shutil.which(lmp_exe) is not None:
             LMP_EXE = lmp_exe
-    if LMP_EXE is None:
-        raise ValueError("lammps executable not found in path, "
-                         "check lmp_mpi or lmp_serial")
 
     _COMMON_CMDS = ['units metal',
                     'atom_style charge',

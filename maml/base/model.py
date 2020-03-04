@@ -1,7 +1,6 @@
 import joblib
 from typing import Any, Union, List
 
-from keras.models import Model as KerasModel
 import numpy as np
 from sklearn.base import TransformerMixin, BaseEstimator
 
@@ -18,7 +17,7 @@ class BaseModel:
         model (Any): ML models, for example, sklearn model or keras model
         describer (TransformerMixin): Describer that converts object into features
     """
-    def __init__(self, model: Union[BaseEstimator, KerasModel] = None,
+    def __init__(self, model: Any = None,
                  describer: TransformerMixin = None, **kwargs):
         if describer is None:
             describer = DummyDescriber()
@@ -133,7 +132,7 @@ class ModelWithSklearn(BaseModel, SklearnMixin):
         model (Any): ML models, for example, sklearn model or keras model
         describer (TransformerMixin): Describer that converts object into features
     """
-    def __init__(self, model: Union[BaseEstimator, KerasModel],
+    def __init__(self, model: Any,
                  describer: TransformerMixin = None, **kwargs):
         super().__init__(model=model, describer=describer, **kwargs)
 
@@ -145,6 +144,6 @@ class ModelWithKeras(BaseModel, KerasMixin):
         model (Any): ML models, for example, sklearn model or keras model
         describer (TransformerMixin): Describer that converts object into features
     """
-    def __init__(self, model: Union[BaseEstimator, KerasModel],
+    def __init__(self, model: Any,
                  describer: TransformerMixin = None, **kwargs):
         super().__init__(model=model, describer=describer, **kwargs)
