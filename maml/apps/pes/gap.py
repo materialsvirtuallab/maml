@@ -1,36 +1,36 @@
-"""
-This module implements Gaussian approximation potential
-Bartók, Albert P., et al. Physical review letters 104.13 (2010): 136403.
-"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-from collections import OrderedDict, defaultdict
-import os
-import re
-import subprocess
-import xml.etree.ElementTree as ET
-import yaml
+"""This module provides SOAP-GAP interatomic potential class."""
 
+import re
+import os
+import subprocess
+import ruamel.yaml as yaml
+import xml.etree.ElementTree as ET
+from collections import OrderedDict, defaultdict
+
+import numpy as np
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
-import numpy as np
 from pymatgen import Structure, Lattice, Element
+from pymatgen.core.periodic_table import get_el_sp
 
-from .abstract import Potential
+from maml.apps.pes import Potential
+from maml.apps.pes.lammps.calcs import EnergyForceStress
 from maml.utils.data_conversion import pool_from, convert_docs
-from .lammps.calcs import EnergyForceStress
+
 
 module_dir = os.path.dirname(__file__)
-soap_params = loadfn(os.path.join(module_dir, 'params', 'soap.json'))
+soap_params = loadfn(os.path.join(module_dir, 'params', 'GAP.json'))
 
 
-class SOAPotential(Potential):
+class GAPotential(Potential):
     """
-    This class implements Smooth Overlap of Atomic Position potential.
+    This class implements Smooth Overlap of Atomic Position potentials.
     """
     pair_style = 'pair_style        quip'
     pair_coeff = 'pair_coeff        * * {} {} {}'
@@ -40,11 +40,11 @@ class SOAPotential(Potential):
 
         Args:
             name (str): Name of force field.
-            param (dict): The parameter configuration of potential.
+            param (dict): The parameter configuration of potentials.
         """
-        self.name = name if name else "SOAPotential"
+        self.name = name if name else "GAPotential"
         self.param = param if param else {}
-        self.specie = None
+        self.elements = None
 
     def _line_up(self, structure, energy, forces, virial_stress):
         """
@@ -90,11 +90,19 @@ class SOAPotential(Potential):
         if 'AtomData' in inputs:
             format_str = '{:<10s}{:>16f}{:>16f}{:>16f}{:>8d}{:>16f}{:>16f}{:>16f}'
             for i, (site, force) in enumerate(zip(structure, forces)):
-                lines.append(format_str.format(site.species_string,
-                                               *site.coords, site.specie.Z, *force))
+                lines.append(format_str.format(site.species_string, *site.coords, site.specie.Z,
+                                               *force))
         return '\n'.join(lines)
 
     def write_cfgs(self, filename, cfg_pool):
+        """
+        Write the formatted configuration file.
+
+        Args:
+            filename (str): The filename to be written.
+            cfg_pool (list): The configuration pool contains
+                structure and energy/forces properties.
+        """
         if not filename.endswith('.xyz'):
             raise RuntimeError('The extended xyz file should end with ".xyz"')
 
@@ -119,6 +127,8 @@ class SOAPotential(Potential):
 
     def read_cfgs(self, filename, predict=False):
         """
+        Read the configuration file.
+
         Args:
             filename (str): The configuration file to be read.
         """
@@ -129,8 +139,8 @@ class SOAPotential(Potential):
         repl = re.compile('AT ')
         lines = repl.sub('', string=lines)
 
-        block_pattern = re.compile('(\n[0-9]+\n|^[0-9]+\n)(.+?)(?=\n[0-9]+\n|$)', re.S)
-        lattice_pattern = re.compile('Lattice="(.+)"')
+        block_pattern = re.compile(r'(\n[0-9]+\n|^[0-9]+\n)(.+?)(?=\n[0-9]+\n|$)', re.S)
+        lattice_pattern = re.compile(r'Lattice="(.+)"')
         # energy_pattern = re.compile('dft_energy=(-?[0-9]+.[0-9]+)', re.I)
         energy_pattern = re.compile(r'(?<=\S{3}\s|dft_)energy=(-?[0-9]+.[0-9]+)')
         # stress_pattern = re.compile('dft_virial={(.+)}')
@@ -145,10 +155,8 @@ class SOAPotential(Potential):
             size = int(size)
             lattice_str = lattice_pattern.findall(block)[0]
             lattice = Lattice(list(map(lambda s: float(s), lattice_str.split())))
-            # energy_str = energy_pattern.findall(block)[0]
             energy_str = energy_pattern.findall(block)[-1]
             energy = float(energy_str)
-            # stress_str = stress_pattern.findall(block)[0]
             stress_str = stress_pattern.findall(block)[0][1]
             virial_stress = np.array(list(map(lambda s: float(s), stress_str.split())))
             virial_stress = [virial_stress[i] for i in [0, 4, 8, 1, 5, 6]]
@@ -181,8 +189,8 @@ class SOAPotential(Potential):
         _, df = convert_docs(docs=data_pool)
         return data_pool, df
 
-    def train(self, train_structures, energies=None, forces=None, stresses=None,
-              default_sigma=[0.0005, 0.1, 0.05, 0.01],
+    def train(self, train_structures, train_energies, train_forces,
+              train_stresses=None, default_sigma=[0.0005, 0.1, 0.05, 0.01],
               use_energies=True, use_forces=True, use_stress=False, **kwargs):
         """
         Training data with gaussian process regression.
@@ -191,12 +199,12 @@ class SOAPotential(Potential):
             train_structures ([Structure]): The list of Pymatgen Structure object.
                 energies ([float]): The list of total energies of each structure
                 in structures list.
-            energies ([float]): List of total energies of each structure in
+            train_energies ([float]): List of total energies of each structure in
                 structures list.
-            forces ([np.array]): List of (m, 3) forces array of each structure
+            train_forces ([np.array]): List of (m, 3) forces array of each structure
                 with m atoms in structures list. m can be varied with each
                 single structure case.
-            stresses (list): List of (6, ) virial stresses of each
+            train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
             default_sigma (list): Error criteria in energies, forces, stress
                 and hessian. Should have 4 numbers.
@@ -240,15 +248,25 @@ class SOAPotential(Potential):
                     the average atomic energy of the input data or the e0
                     specified manually. Default to 0.0.
         """
-        if not which('teach_sparse'):
-            raise RuntimeError("teach_sparse has not been found.\n",
+        if not which('gap_fit'):
+            raise RuntimeError("gap_fit has not been found.\n",
                                "Please refer to https://github.com/libAtoms/QUIP for ",
                                "further detail.")
+
+        gap_sorted_elements = []
+        for struct in train_structures:
+            for specie in struct.species:
+                if str(specie) not in gap_sorted_elements:
+                    gap_sorted_elements.append(str(specie))
+
+        self.elements = sorted(gap_sorted_elements, key=lambda x: Element(x))
+
         atoms_filename = 'train.xyz'
         xml_filename = 'train.xml'
-        train_pool = pool_from(train_structures, energies, forces, stresses)
+        train_pool = pool_from(train_structures, train_energies, train_forces,
+                               train_stresses)
 
-        exe_command = ["teach_sparse"]
+        exe_command = ["gap_fit"]
         exe_command.append('at_file={}'.format(atoms_filename))
         gap_configure_params = ['l_max', 'n_max', 'atom_sigma', 'zeta', 'cutoff',
                                 'cutoff_transition_width', 'delta', 'f0', 'n_sparse',
@@ -262,6 +280,7 @@ class SOAPotential(Potential):
             param = kwargs.get(param_name) if kwargs.get(param_name) \
                 else soap_params.get(param_name)
             gap_command.append(param_name + '=' + '{}'.format(param))
+        gap_command.append('add_species=T')
         exe_command.append("gap=" + "{" + "{}".format(' '.join(gap_command)) + "}")
 
         for param_name in preprocess_params:
@@ -301,19 +320,25 @@ class SOAPotential(Potential):
                 tree = ET.parse(xml_file)
                 root = tree.getroot()
                 potential_label = root.tag
-                gpcoordinates = list(root.iter('gpCoordinates'))[0]
-                param_file = gpcoordinates.get('sparseX_filename')
-                param = np.loadtxt(param_file)
-                return tree, param, potential_label
+                element_param = {}
+                for gpcoordinates in list(root.iter('gpCoordinates')):
+                    gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
+                    gp_descriptor_text = gp_descriptor.findtext('.')
+                    Z_pattern = re.compile(' Z=(.*?) ', re.S)
+                    element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
+                    param = np.loadtxt(gpcoordinates.get('sparseX_filename'))
+                    element_param[element] = param.tolist()
 
-            tree, param, potential_label = get_xml(xml_filename)
+                return tree, element_param, potential_label
+
+            tree, element_param, potential_label = get_xml(xml_filename)
             self.param['xml'] = tree
-            self.param['param'] = param
+            self.param['element_param'] = element_param
             self.param['potential_label'] = potential_label
 
         return rc
 
-    def write_param(self, xml_filename='soap.xml'):
+    def write_param(self, xml_filename='gap.xml'):
         """
         Write xml file to perform lammps calculation.
 
@@ -324,32 +349,40 @@ class SOAPotential(Potential):
             raise RuntimeError("The xml and parameters should be provided.")
         tree = self.param.get('xml')
         root = tree.getroot()
-        gpcoordinates = list(root.iter('gpCoordinates'))[0]
-        param_filename = "{}.soapparam".format(self.name)
-        gpcoordinates.set('sparseX_filename', param_filename)
-        np.savetxt(param_filename, self.param.get('param'))
+        element_param = self.param.get('element_param')
+        atomic_numbers = []
+        for i, gpcoordinates in enumerate(list(root.iter('gpCoordinates'))):
+            gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
+            gp_descriptor_text = gp_descriptor.findtext('.')
+            Z_pattern = re.compile(' Z=(.*?) ', re.S)
+            element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
+            atomic_numbers.append(str(Element(element).number))
+            param_file = "{}.soapparam".format(element)
+            gpcoordinates.set('sparseX_filename', param_file)
+            np.savetxt(param_file, element_param[element], fmt='%.20e')
         tree.write(xml_filename)
+
         pair_coeff = self.pair_coeff.format(xml_filename,
-                                            '\"Potential xml_label={}\"'.format(self.param.get('potential_label')),
-                                            self.specie.Z)
+                                            '\"Potential xml_label={}\"'.
+                                            format(self.param.get('potential_label')),
+                                            ' '.join(atomic_numbers))
         ff_settings = [self.pair_style, pair_coeff]
         return ff_settings
 
-    def evaluate(self, test_structures, ref_energies=None, ref_forces=None,
-                 ref_stresses=None, predict_energies=True,
-                 predict_forces=True, predict_stress=False):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses=None,
+                 predict_energies=True, predict_forces=True, predict_stress=False):
         """
         Evaluate energies, forces and stresses of structures with trained
-        interatomic potential.
+        interatomic potentials.
 
         Args:
             test_structures ([Structure]): List of Pymatgen Structure Objects.
-            ref_energies ([float]): List of DFT-calculated total energies of
+            test_energies ([float]): List of DFT-calculated total energies of
                 each structure in structures list.
-            ref_forces ([np.array]): List of DFT-calculated (m, 3) forces of
+            test_forces ([np.array]): List of DFT-calculated (m, 3) forces of
                 each structure with m atoms in structures list. m can be varied
                 with each single structure case.
-            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses
+            test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
             predict_energies (bool): Whether to predict energies of configurations.
             predict_forces (bool): Whether to predict forces of configurations.
@@ -363,8 +396,8 @@ class SOAPotential(Potential):
         xml_file = 'predict.xml'
         original_file = 'original.xyz'
         predict_file = 'predict.xyz'
-        predict_pool = pool_from(test_structures, ref_energies,
-                                 ref_forces, ref_stresses)
+        predict_pool = pool_from(test_structures, test_energies, test_forces,
+                                 test_stresses)
 
         with ScratchDir('.'):
             _ = self.write_param(xml_file)
@@ -388,7 +421,7 @@ class SOAPotential(Potential):
 
         return df_orig, df_predict
 
-    def predict(self, structure):
+    def predict_efs(self, structure):
         """
         Predict energy, forces and stresses of the structure.
 
@@ -404,10 +437,10 @@ class SOAPotential(Potential):
 
     def save(self, filename='param.yaml'):
         """
-        Save parameters of the potential.
+        Save parameters of the potentials.
 
         Args:
-            filename (str): The file to store parameters of potential.
+            filename (str): The file to store parameters of potentials.
 
         Returns:
             (str)
@@ -418,16 +451,44 @@ class SOAPotential(Potential):
         return filename
 
     @staticmethod
-    def from_file(filename):
+    def from_config(filename):
         """
-        Initialize potential with parameters file.
+        Initialize potentials with parameters file.
 
         ARgs:
-            filename (str): The file storing parameters of potential.
+            filename (str): The file storing parameters of potentials.
 
         Returns:
-            SOAPotential
+            GAPotential.
         """
-        with open(filename) as f:
-            param = yaml.load(f)
-        return SOAPotential(param=param)
+        if filename.endswith('.yaml'):
+            with open(filename) as f:
+                parameters = yaml.load(f)
+            gap = GAPotential(param=parameters)
+            gap.elements = sorted(parameters.get('element_param').keys(),
+                                  key=lambda x: Element(x))
+            return gap
+
+        if filename.endswith('.xml'):
+            def get_xml(xml_file):
+                tree = ET.parse(xml_file)
+                root = tree.getroot()
+                potential_label = root.tag
+                element_param = {}
+
+                for gpcoordinates in list(root.iter('gpCoordinates')):
+                    gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
+                    gp_descriptor_text = gp_descriptor.findtext('.')
+                    Z_pattern = re.compile(' Z=(.*?) ', re.S)
+                    element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
+                    param = np.loadtxt(gpcoordinates.get('sparseX_filename'))
+                    element_param[element] = param.tolist()
+
+                return tree, element_param, potential_label
+
+            tree, element_param, potential_label = get_xml(filename)
+            parameters = dict(xml=tree, element_param=element_param,
+                              potential_label=potential_label)
+            gap = GAPotential(param=parameters)
+            gap.elements = sorted(element_param.keys(), key=lambda x: Element(x))
+            return gap

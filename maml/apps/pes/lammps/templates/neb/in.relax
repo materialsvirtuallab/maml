@@ -1,0 +1,33 @@
+# NEB simulation of vacancy hopping in crystal
+
+units           metal
+
+atom_style      charge
+atom_modify     map array
+boundary        p p p
+atom_modify	sort 0 0.0
+
+# unit cell
+
+lattice         {lattice} {alat}
+
+read_data       data.supercell
+
+# make a vacancy
+
+group 		{specie} type 1
+
+group 		del id {del_id}
+delete_atoms 	group del compress no
+ 
+# choose potential
+
+{ff_settings}
+
+# initial minimization to relax vacancy
+fix 1 all box/relax iso 0.0 vmax 0.001
+
+min_style       cg
+minimize	1.0e-6 1.0e-4 1000 10000
+
+write_data      {relaxed_file}

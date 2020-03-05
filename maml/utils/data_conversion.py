@@ -1,9 +1,9 @@
 """
 Convert data list to docs or pool existing data lists for training
 """
+import numpy as np
 import pandas as pd
 from pymatgen import Structure
-import numpy as np
 
 
 def doc_from(structure, energy=None, force=None, stress=None):

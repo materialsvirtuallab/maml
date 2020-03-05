@@ -1,0 +1,33 @@
+# NEB simulation of vacancy hopping in crystal
+
+units           metal
+
+atom_style      charge
+atom_modify     map array
+boundary        p p p
+atom_modify	    sort 0 0.0
+
+# read start replica
+
+read_data       {start_replica}
+
+{ff_settings}
+
+# set up neb run
+
+variable	    u uloop 20
+
+# only output atoms near vacancy
+
+#dump events vacneigh custom 1000 dump.neb.sivac.$u id type x y z
+
+fix		        1 all neb 1.0
+
+thermo		    100
+
+# run NEB for 2000 steps or to force tolerance
+
+timestep        0.01
+min_style       quickmin
+
+neb		        0.0 0.01 10000 10000 100 final {final_replica}

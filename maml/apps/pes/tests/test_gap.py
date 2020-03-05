@@ -2,21 +2,23 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-import unittest
-import tempfile
 import os
 import shutil
+import unittest
+import tempfile
+
 import numpy as np
+from pymatgen import Structure
 from monty.os.path import which
 from monty.serialization import loadfn
-from pymatgen import Structure
-from maml.apps.pes.mt import MTPotential
+from maml.apps.pes.gap import GAPotential
 
 CWD = os.getcwd()
-test_datapool = loadfn(os.path.join(os.path.dirname(__file__), 'datapool.json'))
+test_datapool = loadfn(os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                    'datapool.json'))
 
 
-class MTPotentialTest(unittest.TestCase):
+class GAPotentialTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -30,7 +32,7 @@ class MTPotentialTest(unittest.TestCase):
         shutil.rmtree(cls.test_dir)
 
     def setUp(self):
-        self.potential = MTPotential(name='test')
+        self.potential = GAPotential(name='test')
         self.test_pool = test_datapool
         self.test_structures = []
         self.test_energies = []
@@ -44,8 +46,8 @@ class MTPotentialTest(unittest.TestCase):
         self.test_struct = d['structure']
 
     def test_write_read_cfgs(self):
-        self.potential.write_cfg('test.cfgs', cfg_pool=self.test_pool)
-        datapool, df = self.potential.read_cfgs('test.cfgs', symbol='Mo')
+        self.potential.write_cfgs('test.xyz', cfg_pool=self.test_pool)
+        datapool, df = self.potential.read_cfgs('test.xyz')
         self.assertEqual(len(self.test_pool), len(datapool))
         for data1, data2 in zip(self.test_pool, datapool):
             struct1 = data1['structure']
@@ -61,34 +63,34 @@ class MTPotentialTest(unittest.TestCase):
             stress2 = data2['outputs']['virial_stress']
             np.testing.assert_array_almost_equal(stress1, stress2)
 
-    @unittest.skipIf(not which('mlp'), 'No MLIP cmd found.')
+    @unittest.skipIf(not which('gap_fit'), 'No QUIP cmd found.')
     def test_train(self):
         self.potential.train(train_structures=self.test_structures,
-                             energies=self.test_energies,
-                             forces=self.test_forces,
-                             stresses=self.test_stresses)
+                             train_energies=self.test_energies,
+                             train_forces=self.test_forces,
+                             train_stresses=self.test_stresses)
         self.assertTrue(self.potential.param)
 
-    @unittest.skipIf(not which('mlp'), 'No MLIP cmd found.')
+    @unittest.skipIf(not which('quip'), 'No QUIP cmd found.')
     def test_evaluate(self):
         self.potential.train(train_structures=self.test_structures,
-                             energies=self.test_energies,
-                             forces=self.test_forces,
-                             stresses=self.test_stresses)
+                             train_energies=self.test_energies,
+                             train_forces=self.test_forces,
+                             train_stresses=self.test_stresses)
         df_orig, df_tar = self.potential.evaluate(test_structures=self.test_structures,
-                                                  ref_energies=self.test_energies,
-                                                  ref_forces=self.test_forces,
-                                                  ref_stresses=self.test_stresses)
+                                                  test_energies=self.test_energies,
+                                                  test_forces=self.test_forces,
+                                                  test_stresses=self.test_stresses)
         self.assertEqual(df_orig.shape[0], df_tar.shape[0])
 
-    @unittest.skipIf(not which('mlp'), 'No MLIP cmd found.')
+    @unittest.skipIf(not which('gap_fit'), 'No QUIP cmd found.')
     @unittest.skipIf(not which('lmp_serial'), 'No LAMMPS cmd found.')
     def test_predict(self):
         self.potential.train(train_structures=self.test_structures,
-                             energies=self.test_energies,
-                             forces=self.test_forces,
-                             stresses=self.test_stresses)
-        energy, forces, stress = self.potential.predict(self.test_struct)
+                             train_energies=self.test_energies,
+                             train_forces=self.test_forces,
+                             train_stresses=self.test_stresses)
+        energy, forces, stress = self.potential.predict_efs(self.test_struct)
         self.assertEqual(len(forces), len(self.test_struct))
         self.assertEqual(len(stress), 6)
 

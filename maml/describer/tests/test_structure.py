@@ -7,7 +7,8 @@ import numpy as np
 from pymatgen import Structure, Element, Lattice
 from pymatgen.util.testing import PymatgenTest
 
-from maml.describer.structure import DistinctSiteProperty, CoulombMatrix
+from maml.describer.structure import DistinctSiteProperty, CoulombMatrix, \
+    SortedCoulombMatrix, RandomizedCoulombMatrix
 
 
 class DistinctSitePropertyTest(PymatgenTest):
@@ -21,16 +22,16 @@ class DistinctSitePropertyTest(PymatgenTest):
                                              ["Z", "atomic_radius"])
 
     def test_describe(self):
-        descriptor = self.describer.describe(self.li2o)
+        descriptor = self.describer.transform_one(self.li2o)
         self.assertAlmostEqual(descriptor.iloc[0]["2c-Z"], 3)
         self.assertAlmostEqual(descriptor.iloc[0]["2c-atomic_radius"], 1.45)
-        descriptor = self.describer.describe(self.na2o)
+        descriptor = self.describer.transform_one(self.na2o)
         self.assertEqual(descriptor.iloc[0]["1a-Z"], 8)
         self.assertEqual(descriptor.iloc[0]["1a-atomic_radius"], 0.6)
 
     def test_describe_all(self):
-        df = pd.DataFrame(self.describer.describe_all([self.li2o, self.na2o]))
-        print(df)
+        df = pd.DataFrame(self.describer.transform([self.li2o, self.na2o]))
+        # print(df)
         self.assertEqual(df.iloc[0]["2c-Z"], 3)
         self.assertEqual(df.iloc[0]["2c-atomic_radius"], 1.45)
 
@@ -89,7 +90,7 @@ class CoulomMatrixTest(unittest.TestCase):
 
     def test_coulomb_mat(self):
         cm = CoulombMatrix()
-        cmat = cm.describe(self.s1).values.reshape(self.s1.num_sites, self.s1.num_sites)
+        cmat = cm.transform_one(self.s1).values.reshape(self.s1.num_sites, self.s1.num_sites)
         na = Element('Na')
         cl = Element('Cl')
         dist = self.s1.distance_matrix
@@ -98,30 +99,31 @@ class CoulomMatrixTest(unittest.TestCase):
         self.assertEqual(cmat[0][1], (na.Z * na.Z) / dist[0][1])
 
     def test_sorted_coulomb_mat(self):
-        cm = CoulombMatrix()
+        cm = SortedCoulombMatrix()
         c = cm.get_coulomb_mat(self.s2)
-        cmat = cm.describe(self.s2, is_sorted=True).values.reshape(self.s2.num_sites, self.s2.num_sites)
+        cmat = cm.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
         norm_order_ind = np.argsort(np.linalg.norm(c, axis=1))
         for i in range(cmat.shape[1]):
             self.assertTrue(np.all(cmat[i] == c[norm_order_ind[i]]))
 
     def test_random_coulom_mat(self):
-        cm = CoulombMatrix(random_seed=7)
+        cm = RandomizedCoulombMatrix(random_seed=7)
         c = cm.get_coulomb_mat(self.s2)
-        cmat = cm.describe(self.s2, is_randomized=True).values.reshape(self.s2.num_sites, self.s2.num_sites)
-        cm2 = CoulombMatrix(random_seed=8)
-        cmat2 = cm2.describe(self.s2, is_randomized=True).values.reshape(self.s2.num_sites, self.s2.num_sites)
+        cmat = cm.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
+        cm2 = RandomizedCoulombMatrix(random_seed=8)
+        cmat2 = cm2.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
         self.assertEqual(np.all(cmat == cmat2), False)
         for i in range(cmat.shape[1]):
             self.assertTrue(cmat[i] in c[i])
 
-    def test_describe_all(self):
+    def test_transform(self):
         cm = CoulombMatrix()
-        c = cm.describe_all([self.s1, self.s2])
-        c1 = cm.describe(self.s1)
-        c2 = cm.describe(self.s2)
-        self.assertTrue(np.all(c[0].dropna() == c1[0]))
-        self.assertTrue(np.all(c[1].dropna() == c2[0]))
+        c = cm.transform([self.s1, self.s2])
+        c1 = cm.transform_one(self.s1)
+        c2 = cm.transform_one(self.s2)
+        print(c.xs(0, level='input_index'), c1)
+        self.assertTrue(np.allclose(c.xs(0, level='input_index'), c1))
+        self.assertTrue(np.allclose(c.xs(1, level='input_index'), c2))
 
 
 if __name__ == "__main__":

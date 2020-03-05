@@ -1,6 +1,8 @@
 """
 Utilities to serialize and deserialize maml object
 """
+import pickle
+from typing import Any
 
 
 def serialize_maml_object(instance):
@@ -61,3 +63,30 @@ def deserialize_maml_object(identifier, module_objects=None,
             raise ValueError('Unknown ' + printable_module_name +
                              ':' + function_name)
         return fn
+
+
+def load_pickle(filename: str) -> Any:
+    """
+    Load pickled file to objection
+
+    Args:
+        filename: filename
+
+    Returns: obj
+
+    """
+    with open(filename, 'rb') as f:
+        return pickle.load(f)
+
+
+def to_pickle(obj: Any, filename: str) -> None:
+    """
+    Dump picklable object to file
+
+    Args:
+        obj: object
+        filename: file name
+
+    """
+    with open(filename, 'wb') as f:
+        pickle.dump(obj, f)

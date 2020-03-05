@@ -1,33 +1,28 @@
-"""
-Implements the training utility of neural network potential
-Behler, et al. Physical review letters 98.14 (2007): 146401.
-
-The code calls the n2p2 training utilities in
-Singraber, et al. Journal of chemical theory and computation 15.3 (2019): 1827-1840.
-"""
 # coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-from collections import OrderedDict
-import itertools
-import glob
-import os
-import re
-import subprocess
+"""This module provides NNP interatomic potential class."""
 
+import re
+import os
+import itertools
+import subprocess
+from collections import OrderedDict
+
+import numpy as np
+import pandas as pd
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
-import numpy as np
-import pandas as pd
 from pymatgen import Structure, Lattice, Element
 from pymatgen.core import units
 
-from .abstract import Potential
-from .lammps.calcs import EnergyForceStress
-from maml.utils.data_conversion import convert_docs, pool_from
+from maml.apps.pes import Potential
+from maml.apps.pes.lammps.calcs import EnergyForceStress
+from maml.utils.data_conversion import pool_from, convert_docs
+
 
 module_dir = os.path.dirname(__file__)
 NNinput_params = loadfn(os.path.join(module_dir, 'params', 'NNinput.json'))
@@ -43,28 +38,29 @@ class NNPotential(Potential):
                  'maxew 10000000 resetew yes cflength 1.8897261328 cfenergy 0.0367493254'
     pair_coeff = 'pair_coeff        * * {}'
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, param=None, weight_param=None, scaling_param=None):
         """
 
         Args:
             name (str): Name of force field.
         """
         self.name = name if name else "NNPotential"
-        self.specie = None
-        self.weights = []
-        self.bs = []
+        self.elements = None
+        self.weights = {}
+        self.bs = {}
         self.atom_energy = None
         self.normalized_nodes = None
         self.epochs = None
-        self.params = None
-        self.scaling_params = None
+        self.param = param if param else {}
+        self.weight_param = weight_param if weight_param else {}
+        self.scaling_param = scaling_param if scaling_param else None
         self.fitted = False
 
     def _line_up(self, structure, energy, forces, virial_stress):
         """
         Convert input structure, energy, forces, virial_stress to
-        proper configuration format for RuNNer usage. Note that
-        RuNNer takes bohr as length unit and Hatree as energy unit.
+        proper configuration format for n2p2 usage. Note that
+        n2p2 takes bohr as length unit and Hartree as energy unit.
 
         Args:
             structure (Structure): Pymatgen Structure object.
@@ -73,12 +69,7 @@ class NNPotential(Potential):
                 (num_atoms, 3).
             virial_stress (list): stress should has 6 distinct
                 elements arranged in order [xx, yy, zz, xy, yz, xz].
-
-        Returns:
         """
-        if len(structure.symbol_set) > 1:
-            raise ValueError("Structure is not unary.")
-
         inputs = OrderedDict(Size=structure.num_sites,
                              SuperCell=structure.lattice,
                              AtomData=(structure, forces),
@@ -107,8 +98,16 @@ class NNPotential(Potential):
         return '\n'.join(lines)
 
     def write_cfgs(self, filename, cfg_pool):
+        """
+        Write the formatted configuration file.
 
+        Args:
+            filename (str): The filename to be written.
+            cfg_pool (list): The configuration pool contains
+                structure and energy/forces properties.
+        """
         lines = []
+        elements = []
         for dataset in cfg_pool:
             if isinstance(dataset['structure'], dict):
                 structure = Structure.from_dict(dataset['structure'])
@@ -120,11 +119,9 @@ class NNPotential(Potential):
 
             lines.append(self._line_up(structure, energy, forces, virial_stress))
 
-            # dist = np.unique(structure.distance_matrix.ravel())[1]
-            # if self.shortest_distance > dist:
-            #     self.shortest_distance = dist
+            elements.extend(structure.species)
 
-        self.specie = Element(structure.symbol_set[0])
+        self.elements = [element.name for element in sorted(set(elements))]
 
         with open(filename, 'w') as f:
             f.write('\n'.join(lines))
@@ -133,14 +130,14 @@ class NNPotential(Potential):
 
     def write_input(self, **kwargs):
         """
-        Write input.nn file to train the Neural Network model.
+        Write input.nn file to train the Neural Network Potential.
 
         Args:
             atom_energy (float): Atomic reference energy.
 
             kwargs:
                 General nnp settings:
-                    atom_energy (None): Free atom reference energy.
+                    atom_energy (dict): Free atom reference energy for each specie.
                     cutoff_type (int): Type of cutoff function. Default to 1
                         (i.e., cosine function).
                     scale_features (int): Determine the method to scale the
@@ -165,10 +162,18 @@ class NNPotential(Potential):
                         0: gradient Descent, 1: Kalman filter.
                     parallel_mode (int): Training parallelization used.
                         Default to serial mode.
+                    jacobian_mode (int): Jacobian computation mode.
+                        0: Summation to single gradient,
+                        1: Per-task summed gradient,
+                        2: Full Jacobian.
                     update_strategy (int): Update strategy.
                         0: combined, 1: per-element.
                     selection_mode (int): Update candidate selection mode.
                         0: random, 1: sort, 2: threshold
+                    task_batch_size_energy (int): Number of energy update
+                        candidates prepared per task for each update.
+                    task_batch_size_force (int): Number of force update
+                        candidates prepared per task for each update.
                     test_fraction (float): Fraction of structures kept for
                         testing.
                     force_weight (float): Weight of force updates relative
@@ -230,15 +235,15 @@ class NNPotential(Potential):
                        '{neighbor_atom2}    {a_eta:.7f} {lambd:>2d} {zeta:.7f}   ' \
                        '{rcut:.7f}'
 
-        specie = self.specie.name
-        lines = [head_formatter.format('number_of_elements', value=1),
-                 head_formatter.format('elements', value=specie)]
+        lines = [head_formatter.format('number_of_elements', value=len(self.elements)),
+                 head_formatter.format('elements', value=' '.join(self.elements))]
 
         PARAMS = {'general': ['cutoff_type', 'scale_features', 'scale_min_short',
                               'scale_max_short', 'hidden_layers'],
-                  'additional': ['epochs', 'updater_type', 'parallel_mode',
-                                 'update_strategy', 'selection_mode', 'random_seed',
-                                 'test_fraction', 'force_weight', 'short_energy_fraction',
+                  'additional': ['epochs', 'updater_type', 'parallel_mode', 'jacobian_mode',
+                                 'update_strategy', 'selection_mode', 'task_batch_size_energy',
+                                 'task_batch_size_force', 'random_seed', 'test_fraction',
+                                 'force_weight', 'short_energy_fraction',
                                  'short_force_fraction', 'short_energy_error_threshold',
                                  'short_force_error_threshold', 'rmse_threshold_trials',
                                  'weights_min', 'weights_max', 'write_trainpoints',
@@ -247,15 +252,20 @@ class NNPotential(Potential):
                                  'kalman_q0', 'kalman_qtau', 'kalman_qmin', 'kalman_eta',
                                  'kalman_etatau', 'kalman_etamax']}
         if self.fitted:
-            if self.atom_energy:
-                lines.append(head_formatter.format('atom_energy',
-                                                   value=' '.join([specie, str(self.atom_energy)])))
+            if self.param.get('atom_energy'):
+                for specie in self.elements:
+                    lines.append(
+                        head_formatter.format(
+                            'atom_energy',
+                            value=' '.join(
+                                [specie, str(self.param.get('atom_energy').get(specie))]
+                            )))
             for tag in PARAMS.get('general'):
                 if tag == 'scale_features':
-                    lines.append(NNinput_params.get('general').get(tag).get(getattr(self, tag)))
+                    lines.append(NNinput_params.get('general').get(tag).get(self.param.get(tag)))
                 elif tag == 'hidden_layers':
-                    layers = self.hidden_layers
-                    activations = self.activations
+                    layers = self.param.get('hidden_layers')
+                    activations = self.param.get('activations')
                     lines.append(head_formatter.format('global_hidden_layers_short',
                                                        value=len(layers)))
                     lines.append(head_formatter.format('global_nodes_short',
@@ -263,111 +273,122 @@ class NNPotential(Potential):
                     lines.append(head_formatter.format('global_activation_short',
                                                        value=' '.join([activations] * len(layers) + ['l'])))
                 else:
-                    lines.append(head_formatter.format(tag, value=getattr(self, tag)))
+                    lines.append(head_formatter.format(tag, value=self.param.get(tag)))
             if self.normalized_nodes:
                 lines.append('normalize_nodes')
 
             for tag in PARAMS.get('additional'):
-                lines.append(head_formatter.format(tag, value=getattr(self, tag)))
+                lines.append(head_formatter.format(tag, value=self.param.get(tag)))
             lines.append('use_short_forces')
 
-            central_atom, neighbor_atom1, neighbor_atom2 = specie, specie, specie
-
-            r_cut = self.r_cut
+            r_cut = self.param.get('r_cut')
             r_cut /= self.bohr_to_angstrom
-            r_shift = np.array(self.r_shift)
+            r_shift = np.array(self.param.get('r_shift'))
             r_shift /= self.bohr_to_angstrom
 
-            for r_eta, rs in itertools.product(self.r_etas, r_shift):
-                lines.append(type2_format.format(central_atom=central_atom,
-                                                 neighbor_atom=neighbor_atom1,
-                                                 r_eta=r_eta, rs=rs, rcut=r_cut))
-
-            for a_eta, lambd, zeta in itertools.product(self.a_etas, self.lambdas,
-                                                        self.zetas):
-                lines.append(type3_format.format(central_atom=central_atom,
-                                                 neighbor_atom1=neighbor_atom1,
-                                                 neighbor_atom2=neighbor_atom2,
-                                                 a_eta=a_eta, lambd=lambd,
-                                                 zeta=zeta, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1 in self.elements:
+                    for r_eta, rs in itertools.product(self.param.get('r_etas'), r_shift):
+                        lines.append(type2_format.format(central_atom=central_atom,
+                                                         neighbor_atom=neighbor_atom1,
+                                                         r_eta=r_eta, rs=rs, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1, neighbor_atom2 \
+                        in itertools.combinations_with_replacement(self.elements, 2):
+                    for a_eta, lambd, zeta in itertools.product(self.param.get('a_etas'),
+                                                                self.param.get('lambdas'),
+                                                                self.param.get('zetas')):
+                        lines.append(type3_format.format(central_atom=central_atom,
+                                                         neighbor_atom1=neighbor_atom1,
+                                                         neighbor_atom2=neighbor_atom2,
+                                                         a_eta=a_eta, lambd=lambd,
+                                                         zeta=zeta, rcut=r_cut))
         else:
             if kwargs.get('atom_energy'):
-                lines.append(head_formatter.format('atom_energy',
-                                                   value=' '.join([specie, str(kwargs.get('atom_energy'))])))
-                setattr(self, 'atom_energy', kwargs.get('atom_energy'))
+                for specie in self.elements:
+                    lines.append(
+                        head_formatter.format(
+                            'atom_energy',
+                            value=' '.join([specie, str(kwargs.get('atom_energy').get(specie))])))
+                self.param.update({'atom_energy': kwargs.get('atom_energy')})
             for tag in PARAMS.get('general'):
                 if tag == 'scale_features':
                     value = kwargs.get(tag) if kwargs.get(tag) is not None else '1'
                     lines.append(NNinput_params.get('general').get(tag).get(value))
-                    setattr(self, tag, value)
+                    self.param.update({tag: value})
                 elif tag == 'hidden_layers':
-                    layers = kwargs.get(tag) if kwargs.get(tag) is not None \
-                        else NNinput_params.get('general').get(tag)
-                    setattr(self, tag, layers)
-                    activations = kwargs.get('activations') if kwargs.get('activations') is not None \
-                        else NNinput_params.get('general').get('activations')
-                    setattr(self, 'activations', activations)
+                    layers = kwargs.get(tag, NNinput_params.get('general').get(tag))
+                    self.param.update({tag: layers})
+                    activations = kwargs.get('activations', NNinput_params.get('general').get(
+                        'activations'))
+                    self.param.update({'activations': activations})
                     lines.append(head_formatter.format('global_hidden_layers_short',
                                                        value=len(layers)))
                     lines.append(head_formatter.format('global_nodes_short',
                                                        value=' '.join([str(i) for i in layers])))
                     lines.append(head_formatter.format('global_activation_short',
-                                                       value=' '.join([activations] * len(layers) + ['l'])))
+                                                       value=' '.join([activations] * len(layers)
+                                                                      + ['l'])))
                 else:
-                    value = kwargs.get(tag) if kwargs.get(tag) is not None \
-                        else NNinput_params.get('general').get(tag)
+                    value = kwargs.get(tag, NNinput_params.get('general').get(tag))
                     lines.append(head_formatter.format(tag, value=value))
-                    setattr(self, tag, value)
+                    self.param.update({tag: value})
             if kwargs.get('normalize_nodes'):
                 lines.append('normalize_nodes')
-                setattr(self, 'normalize_nodes', True)
+                self.param.update({'normalize_nodes': True})
 
             for tag in PARAMS.get('additional'):
-                value = kwargs.get(tag) if kwargs.get(tag) is not None \
-                    else NNinput_params.get('additional').get(tag)
+                value = kwargs.get(tag, NNinput_params.get('additional').get(tag))
                 lines.append(head_formatter.format(tag, value=value))
-                setattr(self, tag, value)
+                self.param.update({tag: value})
             lines.append('use_short_forces')
-
-            central_atom, neighbor_atom1, neighbor_atom2 = specie, specie, specie
 
             r_cut = kwargs.get('r_cut') if kwargs.get('r_cut') is not None \
                 else NNinput_params.get('symmetry_function').get('r_cut')
-            setattr(self, 'r_cut', r_cut)
+            self.param.update({'r_cut': r_cut})
             r_cut /= self.bohr_to_angstrom
             r_etas = kwargs.get('r_etas') if kwargs.get('r_etas') is not None \
                 else NNinput_params.get('symmetry_function').get('r_etas')
-            setattr(self, 'r_etas', r_etas)
+            self.param.update({'r_etas': r_etas})
             r_shift = kwargs.get('r_shift') if kwargs.get('r_shift') is not None \
                 else NNinput_params.get('symmetry_function').get('r_shift')
-            setattr(self, 'r_shift', r_shift)
+            self.param.update({'r_shift': r_shift})
             r_shift = np.array(r_shift)
             r_shift /= self.bohr_to_angstrom
             a_etas = kwargs.get('a_etas') if kwargs.get('a_etas') is not None \
                 else NNinput_params.get('symmetry_function').get('a_etas')
-            setattr(self, 'a_etas', a_etas)
+            self.param.update({'a_etas': a_etas})
             zetas = kwargs.get('zetas') if kwargs.get('zetas') is not None \
                 else NNinput_params.get('symmetry_function').get('zetas')
-            setattr(self, 'zetas', zetas)
+            self.param.update({'zetas': zetas})
             lambdas = kwargs.get('lambdas') if kwargs.get('lambdas') is not None \
                 else NNinput_params.get('symmetry_function').get('lambdas')
-            setattr(self, 'lambdas', lambdas)
+            self.param.update({'lambdas': lambdas})
 
-            for r_eta, rs in itertools.product(r_etas, r_shift):
-                lines.append(type2_format.format(central_atom=central_atom,
-                                                 neighbor_atom=neighbor_atom1,
-                                                 r_eta=r_eta, rs=rs, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1 in self.elements:
+                    for r_eta, rs in itertools.product(self.param.get('r_etas'), r_shift):
+                        lines.append(type2_format.format(central_atom=central_atom,
+                                                         neighbor_atom=neighbor_atom1,
+                                                         r_eta=r_eta, rs=rs, rcut=r_cut))
+            for central_atom in self.elements:
+                for neighbor_atom1, neighbor_atom2 \
+                        in itertools.combinations_with_replacement(self.elements, 2):
+                    for a_eta, lambd, zeta in itertools.product(self.param.get('a_etas'),
+                                                                self.param.get('lambdas'),
+                                                                self.param.get('zetas')):
+                        lines.append(type3_format.format(central_atom=central_atom,
+                                                         neighbor_atom1=neighbor_atom1,
+                                                         neighbor_atom2=neighbor_atom2,
+                                                         a_eta=a_eta, lambd=lambd,
+                                                         zeta=zeta, rcut=r_cut))
 
-            for a_eta, lambd, zeta in itertools.product(a_etas, lambdas, zetas):
-                lines.append(type3_format.format(central_atom=central_atom,
-                                                 neighbor_atom1=neighbor_atom1,
-                                                 neighbor_atom2=neighbor_atom2,
-                                                 a_eta=a_eta, lambd=lambd,
-                                                 zeta=zeta, rcut=r_cut))
+            self.num_symm_functions \
+                = sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + \
+                sum([len(list(itertools.product(a_etas, lambdas, zetas)))
+                     for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
 
-            self.num_symm_functions = len(list(itertools.product(r_etas, r_shift))) + \
-                len(list(itertools.product(a_etas, lambdas, zetas)))
-            self.layer_sizes = [self.num_symm_functions] + self.hidden_layers
+            self.layer_sizes = [self.num_symm_functions] + self.param.get('hidden_layers')
 
         with open(filename, 'w') as f:
             f.write('\n'.join(lines))
@@ -376,8 +397,144 @@ class NNPotential(Potential):
 
         return filename
 
+    def load_input(self, filename='input.nn'):
+        """
+        Load input file from trained Neural Network Potential.
+
+        Args:
+            filename (str): The input filename.
+        """
+        PARAMS = {'general': ['cutoff_type', 'scale_features', 'scale_min_short',
+                              'scale_max_short', 'hidden_layers'],
+                  'additional': ['epochs', 'updater_type', 'parallel_mode', 'jacobian_mode',
+                                 'update_strategy', 'selection_mode', 'task_batch_size_energy',
+                                 'task_batch_size_force', 'random_seed',
+                                 'test_fraction', 'force_weight', 'short_energy_fraction',
+                                 'short_force_fraction', 'short_energy_error_threshold',
+                                 'short_force_error_threshold', 'rmse_threshold_trials',
+                                 'weights_min', 'weights_max', 'write_trainpoints',
+                                 'write_trainforces', 'write_weights_epoch',
+                                 'write_neuronstats', 'kalman_type', 'kalman_epsilon',
+                                 'kalman_q0', 'kalman_qtau', 'kalman_qmin', 'kalman_eta',
+                                 'kalman_etatau', 'kalman_etamax']}
+
+        def str_formatify(string):
+            return float(string) if '.' in string \
+                                    or 'e' in string else int(string)
+
+        param = {}
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+        df = pd.DataFrame([line.split() for line in lines if "#" not in line])
+        self.elements = sorted([element for element in np.ravel(df[df[0] == 'elements'])[1:]
+                                if element is not None], key=lambda x: Element(x))
+
+        atom_energy = {}
+        for atom, energy in zip(np.array(df[df[0] == 'atom_energy'])[:, 1],
+                                np.array(df[df[0] == 'atom_energy'])[:, 2]):
+            atom_energy[atom] = float(energy)
+        param.update({'atom_energy': atom_energy})
+        for tag in PARAMS.get('general'):
+            if tag == 'scale_features':
+                scale_features = '1' \
+                    if len(df[df[0] == 'scale_symmetry_functions']) != 0 else 0
+                param.update({'scale_features': scale_features})
+            elif tag == 'hidden_layers':
+                hidden_layers = [int(neuron) for neuron
+                                 in np.array(df[df[0] == 'global_nodes_short'])[0][1:] if neuron]
+                param.update({'hidden_layers': hidden_layers})
+                activations = np.array(df[df[0] == 'global_activation_short'])[0][1]
+                param.update({'activations': activations})
+            else:
+                value = str_formatify(np.array(df[df[0] == tag])[0][1])
+                param.update({tag: value})
+        if len(df[df[0] == 'normalize_nodes']) != 0:
+            param.update({'normalize_nodes': True})
+
+        for tag in PARAMS.get('additional'):
+            value = str_formatify(np.array(df[df[0] == tag])[0][1])
+            param.update({tag: value})
+
+        r_cut = np.sort(np.array(df[(df[0] == 'symfunction_short') & (df[2] == '2')][6],
+                                 dtype=np.float))[0]
+        r_cut = float('{:.1f}'.format(r_cut * units.bohr_to_angstrom))
+        param.update({'r_cut': r_cut})
+        r_etas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '2')][4]),
+                                  dtype=np.float)).tolist()
+        param.update({'r_etas': r_etas})
+        r_shift = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '2')][5]),
+                                   dtype=np.float)).tolist()
+        r_shift = [float('{:.1f}'.format(r * units.bohr_to_angstrom)) for r in r_shift]
+        param.update({'r_shift': r_shift})
+        a_etas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][5]),
+                                  dtype=np.float)).tolist()
+        param.update({'a_etas': a_etas})
+        lambdas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][6]),
+                                   dtype=np.int)).tolist()
+        param.update({'lambdas': lambdas})
+        zetas = np.sort(np.array(np.unique(df[(df[0] == 'symfunction_short') & (df[2] == '3')][7]),
+                                 dtype=np.float)).tolist()
+        param.update({'zetas': zetas})
+        self.num_symm_functions = \
+            sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + \
+            sum([len(list(itertools.product(a_etas, lambdas, zetas)))
+                 for _, _ in itertools.combinations_with_replacement(self.elements, 2)])
+        self.layer_sizes = [self.num_symm_functions] + hidden_layers
+        self.param = param
+
+    def load_weights(self, weights_filename, specie):
+        """
+        Load weights file of trained Neural Network Potential.
+
+        Args
+            weights_filename (str): The weights file.
+            specie (str): The name of specie.
+        """
+        if not self.weights.get(specie) or not self.bs.get(specie) or not self.weight_param:
+            self.weights[specie] = []
+            self.bs[specie] = []
+            self.weight_param[specie] = []
+
+        with open(weights_filename) as f:
+            weights_lines = f.readlines()
+
+        weight_param = pd.DataFrame([line.split() for line in weights_lines if "#" not in line])
+        weight_param.columns = ['value', 'type', 'index', 'start_layer',
+                                'start_neuron', 'end_layer', 'end_neuron']
+
+        for layer_index in range(1, len(self.layer_sizes)):
+            weights_group = weight_param[(weight_param['start_layer'] == str(layer_index - 1))
+                                         & (weight_param['end_layer'] == str(layer_index))]
+
+            weights = np.reshape(np.array(weights_group['value'], dtype=np.float),
+                                 (self.layer_sizes[layer_index - 1],
+                                  self.layer_sizes[layer_index]))
+            self.weights[specie].append(weights)
+
+            bs_group = weight_param[(weight_param['type'] == 'b') &
+                                    (weight_param['start_layer'] == str(layer_index))]
+            bs = np.array(bs_group['value'], dtype=np.float)
+            self.bs[specie].append(bs)
+
+        self.weight_param[specie] = weight_param
+
+    def load_scaler(self, scaling_filename):
+        """
+        Load scaling info of trained Neural Network Potential.
+
+        Args:
+            scaling_filename (str): The scaling file.
+        """
+        with open(scaling_filename) as f:
+            scaling_lines = f.readlines()
+        scaling_param = pd.DataFrame([line.split() for line in scaling_lines
+                                      if '#' not in line])
+        self.scaling_param = scaling_param
+
     def read_cfgs(self, filename='output.data'):
         """
+        Read the configuration file.
+
         Args:
             filename (str): The configuration file to be read.
         """
@@ -421,36 +578,37 @@ class NNPotential(Potential):
         """
         Write optimized weights file to perform energy and force prediction.
         """
-        if self.params is None or self.scaling_params is None:
+        if self.weight_param is None or self.scaling_param is None:
             raise RuntimeError("The parameters should be provided.")
-        weights_filename = '.'.join(['weights', self.suffix, 'data'])
-        weight_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6s}{:>6s}{:>6s}'
-        bias_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6}'
-        lines = []
-        for i in range(self.params.shape[0]):
-            if self.params.iloc[i]['type'] == 'a':
-                lines.append(weight_formatter.format(*self.params.iloc[i]))
-            else:
-                lines.append(bias_formatter.format(*self.params.iloc[i]))
+        for specie in self.elements:
+            weights_filename = '.'.join(['weights', str(Element(specie).number).zfill(3), 'data'])
+            weight_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6s}{:>6s}{:>6s}'
+            bias_formatter = '{:>18s}{:>2s}{:>10s}{:>6s}{:>6}'
+            lines = []
+            for i in range(self.weight_param[specie].shape[0]):
+                if self.weight_param[specie].iloc[i]['type'] == 'a':
+                    lines.append(weight_formatter.format(*self.weight_param[specie].iloc[i]))
+                else:
+                    lines.append(bias_formatter.format(*self.weight_param[specie].iloc[i]))
 
-        with open(weights_filename, 'w') as f:
-            f.writelines('\n'.join(lines))
+            with open(weights_filename, 'w') as f:
+                f.writelines('\n'.join(lines))
 
         scaling_filename = 'scaling.data'
         scaling_formatter = '{:>4s}{:>5s}  {:>22s} {:>22s} {:>22s} {:.>22s}'
         scaling_lines = []
-        for i in range(self.num_symm_functions):
-            scaling_lines.append(scaling_formatter.format(*self.scaling_params.iloc[i]))
+        for i in range(self.num_symm_functions * len(self.elements)):
+            scaling_lines.append(scaling_formatter.format(*self.scaling_param.iloc[i]))
         with open(scaling_filename, 'w') as f:
             f.writelines('\n'.join(scaling_lines))
 
         self.write_input()
 
-        ff_settings = [self.pair_style, self.pair_coeff.format(self.r_cut + 1e-2)]
+        ff_settings = [self.pair_style, self.pair_coeff.format(self.param.get('r_cut') + 1e-2)]
 
         return ff_settings
 
-    def train(self, train_structures, energies=None, forces=None, stresses=None,
+    def train(self, train_structures, train_energies, train_forces, train_stresses=None,
               **kwargs):
         """
         Training data with moment tensor method.
@@ -459,23 +617,23 @@ class NNPotential(Potential):
             train_structures ([Structure]): The list of Pymatgen Structure object.
                 energies ([float]): The list of total energies of each structure
                 in structures list.
-            energies ([float]): List of total energies of each structure in
+            train_energies ([float]): List of total energies of each structure in
                 structures list.
-            forces ([np.array]): List of (m, 3) forces array of each structure
+            train_forces ([np.array]): List of (m, 3) forces array of each structure
                 with m atoms in structures list. m can be varied with each
                 single structure case.
-            stresses (list): List of (6, ) virial stresses of each
+            train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
             kwargs: Parameters in write_input method.
         """
         if not which('nnp-train'):
             raise RuntimeError("NNP Trainer has not been found.")
 
-        train_pool = pool_from(train_structures, energies, forces, stresses)
+        train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
         atoms_filename = 'input.data'
 
         with ScratchDir('.'):
-            atoms_filename = self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)
+            _ = self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)
             output = 'training_output'
 
             input_filename = self.write_input(**kwargs)
@@ -488,7 +646,7 @@ class NNPotential(Potential):
 
             rc = p_train.returncode
             if rc != 0:
-                error_msg = 'RuNNer exited with return code %d' % rc
+                error_msg = 'n2p2 exited with return code %d' % rc
                 msg = stdout.decode("utf-8").split('\n')[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg)
@@ -510,57 +668,30 @@ class NNPotential(Potential):
                 np.array([line for line in forces_rmse_pattern.findall(error_lines)],
                          dtype=np.float).T
 
-            weights_filename_pattern = 'weights*{}.out'.format(self.epochs)
-            weights_filename = glob.glob(weights_filename_pattern)[0]
-
-            self.suffix = weights_filename.split('.')[1]
-
-            with open(weights_filename) as f:
-                weights_lines = f.readlines()
-
-            params = pd.DataFrame([line.split() for line in weights_lines
-                                   if "#" not in line])
-            params.columns = ['value', 'type', 'index', 'start_layer',
-                              'start_neuron', 'end_layer', 'end_neuron']
-            self.params = params
-
-            for layer_index in range(1, len(self.layer_sizes)):
-                weights_group = params[(params['start_layer'] == str(layer_index - 1))
-                                       & (params['end_layer'] == str(layer_index))]
-
-                weights = np.reshape(np.array(weights_group['value'], dtype=np.float),
-                                     (self.layer_sizes[layer_index - 1],
-                                      self.layer_sizes[layer_index]))
-                self.weights.append(weights)
-
-                bs_group = params[(params['type'] == 'b') &
-                                  (params['start_layer'] == str(layer_index))]
-                bs = np.array(bs_group['value'], dtype=np.float)
-                self.bs.append(bs)
-
-            with open('scaling.data') as f:
-                scaling_lines = f.readlines()
-            scaling_params = pd.DataFrame([line.split() for line in scaling_lines
-                                           if '#' not in line])
-            scaling_params.column = ['e_index', 'sf_index', 'sf_min', 'sf_max',
-                                     'sf_mean', 'sf_sigma']
-            self.scaling_params = scaling_params
+            for specie in self.elements:
+                weights_filename = 'weights.{}.{}.out'.format(
+                    str(Element(specie).number).zfill(3), str(self.param['epochs']).zfill(6))
+                self.weights[specie] = []
+                self.bs[specie] = []
+                self.weight_param[specie] = []
+                self.load_weights(weights_filename, specie)
+            self.load_scaler('scaling.data')
 
         return rc
 
-    def evaluate(self, test_structures, ref_energies, ref_forces, ref_stresses):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses=None):
         """
         Evaluate energies, forces and stresses of structures with trained
-        interatomic potential.
+        interatomic potentials.
 
         Args:
             test_structures ([Structure]): List of Pymatgen Structure Objects.
-            ref_energies ([float]): List of DFT-calculated total energies of
+            test_energies ([float]): List of DFT-calculated total energies of
                 each structure in structures list.
-            ref_forces ([np.array]): List of DFT-calculated (m, 3) forces of
+            test_forces ([np.array]): List of DFT-calculated (m, 3) forces of
                 each structure with m atoms in structures list. m can be varied
                 with each single structure case.
-            ref_stresses (list): List of DFT-calculated (6, ) viriral stresses
+            test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
         """
         if not which('nnp-predict'):
@@ -569,8 +700,8 @@ class NNPotential(Potential):
         original_file = 'input.data'
         predict_file = 'output.data'
 
-        predict_pool = pool_from(test_structures, ref_energies,
-                                 ref_forces, ref_stresses)
+        predict_pool = pool_from(test_structures, test_energies, test_forces,
+                                 test_stresses)
         with ScratchDir('.'):
             _, _ = self.write_param()
             original_file = self.write_cfgs(original_file, cfg_pool=predict_pool)
@@ -586,7 +717,7 @@ class NNPotential(Potential):
 
                 rc = p.returncode
                 if rc != 0:
-                    error_msg = 'RuNNer exited with return code %d' % rc
+                    error_msg = 'n2p2 exited with return code %d' % rc
                     msg = stdout.decode("utf-8").split('\n')[:-1]
                     try:
                         error_line = [i for i, m in enumerate(msg)
@@ -602,7 +733,7 @@ class NNPotential(Potential):
 
         return df_orig, df_predict
 
-    def predict(self, structure):
+    def predict_efs(self, structure):
         """
         Predict energy, forces and stresses of the structure.
 
@@ -615,3 +746,28 @@ class NNPotential(Potential):
         calculator = EnergyForceStress(self)
         energy, forces, stress = calculator.calculate(structures=[structure])[0]
         return energy, forces, stress
+
+    @staticmethod
+    def from_config(input_filename, scaling_filename, weights_filenames):
+        """
+        Initialize potentials with parameters file.
+
+        Args:
+            input_filename (str): The file storing the input configuration of
+                Neural Network Potential.
+            scaling_filename (str): The file storing scaling info of
+                Neural Network Potential.
+            weights_filenames (list): List of files storing weights of each specie in
+                Neural Network Potential.
+        """
+        nnp = NNPotential()
+        nnp.load_input(input_filename)
+        nnp.load_scaler(scaling_filename)
+        if len(nnp.elements) != len(weights_filenames):
+            raise ValueError("{} weights files should be given to "
+                             "{}".format(len(nnp.elements), ' '.join(nnp.elements)))
+        for weights_filename, specie in zip(weights_filenames, nnp.elements):
+            nnp.load_weights(weights_filename, specie)
+        nnp.fitted = True
+
+        return nnp
