@@ -11,7 +11,7 @@ from maml.data.mp import MaterialsProject
 class MaterialsProjectTest(PymatgenTest):
 
     def test_get(self):
-        mp = MaterialsProject()
+        mp = MaterialsProject(SETTINGS.get("PMG_MAPI_KEY"))
         features = ["pretty_formula", "band_gap", "formation_energy_per_atom", "e_above_hull",
                     "elasticity.K_VRH"]
         df = mp.get(criteria={"nelements": 1},
