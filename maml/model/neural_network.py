@@ -6,10 +6,11 @@ Simple multi-layer perceptrons
 # Distributed under the terms of the BSD License.
 
 
+from typing import List
 from keras.layers import Dense
 from keras.optimizers import Adam
 from keras.models import Sequential
-from typing import List
+
 from sklearn.preprocessing import StandardScaler
 from sklearn.base import TransformerMixin
 

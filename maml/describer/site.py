@@ -201,12 +201,12 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
             stdout = p.communicate()[0]
             rc = p.returncode
             if rc != 0:
-                error_msg = 'QUIP exited with return code %d' % rc
+                error_msg = 'quip/soap exited with return code %d' % rc
                 msg = stdout.decode("utf-8").split('\n')[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -273,8 +273,8 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
             sorted_neighbors = sorted(neighbors, key=lambda neighbor: neighbor.species_string)
             temp_dict = {element: [(neighbor.coords, neighbor.nn_distance) for neighbor in group]
                          for element, group in itertools.groupby(sorted_neighbors,
-                         key=lambda neighbor: neighbor.species_string)}
-
+                                                                 key=lambda neighbor:
+                                                                 neighbor.species_string)}
             for specie in elements:
                 distances = np.array([nn_distance for _, nn_distance 
                                       in temp_dict[specie]])[:, None, None]

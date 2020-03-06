@@ -12,7 +12,6 @@ from sklearn.linear_model import LinearRegression
 from maml.apps.pes.base import Potential
 from maml import ModelWithSklearn
 from maml.describer import BispectrumCoefficients
-from maml.apps.pes.lammps.calcs import EnergyForceStress
 from maml.utils.data_conversion import pool_from, convert_docs
 
 
@@ -87,20 +86,6 @@ class SNAPotential(Potential):
         df_predict['y_orig'] = df_predict['n'] * outputs
 
         return df_orig, df_predict
-
-    def predict_efs(self, structure):
-        """
-        Predict energy, forces and stresses of the structure.
-
-        Args:
-            structure (Structure): Pymatgen Structure object.
-
-        Returns:
-            energy, forces, stress
-        """
-        calculator = EnergyForceStress(ff_settings=self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
 
     def write_param(self):
         """
@@ -199,8 +184,9 @@ class SNAPotential(Potential):
                                            quadratic=quadratic, pot_fit=True)
         model = ModelWithSklearn(model=LinearRegression(),
                                  describer=describer, **kwargs)
-        coef = np.array(np.concatenate([coeff_lines[(2 + nbc * n + n):
-                        (2 + nbc * (n + 1) + n)] for n in range(ne)]), dtype=np.float)
+        coef = np.array(np.concatenate([coeff_lines[
+                                        (2 + nbc * n + n): (2 + nbc * (n + 1) + n)]
+                                        for n in range(ne)]), dtype=np.float)
         model.model.coef_ = coef
         model.model.intercept_ = 0
         snap = SNAPotential(model=model)

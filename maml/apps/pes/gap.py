@@ -20,7 +20,6 @@ from pymatgen import Structure, Lattice, Element
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.apps.pes.base import Potential
-from maml.apps.pes.lammps.calcs import EnergyForceStress
 from maml.utils.data_conversion import pool_from, convert_docs
 
 
@@ -117,8 +116,6 @@ class GAPotential(Potential):
             virial_stress = dataset['outputs']['virial_stress']
 
             lines.append(self._line_up(structure, energy, forces, virial_stress))
-
-        self.specie = Element(structure.symbol_set[0])
 
         with open(filename, 'w') as f:
             f.write('\n'.join(lines))
@@ -306,12 +303,12 @@ class GAPotential(Potential):
             stdout = p.communicate()[0]
             rc = p.returncode
             if rc != 0:
-                error_msg = 'QUIP exited with return code %d' % rc
+                error_msg = 'gap_fit exited with return code %d' % rc
                 msg = stdout.decode("utf-8").split('\n')[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -420,20 +417,6 @@ class GAPotential(Potential):
             _, df_predict = self.read_cfgs(predict_file, predict=True)
 
         return df_orig, df_predict
-
-    def predict_efs(self, structure):
-        """
-        Predict energy, forces and stresses of the structure.
-
-        Args:
-            structure (Structure): Pymatgen Structure object.
-
-        Returns:
-            energy, forces, stress
-        """
-        calculator = EnergyForceStress(self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
 
     def save(self, filename='param.yaml'):
         """

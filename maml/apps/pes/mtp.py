@@ -10,8 +10,8 @@ import json
 import shutil
 import itertools
 import subprocess
-import ruamel.yaml as yaml
 from collections import OrderedDict
+import ruamel.yaml as yaml
 
 
 import numpy as np
@@ -22,7 +22,6 @@ from monty.tempfile import ScratchDir
 from pymatgen import Structure, Lattice
 
 from maml.apps.pes.base import Potential
-from maml.apps.pes.lammps.calcs import EnergyForceStress
 from maml.utils.data_conversion import pool_from, convert_docs
 
 
@@ -489,7 +488,7 @@ class MTPotential(Potential):
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -563,12 +562,12 @@ class MTPotential(Potential):
             stdout = p.communicate()[0]
             rc = p.returncode
             if rc != 0:
-                error_msg = 'MLP exited with return code %d' % rc
+                error_msg = 'mlp exited with return code %d' % rc
                 msg = stdout.decode("utf-8").split('\n')[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -576,20 +575,6 @@ class MTPotential(Potential):
                 predict_file = '_'.join([predict_file, '0'])
             _, df_predict = self.read_cfgs(predict_file)
         return df_orig, df_predict
-
-    def predict_efs(self, structure):
-        """
-        Predict energy, forces and stresses of the structure.
-
-        Args:
-            structure (Structure): Pymatgen Structure object.
-
-        Returns:
-            energy, forces, stress
-        """
-        calculator = EnergyForceStress(self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
 
     def save(self, filename='param.yaml'):
         """
@@ -621,23 +606,19 @@ class MTPotential(Potential):
         if filename.endswith('.yaml'):
             with open(filename) as f:
                 param = yaml.load(f)
-            mtp = MTPotential(param)
-            mtp.elements = elements
 
         if filename.endswith('.mtp'):
-            def load_config(filename):
-                param = OrderedDict()
-                with open(filename, 'r') as f:
-                    lines = f.readlines()
-                param['safe'] = [line.rstrip() for line in lines[:-2]]
-                for line in lines[-2:]:
-                    key = line.rstrip().split(' = ')[0]
-                    value = json.loads(
-                        line.rstrip().split(' = ')[1].replace('{', '[').replace('}', ']'))
-                    param[key] = value
-                return param
-            param = load_config(filename)
-            mtp = MTPotential(param=param)
-            mtp.elements = elements
+            param = OrderedDict()
+            with open(filename, 'r') as f:
+                lines = f.readlines()
+            param['safe'] = [line.rstrip() for line in lines[:-2]]
+            for line in lines[-2:]:
+                key = line.rstrip().split(' = ')[0]
+                value = json.loads(
+                    line.rstrip().split(' = ')[1].replace('{', '[').replace('}', ']'))
+                param[key] = value
+
+        mtp = MTPotential(param=param)
+        mtp.elements = elements
 
         return mtp
