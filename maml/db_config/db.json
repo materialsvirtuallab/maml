@@ -1,0 +1,11 @@
+{
+    "admin_password": "QtrMwG6b",
+    "admin_user": "elsa", 
+    "aliases_config": null, 
+    "collection": , 
+    "database": "maml",
+    "host": "mavrldb.ucsd.edu",  
+    "port": 27017, 
+    "readonly_password": "yqvTW8dp",
+    "readonly_user": "anna"
+}
