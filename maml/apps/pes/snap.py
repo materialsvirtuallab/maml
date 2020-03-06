@@ -9,7 +9,7 @@ import numpy as np
 from monty.io import zopen
 from sklearn.linear_model import LinearRegression
 
-from maml.apps.pes import Potential
+from maml.apps.pes.base import Potential
 from maml import ModelWithSklearn
 from maml.describer import BispectrumCoefficients
 from maml.apps.pes.lammps.calcs import EnergyForceStress
