@@ -11,7 +11,7 @@ jobs:
             pip install pip --upgrade
             pip install --quiet pycodestyle flake8 mypy pydocstyle pylint
             echo "Checks will be performed in the order of pycodestyle -> flake8 -> mypy -> pydocstyle "
-            echo "It is highly recommended that you use the pre-commit hook provided in pymatgen."
+            echo "It is highly recommended that you use the pre-commit hook provided in maml."
             echo "Simply copy pre-commit to .git/hooks to check before pushing your code."
             echo "pycodestyle checks..."
             pycodestyle maml
