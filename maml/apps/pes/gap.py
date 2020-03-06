@@ -20,6 +20,7 @@ from pymatgen import Structure, Lattice, Element
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.apps.pes.base import Potential
+from maml.apps.pes.lammps.calcs import EnergyForceStress
 from maml.utils.data_conversion import pool_from, convert_docs
 
 
@@ -417,6 +418,20 @@ class GAPotential(Potential):
             _, df_predict = self.read_cfgs(predict_file, predict=True)
 
         return df_orig, df_predict
+
+    def predict_efs(self, structure):
+        """
+        Predict energy, forces and stresses of the structure.
+
+        Args:
+            structure (Structure): Pymatgen Structure object.
+
+        Returns:
+            energy, forces, stress
+        """
+        calculator = EnergyForceStress(self)
+        energy, forces, stress = calculator.calculate(structures=[structure])[0]
+        return energy, forces, stress
 
     def save(self, filename='param.yaml'):
         """

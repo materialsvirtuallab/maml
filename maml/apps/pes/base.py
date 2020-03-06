@@ -7,7 +7,6 @@ Base classes for potentials
 
 import abc
 from maml.base.model import BaseModel
-from maml.apps.pes.lammps.calcs import EnergyForceStress
 
 
 class PotentialMixin:
@@ -63,9 +62,7 @@ class PotentialMixin:
         Returns:
             energy, forces, stress
         """
-        calculator = EnergyForceStress(self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
+        raise NotImplementedError
 
     @abc.abstractmethod
     def write_param(self):
