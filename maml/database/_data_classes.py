@@ -49,14 +49,18 @@ class MaterialData:
 @dataclass
 class DescriberData:
     """
-    
+    The describer data 
     """
     describer_name: str
     describer_params: Dict
     state: Any
 
+
 @dataclass
 class LearningModelData:
+    """
+    learning model information, will be stored in a dict
+    """
     learning_model_name: str
     model_type: str
     model_params: Dict
@@ -65,6 +69,10 @@ class LearningModelData:
 
 @dataclass
 class ModelData:
+    """
+    The model information. ModelData will contain
+    DescriberData and LearningModelData
+    """
     model_name: str
     describer: DescriberData
     model: LearningModelData
@@ -73,6 +81,9 @@ class ModelData:
 
 @dataclass
 class ModelResults:
+    """
+    Used to save model results
+    """
     model_name: str
     metric_name: str
     test_data_name: str
