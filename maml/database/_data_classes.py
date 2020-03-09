@@ -4,7 +4,7 @@ dataclasses for documents in the database
 
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union, Optional
 
 
 @dataclass
@@ -76,7 +76,7 @@ class ModelData:
     model_name: str
     describer: DescriberData
     model: LearningModelData
-    descriptor_name: str = None
+    descriptor_name: Optional[str] = None
 
 
 @dataclass
