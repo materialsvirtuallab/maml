@@ -18,8 +18,8 @@ setup(
     license="BSD",
     description="maml is a machine learning library for materials science.",
     long_description="""Maml, acronym for MAterials Machine Learning and pronounced mammal, is a machine learning 
-    library for materials science. It builds onof pymatgen (Python Materials Genomics) materials analysis library
-and well-known deep learning libraries like Keras and Tensorflow. The aim is to link the power of both kinds of 
+    library for materials science. It builds on top of pymatgen (Python Materials Genomics) materials analysis library
+and well-known machine learning/deep learning libraries like scikit-learn, Keras and Tensorflow. The aim is to link the power of both kinds of 
 libraries for rapid experimentation and learning of materials data.""",
     long_description_content_type='text/markdown',
     keywords=["materials", "science", "deep", "learning"],
