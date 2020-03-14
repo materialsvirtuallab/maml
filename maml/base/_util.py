@@ -1,3 +1,0 @@
-"""
-Utils for base
-"""
