@@ -9,7 +9,7 @@ import tempfile
 import unittest
 import numpy as np
 from monty.serialization import loadfn
-from maml.utils.data_conversion import convert_docs, pool_from
+from maml.utils._data_conversion import convert_docs, pool_from
 
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.dirname(__file__),

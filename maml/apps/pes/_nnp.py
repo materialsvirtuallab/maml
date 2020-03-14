@@ -21,7 +21,7 @@ from pymatgen.core import units
 
 from maml.apps.pes._base import Potential
 from maml.apps.pes.lammps import EnergyForceStress
-from maml.utils.data_conversion import pool_from, convert_docs
+from maml.utils import pool_from, convert_docs
 
 
 module_dir = os.path.dirname(__file__)

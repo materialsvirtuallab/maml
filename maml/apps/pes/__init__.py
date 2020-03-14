@@ -9,3 +9,11 @@ from ._gap import GAPotential  # noqa
 from ._mtp import MTPotential  # noqa
 from ._snap import SNAPotential  # noqa
 from ._nnp import NNPotential  # noqa
+
+__all__ = [
+    "Potential",
+    "GAPotential",
+    "MTPotential",
+    "SNAPotential",
+    "NNPotential",
+]
