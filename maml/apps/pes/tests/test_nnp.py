@@ -11,7 +11,7 @@ import numpy as np
 from monty.os.path import which
 from monty.serialization import loadfn
 from pymatgen import Structure
-from maml.apps.pes.nnp import NNPotential
+from maml.apps.pes._nnp import NNPotential
 
 CWD = os.getcwd()
 DIR = os.path.abspath(os.path.dirname(__file__))

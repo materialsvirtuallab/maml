@@ -4,7 +4,8 @@
 
 """This package contains PotentialMixin classes representing Interatomic Potentials."""
 
-from .gap import GAPotential  # noqa
-from .mtp import MTPotential  # noqa
-from .snap import SNAPotential  # noqa
-from .nnp import NNPotential  # noqa
+from ._base import PotentialMixin, Potential  # noqa
+from ._gap import GAPotential  # noqa
+from ._mtp import MTPotential  # noqa
+from ._snap import SNAPotential  # noqa
+from ._nnp import NNPotential  # noqa

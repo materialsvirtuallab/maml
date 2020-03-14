@@ -16,7 +16,7 @@ from monty.tempfile import ScratchDir
 from pymatgen import Element, Structure
 from pymatgen.core.periodic_table import get_el_sp
 
-from maml.base.describer import BaseDescriber, OutDataFrameConcat
+from maml.base._describer import BaseDescriber, OutDataFrameConcat
 from maml.utils.data_conversion import pool_from
 
 
@@ -58,7 +58,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                 If this value is set to negative or greater than the total cpu
                 then n_jobs is set to the number of cpu on system.
         """
-        from maml.apps.pes.lammps.calcs import SpectralNeighborAnalysis
+        from maml.apps.pes.lammps._calcs import SpectralNeighborAnalysis
         self.calculator = SpectralNeighborAnalysis(rcut=cutoff,
                                                    twojmax=twojmax,
                                                    element_profile=element_profile,
@@ -151,7 +151,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                 If this value is set to negative or greater than the total cpu
                 then n_jobs is set to the number of cpu on system.
         """
-        from maml.apps.pes.gap import GAPotential
+        from maml.apps.pes._gap import GAPotential
         self.operator = GAPotential()
         self.cutoff = cutoff
         self.l_max = l_max

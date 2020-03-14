@@ -17,9 +17,9 @@ from pymatgen import Structure, Lattice
 from sklearn.linear_model import LinearRegression
 
 from maml import ModelWithSklearn
-from maml.apps.pes.snap import SNAPotential
-from maml.describer.site import BispectrumCoefficients
-from maml.apps.pes.lammps.calcs import SpectralNeighborAnalysis, EnergyForceStress, \
+from maml.apps.pes._snap import SNAPotential
+from maml.describer._site import BispectrumCoefficients
+from maml.apps.pes.lammps import SpectralNeighborAnalysis, EnergyForceStress, \
     ElasticConstant, LatticeConstant, NudgedElasticBand, DefectFormation
 
 CWD = os.getcwd()

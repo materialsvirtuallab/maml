@@ -3,7 +3,7 @@ import unittest
 from pymatgen.util.testing import PymatgenTest
 from pymatgen import SETTINGS
 
-from maml.data.mp import MaterialsProject
+from maml.data._mp import MaterialsProject
 
 
 @unittest.skipIf(not SETTINGS.get("PMG_MAPI_KEY"),

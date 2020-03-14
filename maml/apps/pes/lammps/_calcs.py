@@ -16,7 +16,7 @@ from pymatgen.io.lammps.data import LammpsData
 from pymatgen import Structure, Lattice, Element
 import numpy as np
 
-from maml.apps.pes.base import Potential
+from maml.apps.pes._base import Potential
 
 
 def _pretty_input(lines):

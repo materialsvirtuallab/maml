@@ -9,7 +9,7 @@ import numpy as np
 from monty.os.path import which
 from pymatgen import Lattice, Structure
 
-from maml.describer.site import \
+from maml.describer._site import \
     BispectrumCoefficients, SmoothOverlapAtomicPosition, BPSymmetryFunctions
 
 

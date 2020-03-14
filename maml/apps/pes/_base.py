@@ -6,7 +6,7 @@ Base classes for potentials
 """
 
 import abc
-from maml.base.model import BaseModel
+from maml.base._model import BaseModel
 
 
 class PotentialMixin:
