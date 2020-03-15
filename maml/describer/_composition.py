@@ -1,4 +1,3 @@
 """
 Compositional describers
 """
-
