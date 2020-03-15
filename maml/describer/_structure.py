@@ -25,9 +25,6 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                  wyckoffs: List[str],
                  properties: List[str],
                  symprec: float = 0.1,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
 
@@ -38,17 +35,12 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                 pymatgen.core.periodic_table.Specie for support properties (there
                 are a lot!)
             symprec (float): Symmetry precision for spacegroup determination.
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         self.wyckoffs = wyckoffs
         self.properties = properties
         self.symprec = symprec
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(**kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
@@ -79,24 +71,16 @@ class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
     """
     def __init__(self,
                  random_seed: int = None,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
 
         self.max_sites = None  # For padding
         self.random_seed = random_seed
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(**kwargs)
 
     def get_coulomb_mat(self, s: Structure) -> np.ndarray:
         """
@@ -151,22 +135,13 @@ class RandomizedCoulombMatrix(CoulombMatrix):
     """
     def __init__(self,
                  random_seed: int = None,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        super().__init__(random_seed=random_seed, memory=memory,
-                         verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(random_seed=random_seed, **kwargs)
 
     def get_randomized_coulomb_mat(self, s: Structure) -> pd.DataFrame:
         """
@@ -211,22 +186,13 @@ class SortedCoulombMatrix(CoulombMatrix):
     """
     def __init__(self,
                  random_seed: int = None,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        super().__init__(random_seed=random_seed, memory=memory,
-                         verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(random_seed=random_seed, **kwargs)
 
     def get_sorted_coulomb_mat(self, s: Structure) -> pd.DataFrame:
         """

@@ -34,21 +34,28 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     """
 
     def __init__(self,
-                 memory: Union[str, Memory] = None,
-                 verbose: bool = True,
-                 n_jobs: int = 0,
                  **kwargs):
         """
+        Base estimator with the following allowed keyword args
 
-        Args:
             memory (str/joblib.Memory): The path or Memory for caching the computational
                 results, default None means no cache.
             verbose (bool): Whether to show the progress of feature calculations.
             n_jobs (int): The number of parallel jobs. 0 means no parallel computations.
                 If this value is set to negative or greater than the total cpu
                 then n_jobs is set to the number of cpu on system.
-            **kwargs:
+
+        Args:
+            **kwargs: keyword args that contain possibly memory (str/joblib.Memory),
+                verbose (bool), n_jobs (int)
         """
+        allowed_kwargs = ['memory', 'verbose', 'n_jobs']
+        for k, v in kwargs.items():
+            if k not in allowed_kwargs:
+                raise TypeError("%s not allowed as kwargs" % (str(k)))
+        memory = kwargs.get("memory", None)
+        verbose = kwargs.get("verbose", False)
+        n_jobs = kwargs.get("n_jobs", 0)
         self.memory = check_memory(memory)
         self.verbose = verbose
         # find out the number of parallel jobs

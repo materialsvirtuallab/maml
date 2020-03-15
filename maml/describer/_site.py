@@ -37,9 +37,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                  quadratic: bool = False,
                  pot_fit: bool = False,
                  include_stress: bool = False,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0):
+                 **kwargs):
         """
         Args:
             cutoff (float): The cutoff distance.
@@ -52,11 +50,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                 Default to False.
             pot_fit (bool): Whether combine the dataframe for potential fitting.
             include_stress (bool): Wether to include stress components.
-            memory (str/joblib.Memory): Whether to cache to the str path.
-            verbose (bool): Whether to show progress for featurization.
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system.
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         from maml.apps.pes.lammps import SpectralNeighborAnalysis
         self.calculator = SpectralNeighborAnalysis(rcut=cutoff,
@@ -70,7 +64,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
         self.quadratic = quadratic
         self.pot_fit = pot_fit
         self.include_stress = include_stress
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
+        super().__init__(**kwargs)
 
     @property
     def subscripts(self) -> List:
@@ -134,9 +128,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                  l_max: int = 8,
                  n_max: int = 8,
                  atom_sigma: float = 0.5,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0):
+                 **kwargs):
         """
 
         Args:
@@ -145,11 +137,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                 Default to 8.
             n_max (int): The number of radial basis function. Default to 8.
             atom_sigma (float): The width of gaussian atomic density. Default to 0.5.
-            memory (str/joblib.Memory): Whether to cache to the str path.
-            verbose (bool): Whether to show progress for featurization.
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system.
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         from maml.apps.pes._gap import GAPotential
         self.operator = GAPotential()
@@ -157,7 +145,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
         self.l_max = l_max
         self.n_max = n_max
         self.atom_sigma = atom_sigma
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
+        super().__init__(**kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
@@ -233,9 +221,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
                  a_etas: np.ndarray,
                  zetas: np.ndarray,
                  lambdas: np.ndarray,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0):
+                 **kwargs):
         """
         Args:
             cutoff (float): The cutoff distance.
@@ -244,11 +230,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
             a_etas (numpy.ndarray): η in angular function.
             zetas (numpy.ndarray): ζ in angular function.
             lambdas (numpy.ndarray): λ in angular function. Default to (1, -1).
-            memory (str/joblib.Memory): Whether to cache to the str path.
-            verbose (bool): Whether to show progress for featurization.
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system.
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         self.cutoff = cutoff
         self.r_etas = np.array(r_etas)[None, :, None]
@@ -256,7 +238,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
         self.a_etas = np.array(a_etas)[None, :, None, None]
         self.zetas = np.array(zetas)[None, None, :, None]
         self.lambdas = np.array(lambdas)[None, None, None, :]
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
+        super().__init__(**kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
