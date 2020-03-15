@@ -62,6 +62,21 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                 names.append("%s-%s" % (w, p))
         return pd.DataFrame([data], columns=names)
 
+    def get_citations(self) -> List[str]:
+        """
+        Get distinct site property citations
+        """
+        return ["@article{ye2018deep,"
+                "title={Deep neural networks for accurate predictions of crystal stability},"
+                "author={Ye, Weike and Chen, Chi and Wang, Zhenbin and "
+                "Chu, Iek-Heng and Ong, Shyue Ping},"
+                "journal={Nature communications},"
+                "volume={9},"
+                "number={1},"
+                "pages={1--6},"
+                "year={2018},"
+                "publisher={Nature Publishing Group}}"]
+
 
 class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
     """
@@ -127,6 +142,19 @@ class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
         c = self.get_coulomb_mat(s)
         return pd.DataFrame(c.ravel())
 
+    def get_citations(self) -> List[str]:
+        """
+        Citations for CoulombMatrix
+        """
+        return ["@article{rupp2012fast, "
+                "title={Fast and accurate modeling of molecular "
+                "atomization energies with machine learning},"
+                "author={Rupp, Matthias and Tkatchenko, Alexandre and M{\"u}ller, "
+                "Klaus-Robert and Von Lilienfeld, O Anatole},"
+                "journal={Physical review letters}, volume={108}, "
+                "number={5}, pages={058301}, "
+                "year={2012}, publisher={APS}}"]
+
 
 class RandomizedCoulombMatrix(CoulombMatrix):
     """
@@ -151,8 +179,6 @@ class RandomizedCoulombMatrix(CoulombMatrix):
             size as row_norms.
         (iv)  permute the rows and columns of C with the same permutation
             that sorts row_norms + ε
-        Montavon, Grégoire, et al.v"Machine learning of molecular electronic properties in chemical
-            compound space." New Journal of Physics 15.9 (2013): 095003.
 
         Args:
             s (pymatgen Structure): pymatgen Structure for computing the randomized Coulomb matrix
@@ -177,6 +203,21 @@ class RandomizedCoulombMatrix(CoulombMatrix):
 
         """
         return self.get_randomized_coulomb_mat(s)
+
+    def get_citations(self) -> List[str]:
+        """
+        citation for randomized coulomb matrix
+        """
+        return ["@article{montavon2013machine,"
+                "title={Machine learning of molecular electronic properties "
+                "in chemical compound space},"
+                "author={Montavon, Gr{\'e}goire and Rupp, Matthias and Gobre, "
+                "Vivekanand and Vazquez-Mayagoitia, Alvaro and Hansen, Katja "
+                "and Tkatchenko, Alexandre and M{\"u}ller, Klaus-Robert and "
+                "Von Lilienfeld, O Anatole},"
+                "journal={New Journal of Physics},"
+                "volume={15}, number={9},pages={095003},"
+                "year={2013},publisher={IOP Publishing}}"]
 
 
 class SortedCoulombMatrix(CoulombMatrix):
@@ -216,3 +257,17 @@ class SortedCoulombMatrix(CoulombMatrix):
 
         """
         return self.get_sorted_coulomb_mat(s)
+
+    def get_citations(self) -> List[str]:
+        """
+        Sorted Coulomb matrix
+        """
+        return ["@inproceedings{montavon2012learning,"
+                "title={Learning invariant representations "
+                "of molecules for atomization energy prediction},"
+                "author={Montavon, Gr{\'e}goire and Hansen, Katja "
+                "and Fazli, Siamac and Rupp, Matthias and Biegler, "
+                "Franziska and Ziehe, Andreas and Tkatchenko, Alexandre "
+                "and Lilienfeld, Anatole V and M{\"u}ller, Klaus-Robert},"
+                "booktitle={Advances in neural information processing systems},"
+                "pages={440--448}, year={2012}}"]

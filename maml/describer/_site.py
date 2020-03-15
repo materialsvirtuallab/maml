@@ -116,6 +116,17 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
             return df
         return process(raw_data[0], self.pot_fit)
 
+    def get_citations(self) -> List[str]:
+        """
+        Bispectrum coefficient citations
+        """
+        return ["@article{bartok2010gaussian, "
+                "title={Gaussian approximation potentials: The"
+                " accuracy of quantum mechanics, without the electrons}, "
+                "author={Bart{\'o}k, Albert P and Payne, Mike C and Kondor,"
+                "Risi and Cs{\'a}nyi, G{\'a}bor}, journal={Physical review letters},"
+                "volume={104}, number={13}, pages={136403}, year={2010}, publisher={APS}}"]
+
 
 class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
     """
@@ -206,6 +217,20 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                                         for c in descriptor_pattern.findall(lines)])
 
         return descriptors
+
+    def get_citations(self) -> List[str]:
+        """
+        Get SOAP citations
+        """
+        return ["@article{bartok2013representing,"
+                "title={On representing chemical environments},"
+                "author={Bart{\'o}k, Albert P and Kondor, Risi and Cs{\'a}nyi, G{\'a}bor},"
+                "journal={Physical Review B},"
+                "volume={87},"
+                "number={18},"
+                "pages={184115},"
+                "year={2013},"
+                "publisher={APS}}"]
 
 
 class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
@@ -305,3 +330,18 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
         """
         decay = 0.5 * (np.cos(np.pi * r / self.cutoff) + 1) * (r <= self.cutoff)
         return decay
+
+    def get_citations(self) -> List[str]:
+        """
+        Get symmetry function citations
+        """
+        return ["@article{behler2007generalized,"
+                "title={Generalized neural-network representation of "
+                "high-dimensional potential-energy surfaces},"
+                "author={Behler, J{\"o}rg and Parrinello, Michele},"
+                "journal={Physical review letters},"
+                "volume={98},"
+                "number={14},"
+                "pages={146401},"
+                "year={2007},"
+                "publisher={APS}}"]
