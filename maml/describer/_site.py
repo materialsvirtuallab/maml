@@ -5,11 +5,10 @@ import re
 import logging
 import itertools
 import subprocess
-from typing import Dict, List, Union
+from typing import Dict, List
 import numpy as np
 import pandas as pd
 
-from joblib import Memory
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir

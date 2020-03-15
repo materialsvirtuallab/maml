@@ -4,12 +4,12 @@ MAML describer base classes
 import abc
 import logging
 from tqdm import tqdm  # ignore
-from typing import Any, Union, List
+from typing import Any, List
 
 import pandas as pd
 from monty.json import MSONable
 import numpy as np
-from joblib import cpu_count, Parallel, delayed, Memory
+from joblib import cpu_count, Parallel, delayed
 from sklearn.utils.validation import check_memory
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline

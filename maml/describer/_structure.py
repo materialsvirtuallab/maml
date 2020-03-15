@@ -1,9 +1,8 @@
 """
 Structure-wise describers. These describers include structural information.
 """
-from typing import List, Union
+from typing import List
 
-from joblib import Memory
 import numpy as np
 import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
