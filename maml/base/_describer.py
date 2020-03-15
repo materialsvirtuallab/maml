@@ -5,6 +5,7 @@ import abc
 import logging
 from tqdm import tqdm  # ignore
 from typing import Any, List
+import tempfile
 
 import pandas as pd
 from monty.json import MSONable
@@ -38,7 +39,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         Base estimator with the following allowed keyword args
 
-            memory (str/joblib.Memory): The path or Memory for caching the computational
+            memory (bool/str/joblib.Memory): The path or Memory for caching the computational
                 results, default None means no cache.
             verbose (bool): Whether to show the progress of feature calculations.
             n_jobs (int): The number of parallel jobs. 0 means no parallel computations.
@@ -54,6 +55,9 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             if k not in allowed_kwargs:
                 raise TypeError("%s not allowed as kwargs" % (str(k)))
         memory = kwargs.get("memory", None)
+        if isinstance(memory, bool):
+            memory = tempfile.mkdtemp()
+            logger.info("Created temporary directory %s" % memory)
         verbose = kwargs.get("verbose", False)
         n_jobs = kwargs.get("n_jobs", 0)
         self.memory = check_memory(memory)
@@ -144,6 +148,13 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         Returns: a list of citation str
         """
         return [""]
+
+    def clear_cache(self):
+        """
+        Clear cache
+        """
+        if self.memory.location is not None:
+            self.memory.clear()
 
 
 class OutDataFrameConcat:
