@@ -2,14 +2,9 @@
 
 PROJECT_NAME := maml
 
-.PHONY: all pre-commit pycodestyle flake8 mypy pydocstyle pylint test
+.PHONY: all pycodestyle flake8 mypy pydocstyle pylint test
 
 all: pycodestyle flake8 mypy pydocstyle
-
-pre-commit:
-	echo "running pre-commit hooks"
-	./pre-commit
-	echo "--- Done ---"
 
 pycodestyle:
 	echo "pycodestyle checks..."
