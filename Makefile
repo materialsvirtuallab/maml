@@ -30,3 +30,8 @@ pylint:
 	echo "pylint checks..."
 	pylint --exit-zero $(PROJECT_NAME)
 	echo "--- Done ---"
+
+test:
+	echo "pytest checks..."
+	pytest $(PROJECT_NAME)
+	echo "--- Done ---"
