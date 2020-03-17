@@ -4,12 +4,13 @@ MAML describer base classes
 import abc
 import logging
 from tqdm import tqdm  # ignore
-from typing import Any, Union, List
+from typing import Any, List
+import tempfile
 
 import pandas as pd
 from monty.json import MSONable
 import numpy as np
-from joblib import cpu_count, Parallel, delayed, Memory
+from joblib import cpu_count, Parallel, delayed
 from sklearn.utils.validation import check_memory
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
@@ -34,21 +35,31 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     """
 
     def __init__(self,
-                 memory: Union[str, Memory] = None,
-                 verbose: bool = True,
-                 n_jobs: int = 0,
                  **kwargs):
         """
+        Base estimator with the following allowed keyword args
 
-        Args:
-            memory (str/joblib.Memory): The path or Memory for caching the computational
+            memory (bool/str/joblib.Memory): The path or Memory for caching the computational
                 results, default None means no cache.
             verbose (bool): Whether to show the progress of feature calculations.
             n_jobs (int): The number of parallel jobs. 0 means no parallel computations.
                 If this value is set to negative or greater than the total cpu
                 then n_jobs is set to the number of cpu on system.
-            **kwargs:
+
+        Args:
+            **kwargs: keyword args that contain possibly memory (str/joblib.Memory),
+                verbose (bool), n_jobs (int)
         """
+        allowed_kwargs = ['memory', 'verbose', 'n_jobs']
+        for k, v in kwargs.items():
+            if k not in allowed_kwargs:
+                raise TypeError("%s not allowed as kwargs" % (str(k)))
+        memory = kwargs.get("memory", None)
+        if isinstance(memory, bool):
+            memory = tempfile.mkdtemp()
+            logger.info("Created temporary directory %s" % memory)
+        verbose = kwargs.get("verbose", False)
+        n_jobs = kwargs.get("n_jobs", 0)
         self.memory = check_memory(memory)
         self.verbose = verbose
         # find out the number of parallel jobs
@@ -121,6 +132,29 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         tags = self._get_tags()
         multi_output = tags["multioutput"]  # this is from BaseEstimator
         return multi_output
+
+    def get_citations(self) -> List[str]:
+        """
+        Get citations for the describer
+
+        e.g.,
+        ["@article{chen2019graph, title={Graph networks as a universal"
+         "machine learning framework for molecules and crystals}, "
+         "author={Chen, Chi and Ye, Weike and Zuo, Yunxing and Zheng, "
+         "Chen and Ong, Shyue Ping}, journal={Chemistry of Materials},"
+         "volume={31}, number={9}, pages={3564--3572}, year={2019}, publisher"
+         "={ACS Publications}}"]
+
+        Returns: a list of citation str
+        """
+        return [""]
+
+    def clear_cache(self):
+        """
+        Clear cache
+        """
+        if self.memory.location is not None:
+            self.memory.clear()
 
 
 class OutDataFrameConcat:

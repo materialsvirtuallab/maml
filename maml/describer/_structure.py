@@ -1,9 +1,8 @@
 """
 Structure-wise describers. These describers include structural information.
 """
-from typing import List, Union
+from typing import List
 
-from joblib import Memory
 import numpy as np
 import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
@@ -25,9 +24,6 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                  wyckoffs: List[str],
                  properties: List[str],
                  symprec: float = 0.1,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
 
@@ -38,17 +34,12 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                 pymatgen.core.periodic_table.Specie for support properties (there
                 are a lot!)
             symprec (float): Symmetry precision for spacegroup determination.
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         self.wyckoffs = wyckoffs
         self.properties = properties
         self.symprec = symprec
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(**kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
@@ -71,6 +62,21 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                 names.append("%s-%s" % (w, p))
         return pd.DataFrame([data], columns=names)
 
+    def get_citations(self) -> List[str]:
+        """
+        Get distinct site property citations
+        """
+        return ["@article{ye2018deep,"
+                "title={Deep neural networks for accurate predictions of crystal stability},"
+                "author={Ye, Weike and Chen, Chi and Wang, Zhenbin and "
+                "Chu, Iek-Heng and Ong, Shyue Ping},"
+                "journal={Nature communications},"
+                "volume={9},"
+                "number={1},"
+                "pages={1--6},"
+                "year={2018},"
+                "publisher={Nature Publishing Group}}"]
+
 
 class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
     """
@@ -79,24 +85,16 @@ class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
     """
     def __init__(self,
                  random_seed: int = None,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
 
         self.max_sites = None  # For padding
         self.random_seed = random_seed
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(**kwargs)
 
     def get_coulomb_mat(self, s: Structure) -> np.ndarray:
         """
@@ -144,6 +142,19 @@ class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
         c = self.get_coulomb_mat(s)
         return pd.DataFrame(c.ravel())
 
+    def get_citations(self) -> List[str]:
+        """
+        Citations for CoulombMatrix
+        """
+        return ["@article{rupp2012fast, "
+                "title={Fast and accurate modeling of molecular "
+                "atomization energies with machine learning},"
+                "author={Rupp, Matthias and Tkatchenko, Alexandre and M{\"u}ller, "
+                "Klaus-Robert and Von Lilienfeld, O Anatole},"
+                "journal={Physical review letters}, volume={108}, "
+                "number={5}, pages={058301}, "
+                "year={2012}, publisher={APS}}"]
+
 
 class RandomizedCoulombMatrix(CoulombMatrix):
     """
@@ -151,22 +162,13 @@ class RandomizedCoulombMatrix(CoulombMatrix):
     """
     def __init__(self,
                  random_seed: int = None,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        super().__init__(random_seed=random_seed, memory=memory,
-                         verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(random_seed=random_seed, **kwargs)
 
     def get_randomized_coulomb_mat(self, s: Structure) -> pd.DataFrame:
         """
@@ -177,8 +179,6 @@ class RandomizedCoulombMatrix(CoulombMatrix):
             size as row_norms.
         (iv)  permute the rows and columns of C with the same permutation
             that sorts row_norms + ε
-        Montavon, Grégoire, et al.v"Machine learning of molecular electronic properties in chemical
-            compound space." New Journal of Physics 15.9 (2013): 095003.
 
         Args:
             s (pymatgen Structure): pymatgen Structure for computing the randomized Coulomb matrix
@@ -204,6 +204,21 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         """
         return self.get_randomized_coulomb_mat(s)
 
+    def get_citations(self) -> List[str]:
+        """
+        citation for randomized coulomb matrix
+        """
+        return ["@article{montavon2013machine,"
+                "title={Machine learning of molecular electronic properties "
+                "in chemical compound space},"
+                "author={Montavon, Gr{\'e}goire and Rupp, Matthias and Gobre, "
+                "Vivekanand and Vazquez-Mayagoitia, Alvaro and Hansen, Katja "
+                "and Tkatchenko, Alexandre and M{\"u}ller, Klaus-Robert and "
+                "Von Lilienfeld, O Anatole},"
+                "journal={New Journal of Physics},"
+                "volume={15}, number={9},pages={095003},"
+                "year={2013},publisher={IOP Publishing}}"]
+
 
 class SortedCoulombMatrix(CoulombMatrix):
     """
@@ -211,22 +226,13 @@ class SortedCoulombMatrix(CoulombMatrix):
     """
     def __init__(self,
                  random_seed: int = None,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
-            memory (None, str or joblib.Memory): whether to cache to
-                the str path
-            verbose (bool): whether to show progress for featurization
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        super().__init__(random_seed=random_seed, memory=memory,
-                         verbose=verbose, n_jobs=n_jobs, **kwargs)
+        super().__init__(random_seed=random_seed, **kwargs)
 
     def get_sorted_coulomb_mat(self, s: Structure) -> pd.DataFrame:
         """
@@ -251,3 +257,17 @@ class SortedCoulombMatrix(CoulombMatrix):
 
         """
         return self.get_sorted_coulomb_mat(s)
+
+    def get_citations(self) -> List[str]:
+        """
+        Sorted Coulomb matrix
+        """
+        return ["@inproceedings{montavon2012learning,"
+                "title={Learning invariant representations "
+                "of molecules for atomization energy prediction},"
+                "author={Montavon, Gr{\'e}goire and Hansen, Katja "
+                "and Fazli, Siamac and Rupp, Matthias and Biegler, "
+                "Franziska and Ziehe, Andreas and Tkatchenko, Alexandre "
+                "and Lilienfeld, Anatole V and M{\"u}ller, Klaus-Robert},"
+                "booktitle={Advances in neural information processing systems},"
+                "pages={440--448}, year={2012}}"]

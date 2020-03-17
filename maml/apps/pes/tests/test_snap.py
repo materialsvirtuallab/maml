@@ -11,9 +11,9 @@ from monty.os.path import which
 from monty.serialization import loadfn
 from sklearn.linear_model import LinearRegression
 
-from maml.apps.pes.snap import SNAPotential
+from maml.apps.pes._snap import SNAPotential
 from maml import ModelWithSklearn
-from maml.describer.site import BispectrumCoefficients
+from maml.describer._site import BispectrumCoefficients
 
 CWD = os.getcwd()
 DIR = os.path.abspath(os.path.dirname(__file__))

@@ -9,11 +9,11 @@ import numpy as np
 from monty.io import zopen
 from sklearn.linear_model import LinearRegression
 
-from maml.apps.pes import Potential
+from maml.apps.pes._base import Potential
 from maml import ModelWithSklearn
 from maml.describer import BispectrumCoefficients
-from maml.apps.pes.lammps.calcs import EnergyForceStress
-from maml.utils.data_conversion import pool_from, convert_docs
+from maml.apps.pes.lammps import EnergyForceStress
+from maml.utils import pool_from, convert_docs
 
 
 class SNAPotential(Potential):
@@ -98,7 +98,7 @@ class SNAPotential(Potential):
         Returns:
             energy, forces, stress
         """
-        calculator = EnergyForceStress(ff_settings=self)
+        calculator = EnergyForceStress(self)
         energy, forces, stress = calculator.calculate(structures=[structure])[0]
         return energy, forces, stress
 
@@ -199,8 +199,9 @@ class SNAPotential(Potential):
                                            quadratic=quadratic, pot_fit=True)
         model = ModelWithSklearn(model=LinearRegression(),
                                  describer=describer, **kwargs)
-        coef = np.array(np.concatenate([coeff_lines[(2 + nbc * n + n):
-                        (2 + nbc * (n + 1) + n)] for n in range(ne)]), dtype=np.float)
+        coef = np.array(np.concatenate([coeff_lines[
+                                        (2 + nbc * n + n): (2 + nbc * (n + 1) + n)]
+                                        for n in range(ne)]), dtype=np.float)
         model.model.coef_ = coef
         model.model.intercept_ = 0
         snap = SNAPotential(model=model)

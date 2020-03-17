@@ -1,8 +1,8 @@
 """
 MAML model base classes
 """
-import joblib
 from typing import Any, Union, List
+import joblib
 
 import numpy as np
 from sklearn.base import TransformerMixin

@@ -13,8 +13,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.gaussian_process import GaussianProcessRegressor
 
 from maml import BaseDescriber, ModelWithSklearn
-from maml.describer.structure import DistinctSiteProperty
-from maml.model.neural_network import MultiLayerPerceptron
+from maml.describer._structure import DistinctSiteProperty
+from maml.model._neural_network import MultiLayerPerceptron
 
 
 class NeuralNetTest(PymatgenTest):

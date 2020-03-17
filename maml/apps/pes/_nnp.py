@@ -19,9 +19,9 @@ from monty.serialization import loadfn
 from pymatgen import Structure, Lattice, Element
 from pymatgen.core import units
 
-from maml.apps.pes import Potential
-from maml.apps.pes.lammps.calcs import EnergyForceStress
-from maml.utils.data_conversion import pool_from, convert_docs
+from maml.apps.pes._base import Potential
+from maml.apps.pes.lammps import EnergyForceStress
+from maml.utils import pool_from, convert_docs
 
 
 module_dir = os.path.dirname(__file__)
@@ -54,6 +54,10 @@ class NNPotential(Potential):
         self.param = param if param else {}
         self.weight_param = weight_param if weight_param else {}
         self.scaling_param = scaling_param if scaling_param else None
+        self.train_energy_rmse = None
+        self.validation_energy_rmse = None
+        self.train_forces_rmse = None
+        self.validation_forces_rmse = None
         self.fitted = False
 
     def _line_up(self, structure, energy, forces, virial_stress):
@@ -651,7 +655,7 @@ class NNPotential(Potential):
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -722,7 +726,7 @@ class NNPotential(Potential):
                     try:
                         error_line = [i for i, m in enumerate(msg)
                                       if m.startswith('ERROR')][0]
-                        error_msg += ', '.join([e for e in msg[error_line:]])
+                        error_msg += ', '.join(msg[error_line:])
                     except Exception:
                         error_msg += msg[-1]
                     raise RuntimeError(error_msg)

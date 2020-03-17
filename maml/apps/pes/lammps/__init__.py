@@ -5,3 +5,5 @@
 """
 This package contains LAMMPS calculator classes to calculate the basic materials properties.
 """
+from ._calcs import LMPStaticCalculator, EnergyForceStress, SpectralNeighborAnalysis  # noqa
+from ._calcs import ElasticConstant, LatticeConstant, NudgedElasticBand, DefectFormation  # noqa

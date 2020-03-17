@@ -5,19 +5,18 @@ import re
 import logging
 import itertools
 import subprocess
-from typing import Dict, List, Union
+from typing import Dict, List
 import numpy as np
 import pandas as pd
 
-from joblib import Memory
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
 from pymatgen import Element, Structure
 from pymatgen.core.periodic_table import get_el_sp
 
-from maml.base.describer import BaseDescriber, OutDataFrameConcat
-from maml.utils.data_conversion import pool_from
+from maml.base import BaseDescriber, OutDataFrameConcat
+from maml.utils import pool_from
 
 
 logging.basicConfig()
@@ -37,9 +36,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                  quadratic: bool = False,
                  pot_fit: bool = False,
                  include_stress: bool = False,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0):
+                 **kwargs):
         """
         Args:
             cutoff (float): The cutoff distance.
@@ -52,13 +49,9 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                 Default to False.
             pot_fit (bool): Whether combine the dataframe for potential fitting.
             include_stress (bool): Wether to include stress components.
-            memory (str/joblib.Memory): Whether to cache to the str path.
-            verbose (bool): Whether to show progress for featurization.
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system.
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        from maml.apps.pes.lammps.calcs import SpectralNeighborAnalysis
+        from maml.apps.pes.lammps import SpectralNeighborAnalysis
         self.calculator = SpectralNeighborAnalysis(rcut=cutoff,
                                                    twojmax=twojmax,
                                                    element_profile=element_profile,
@@ -70,7 +63,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
         self.quadratic = quadratic
         self.pot_fit = pot_fit
         self.include_stress = include_stress
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
+        super().__init__(**kwargs)
 
     @property
     def subscripts(self) -> List:
@@ -123,6 +116,17 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
             return df
         return process(raw_data[0], self.pot_fit)
 
+    def get_citations(self) -> List[str]:
+        """
+        Bispectrum coefficient citations
+        """
+        return ["@article{bartok2010gaussian, "
+                "title={Gaussian approximation potentials: The"
+                " accuracy of quantum mechanics, without the electrons}, "
+                "author={Bart{\'o}k, Albert P and Payne, Mike C and Kondor,"
+                "Risi and Cs{\'a}nyi, G{\'a}bor}, journal={Physical review letters},"
+                "volume={104}, number={13}, pages={136403}, year={2010}, publisher={APS}}"]
+
 
 class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
     """
@@ -134,9 +138,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                  l_max: int = 8,
                  n_max: int = 8,
                  atom_sigma: float = 0.5,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0):
+                 **kwargs):
         """
 
         Args:
@@ -145,19 +147,15 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                 Default to 8.
             n_max (int): The number of radial basis function. Default to 8.
             atom_sigma (float): The width of gaussian atomic density. Default to 0.5.
-            memory (str/joblib.Memory): Whether to cache to the str path.
-            verbose (bool): Whether to show progress for featurization.
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system.
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        from maml.apps.pes.gap import GAPotential
+        from maml.apps.pes._gap import GAPotential
         self.operator = GAPotential()
         self.cutoff = cutoff
         self.l_max = l_max
         self.n_max = n_max
         self.atom_sigma = atom_sigma
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
+        super().__init__(**kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
@@ -201,12 +199,12 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
             stdout = p.communicate()[0]
             rc = p.returncode
             if rc != 0:
-                error_msg = 'QUIP exited with return code %d' % rc
+                error_msg = 'quip/soap exited with return code %d' % rc
                 msg = stdout.decode("utf-8").split('\n')[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -219,6 +217,20 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                                         for c in descriptor_pattern.findall(lines)])
 
         return descriptors
+
+    def get_citations(self) -> List[str]:
+        """
+        Get SOAP citations
+        """
+        return ["@article{bartok2013representing,"
+                "title={On representing chemical environments},"
+                "author={Bart{\'o}k, Albert P and Kondor, Risi and Cs{\'a}nyi, G{\'a}bor},"
+                "journal={Physical Review B},"
+                "volume={87},"
+                "number={18},"
+                "pages={184115},"
+                "year={2013},"
+                "publisher={APS}}"]
 
 
 class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
@@ -233,9 +245,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
                  a_etas: np.ndarray,
                  zetas: np.ndarray,
                  lambdas: np.ndarray,
-                 memory: Union[Memory, str] = None,
-                 verbose: bool = False,
-                 n_jobs: int = 0):
+                 **kwargs):
         """
         Args:
             cutoff (float): The cutoff distance.
@@ -244,11 +254,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
             a_etas (numpy.ndarray): η in angular function.
             zetas (numpy.ndarray): ζ in angular function.
             lambdas (numpy.ndarray): λ in angular function. Default to (1, -1).
-            memory (str/joblib.Memory): Whether to cache to the str path.
-            verbose (bool): Whether to show progress for featurization.
-            n_jobs (int): number of parallel jobs. 0 means no parallel computations.
-                If this value is set to negative or greater than the total cpu
-                then n_jobs is set to the number of cpu on system.
+            **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         self.cutoff = cutoff
         self.r_etas = np.array(r_etas)[None, :, None]
@@ -256,7 +262,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
         self.a_etas = np.array(a_etas)[None, :, None, None]
         self.zetas = np.array(zetas)[None, None, :, None]
         self.lambdas = np.array(lambdas)[None, None, None, :]
-        super().__init__(memory=memory, verbose=verbose, n_jobs=n_jobs)
+        super().__init__(**kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
@@ -273,8 +279,8 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
             sorted_neighbors = sorted(neighbors, key=lambda neighbor: neighbor.species_string)
             temp_dict = {element: [(neighbor.coords, neighbor.nn_distance) for neighbor in group]
                          for element, group in itertools.groupby(sorted_neighbors,
-                         key=lambda neighbor: neighbor.species_string)}
-
+                                                                 key=lambda neighbor:
+                                                                 neighbor.species_string)}
             for specie in elements:
                 distances = np.array([nn_distance for _, nn_distance 
                                       in temp_dict[specie]])[:, None, None]
@@ -324,3 +330,18 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
         """
         decay = 0.5 * (np.cos(np.pi * r / self.cutoff) + 1) * (r <= self.cutoff)
         return decay
+
+    def get_citations(self) -> List[str]:
+        """
+        Get symmetry function citations
+        """
+        return ["@article{behler2007generalized,"
+                "title={Generalized neural-network representation of "
+                "high-dimensional potential-energy surfaces},"
+                "author={Behler, J{\"o}rg and Parrinello, Michele},"
+                "journal={Physical review letters},"
+                "volume={98},"
+                "number={14},"
+                "pages={146401},"
+                "year={2007},"
+                "publisher={APS}}"]

@@ -16,7 +16,7 @@ from pymatgen.io.lammps.data import LammpsData
 from pymatgen import Structure, Lattice, Element
 import numpy as np
 
-from maml.apps.pes import Potential
+from maml.apps.pes._base import Potential
 
 
 def _pretty_input(lines):
@@ -37,7 +37,7 @@ def _read_dump(file_name, dtype='float_'):
     return np.loadtxt(io.StringIO(''.join(lines)), dtype=dtype)
 
 
-class LMPStaticCalculator(object):
+class LMPStaticCalculator:
     """
     Abstract class to perform static structure property calculation
     using LAMMPS.
@@ -95,9 +95,12 @@ class LMPStaticCalculator(object):
                 'Incompatible structure found'
         ff_elements = None
         if hasattr(self, 'element_profile'):
-            ff_elements = self.element_profile.keys()
-        if hasattr(self, 'ff_settings') and hasattr(self.ff_settings, 'elements'):
-            ff_elements = self.ff_settings.elements
+            element_profile = getattr(self, 'element_profile')
+            ff_elements = element_profile.keys()
+        if hasattr(self, 'ff_settings'):
+            ff_settings = getattr(self, 'ff_settings')
+            if hasattr(ff_settings, 'elements'):
+                ff_elements = getattr(ff_settings, 'elements')
         with ScratchDir('.'):
             input_file = self._setup()
             data = []
@@ -114,7 +117,7 @@ class LMPStaticCalculator(object):
                     try:
                         error_line = [i for i, m in enumerate(msg)
                                       if m.startswith('ERROR')][0]
-                        error_msg += ', '.join([e for e in msg[error_line:]])
+                        error_msg += ', '.join(msg[error_line:])
                     except Exception:
                         error_msg += msg[-1]
                     raise RuntimeError(error_msg)
@@ -235,10 +238,8 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
 
         subs = itertools.product(range(twojmax + 1), repeat=3)
 
-        filters = [lambda x: True if x[0] >= x[1] else False,
-                   lambda x: True if x[2] >= x[0] else False]
-        j_filter = [lambda x: True if
-                    x[2] in range(x[0] - x[1], min(twojmax, x[0] + x[1]) + 1, 2) else False]
+        filters = [lambda x: x[0] >= x[1], lambda x: x[2] >= x[0]]
+        j_filter = [lambda x: x[2] in range(x[0] - x[1], min(twojmax, x[0] + x[1]) + 1, 2)]
         filters.extend(j_filter)
         for f in filters:
             subs = filter(f, subs)
@@ -261,7 +262,7 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
         cutoffs = [self.element_profile[e]['r'] * self.rcutfac for e in el_in_seq]
         weights = [self.element_profile[e]['w'] for e in el_in_seq]
         compute_args += ' '.join([str(p) for p in cutoffs + weights])
-        compute_args += ' diagonal 3 rmin0 0 quadraticflag {}'.format(int(self.quadratic))
+        compute_args += ' rmin0 0 quadraticflag {}'.format(int(self.quadratic))
         CMDS = list(map(add_args, self._CMDS))
         CMDS[2] += ' bzeroflag 0'
         CMDS[3] += ' bzeroflag 0'
@@ -390,7 +391,7 @@ class ElasticConstant(LMPStaticCalculator):
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -553,7 +554,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             try:
                 error_line = [i for i, m in enumerate(msg)
                               if m.startswith('ERROR')][0]
-                error_msg += ', '.join([e for e in msg[error_line:]])
+                error_msg += ', '.join(msg[error_line:])
             except Exception:
                 error_msg += msg[-1]
             raise RuntimeError(error_msg)
@@ -573,7 +574,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             try:
                 error_line = [i for i, m in enumerate(msg)
                               if m.startswith('ERROR')][0]
-                error_msg += ', '.join([e for e in msg[error_line:]])
+                error_msg += ', '.join(msg[error_line:])
             except Exception:
                 error_msg += msg[-1]
             raise RuntimeError(error_msg)
@@ -621,7 +622,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
@@ -746,7 +747,7 @@ class DefectFormation(LMPStaticCalculator):
                 try:
                     error_line = [i for i, m in enumerate(msg)
                                   if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
+                    error_msg += ', '.join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
