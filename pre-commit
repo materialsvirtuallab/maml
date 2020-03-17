@@ -5,7 +5,8 @@
 # exit with non-zero status after issuing an appropriate message if
 # it wants to stop the commit.
 #
-# To enable this hook, rename this file to "pre-commit".
+# To enable this hook, rename this file to "pre-commit", and copy it
+# to your local ".git/hooks" directory
 
 status=0
 files=$(git diff --diff-filter=d --cached --name-only | grep -E 'maml.*\.(py)$' | sed '/test_/d')
