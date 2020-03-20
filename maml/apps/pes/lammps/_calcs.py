@@ -8,13 +8,13 @@ import os
 import abc
 import io
 import subprocess
-import shutil
 import itertools
 
+import numpy as np
+from monty.os.path import which
 from monty.tempfile import ScratchDir
 from pymatgen.io.lammps.data import LammpsData
 from pymatgen import Structure, Lattice, Element
-import numpy as np
 
 from maml.apps.pes._base import Potential
 
@@ -45,7 +45,7 @@ class LMPStaticCalculator:
 
     LMP_EXE = None
     for lmp_exe in ["lmp_mpi", "lmp_serial"]:
-        if shutil.which(lmp_exe) is not None:
+        if which(lmp_exe) is not None:
             LMP_EXE = lmp_exe
 
     _COMMON_CMDS = ['units metal',
