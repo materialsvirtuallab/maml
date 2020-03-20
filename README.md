@@ -20,4 +20,4 @@ Many Jupyter notebooks are available on usage. See [notebooks](/notebooks).
 
 # API documentation
 
- See [api-docs](/api-docs).
+ See [api-docs](https://guide.materialsvirtuallab.org/maml/api-docs/).
