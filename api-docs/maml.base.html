@@ -14,8 +14,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="maml.base._data module" href="maml.base._data.html" />
-    <link rel="prev" title="maml.apps.pes._snap module" href="maml.apps.pes._snap.html" />
+    <link rel="next" title="maml.data package" href="maml.data.html" />
+    <link rel="prev" title="maml.apps.pes.lammps package" href="maml.apps.pes.lammps.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,11 +37,6 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="maml.base._data.html">maml.base._data module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.base._describer.html">maml.base._describer module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.base._model.html">maml.base._model module</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="module-maml.base">
@@ -201,7 +196,7 @@ into a higher-dimensional np.ndarray</p>
 <dl class="class">
 <dt id="maml.base.DummyDescriber">
 <em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">DummyDescriber</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.DummyDescriber" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Dummy Describer that does nothing</p>
 <dl class="attribute">
 <dt id="maml.base.DummyDescriber._abc_impl">
@@ -282,14 +277,14 @@ targets (list): list of float or np.ndarray
 <dl class="class">
 <dt id="maml.base.ModelWithKeras">
 <em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">ModelWithKeras</code><span class="sig-paren">(</span><em class="sig-param">model: Any</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.ModelWithKeras" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._model.html#maml.base._model.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a>, <a class="reference internal" href="maml.base._model.html#maml.base._model.KerasMixin" title="maml.base._model.KerasMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></p>
 <p>MAML model with keras model as estimators</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="maml.base.ModelWithSklearn">
 <em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">ModelWithSklearn</code><span class="sig-paren">(</span><em class="sig-param">model: Any</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.ModelWithSklearn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._model.html#maml.base._model.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a>, <a class="reference internal" href="maml.base._model.html#maml.base._model.SklearnMixin" title="maml.base._model.SklearnMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></p>
 <p>MAML model with sklearn model as estimator</p>
 </dd></dl>
 
@@ -316,10 +311,7 @@ targets (list): list of float or np.ndarray
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="maml.apps.html">maml.apps package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">maml.base package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="maml.base._data.html">maml.base._data module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.base._describer.html">maml.base._describer module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.base._model.html">maml.base._model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-maml.base">Module contents</a></li>
@@ -336,8 +328,8 @@ targets (list): list of float or np.ndarray
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="maml.apps.pes._snap.html" title="previous chapter">maml.apps.pes._snap module</a></li>
-      <li>Next: <a href="maml.base._data.html" title="next chapter">maml.base._data module</a></li>
+      <li>Previous: <a href="maml.apps.pes.lammps.html" title="previous chapter">maml.apps.pes.lammps package</a></li>
+      <li>Next: <a href="maml.data.html" title="next chapter">maml.data package</a></li>
   </ul></li>
 </ul>
 </div>

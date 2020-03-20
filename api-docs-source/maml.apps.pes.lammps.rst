@@ -6,7 +6,6 @@ Submodules
 
 .. toctree::
 
-   maml.apps.pes.lammps._calcs
 
 Module contents
 ---------------

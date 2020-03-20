@@ -6,7 +6,6 @@ Submodules
 
 .. toctree::
 
-   maml.model._neural_network
 
 Module contents
 ---------------

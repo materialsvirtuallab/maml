@@ -39,8 +39,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="maml.apps.pes.lammps.html">maml.apps.pes.lammps package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="maml.apps.pes.lammps.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="maml.apps.pes.lammps._calcs.html">maml.apps.pes.lammps._calcs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maml.apps.pes.lammps.html#submodules">Submodules</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="maml.apps.pes.lammps.html#module-maml.apps.pes.lammps">Module contents</a></li>
@@ -52,13 +51,6 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="maml.apps.pes._base.html">maml.apps.pes._base module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.apps.pes._gap.html">maml.apps.pes._gap module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.apps.pes._mtp.html">maml.apps.pes._mtp module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.apps.pes._nnp.html">maml.apps.pes._nnp module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.apps.pes._snap.html">maml.apps.pes._snap module</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="module-maml.apps.pes">
@@ -67,7 +59,7 @@
 <dl class="class">
 <dt id="maml.apps.pes.Potential">
 <em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">Potential</code><span class="sig-paren">(</span><em class="sig-param">model: Any = None</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.Potential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.apps.pes._base.html#maml.apps.pes._base.PotentialMixin" title="maml.apps.pes._base.PotentialMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.PotentialMixin</span></code></a>, <a class="reference internal" href="maml.base._model.html#maml.base._model.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.PotentialMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></p>
 <p>Potential model that can be used to fit struccture-[energy, force, stress]
 pairs</p>
 </dd></dl>
@@ -75,7 +67,7 @@ pairs</p>
 <dl class="class">
 <dt id="maml.apps.pes.GAPotential">
 <em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">GAPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.apps.pes._base.html#maml.apps.pes._base.Potential" title="maml.apps.pes._base.Potential"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements Smooth Overlap of Atomic Position potentials.</p>
 <dl class="method">
 <dt id="maml.apps.pes.GAPotential._line_up">
@@ -273,7 +265,7 @@ cfg_pool (list): The configuration pool contains</p>
 <dl class="class">
 <dt id="maml.apps.pes.MTPotential">
 <em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">MTPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.apps.pes._base.html#maml.apps.pes._base.Potential" title="maml.apps.pes._base.Potential"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements moment tensor potentials.</p>
 <dl class="method">
 <dt id="maml.apps.pes.MTPotential._line_up">
@@ -585,7 +577,7 @@ Default to None.</p>
 <dl class="class">
 <dt id="maml.apps.pes.SNAPotential">
 <em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">SNAPotential</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.apps.pes._base.html#maml.apps.pes._base.Potential" title="maml.apps.pes._base.Potential"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements Spectral Neighbor Analysis Potential.</p>
 <dl class="method">
 <dt id="maml.apps.pes.SNAPotential.evaluate">
@@ -688,7 +680,7 @@ each single structure case.</p>
 <dl class="class">
 <dt id="maml.apps.pes.NNPotential">
 <em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">NNPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em>, <em class="sig-param">weight_param=None</em>, <em class="sig-param">scaling_param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.apps.pes._base.html#maml.apps.pes._base.Potential" title="maml.apps.pes._base.Potential"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements Neural Network Potential.</p>
 <dl class="method">
 <dt id="maml.apps.pes.NNPotential._line_up">
@@ -1008,12 +1000,7 @@ lambdas (numpy.array): λ in angular function. Default to (1, -1).</p>
 <li class="toctree-l5"><a class="reference internal" href="maml.apps.pes.lammps.html">maml.apps.pes.lammps package</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._base.html">maml.apps.pes._base module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._gap.html">maml.apps.pes._gap module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._mtp.html">maml.apps.pes._mtp module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._nnp.html">maml.apps.pes._nnp module</a></li>
-<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._snap.html">maml.apps.pes._snap module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="#module-maml.apps.pes">Module contents</a></li>

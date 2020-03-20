@@ -6,7 +6,6 @@ Submodules
 
 .. toctree::
 
-   maml.database._data_classes
    maml.database.db
 
 Module contents

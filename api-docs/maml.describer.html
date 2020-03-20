@@ -14,7 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="maml.describer._composition module" href="maml.describer._composition.html" />
+    <link rel="next" title="maml.model package" href="maml.model.html" />
     <link rel="prev" title="maml.database.db module" href="maml.database.db.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -37,12 +37,6 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="maml.describer._composition.html">maml.describer._composition module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.describer._site.html">maml.describer._site module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.describer._spectrum.html">maml.describer._spectrum module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.describer._structure.html">maml.describer._structure module</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="module-maml.describer">
@@ -52,7 +46,7 @@ numeric vectors or tensors.</p>
 <dl class="class">
 <dt id="maml.describer.BispectrumCoefficients">
 <em class="property">class </em><code class="sig-prename descclassname">maml.describer.</code><code class="sig-name descname">BispectrumCoefficients</code><span class="sig-paren">(</span><em class="sig-param">cutoff: float</em>, <em class="sig-param">twojmax: int</em>, <em class="sig-param">element_profile: Dict</em>, <em class="sig-param">quadratic: bool = False</em>, <em class="sig-param">pot_fit: bool = False</em>, <em class="sig-param">include_stress: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer.BispectrumCoefficients" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Bispectrum coefficients to describe the local environment of each atom.
 Lammps is required to perform this computation.</p>
 <dl class="attribute">
@@ -87,7 +81,7 @@ involved.</p>
 <dl class="class">
 <dt id="maml.describer.SmoothOverlapAtomicPosition">
 <em class="property">class </em><code class="sig-prename descclassname">maml.describer.</code><code class="sig-name descname">SmoothOverlapAtomicPosition</code><span class="sig-paren">(</span><em class="sig-param">cutoff: float</em>, <em class="sig-param">l_max: int = 8</em>, <em class="sig-param">n_max: int = 8</em>, <em class="sig-param">atom_sigma: float = 0.5</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer.SmoothOverlapAtomicPosition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Smooth overlap of atomic positions (SOAP) to describe the local environment
 of each atom.</p>
 <dl class="attribute">
@@ -115,7 +109,7 @@ of each atom.</p>
 <dl class="class">
 <dt id="maml.describer.BPSymmetryFunctions">
 <em class="property">class </em><code class="sig-prename descclassname">maml.describer.</code><code class="sig-name descname">BPSymmetryFunctions</code><span class="sig-paren">(</span><em class="sig-param">cutoff: float</em>, <em class="sig-param">r_etas: numpy.ndarray</em>, <em class="sig-param">r_shift: numpy.ndarray</em>, <em class="sig-param">a_etas: numpy.ndarray</em>, <em class="sig-param">zetas: numpy.ndarray</em>, <em class="sig-param">lambdas: numpy.ndarray</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer.BPSymmetryFunctions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Behler-Parrinello symmetry function to describe the local environment
 of each atom.</p>
 <dl class="attribute">
@@ -153,7 +147,7 @@ of each atom.</p>
 <dl class="class">
 <dt id="maml.describer.DistinctSiteProperty">
 <em class="property">class </em><code class="sig-prename descclassname">maml.describer.</code><code class="sig-name descname">DistinctSiteProperty</code><span class="sig-paren">(</span><em class="sig-param">wyckoffs: List[str], properties: List[str], symprec: float = 0.1, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer.DistinctSiteProperty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Constructs a describer based on properties of distinct sites in a
 structure. For now, this assumes that there is only one type of species in
 a particular Wyckoff site.</p>
@@ -184,7 +178,7 @@ a particular Wyckoff site.</p>
 <dl class="class">
 <dt id="maml.describer.CoulombMatrix">
 <em class="property">class </em><code class="sig-prename descclassname">maml.describer.</code><code class="sig-name descname">CoulombMatrix</code><span class="sig-paren">(</span><em class="sig-param">random_seed: int = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer.CoulombMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Coulomb Matrix to decribe structure</p>
 <dl class="attribute">
 <dt id="maml.describer.CoulombMatrix._abc_impl">
@@ -226,7 +220,7 @@ df[0] returns the serials of coulomb_mat raval</p>
 <dl class="class">
 <dt id="maml.describer.SortedCoulombMatrix">
 <em class="property">class </em><code class="sig-prename descclassname">maml.describer.</code><code class="sig-name descname">SortedCoulombMatrix</code><span class="sig-paren">(</span><em class="sig-param">random_seed: int = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer.SortedCoulombMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.describer._structure.html#maml.describer._structure.CoulombMatrix" title="maml.describer._structure.CoulombMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.describer._structure.CoulombMatrix</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.describer._structure.CoulombMatrix</span></code></p>
 <p>Sorted CoulombMatrix</p>
 <dl class="attribute">
 <dt id="maml.describer.SortedCoulombMatrix._abc_impl">
@@ -267,7 +261,7 @@ Args:</p>
 <dl class="class">
 <dt id="maml.describer.RandomizedCoulombMatrix">
 <em class="property">class </em><code class="sig-prename descclassname">maml.describer.</code><code class="sig-name descname">RandomizedCoulombMatrix</code><span class="sig-paren">(</span><em class="sig-param">random_seed: int = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer.RandomizedCoulombMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.describer._structure.html#maml.describer._structure.CoulombMatrix" title="maml.describer._structure.CoulombMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.describer._structure.CoulombMatrix</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.describer._structure.CoulombMatrix</span></code></p>
 <p>Randomized CoulombMatrix</p>
 <dl class="attribute">
 <dt id="maml.describer.RandomizedCoulombMatrix._abc_impl">
@@ -343,11 +337,7 @@ Args:</p>
 <li class="toctree-l1"><a class="reference internal" href="maml.data.html">maml.data package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maml.database.html">maml.database package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">maml.describer package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="maml.describer._composition.html">maml.describer._composition module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.describer._site.html">maml.describer._site module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.describer._spectrum.html">maml.describer._spectrum module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.describer._structure.html">maml.describer._structure module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-maml.describer">Module contents</a></li>
@@ -362,7 +352,7 @@ Args:</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="maml.database.db.html" title="previous chapter">maml.database.db module</a></li>
-      <li>Next: <a href="maml.describer._composition.html" title="next chapter">maml.describer._composition module</a></li>
+      <li>Next: <a href="maml.model.html" title="next chapter">maml.model package</a></li>
   </ul></li>
 </ul>
 </div>

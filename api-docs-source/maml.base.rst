@@ -6,9 +6,6 @@ Submodules
 
 .. toctree::
 
-   maml.base._data
-   maml.base._describer
-   maml.base._model
 
 Module contents
 ---------------

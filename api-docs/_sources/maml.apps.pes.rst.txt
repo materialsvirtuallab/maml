@@ -13,11 +13,6 @@ Submodules
 
 .. toctree::
 
-   maml.apps.pes._base
-   maml.apps.pes._gap
-   maml.apps.pes._mtp
-   maml.apps.pes._nnp
-   maml.apps.pes._snap
 
 Module contents
 ---------------

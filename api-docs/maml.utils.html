@@ -14,8 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="maml.utils._data_conversion module" href="maml.utils._data_conversion.html" />
-    <link rel="prev" title="maml.model._neural_network module" href="maml.model._neural_network.html" />
+    <link rel="prev" title="maml.model package" href="maml.model.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,12 +36,6 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="maml.utils._data_conversion.html">maml.utils._data_conversion module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.utils._data_selection.html">maml.utils._data_selection module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.utils._general.html">maml.utils._general module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maml.utils._value_profile.html">maml.utils._value_profile module</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="module-maml.utils">
@@ -170,7 +163,7 @@ Returns: value float</p>
 <dl class="class">
 <dt id="maml.utils.ConstantValue">
 <em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">ConstantValue</code><span class="sig-paren">(</span><em class="sig-param">value: float</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ConstantValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.utils._value_profile.html#maml.utils._value_profile.ValueProfile" title="maml.utils._value_profile.ValueProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></p>
 <p>Return constant value</p>
 <dl class="method">
 <dt id="maml.utils.ConstantValue.get_value">
@@ -183,7 +176,7 @@ Returns: value float</p>
 <dl class="class">
 <dt id="maml.utils.LinearProfile">
 <em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">LinearProfile</code><span class="sig-paren">(</span><em class="sig-param">value_start: float</em>, <em class="sig-param">value_end: float = 0.0</em>, <em class="sig-param">max_steps: int = 100</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.LinearProfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.utils._value_profile.html#maml.utils._value_profile.ValueProfile" title="maml.utils._value_profile.ValueProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></p>
 <p>LinearProfile by setting starting value and the rate of
 value change. The profile can be initialized either by
 [value_start, value_end, max_step] or [value_start, rate]</p>
@@ -224,11 +217,7 @@ Returns: float</p>
 <li class="toctree-l1"><a class="reference internal" href="maml.describer.html">maml.describer package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="maml.model.html">maml.model package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">maml.utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="maml.utils._data_conversion.html">maml.utils._data_conversion module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.utils._data_selection.html">maml.utils._data_selection module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.utils._general.html">maml.utils._general module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maml.utils._value_profile.html">maml.utils._value_profile module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-maml.utils">Module contents</a></li>
@@ -240,8 +229,7 @@ Returns: float</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="maml.model._neural_network.html" title="previous chapter">maml.model._neural_network module</a></li>
-      <li>Next: <a href="maml.utils._data_conversion.html" title="next chapter">maml.utils._data_conversion module</a></li>
+      <li>Previous: <a href="maml.model.html" title="previous chapter">maml.model package</a></li>
   </ul></li>
 </ul>
 </div>

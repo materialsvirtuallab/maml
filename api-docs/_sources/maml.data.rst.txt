@@ -6,8 +6,6 @@ Submodules
 
 .. toctree::
 
-   maml.data._mp
-   maml.data._url
 
 Module contents
 ---------------

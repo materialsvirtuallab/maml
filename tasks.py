@@ -43,27 +43,22 @@ def make_doc(ctx):
         ctx.run("rm maml.*.rst", warn=True)
         ctx.run("sphinx-apidoc --separate -P -d 7 -o . -f ../maml")
         ctx.run("rm maml*.tests.*rst", warn=True)
-        # for f in glob.glob("maml*.rst"):
-        #     newoutput = []
-        #     suboutput = []
-        #     subpackage = False
-        #     with open(f, 'r') as fid:
-        #         for line in fid:
-        #             clean = line.strip()
-        #             if clean == "Subpackages":
-        #                 subpackage = True
-        #             if not subpackage and not clean.endswith("tests"):
-        #                 newoutput.append(line)
-        #             else:
-        #                 if not clean.endswith("tests"):
-        #                     suboutput.append(line)
-        #                 if clean.startswith("maml") and not clean.endswith("tests"):
-        #                     newoutput.extend(suboutput)
-        #                     subpackage = False
-        #                     suboutput = []
+        for f in glob.glob("maml*.rst"):
+            newoutput = []
+            with open(f, 'r') as fid:
+                for line in fid:
+                    if re.search("maml.*\._.*", line):
+                        print("here")
+                        continue
+                    else:
+                        newoutput.append(line)
 
-            # with open(f, 'w') as fid:
-            #     fid.write("".join(newoutput))
+            with open(f, 'w') as fid:
+                fid.write("".join(newoutput))
+        ctx.run("rm maml*._*.rst")
+
+    ctx.run("rm -r api-docs")
+
     ctx.run("sphinx-build -b html api-docs-source api-docs")
 
     # ctx.run("cp _static/* ../docs/html/_static", warn=True)
