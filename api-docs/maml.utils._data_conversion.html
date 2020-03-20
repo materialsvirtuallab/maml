@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.utils._data_conversion module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.utils._data_conversion">
+<span id="maml-utils-data-conversion-module"></span><h1>maml.utils._data_conversion module<a class="headerlink" href="#module-maml.utils._data_conversion" title="Permalink to this headline">¶</a></h1>
+<p>Convert data list to docs or pool existing data lists for training</p>
+<dl class="function">
+<dt id="maml.utils._data_conversion.convert_docs">
+<code class="sig-prename descclassname">maml.utils._data_conversion.</code><code class="sig-name descname">convert_docs</code><span class="sig-paren">(</span><em class="sig-param">docs</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_conversion.convert_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to convert a list of docs into objects, e.g.,
+Structure and DataFrame.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>docs ([dict]): List of docs. Each doc should have the same</dt><dd><p>format as one returned from .dft.parse_dir.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A list of structures, and a DataFrame with energy and force
+data in ‘y_orig’ column, data type (‘energy’ or ‘force’) in
+‘dtype’ column, No. of atoms in ‘n’ column sharing the same row
+of energy data while ‘n’ being 1 for the rows of force data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.utils._data_conversion.doc_from">
+<code class="sig-prename descclassname">maml.utils._data_conversion.</code><code class="sig-name descname">doc_from</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">energy=None</em>, <em class="sig-param">force=None</em>, <em class="sig-param">stress=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_conversion.doc_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to convert structure and its properties into doc
+format for further processing. If properties are None, zeros
+array will be used.</p>
+<dl>
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.
+energy (float): The total energy of the structure.
+force (np.array): The (m, 3) forces array of the structure</p>
+<blockquote>
+<div><p>where m is the number of atoms in structure.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>stress (list/np.array): The (6, ) stresses array of the</dt><dd><p>structure.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>(dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.utils._data_conversion.pool_from">
+<code class="sig-prename descclassname">maml.utils._data_conversion.</code><code class="sig-name descname">pool_from</code><span class="sig-paren">(</span><em class="sig-param">structures</em>, <em class="sig-param">energies=None</em>, <em class="sig-param">forces=None</em>, <em class="sig-param">stresses=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_conversion.pool_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to convert structures and their properties in to
+datapool format.</p>
+<dl>
+<dt>Args:</dt><dd><p>structures ([Structure]): The list of Pymatgen Structure object.
+energies ([float]): The list of total energies of each structure</p>
+<blockquote>
+<div><p>in structures list.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>forces ([np.array]): List of (m, 3) forces array of each structure</dt><dd><p>with m atoms in structures list. m can be varied with each
+single structure case.</p>
+</dd>
+<dt>stresses (list): List of (6, ) virial stresses of each</dt><dd><p>structure in structures list.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>([dict])</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.utils._data_conversion.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

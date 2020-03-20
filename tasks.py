@@ -27,56 +27,50 @@ def make_doc(ctx):
 
     :param ctx:
     """
-    with open("CHANGES.rst") as f:
-        contents = f.read()
-
-    toks = re.split(r"\-{3,}", contents)
-    n = len(toks[0].split()[-1])
-    changes = [toks[0]]
-    changes.append("\n" + "\n".join(toks[1].strip().split("\n")[0:-1]))
-    changes = ("-" * n).join(changes)
+    # with open("CHANGES.rst") as f:
+    #     contents = f.read()
+    #
+    # toks = re.split(r"\-{3,}", contents)
+    # n = len(toks[0].split()[-1])
+    # changes = [toks[0]]
+    # changes.append("\n" + "\n".join(toks[1].strip().split("\n")[0:-1]))
+    # changes = ("-" * n).join(changes)
 
     # with open("docs_rst/latest_changes.rst", "w") as f:
     #     f.write(changes)
 
-    with cd("docs_rst"):
-        ctx.run("cp ../CHANGES.rst change_log.rst")
+    with cd("api-docs-source"):
         ctx.run("rm maml.*.rst", warn=True)
-        ctx.run("sphinx-apidoc --separate -d 7 -o . -f ../maml")
-        ctx.run("rm maml*.tests.*rst")
-        for f in glob.glob("*.rst"):
-            if f.startswith('maml') and f.endswith('rst'):
-                newoutput = []
-                suboutput = []
-                subpackage = False
-                with open(f, 'r') as fid:
-                    for line in fid:
-                        clean = line.strip()
-                        if clean == "Subpackages":
-                            subpackage = True
-                        if not subpackage and not clean.endswith("tests"):
-                            newoutput.append(line)
-                        else:
-                            if not clean.endswith("tests"):
-                                suboutput.append(line)
-                            if clean.startswith("maml") and not clean.endswith("tests"):
-                                newoutput.extend(suboutput)
-                                subpackage = False
-                                suboutput = []
+        ctx.run("sphinx-apidoc --separate -P -d 7 -o . -f ../maml")
+        ctx.run("rm maml*.tests.*rst", warn=True)
+    # for f in glob.glob("*.rst"):
+    #     if f.startswith('maml') and f.endswith('rst'):
+    #         newoutput = []
+    #         suboutput = []
+    #         subpackage = False
+    #         with open(f, 'r') as fid:
+    #             for line in fid:
+    #                 clean = line.strip()
+    #                 if clean == "Subpackages":
+    #                     subpackage = True
+    #                 if not subpackage and not clean.endswith("tests"):
+    #                     newoutput.append(line)
+    #                 else:
+    #                     if not clean.endswith("tests"):
+    #                         suboutput.append(line)
+    #                     if clean.startswith("maml") and not clean.endswith("tests"):
+    #                         newoutput.extend(suboutput)
+    #                         subpackage = False
+    #                         suboutput = []
 
-                with open(f, 'w') as fid:
-                    fid.write("".join(newoutput))
-        ctx.run("make html")
+            # with open(f, 'w') as fid:
+            #     fid.write("".join(newoutput))
+    ctx.run("sphinx-build -b html api-docs-source api-docs")
 
-        ctx.run("cp _static/* ../docs/html/_static", warn=True)
+    # ctx.run("cp _static/* ../docs/html/_static", warn=True)
 
-    with cd("docs"):
-        ctx.run("rm *.html", warn=True)
-        ctx.run("cp -r html/* .", warn=True)
-        ctx.run("rm -r html", warn=True)
+    with cd("api-docs"):
         ctx.run("rm -r doctrees", warn=True)
-        ctx.run("rm -r _sources", warn=True)
-        ctx.run("rm -r _build", warn=True)
 
         # This makes sure maml.org works to redirect to the Github page
         # ctx.run("echo \"maml.org\" > CNAME")

@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.apps.pes.lammps._calcs module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.apps.pes.lammps._calcs">
+<span id="maml-apps-pes-lammps-calcs-module"></span><h1>maml.apps.pes.lammps._calcs module<a class="headerlink" href="#module-maml.apps.pes.lammps._calcs" title="Permalink to this headline">¶</a></h1>
+<p>This module provides basic LAMMPS calculator classes.</p>
+<dl class="class">
+<dt id="maml.apps.pes.lammps._calcs.DefectFormation">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">DefectFormation</code><span class="sig-paren">(</span><em class="sig-param">ff_settings</em>, <em class="sig-param">specie</em>, <em class="sig-param">lattice</em>, <em class="sig-param">alat</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.DefectFormation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator" title="maml.apps.pes.lammps._calcs.LMPStaticCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes.lammps._calcs.LMPStaticCalculator</span></code></a></p>
+<p>Defect formation energy calculator.</p>
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.DefectFormation._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.DefectFormation._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.DefectFormation._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.DefectFormation._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.DefectFormation._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.DefectFormation._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.DefectFormation.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.DefectFormation.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the vacancy formation given Potential class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.DefectFormation.get_unit_cell">
+<code class="sig-name descname">get_unit_cell</code><span class="sig-paren">(</span><em class="sig-param">specie</em>, <em class="sig-param">lattice</em>, <em class="sig-param">alat</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.DefectFormation.get_unit_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unit cell from specie, lattice type and lattice constant.</p>
+<dl class="simple">
+<dt>Args</dt><dd><p>specie (str): Name of specie.
+lattice (str): The lattice type of structure. e.g. bcc or diamond.
+alat (float): The lattice constant of specific lattice and specie.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.apps.pes.lammps._calcs.ElasticConstant">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">ElasticConstant</code><span class="sig-paren">(</span><em class="sig-param">ff_settings</em>, <em class="sig-param">potential_type='external'</em>, <em class="sig-param">deformation_size=1e-06</em>, <em class="sig-param">jiggle=1e-05</em>, <em class="sig-param">lattice='bcc'</em>, <em class="sig-param">alat=5.0</em>, <em class="sig-param">atom_type=1</em>, <em class="sig-param">maxiter=400</em>, <em class="sig-param">maxeval=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.ElasticConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator" title="maml.apps.pes.lammps._calcs.LMPStaticCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes.lammps._calcs.LMPStaticCalculator</span></code></a></p>
+<p>Elastic constant calculator.</p>
+<dl class="attribute">
+<dt id="maml.apps.pes.lammps._calcs.ElasticConstant._RESTART_CONFIG">
+<code class="sig-name descname">_RESTART_CONFIG</code><em class="property"> = {'external': {'read_command': 'read_data', 'restart_file': 'data.static', 'write_command': 'write_data'}, 'internal': {'read_command': 'read_restart', 'restart_file': 'restart.equil', 'write_command': 'write_restart'}}</em><a class="headerlink" href="#maml.apps.pes.lammps._calcs.ElasticConstant._RESTART_CONFIG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.ElasticConstant._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.ElasticConstant._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.ElasticConstant._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.ElasticConstant._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.ElasticConstant._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.ElasticConstant._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.ElasticConstant.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.ElasticConstant.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the elastic constant given Potential class.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.apps.pes.lammps._calcs.EnergyForceStress">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">EnergyForceStress</code><span class="sig-paren">(</span><em class="sig-param">ff_settings</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.EnergyForceStress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator" title="maml.apps.pes.lammps._calcs.LMPStaticCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes.lammps._calcs.LMPStaticCalculator</span></code></a></p>
+<p>Calculate energy, forces and virial stress of structures.</p>
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.EnergyForceStress._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.EnergyForceStress._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.EnergyForceStress._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.EnergyForceStress._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.EnergyForceStress._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.EnergyForceStress._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">LMPStaticCalculator</code><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract class to perform static structure property calculation
+using LAMMPS.</p>
+<dl class="attribute">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator.LMP_EXE">
+<code class="sig-name descname">LMP_EXE</code><em class="property"> = None</em><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator.LMP_EXE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator._COMMON_CMDS">
+<code class="sig-name descname">_COMMON_CMDS</code><em class="property"> = ['units metal', 'atom_style charge', 'box tilt large', 'read_data data.static', 'run 0']</em><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator._COMMON_CMDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator._parse">
+<em class="property">abstract </em><code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator._sanity_check">
+<em class="property">abstract </em><code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator._setup">
+<em class="property">abstract </em><code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param">structures</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the calculation on a series of structures.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>structures [Structure]: Input structures in a list.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of computed data corresponding to each structure,
+varies with different subclasses.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes.lammps._calcs.LMPStaticCalculator.lmp_exe">
+<code class="sig-name descname">lmp_exe</code><em class="property"> = 'lmp_serial'</em><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator.lmp_exe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.apps.pes.lammps._calcs.LatticeConstant">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">LatticeConstant</code><span class="sig-paren">(</span><em class="sig-param">ff_settings</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LatticeConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator" title="maml.apps.pes.lammps._calcs.LMPStaticCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes.lammps._calcs.LMPStaticCalculator</span></code></a></p>
+<p>Lattice Constant Relaxation Calculator.</p>
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.LatticeConstant._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LatticeConstant._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.LatticeConstant._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LatticeConstant._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.LatticeConstant._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.LatticeConstant._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.apps.pes.lammps._calcs.NudgedElasticBand">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">NudgedElasticBand</code><span class="sig-paren">(</span><em class="sig-param">ff_settings</em>, <em class="sig-param">specie</em>, <em class="sig-param">lattice</em>, <em class="sig-param">alat</em>, <em class="sig-param">num_replicas=7</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.NudgedElasticBand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator" title="maml.apps.pes.lammps._calcs.LMPStaticCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes.lammps._calcs.LMPStaticCalculator</span></code></a></p>
+<p>NudgedElasticBand migration energy calculator.</p>
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.NudgedElasticBand._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.NudgedElasticBand._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.NudgedElasticBand._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.NudgedElasticBand._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.NudgedElasticBand._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.NudgedElasticBand._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.NudgedElasticBand.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.NudgedElasticBand.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the NEB barrier given Potential class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.NudgedElasticBand.get_unit_cell">
+<code class="sig-name descname">get_unit_cell</code><span class="sig-paren">(</span><em class="sig-param">specie</em>, <em class="sig-param">lattice</em>, <em class="sig-param">alat</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.NudgedElasticBand.get_unit_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unit cell from specie, lattice type and lattice constant.</p>
+<dl class="simple">
+<dt>Args</dt><dd><p>specie (str): Name of specie.
+lattice (str): The lattice type of structure. e.g. bcc or diamond.
+alat (float): The lattice constant of specific lattice and specie.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">SpectralNeighborAnalysis</code><span class="sig-paren">(</span><em class="sig-param">rcut</em>, <em class="sig-param">twojmax</em>, <em class="sig-param">element_profile</em>, <em class="sig-param">quadratic=False</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.apps.pes.lammps._calcs.LMPStaticCalculator" title="maml.apps.pes.lammps._calcs.LMPStaticCalculator"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes.lammps._calcs.LMPStaticCalculator</span></code></a></p>
+<p>Calculator for bispectrum components to characterize the local
+neighborhood of each atom in a general way.</p>
+<dl>
+<dt>Usage:</dt><dd><p>[(b, db, e)] = sna.calculate([Structure])
+b: 2d NumPy array with shape (N, n_bs) containing bispectrum</p>
+<blockquote>
+<div><p>coefficients, where N is the No. of atoms in structure and
+n_bs is the No. of bispectrum components.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>db: 2d NumPy array with shape (N, 3 * n_bs * n_elements)</dt><dd><p>containing the first order derivatives of bispectrum
+coefficients with respect to atomic coordinates,
+where n_elements is the No. of elements in element_profile.</p>
+</dd>
+<dt>e: 2d NumPy array with shape (N, 1) containing the element of</dt><dd><p>each atom.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._CMDS">
+<code class="sig-name descname">_CMDS</code><em class="property"> = ['pair_style lj/cut 10', 'pair_coeff * * 1 1', 'compute sna all sna/atom ', 'compute snad all snad/atom ', 'compute snav all snav/atom ', 'dump 1 all custom 1 dump.element element', 'dump 2 all custom 1 dump.sna c_sna[*]', 'dump 3 all custom 1 dump.snad c_snad[*]', 'dump 4 all custom 1 dump.snav c_snav[*]']</em><a class="headerlink" href="#maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._CMDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis.get_bs_subscripts">
+<em class="property">static </em><code class="sig-name descname">get_bs_subscripts</code><span class="sig-paren">(</span><em class="sig-param">twojmax</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis.get_bs_subscripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to list the subscripts 2j1, 2j2, 2j of bispectrum
+components.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>twojmax (int): Band limit for bispectrum components.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of all subscripts [2j1, 2j2, 2j].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis.n_bs">
+<em class="property">property </em><code class="sig-name descname">n_bs</code><a class="headerlink" href="#maml.apps.pes.lammps._calcs.SpectralNeighborAnalysis.n_bs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns No. of bispectrum components to be calculated.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.apps.pes.lammps._calcs._pretty_input">
+<code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">_pretty_input</code><span class="sig-paren">(</span><em class="sig-param">lines</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs._pretty_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="maml.apps.pes.lammps._calcs._read_dump">
+<code class="sig-prename descclassname">maml.apps.pes.lammps._calcs.</code><code class="sig-name descname">_read_dump</code><span class="sig-paren">(</span><em class="sig-param">file_name</em>, <em class="sig-param">dtype='float_'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.lammps._calcs._read_dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.apps.pes.lammps._calcs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

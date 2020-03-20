@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.apps.pes._nnp module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.apps.pes._nnp">
+<span id="maml-apps-pes-nnp-module"></span><h1>maml.apps.pes._nnp module<a class="headerlink" href="#module-maml.apps.pes._nnp" title="Permalink to this headline">¶</a></h1>
+<p>This module provides NNP interatomic potential class.</p>
+<dl class="class">
+<dt id="maml.apps.pes._nnp.NNPotential">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes._nnp.</code><code class="sig-name descname">NNPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em>, <em class="sig-param">weight_param=None</em>, <em class="sig-param">scaling_param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.apps.pes._base.html#maml.apps.pes._base.Potential" title="maml.apps.pes._base.Potential"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></a></p>
+<p>This class implements Neural Network Potential.</p>
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential._line_up">
+<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">energy</em>, <em class="sig-param">forces</em>, <em class="sig-param">virial_stress</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential._line_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert input structure, energy, forces, virial_stress to
+proper configuration format for n2p2 usage. Note that
+n2p2 takes bohr as length unit and Hartree as energy unit.</p>
+<dl>
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.
+energy (float): DFT-calculated energy of the system.
+forces (list): The forces should have dimension</p>
+<blockquote>
+<div><p>(num_atoms, 3).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>virial_stress (list): stress should has 6 distinct</dt><dd><p>elements arranged in order [xx, yy, zz, xy, yz, xz].</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes._nnp.NNPotential.bohr_to_angstrom">
+<code class="sig-name descname">bohr_to_angstrom</code><em class="property"> = 0.529177210903</em><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.bohr_to_angstrom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes._nnp.NNPotential.eV_to_Ha">
+<code class="sig-name descname">eV_to_Ha</code><em class="property"> = 0.036749322175655</em><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.eV_to_Ha" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_structures</em>, <em class="sig-param">test_energies</em>, <em class="sig-param">test_forces</em>, <em class="sig-param">test_stresses=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate energies, forces and stresses of structures with trained
+interatomic potentials.</p>
+<dl>
+<dt>Args:</dt><dd><p>test_structures ([Structure]): List of Pymatgen Structure Objects.
+test_energies ([float]): List of DFT-calculated total energies of</p>
+<blockquote>
+<div><p>each structure in structures list.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>test_forces ([np.array]): List of DFT-calculated (m, 3) forces of</dt><dd><p>each structure with m atoms in structures list. m can be varied
+with each single structure case.</p>
+</dd>
+<dt>test_stresses (list): List of DFT-calculated (6, ) viriral stresses</dt><dd><p>of each structure in structures list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.from_config">
+<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param">input_filename</em>, <em class="sig-param">scaling_filename</em>, <em class="sig-param">weights_filenames</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.from_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize potentials with parameters file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>input_filename (str): The file storing the input configuration of</dt><dd><p>Neural Network Potential.</p>
+</dd>
+<dt>scaling_filename (str): The file storing scaling info of</dt><dd><p>Neural Network Potential.</p>
+</dd>
+<dt>weights_filenames (list): List of files storing weights of each specie in</dt><dd><p>Neural Network Potential.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.load_input">
+<code class="sig-name descname">load_input</code><span class="sig-paren">(</span><em class="sig-param">filename='input.nn'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.load_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load input file from trained Neural Network Potential.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): The input filename.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.load_scaler">
+<code class="sig-name descname">load_scaler</code><span class="sig-paren">(</span><em class="sig-param">scaling_filename</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.load_scaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load scaling info of trained Neural Network Potential.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>scaling_filename (str): The scaling file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.load_weights">
+<code class="sig-name descname">load_weights</code><span class="sig-paren">(</span><em class="sig-param">weights_filename</em>, <em class="sig-param">specie</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.load_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load weights file of trained Neural Network Potential.</p>
+<dl class="simple">
+<dt>Args</dt><dd><p>weights_filename (str): The weights file.
+specie (str): The name of specie.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes._nnp.NNPotential.pair_coeff">
+<code class="sig-name descname">pair_coeff</code><em class="property"> = 'pair_coeff        * * {}'</em><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.pair_coeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes._nnp.NNPotential.pair_style">
+<code class="sig-name descname">pair_style</code><em class="property"> = 'pair_style        nnp dir &quot;./&quot; showew no showewsum 0 maxew 10000000 resetew yes cflength 1.8897261328 cfenergy 0.0367493254'</em><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.pair_style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.predict_efs">
+<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict energy, forces and stresses of the structure.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>energy, forces, stress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.read_cfgs">
+<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename='output.data'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the configuration file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): The configuration file to be read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_structures</em>, <em class="sig-param">train_energies</em>, <em class="sig-param">train_forces</em>, <em class="sig-param">train_stresses=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Training data with moment tensor method.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>train_structures ([Structure]): The list of Pymatgen Structure object.</dt><dd><p>energies ([float]): The list of total energies of each structure
+in structures list.</p>
+</dd>
+<dt>train_energies ([float]): List of total energies of each structure in</dt><dd><p>structures list.</p>
+</dd>
+<dt>train_forces ([np.array]): List of (m, 3) forces array of each structure</dt><dd><p>with m atoms in structures list. m can be varied with each
+single structure case.</p>
+</dd>
+<dt>train_stresses (list): List of (6, ) virial stresses of each</dt><dd><p>structure in structures list.</p>
+</dd>
+</dl>
+<p>kwargs: Parameters in write_input method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.write_cfgs">
+<code class="sig-name descname">write_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">cfg_pool</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.write_cfgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the formatted configuration file.</p>
+<dl>
+<dt>Args:</dt><dd><p>filename (str): The filename to be written.
+cfg_pool (list): The configuration pool contains</p>
+<blockquote>
+<div><p>structure and energy/forces properties.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.write_input">
+<code class="sig-name descname">write_input</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.write_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write input.nn file to train the Neural Network Potential.</p>
+<dl>
+<dt>Args:</dt><dd><p>atom_energy (float): Atomic reference energy.</p>
+<dl>
+<dt>kwargs:</dt><dd><dl>
+<dt>General nnp settings:</dt><dd><p>atom_energy (dict): Free atom reference energy for each specie.
+cutoff_type (int): Type of cutoff function. Default to 1</p>
+<blockquote>
+<div><p>(i.e., cosine function).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>scale_features (int): Determine the method to scale the</dt><dd><p>symmetry function.
+0: no scaling.
+1: scale_symmetry_functions.
+2: center_symmetry_functions.
+3. scale_symmetry_functions_sigma.</p>
+</dd>
+<dt>scale_min_short (float): Minimum value for scaling.</dt><dd><p>Default to 0.0.</p>
+</dd>
+<dt>scale_max_short (float): Maximum value for scaling.</dt><dd><p>Default to 1.</p>
+</dd>
+<dt>hidden_layers (list): List of the numbers of</dt><dd><p>nodes in each hidden layer.</p>
+</dd>
+<dt>activations (str): Activation function for each hidden layer.</dt><dd><p>‘t’: tanh, ‘s’: logistic, ‘p’: softplus.</p>
+</dd>
+</dl>
+<p>normalize_nodes (boolean): Whether to normalize input of nodes.</p>
+</dd>
+<dt>Additional settings for training:</dt><dd><p>epoch (int): Number of training epochs.
+updater_type (int): Weight update method</p>
+<blockquote>
+<div><p>0: gradient Descent, 1: Kalman filter.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>parallel_mode (int): Training parallelization used.</dt><dd><p>Default to serial mode.</p>
+</dd>
+<dt>jacobian_mode (int): Jacobian computation mode.</dt><dd><p>0: Summation to single gradient,
+1: Per-task summed gradient,
+2: Full Jacobian.</p>
+</dd>
+<dt>update_strategy (int): Update strategy.</dt><dd><p>0: combined, 1: per-element.</p>
+</dd>
+<dt>selection_mode (int): Update candidate selection mode.</dt><dd><p>0: random, 1: sort, 2: threshold</p>
+</dd>
+<dt>task_batch_size_energy (int): Number of energy update</dt><dd><p>candidates prepared per task for each update.</p>
+</dd>
+<dt>task_batch_size_force (int): Number of force update</dt><dd><p>candidates prepared per task for each update.</p>
+</dd>
+<dt>test_fraction (float): Fraction of structures kept for</dt><dd><p>testing.</p>
+</dd>
+<dt>force_weight (float): Weight of force updates relative</dt><dd><p>to energy updates. Default to 10.0</p>
+</dd>
+<dt>short_energy_fraction (float): Fraction of energy updates</dt><dd><p>per epoch. Default to 1.0.</p>
+</dd>
+<dt>short_force_fraction (float): Fraction of force updates</dt><dd><p>per epoch. Default to 0.02315.</p>
+</dd>
+<dt>short_energy_error_threshold (float): RMSE threshold for</dt><dd><p>energy update candidates. Default to 0.0.</p>
+</dd>
+<dt>short_force_error_threshold (float): RMSE threshold for</dt><dd><p>force update candidates. Default to 1.0.</p>
+</dd>
+<dt>rmse_threshold_trials (int): Maximum number of RMSE</dt><dd><p>threshold trials. Default to 3.</p>
+</dd>
+<dt>weights_min (float): Minimum value for initial random</dt><dd><p>weights. Default to -1.</p>
+</dd>
+<dt>weights_max (float): Maximum value for initial random</dt><dd><p>weights. Default to 1.</p>
+</dd>
+<dt>write_trainpoints (int): Write energy comparison every</dt><dd><p>this many epochs. Default to 1.</p>
+</dd>
+<dt>write_trainforces (int): Write force comparison every</dt><dd><p>this many epochs. Default to 1.</p>
+</dd>
+<dt>write_weights_epoch (int): Write weights every this many</dt><dd><p>epochs. Default to 1.</p>
+</dd>
+<dt>write_neuronstats (int): Write neuron statistics every</dt><dd><p>this many epochs. Default to 1.</p>
+</dd>
+</dl>
+<p># Kalman Filter
+kalman_type (int): Kalman filter type. Default to 0.
+kalman_epsilon (float): General Kalman filter parameter</p>
+<blockquote>
+<div><p>epsilon. Default to 0.01.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>kalman_q0 (float): General Kalman filter parameter q0.</dt><dd><p>Default to 0.01.</p>
+</dd>
+<dt>kalman_qtau (float): General Kalman filter parameter</dt><dd><p>qtau. Default to 2.302.</p>
+</dd>
+<dt>kalman_qmin (float): General Kalman filter parameter qmin.</dt><dd><p>Default to 1e-6.</p>
+</dd>
+<dt>kalman_eta (float): Standard Kalman filter parameter eta.</dt><dd><p>Default to 0.01.</p>
+</dd>
+<dt>kalman_etatau (float): Standard Kalman filter parameter</dt><dd><p>etatau. Defaul to 2.302.</p>
+</dd>
+<dt>kalman_etamax (float): Standard Kalman filter parameter</dt><dd><p>etamax. Default to 1.0.</p>
+</dd>
+</dl>
+</dd>
+<dt>Symmetry functions:</dt><dd><p>r_cut (float): Cutoff distance (unit: Å).
+r_etas (numpy.array): η in radial function.
+r_shift (numpy.array): Rs in radial function.
+a_etas (numpy.array): η in angular function.
+zetas (numpy.array): ζ in angular function.
+lambdas (numpy.array): λ in angular function. Default to (1, -1).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._nnp.NNPotential.write_param">
+<code class="sig-name descname">write_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._nnp.NNPotential.write_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write optimized weights file to perform energy and force prediction.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.apps.pes._nnp.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

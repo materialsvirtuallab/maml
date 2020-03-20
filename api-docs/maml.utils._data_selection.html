@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.utils._data_selection module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.utils._data_selection">
+<span id="maml-utils-data-selection-module"></span><h1>maml.utils._data_selection module<a class="headerlink" href="#module-maml.utils._data_selection" title="Permalink to this headline">¶</a></h1>
+<p>Data selection methods. Select a subset of data using certain criteria.</p>
+<dl class="class">
+<dt id="maml.utils._data_selection.MonteCarloSampler">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils._data_selection.</code><code class="sig-name descname">MonteCarloSampler</code><span class="sig-paren">(</span><em class="sig-param">datasets</em>, <em class="sig-param">num_samples</em>, <em class="sig-param">cost_function</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_selection.MonteCarloSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sample a subset from the dataset to achieve some criteria using simulated annealing.
+For example, one needs to subset the data so that a fraction
+of the data can already cover a large feature space,
+i.e., maximizing the distances.</p>
+<dl class="method">
+<dt id="maml.utils._data_selection.MonteCarloSampler._get_remain_index">
+<code class="sig-name descname">_get_remain_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_selection.MonteCarloSampler._get_remain_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get indices for unselected data</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list of indices for unselected data entry</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.utils._data_selection.MonteCarloSampler.compute_cost">
+<code class="sig-name descname">compute_cost</code><span class="sig-paren">(</span><em class="sig-param">data_subset</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_selection.MonteCarloSampler.compute_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the cost of data subsets.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data_subset (numpy.array): Data subset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.utils._data_selection.MonteCarloSampler.decision">
+<code class="sig-name descname">decision</code><span class="sig-paren">(</span><em class="sig-param">d_cost</em>, <em class="sig-param">temperature</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_selection.MonteCarloSampler.decision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decision on accepting the data swap.
+Args:</p>
+<blockquote>
+<div><p>d_cost (float): Difference between cost in proposed move.
+temperature (float): Temperature.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.utils._data_selection.MonteCarloSampler.sample">
+<code class="sig-name descname">sample</code><span class="sig-paren">(</span><em class="sig-param">num_attempts</em>, <em class="sig-param">t_init</em>, <em class="sig-param">t_final</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_selection.MonteCarloSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Metropolis sampler. For every sampling attempt, one data entry is
+swapped with the data reservior. Then the energy difference is evaluated.
+If dE &lt; 0, the swapping is accepted. If dE &gt; 0, then it is accepted with
+probability exp(-dE / T), where T is some artificial temperature. We can
+start with a relatively large T, and then reduce it with sampling process
+going on.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>num_attempts (int): Number of sampling attempts.
+t_init (float): Initial temperature.
+t_final (float): Final temperature.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.utils._data_selection.MonteCarloSampler.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">index_remain</em>, <em class="sig-param">temperature</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._data_selection.MonteCarloSampler.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement the data swap, if it is accepted.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>index (int): The index of selected feature matrix</dt><dd><p>used for swapping.</p>
+</dd>
+<dt>index_remain (int): The index of remaining feature matrix</dt><dd><p>used for swapping.</p>
+</dd>
+</dl>
+<p>temperature (float): Artificial temperature.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.utils._data_selection.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.describer._structure module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.describer._structure">
+<span id="maml-describer-structure-module"></span><h1>maml.describer._structure module<a class="headerlink" href="#module-maml.describer._structure" title="Permalink to this headline">¶</a></h1>
+<p>Structure-wise describers. These describers include structural information.</p>
+<dl class="class">
+<dt id="maml.describer._structure.CoulombMatrix">
+<em class="property">class </em><code class="sig-prename descclassname">maml.describer._structure.</code><code class="sig-name descname">CoulombMatrix</code><span class="sig-paren">(</span><em class="sig-param">random_seed: int = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer._structure.CoulombMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<p>Coulomb Matrix to decribe structure</p>
+<dl class="attribute">
+<dt id="maml.describer._structure.CoulombMatrix._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describer._structure.CoulombMatrix._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.CoulombMatrix.get_citations">
+<code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#maml.describer._structure.CoulombMatrix.get_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Citations for CoulombMatrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.CoulombMatrix.get_coulomb_mat">
+<code class="sig-name descname">get_coulomb_mat</code><span class="sig-paren">(</span><em class="sig-param">s: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.describer._structure.CoulombMatrix.get_coulomb_mat" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>s (pymatgen Structure): input structure</p>
+</dd>
+<dt>Returns:</dt><dd><p>np.ndarray Coulomb matrix of the structure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.CoulombMatrix.transform_one">
+<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param">s: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._structure.CoulombMatrix.transform_one" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>s (Structure): input structure</p>
+</dd>
+<dt>Returns:</dt><dd><p>pandas.DataFrame.
+The column is index of the structure, which is 0 for single input
+df[0] returns the serials of coulomb_mat raval</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.describer._structure.DistinctSiteProperty">
+<em class="property">class </em><code class="sig-prename descclassname">maml.describer._structure.</code><code class="sig-name descname">DistinctSiteProperty</code><span class="sig-paren">(</span><em class="sig-param">wyckoffs: List[str], properties: List[str], symprec: float = 0.1, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer._structure.DistinctSiteProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<p>Constructs a describer based on properties of distinct sites in a
+structure. For now, this assumes that there is only one type of species in
+a particular Wyckoff site.</p>
+<dl class="attribute">
+<dt id="maml.describer._structure.DistinctSiteProperty._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describer._structure.DistinctSiteProperty._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.DistinctSiteProperty.get_citations">
+<code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#maml.describer._structure.DistinctSiteProperty.get_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get distinct site property citations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.DistinctSiteProperty.transform_one">
+<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param">structure: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._structure.DistinctSiteProperty.transform_one" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>structure (pymatgen Structure): pymatgen structure for descriptor computation</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame that contains the distinct position labeled features</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.describer._structure.RandomizedCoulombMatrix">
+<em class="property">class </em><code class="sig-prename descclassname">maml.describer._structure.</code><code class="sig-name descname">RandomizedCoulombMatrix</code><span class="sig-paren">(</span><em class="sig-param">random_seed: int = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer._structure.RandomizedCoulombMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.describer._structure.CoulombMatrix" title="maml.describer._structure.CoulombMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.describer._structure.CoulombMatrix</span></code></a></p>
+<p>Randomized CoulombMatrix</p>
+<dl class="attribute">
+<dt id="maml.describer._structure.RandomizedCoulombMatrix._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describer._structure.RandomizedCoulombMatrix._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.RandomizedCoulombMatrix.get_citations">
+<code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#maml.describer._structure.RandomizedCoulombMatrix.get_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>citation for randomized coulomb matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.RandomizedCoulombMatrix.get_randomized_coulomb_mat">
+<code class="sig-name descname">get_randomized_coulomb_mat</code><span class="sig-paren">(</span><em class="sig-param">s: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._structure.RandomizedCoulombMatrix.get_randomized_coulomb_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the randomized matrix
+(i) take an arbitrary valid Coulomb matrix C
+(ii) compute the norm of each row of this Coulomb matrix: row_norms
+(iii) draw a zero-mean unit-variance noise vector ε of the same</p>
+<blockquote>
+<div><p>size as row_norms.</p>
+</div></blockquote>
+<ol class="lowerroman simple" start="4">
+<li><p>permute the rows and columns of C with the same permutation</p></li>
+</ol>
+<blockquote>
+<div><p>that sorts row_norms + ε</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Args:</dt><dd><p>s (pymatgen Structure): pymatgen Structure for computing the randomized Coulomb matrix</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame randomized Coulomb matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.RandomizedCoulombMatrix.transform_one">
+<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param">s: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._structure.RandomizedCoulombMatrix.transform_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform one structure to descriptors
+Args:</p>
+<blockquote>
+<div><p>s (Structure): pymatgen structure</p>
+</div></blockquote>
+<p>Returns: pandas dataframe descriptors</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.describer._structure.SortedCoulombMatrix">
+<em class="property">class </em><code class="sig-prename descclassname">maml.describer._structure.</code><code class="sig-name descname">SortedCoulombMatrix</code><span class="sig-paren">(</span><em class="sig-param">random_seed: int = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer._structure.SortedCoulombMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.describer._structure.CoulombMatrix" title="maml.describer._structure.CoulombMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.describer._structure.CoulombMatrix</span></code></a></p>
+<p>Sorted CoulombMatrix</p>
+<dl class="attribute">
+<dt id="maml.describer._structure.SortedCoulombMatrix._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describer._structure.SortedCoulombMatrix._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.SortedCoulombMatrix.get_citations">
+<code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#maml.describer._structure.SortedCoulombMatrix.get_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorted Coulomb matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.SortedCoulombMatrix.get_sorted_coulomb_mat">
+<code class="sig-name descname">get_sorted_coulomb_mat</code><span class="sig-paren">(</span><em class="sig-param">s: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._structure.SortedCoulombMatrix.get_sorted_coulomb_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the matrix sorted by the row norm</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>s (pymatgen Structure): pymatgen Structure for computing the Coulomb matrix</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame, sorted Coulomb matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._structure.SortedCoulombMatrix.transform_one">
+<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param">s: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._structure.SortedCoulombMatrix.transform_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform one structure into descriptor
+Args:</p>
+<blockquote>
+<div><p>s (Structure): pymatgen Structure</p>
+</div></blockquote>
+<p>Returns: pd.DataFrame descriptors</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.describer._structure.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

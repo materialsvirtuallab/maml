@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.base._model module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.base._model">
+<span id="maml-base-model-module"></span><h1>maml.base._model module<a class="headerlink" href="#module-maml.base._model" title="Permalink to this headline">¶</a></h1>
+<p>MAML model base classes</p>
+<dl class="class">
+<dt id="maml.base._model.BaseModel">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base._model.</code><code class="sig-name descname">BaseModel</code><span class="sig-paren">(</span><em class="sig-param">model: Any = None</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract Base class for a Model. Basically, it usually wraps around a deep
+learning package, e.g., the Sequential Model in Keras, but provides for
+transparent conversion of arbitrary input and outputs.</p>
+<dl class="method">
+<dt id="maml.base._model.BaseModel._predict">
+<code class="sig-name descname">_predict</code><span class="sig-paren">(</span><em class="sig-param">features: numpy.ndarray</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base._model.BaseModel._predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the values given a set of inputs based on fitted model.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>features (np.ndarray): array-like input features.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of output objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.base._model.BaseModel.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">features: Union[List, numpy.ndarray], targets: Union[List, numpy.ndarray] = None, **kwargs</em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base._model.BaseModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>features (list or np.ndarray): Numerical input feature list or</dt><dd><p>numpy array with dim (m, n) where m is the number of data and
+n is the feature dimension.</p>
+</dd>
+<dt>targets (list or np.ndarray): Numerical output target list, or</dt><dd><p>numpy array with dim (m, ).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.base._model.BaseModel.predict_objs">
+<code class="sig-name descname">predict_objs</code><span class="sig-paren">(</span><em class="sig-param">objs: Union[List, numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base._model.BaseModel.predict_objs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Predict the values given a set of objects. Usually Pymatgen</dt><dd><p>Structure objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.base._model.BaseModel.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">objs: Union[List, numpy.ndarray], targets: Union[List, numpy.ndarray], **kwargs</em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base._model.BaseModel.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the model from object, target pairs</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>objs (list of objects): List of objects
+targets (list): list of float or np.ndarray
+<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs:</p>
+</dd>
+</dl>
+<p>Returns: self</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.base._model.KerasMixin">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base._model.</code><code class="sig-name descname">KerasMixin</code><a class="headerlink" href="#maml.base._model.KerasMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>keras model mixin with save and load functionality</p>
+<dl class="method">
+<dt id="maml.base._model.KerasMixin.from_file">
+<em class="property">classmethod </em><code class="sig-name descname">from_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.KerasMixin.from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the model from file
+Args:</p>
+<blockquote>
+<div><p>filename (str): filename
+<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs:</p>
+</div></blockquote>
+<p>Returns: object instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.base._model.KerasMixin.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.KerasMixin.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model parameters from filename
+Args:</p>
+<blockquote>
+<div><p>filename (str): model file name</p>
+</div></blockquote>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.base._model.KerasMixin.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.KerasMixin.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the model and describer</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><p>filename (str): filename for save</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.base._model.ModelWithKeras">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base._model.</code><code class="sig-name descname">ModelWithKeras</code><span class="sig-paren">(</span><em class="sig-param">model: Any</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.ModelWithKeras" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.base._model.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a>, <a class="reference internal" href="#maml.base._model.KerasMixin" title="maml.base._model.KerasMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></a></p>
+<p>MAML model with keras model as estimators</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.base._model.ModelWithSklearn">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base._model.</code><code class="sig-name descname">ModelWithSklearn</code><span class="sig-paren">(</span><em class="sig-param">model: Any</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.ModelWithSklearn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.base._model.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a>, <a class="reference internal" href="#maml.base._model.SklearnMixin" title="maml.base._model.SklearnMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></a></p>
+<p>MAML model with sklearn model as estimator</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.base._model.SklearnMixin">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base._model.</code><code class="sig-name descname">SklearnMixin</code><a class="headerlink" href="#maml.base._model.SklearnMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sklearn model save and load functionality</p>
+<dl class="method">
+<dt id="maml.base._model.SklearnMixin.from_file">
+<em class="property">classmethod </em><code class="sig-name descname">from_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.SklearnMixin.from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the model from file
+Args:</p>
+<blockquote>
+<div><p>filename (str): filename
+<a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs:</p>
+</div></blockquote>
+<p>Returns: object instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.base._model.SklearnMixin.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.SklearnMixin.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model parameters from filename
+Args:</p>
+<blockquote>
+<div><p>filename (str): model file name</p>
+</div></blockquote>
+<p>Returns: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.base._model.SklearnMixin.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base._model.SklearnMixin.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the model and describer</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><p>filename (str): filename for save</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.base._model.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

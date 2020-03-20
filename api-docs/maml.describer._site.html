@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.describer._site module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.describer._site">
+<span id="maml-describer-site-module"></span><h1>maml.describer._site module<a class="headerlink" href="#module-maml.describer._site" title="Permalink to this headline">¶</a></h1>
+<p>This module provides local environment describers.</p>
+<dl class="class">
+<dt id="maml.describer._site.BPSymmetryFunctions">
+<em class="property">class </em><code class="sig-prename descclassname">maml.describer._site.</code><code class="sig-name descname">BPSymmetryFunctions</code><span class="sig-paren">(</span><em class="sig-param">cutoff: float</em>, <em class="sig-param">r_etas: numpy.ndarray</em>, <em class="sig-param">r_shift: numpy.ndarray</em>, <em class="sig-param">a_etas: numpy.ndarray</em>, <em class="sig-param">zetas: numpy.ndarray</em>, <em class="sig-param">lambdas: numpy.ndarray</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer._site.BPSymmetryFunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<p>Behler-Parrinello symmetry function to describe the local environment
+of each atom.</p>
+<dl class="attribute">
+<dt id="maml.describer._site.BPSymmetryFunctions._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describer._site.BPSymmetryFunctions._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.BPSymmetryFunctions._fc">
+<code class="sig-name descname">_fc</code><span class="sig-paren">(</span><em class="sig-param">r: float</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.describer._site.BPSymmetryFunctions._fc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cutoff function to decay the symmetry functions at vicinity of radial cutoff.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>r (float): The pair distance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.BPSymmetryFunctions.get_citations">
+<code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#maml.describer._site.BPSymmetryFunctions.get_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get symmetry function citations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.BPSymmetryFunctions.transform_one">
+<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param">structure: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._site.BPSymmetryFunctions.transform_one" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.describer._site.BispectrumCoefficients">
+<em class="property">class </em><code class="sig-prename descclassname">maml.describer._site.</code><code class="sig-name descname">BispectrumCoefficients</code><span class="sig-paren">(</span><em class="sig-param">cutoff: float</em>, <em class="sig-param">twojmax: int</em>, <em class="sig-param">element_profile: Dict</em>, <em class="sig-param">quadratic: bool = False</em>, <em class="sig-param">pot_fit: bool = False</em>, <em class="sig-param">include_stress: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer._site.BispectrumCoefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<p>Bispectrum coefficients to describe the local environment of each atom.
+Lammps is required to perform this computation.</p>
+<dl class="attribute">
+<dt id="maml.describer._site.BispectrumCoefficients._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describer._site.BispectrumCoefficients._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.BispectrumCoefficients.get_citations">
+<code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#maml.describer._site.BispectrumCoefficients.get_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bispectrum coefficient citations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.BispectrumCoefficients.subscripts">
+<em class="property">property </em><code class="sig-name descname">subscripts</code><a class="headerlink" href="#maml.describer._site.BispectrumCoefficients.subscripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The subscripts (2j1, 2j2, 2j) of all bispectrum components
+involved.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.BispectrumCoefficients.transform_one">
+<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param">structure: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._site.BispectrumCoefficients.transform_one" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.describer._site.SmoothOverlapAtomicPosition">
+<em class="property">class </em><code class="sig-prename descclassname">maml.describer._site.</code><code class="sig-name descname">SmoothOverlapAtomicPosition</code><span class="sig-paren">(</span><em class="sig-param">cutoff: float</em>, <em class="sig-param">l_max: int = 8</em>, <em class="sig-param">n_max: int = 8</em>, <em class="sig-param">atom_sigma: float = 0.5</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describer._site.SmoothOverlapAtomicPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.base._describer.html#maml.base._describer.OutDataFrameConcat" title="maml.base._describer.OutDataFrameConcat"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.OutDataFrameConcat</span></code></a>, <a class="reference internal" href="maml.base._describer.html#maml.base._describer.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
+<p>Smooth overlap of atomic positions (SOAP) to describe the local environment
+of each atom.</p>
+<dl class="attribute">
+<dt id="maml.describer._site.SmoothOverlapAtomicPosition._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describer._site.SmoothOverlapAtomicPosition._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.SmoothOverlapAtomicPosition.get_citations">
+<code class="sig-name descname">get_citations</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#maml.describer._site.SmoothOverlapAtomicPosition.get_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get SOAP citations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.describer._site.SmoothOverlapAtomicPosition.transform_one">
+<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param">structure: pymatgen.core.structure.Structure</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.describer._site.SmoothOverlapAtomicPosition.transform_one" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.describer._site.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
