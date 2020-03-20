@@ -64,8 +64,8 @@ def make_doc(ctx):
 
     # ctx.run("cp _static/* ../docs/html/_static", warn=True)
 
-    with cd("api-docs"):
-        ctx.run("rm -r doctrees", warn=True)
+    with cd("docs"):
+        ctx.run("rm -r .doctrees", warn=True)
 
         # This makes sure maml.org works to redirect to the Github page
         # ctx.run("echo \"maml.org\" > CNAME")
