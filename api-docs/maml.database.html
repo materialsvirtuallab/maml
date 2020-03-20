@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.database package &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="maml.database._data_classes module" href="maml.database._data_classes.html" />
+    <link rel="prev" title="maml.data._url module" href="maml.data._url.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="maml-database-package">
+<h1>maml.database package<a class="headerlink" href="#maml-database-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maml.database._data_classes.html">maml.database._data_classes module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.database.db.html">maml.database.db module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-maml.database">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.database" title="Permalink to this headline">¶</a></h2>
+<p>Database functionalities</p>
+<dl class="class">
+<dt id="maml.database.DataInfo">
+<em class="property">class </em><code class="sig-prename descclassname">maml.database.</code><code class="sig-name descname">DataInfo</code><span class="sig-paren">(</span><em class="sig-param">data_name: str</em>, <em class="sig-param">input_type: str</em>, <em class="sig-param">target_unit: str</em>, <em class="sig-param">target_type: str = 'intensive'</em>, <em class="sig-param">task_type: str = 'regression'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.database.DataInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>data contained in a data_info doc</p>
+<dl class="attribute">
+<dt id="maml.database.DataInfo.data_name">
+<code class="sig-name descname">data_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataInfo.data_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataInfo.input_type">
+<code class="sig-name descname">input_type</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataInfo.input_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataInfo.target_type">
+<code class="sig-name descname">target_type</code><em class="property">: str</em><em class="property"> = 'intensive'</em><a class="headerlink" href="#maml.database.DataInfo.target_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataInfo.target_unit">
+<code class="sig-name descname">target_unit</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataInfo.target_unit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataInfo.task_type">
+<code class="sig-name descname">task_type</code><em class="property">: str</em><em class="property"> = 'regression'</em><a class="headerlink" href="#maml.database.DataInfo.task_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.database.DataSplit">
+<em class="property">class </em><code class="sig-prename descclassname">maml.database.</code><code class="sig-name descname">DataSplit</code><span class="sig-paren">(</span><em class="sig-param">data_name: str</em>, <em class="sig-param">split_name: str</em>, <em class="sig-param">unique_id: str</em>, <em class="sig-param">train_ids: List</em>, <em class="sig-param">val_id: List</em>, <em class="sig-param">test_id: List</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.database.DataSplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>data contained in a data_split doc</p>
+<dl class="attribute">
+<dt id="maml.database.DataSplit.data_name">
+<code class="sig-name descname">data_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataSplit.data_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataSplit.split_name">
+<code class="sig-name descname">split_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataSplit.split_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataSplit.test_id">
+<code class="sig-name descname">test_id</code><em class="property">: List</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataSplit.test_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataSplit.train_ids">
+<code class="sig-name descname">train_ids</code><em class="property">: List</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataSplit.train_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataSplit.unique_id">
+<code class="sig-name descname">unique_id</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataSplit.unique_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DataSplit.val_id">
+<code class="sig-name descname">val_id</code><em class="property">: List</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DataSplit.val_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.database.MaterialData">
+<em class="property">class </em><code class="sig-prename descclassname">maml.database.</code><code class="sig-name descname">MaterialData</code><span class="sig-paren">(</span><em class="sig-param">data_name: str, input: Any, target: Any, id: Union[str, int]</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.database.MaterialData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The data class that stores one document of material data.
+required properties include data_name. Extra necessary fields
+will include the input, target and id. For example
+for</p>
+<dl class="attribute">
+<dt id="maml.database.MaterialData.data_name">
+<code class="sig-name descname">data_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.MaterialData.data_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.MaterialData.id">
+<code class="sig-name descname">id</code><em class="property">: Union[str, int]</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.MaterialData.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.MaterialData.input">
+<code class="sig-name descname">input</code><em class="property">: Any</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.MaterialData.input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.MaterialData.target">
+<code class="sig-name descname">target</code><em class="property">: Any</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.MaterialData.target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.database.DescriberData">
+<em class="property">class </em><code class="sig-prename descclassname">maml.database.</code><code class="sig-name descname">DescriberData</code><span class="sig-paren">(</span><em class="sig-param">describer_name: str</em>, <em class="sig-param">describer_params: Dict</em>, <em class="sig-param">state: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.database.DescriberData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The describer data</p>
+<dl class="attribute">
+<dt id="maml.database.DescriberData.describer_name">
+<code class="sig-name descname">describer_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DescriberData.describer_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DescriberData.describer_params">
+<code class="sig-name descname">describer_params</code><em class="property">: Dict</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DescriberData.describer_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.DescriberData.state">
+<code class="sig-name descname">state</code><em class="property">: Any</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.DescriberData.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.database.LearningModelData">
+<em class="property">class </em><code class="sig-prename descclassname">maml.database.</code><code class="sig-name descname">LearningModelData</code><span class="sig-paren">(</span><em class="sig-param">learning_model_name: str</em>, <em class="sig-param">model_type: str</em>, <em class="sig-param">model_params: Dict</em>, <em class="sig-param">state: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.database.LearningModelData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>learning model information, will be stored in a dict</p>
+<dl class="attribute">
+<dt id="maml.database.LearningModelData.learning_model_name">
+<code class="sig-name descname">learning_model_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.LearningModelData.learning_model_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.LearningModelData.model_params">
+<code class="sig-name descname">model_params</code><em class="property">: Dict</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.LearningModelData.model_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.LearningModelData.model_type">
+<code class="sig-name descname">model_type</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.LearningModelData.model_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.LearningModelData.state">
+<code class="sig-name descname">state</code><em class="property">: Any</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.LearningModelData.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.database.ModelData">
+<em class="property">class </em><code class="sig-prename descclassname">maml.database.</code><code class="sig-name descname">ModelData</code><span class="sig-paren">(</span><em class="sig-param">model_name: str</em>, <em class="sig-param">describer: maml.database._data_classes.DescriberData</em>, <em class="sig-param">model: maml.database._data_classes.LearningModelData</em>, <em class="sig-param">descriptor_name: Optional[str] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.database.ModelData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The model information. ModelData will contain
+DescriberData and LearningModelData</p>
+<dl class="attribute">
+<dt id="maml.database.ModelData.describer">
+<code class="sig-name descname">describer</code><em class="property">: DescriberData</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelData.describer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelData.descriptor_name">
+<code class="sig-name descname">descriptor_name</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelData.descriptor_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelData.model">
+<code class="sig-name descname">model</code><em class="property">: LearningModelData</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelData.model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelData.model_name">
+<code class="sig-name descname">model_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelData.model_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.database.ModelResults">
+<em class="property">class </em><code class="sig-prename descclassname">maml.database.</code><code class="sig-name descname">ModelResults</code><span class="sig-paren">(</span><em class="sig-param">model_name: str</em>, <em class="sig-param">metric_name: str</em>, <em class="sig-param">test_data_name: str</em>, <em class="sig-param">test_split_name: str</em>, <em class="sig-param">metric_value: float</em>, <em class="sig-param">predicted_tests: List</em>, <em class="sig-param">true_tests: List</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.database.ModelResults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Used to save model results</p>
+<dl class="attribute">
+<dt id="maml.database.ModelResults.metric_name">
+<code class="sig-name descname">metric_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelResults.metric_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelResults.metric_value">
+<code class="sig-name descname">metric_value</code><em class="property">: float</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelResults.metric_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelResults.model_name">
+<code class="sig-name descname">model_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelResults.model_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelResults.predicted_tests">
+<code class="sig-name descname">predicted_tests</code><em class="property">: List</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelResults.predicted_tests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelResults.test_data_name">
+<code class="sig-name descname">test_data_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelResults.test_data_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelResults.test_split_name">
+<code class="sig-name descname">test_split_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelResults.test_split_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.database.ModelResults.true_tests">
+<code class="sig-name descname">true_tests</code><em class="property">: List</em><em class="property"> = None</em><a class="headerlink" href="#maml.database.ModelResults.true_tests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maml.apps.html">maml.apps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.base.html">maml.base package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.data.html">maml.data package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">maml.database package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maml.database._data_classes.html">maml.database._data_classes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maml.database.db.html">maml.database.db module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-maml.database">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maml.describer.html">maml.describer package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.model.html">maml.model package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.utils.html">maml.utils package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="maml.data._url.html" title="previous chapter">maml.data._url module</a></li>
+      <li>Next: <a href="maml.database._data_classes.html" title="next chapter">maml.database._data_classes module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.database.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

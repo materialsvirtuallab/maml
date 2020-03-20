@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.apps.pes._gap module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="maml.apps.pes._mtp module" href="maml.apps.pes._mtp.html" />
+    <link rel="prev" title="maml.apps.pes._base module" href="maml.apps.pes._base.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.apps.pes._gap">
+<span id="maml-apps-pes-gap-module"></span><h1>maml.apps.pes._gap module<a class="headerlink" href="#module-maml.apps.pes._gap" title="Permalink to this headline">¶</a></h1>
+<p>This module provides SOAP-GAP interatomic potential class.</p>
+<dl class="class">
+<dt id="maml.apps.pes._gap.GAPotential">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes._gap.</code><code class="sig-name descname">GAPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.apps.pes._base.html#maml.apps.pes._base.Potential" title="maml.apps.pes._base.Potential"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></a></p>
+<p>This class implements Smooth Overlap of Atomic Position potentials.</p>
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential._line_up">
+<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">energy</em>, <em class="sig-param">forces</em>, <em class="sig-param">virial_stress</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential._line_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert input structure, energy, forces, virial_stress to
+proper configuration format for MLIP usage.</p>
+<dl>
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.
+energy (float): DFT-calculated energy of the system.
+forces (list): The forces should have dimension</p>
+<blockquote>
+<div><p>(num_atoms, 3).</p>
+</div></blockquote>
+<dl class="simple">
+<dt>virial_stress (list): stress should has 6 distinct</dt><dd><p>elements arranged in order [xx, yy, zz, xy, yz, xz].</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_structures</em>, <em class="sig-param">test_energies</em>, <em class="sig-param">test_forces</em>, <em class="sig-param">test_stresses=None</em>, <em class="sig-param">predict_energies=True</em>, <em class="sig-param">predict_forces=True</em>, <em class="sig-param">predict_stress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate energies, forces and stresses of structures with trained
+interatomic potentials.</p>
+<dl>
+<dt>Args:</dt><dd><p>test_structures ([Structure]): List of Pymatgen Structure Objects.
+test_energies ([float]): List of DFT-calculated total energies of</p>
+<blockquote>
+<div><p>each structure in structures list.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>test_forces ([np.array]): List of DFT-calculated (m, 3) forces of</dt><dd><p>each structure with m atoms in structures list. m can be varied
+with each single structure case.</p>
+</dd>
+<dt>test_stresses (list): List of DFT-calculated (6, ) viriral stresses</dt><dd><p>of each structure in structures list.</p>
+</dd>
+</dl>
+<p>predict_energies (bool): Whether to predict energies of configurations.
+predict_forces (bool): Whether to predict forces of configurations.
+predict_stress (bool): Whether to predict virial stress of</p>
+<blockquote>
+<div><p>configurations.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.from_config">
+<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.from_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize potentials with parameters file.</p>
+<dl class="simple">
+<dt>ARgs:</dt><dd><p>filename (str): The file storing parameters of potentials.</p>
+</dd>
+<dt>Returns:</dt><dd><p>GAPotential.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes._gap.GAPotential.pair_coeff">
+<code class="sig-name descname">pair_coeff</code><em class="property"> = 'pair_coeff        * * {} {} {}'</em><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.pair_coeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="maml.apps.pes._gap.GAPotential.pair_style">
+<code class="sig-name descname">pair_style</code><em class="property"> = 'pair_style        quip'</em><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.pair_style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.predict_efs">
+<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict energy, forces and stresses of the structure.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>energy, forces, stress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.read_cfgs">
+<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">predict=False</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the configuration file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): The configuration file to be read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">filename='param.yaml'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save parameters of the potentials.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): The file to store parameters of potentials.</p>
+</dd>
+<dt>Returns:</dt><dd><p>(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_structures, train_energies, train_forces, train_stresses=None, default_sigma=[0.0005, 0.1, 0.05, 0.01], use_energies=True, use_forces=True, use_stress=False, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Training data with gaussian process regression.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>train_structures ([Structure]): The list of Pymatgen Structure object.</dt><dd><p>energies ([float]): The list of total energies of each structure
+in structures list.</p>
+</dd>
+<dt>train_energies ([float]): List of total energies of each structure in</dt><dd><p>structures list.</p>
+</dd>
+<dt>train_forces ([np.array]): List of (m, 3) forces array of each structure</dt><dd><p>with m atoms in structures list. m can be varied with each
+single structure case.</p>
+</dd>
+<dt>train_stresses (list): List of (6, ) virial stresses of each</dt><dd><p>structure in structures list.</p>
+</dd>
+<dt>default_sigma (list): Error criteria in energies, forces, stress</dt><dd><p>and hessian. Should have 4 numbers.</p>
+</dd>
+<dt>use_energies (bool): Whether to use dft total energies for training.</dt><dd><p>Default to True.</p>
+</dd>
+<dt>use_forces (bool): Whether to use dft atomic forces for training.</dt><dd><p>Default to True.</p>
+</dd>
+<dt>use_stress (bool): Whether to use dft virial stress for training.</dt><dd><p>Default to False.</p>
+</dd>
+<dt>kwargs:</dt><dd><dl class="simple">
+<dt>l_max (int): Parameter to configure GAP. The band limit of</dt><dd><p>spherical harmonics basis function. Default to 12.</p>
+</dd>
+<dt>n_max (int): Parameter to configure GAP. The number of radial basis</dt><dd><p>function. Default to 10.</p>
+</dd>
+<dt>atom_sigma (float): Parameter to configure GAP. The width of gaussian</dt><dd><p>atomic density. Default to 0.5.</p>
+</dd>
+<dt>zeta (float): Present when covariance function type is do product.</dt><dd><p>Default to 4.</p>
+</dd>
+<dt>cutoff (float): Parameter to configure GAP. The cutoff radius.</dt><dd><p>Default to 4.0.</p>
+</dd>
+<dt>cutoff_transition_width (float): Parameter to configure GAP.</dt><dd><p>The transition width of cutoff radial. Default to 0.5.</p>
+</dd>
+<dt>delta (float): Parameter to configure Sparsification.</dt><dd><p>The signal variance of noise. Default to 1.</p>
+</dd>
+<dt>f0 (float): Parameter to configure Sparsification.</dt><dd><p>The signal mean of noise. Default to 0.0.</p>
+</dd>
+<dt>n_sparse (int): Parameter to configure Sparsification.</dt><dd><p>Number of sparse points.</p>
+</dd>
+<dt>covariance_type (str): Parameter to configure Sparsification.</dt><dd><p>The type of convariance function. Default to dot_product.</p>
+</dd>
+<dt>sparse_method (str): Method to perform clustering in sparsification.</dt><dd><p>Default to ‘cur_points’.</p>
+</dd>
+<dt>sparse_jitter (float): Intrisic error of atomic/bond energy,</dt><dd><p>used to regularise the sparse covariance matrix.
+Default to 1e-8.</p>
+</dd>
+<dt>e0 (float): Atomic energy value to be subtracted from energies</dt><dd><p>before fitting. Default to 0.0.</p>
+</dd>
+<dt>e0_offset (float): Offset of baseline. If zero, the offset is</dt><dd><p>the average atomic energy of the input data or the e0
+specified manually. Default to 0.0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.write_cfgs">
+<code class="sig-name descname">write_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">cfg_pool</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.write_cfgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the formatted configuration file.</p>
+<dl>
+<dt>Args:</dt><dd><p>filename (str): The filename to be written.
+cfg_pool (list): The configuration pool contains</p>
+<blockquote>
+<div><p>structure and energy/forces properties.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._gap.GAPotential.write_param">
+<code class="sig-name descname">write_param</code><span class="sig-paren">(</span><em class="sig-param">xml_filename='gap.xml'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._gap.GAPotential.write_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write xml file to perform lammps calculation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>xml_filename (str): Filename to store xml formatted parameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maml.apps.html">maml.apps package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="maml.apps.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="maml.apps.pes.html">maml.apps.pes package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="maml.apps.pes.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="maml.apps.pes.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._base.html">maml.apps.pes._base module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">maml.apps.pes._gap module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._mtp.html">maml.apps.pes._mtp module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._nnp.html">maml.apps.pes._nnp module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._snap.html">maml.apps.pes._snap module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="maml.apps.pes.html#module-maml.apps.pes">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maml.apps.html#module-maml.apps">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maml.base.html">maml.base package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.data.html">maml.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.database.html">maml.database package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.describer.html">maml.describer package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.model.html">maml.model package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.utils.html">maml.utils package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="maml.apps.html">maml.apps package</a><ul>
+  <li><a href="maml.apps.pes.html">maml.apps.pes package</a><ul>
+      <li>Previous: <a href="maml.apps.pes._base.html" title="previous chapter">maml.apps.pes._base module</a></li>
+      <li>Next: <a href="maml.apps.pes._mtp.html" title="next chapter">maml.apps.pes._mtp module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.apps.pes._gap.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

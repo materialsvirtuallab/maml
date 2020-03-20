@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.utils._value_profile module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="maml.utils._general module" href="maml.utils._general.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.utils._value_profile">
+<span id="maml-utils-value-profile-module"></span><h1>maml.utils._value_profile module<a class="headerlink" href="#module-maml.utils._value_profile" title="Permalink to this headline">¶</a></h1>
+<p>ValueProfile return values according to certain settings. For
+example, one can design a linearly increasing value profile,
+a sinusoidal profile or a constant profile, depending on the
+step, and previous values.</p>
+<dl class="class">
+<dt id="maml.utils._value_profile.ConstantValue">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils._value_profile.</code><code class="sig-name descname">ConstantValue</code><span class="sig-paren">(</span><em class="sig-param">value: float</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._value_profile.ConstantValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.utils._value_profile.ValueProfile" title="maml.utils._value_profile.ValueProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></a></p>
+<p>Return constant value</p>
+<dl class="method">
+<dt id="maml.utils._value_profile.ConstantValue.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils._value_profile.ConstantValue.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return constant value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.utils._value_profile.LinearProfile">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils._value_profile.</code><code class="sig-name descname">LinearProfile</code><span class="sig-paren">(</span><em class="sig-param">value_start: float</em>, <em class="sig-param">value_end: float = 0.0</em>, <em class="sig-param">max_steps: int = 100</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._value_profile.LinearProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.utils._value_profile.ValueProfile" title="maml.utils._value_profile.ValueProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></a></p>
+<p>LinearProfile by setting starting value and the rate of
+value change. The profile can be initialized either by
+[value_start, value_end, max_step] or [value_start, rate]</p>
+<dl class="method">
+<dt id="maml.utils._value_profile.LinearProfile.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils._value_profile.LinearProfile.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get LinearProfile value
+Returns: float</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.utils._value_profile.ValueProfile">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils._value_profile.</code><code class="sig-name descname">ValueProfile</code><span class="sig-paren">(</span><em class="sig-param">max_steps: Optional[int] = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._value_profile.ValueProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for ValueProfile. The base class has the following methods
+methods:</p>
+<blockquote>
+<div><p>increment_step(self): add one to step
+get_value(self): abstract method that return the value</p>
+</div></blockquote>
+<dl class="method">
+<dt id="maml.utils._value_profile.ValueProfile.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils._value_profile.ValueProfile.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract method that returns the current value
+Returns: value float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.utils._value_profile.ValueProfile.increment_step">
+<code class="sig-name descname">increment_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils._value_profile.ValueProfile.increment_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>increase step atttribute by one</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maml.apps.html">maml.apps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.base.html">maml.base package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.data.html">maml.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.database.html">maml.database package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.describer.html">maml.describer package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.model.html">maml.model package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="maml.utils.html">maml.utils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="maml.utils.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="maml.utils._data_conversion.html">maml.utils._data_conversion module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maml.utils._data_selection.html">maml.utils._data_selection module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maml.utils._general.html">maml.utils._general module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">maml.utils._value_profile module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maml.utils.html#module-maml.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="maml.utils.html">maml.utils package</a><ul>
+      <li>Previous: <a href="maml.utils._general.html" title="previous chapter">maml.utils._general module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.utils._value_profile.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

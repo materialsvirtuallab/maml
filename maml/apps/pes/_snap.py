@@ -22,7 +22,7 @@ class SNAPotential(Potential):
     """
 
     pair_style = 'pair_style        snap'
-    pair_coeff = 'pair_coeff        * * {coeff_file} {elements} {param_file} {elements}'
+    pair_coeff = 'pair_coeff        * * {coeff_file} {param_file} {elements}'
 
     def __init__(self, model, name=None):
         """

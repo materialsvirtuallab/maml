@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.model package &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="maml.model._neural_network module" href="maml.model._neural_network.html" />
+    <link rel="prev" title="maml.describer._structure module" href="maml.describer._structure.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="maml-model-package">
+<h1>maml.model package<a class="headerlink" href="#maml-model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="maml.model._neural_network.html">maml.model._neural_network module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-maml.model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.model" title="Permalink to this headline">¶</a></h2>
+<p>MAML models</p>
+<dl class="class">
+<dt id="maml.model.MultiLayerPerceptron">
+<em class="property">class </em><code class="sig-prename descclassname">maml.model.</code><code class="sig-name descname">MultiLayerPerceptron</code><span class="sig-paren">(</span><em class="sig-param">describer: maml.base._describer.BaseDescriber, hidden_layer_sizes: List[int], input_dim: int, preprocessor: sklearn.base.TransformerMixin = StandardScaler(copy=True, with_mean=True, with_std=True), activation: str = 'relu', loss: str = 'mse', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.model.MultiLayerPerceptron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.base._model.html#maml.base._model.ModelWithKeras" title="maml.base._model.ModelWithKeras"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.ModelWithKeras</span></code></a></p>
+<p>Multi-layer perceptron model with keras model as predictor</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="maml.apps.html">maml.apps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.base.html">maml.base package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.data.html">maml.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.database.html">maml.database package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.describer.html">maml.describer package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">maml.model package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maml.model._neural_network.html">maml.model._neural_network module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-maml.model">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maml.utils.html">maml.utils package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="maml.describer._structure.html" title="previous chapter">maml.describer._structure module</a></li>
+      <li>Next: <a href="maml.model._neural_network.html" title="next chapter">maml.model._neural_network module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.model.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,98 @@
+number_of_elements              2
+elements                        Ni Mo
+atom_energy                     Ni -3.0
+atom_energy                     Mo -4.14
+cutoff_type                     1
+scale_symmetry_functions
+scale_min_short                 0.0
+scale_max_short                 1.0
+global_hidden_layers_short      2
+global_nodes_short              4 4
+global_activation_short         t t l
+epochs                          5
+updater_type                    1
+parallel_mode                   0
+jacobian_mode                   1
+update_strategy                 1
+selection_mode                  2
+task_batch_size_energy          1
+task_batch_size_force           1
+random_seed                     123456
+test_fraction                   1e-06
+force_weight                    10.0
+short_energy_fraction           1.0
+short_force_fraction            0.02315
+short_energy_error_threshold    0.0
+short_force_error_threshold     1.0
+rmse_threshold_trials           3
+weights_min                     -1.0
+weights_max                     1
+write_trainpoints               1
+write_trainforces               1
+write_weights_epoch             1
+write_neuronstats               1
+kalman_type                     0
+kalman_epsilon                  0.01
+kalman_q0                       0.01
+kalman_qtau                     2.302
+kalman_qmin                     1e-06
+kalman_eta                      0.01
+kalman_etatau                   2.302
+kalman_etamax                   1.0
+use_short_forces
+symfunction_short Ni  2 Ni    0.5000000    0.0000000    7.9368497
+symfunction_short Ni  2 Ni    2.0000000    0.0000000    7.9368497
+symfunction_short Ni  2 Mo    0.5000000    0.0000000    7.9368497
+symfunction_short Ni  2 Mo    2.0000000    0.0000000    7.9368497
+symfunction_short Mo  2 Ni    0.5000000    0.0000000    7.9368497
+symfunction_short Mo  2 Ni    2.0000000    0.0000000    7.9368497
+symfunction_short Mo  2 Mo    0.5000000    0.0000000    7.9368497
+symfunction_short Mo  2 Mo    2.0000000    0.0000000    7.9368497
+symfunction_short Ni  3 Ni Ni    0.5000000 -1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Ni    0.5000000 -1 4.0000000   7.9368497
+symfunction_short Ni  3 Ni Ni    0.5000000  1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Ni    0.5000000  1 4.0000000   7.9368497
+symfunction_short Ni  3 Ni Ni    2.0000000 -1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Ni    2.0000000 -1 4.0000000   7.9368497
+symfunction_short Ni  3 Ni Ni    2.0000000  1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Ni    2.0000000  1 4.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    0.5000000 -1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    0.5000000 -1 4.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    0.5000000  1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    0.5000000  1 4.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    2.0000000 -1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    2.0000000 -1 4.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    2.0000000  1 1.0000000   7.9368497
+symfunction_short Ni  3 Ni Mo    2.0000000  1 4.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    0.5000000 -1 1.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    0.5000000 -1 4.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    0.5000000  1 1.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    0.5000000  1 4.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    2.0000000 -1 1.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    2.0000000 -1 4.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    2.0000000  1 1.0000000   7.9368497
+symfunction_short Ni  3 Mo Mo    2.0000000  1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    0.5000000 -1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    0.5000000 -1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    0.5000000  1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    0.5000000  1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    2.0000000 -1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    2.0000000 -1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    2.0000000  1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Ni    2.0000000  1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    0.5000000 -1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    0.5000000 -1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    0.5000000  1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    0.5000000  1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    2.0000000 -1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    2.0000000 -1 4.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    2.0000000  1 1.0000000   7.9368497
+symfunction_short Mo  3 Ni Mo    2.0000000  1 4.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    0.5000000 -1 1.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    0.5000000 -1 4.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    0.5000000  1 1.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    0.5000000  1 4.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    2.0000000 -1 1.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    2.0000000 -1 4.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    2.0000000  1 1.0000000   7.9368497
+symfunction_short Mo  3 Mo Mo    2.0000000  1 4.0000000   7.9368497

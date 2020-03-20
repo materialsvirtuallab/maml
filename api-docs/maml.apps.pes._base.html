@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.apps.pes._base module &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="maml.apps.pes._gap module" href="maml.apps.pes._gap.html" />
+    <link rel="prev" title="maml.apps.pes.lammps._calcs module" href="maml.apps.pes.lammps._calcs.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-maml.apps.pes._base">
+<span id="maml-apps-pes-base-module"></span><h1>maml.apps.pes._base module<a class="headerlink" href="#module-maml.apps.pes._base" title="Permalink to this headline">¶</a></h1>
+<p>Base classes for potentials</p>
+<dl class="class">
+<dt id="maml.apps.pes._base.Potential">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes._base.</code><code class="sig-name descname">Potential</code><span class="sig-paren">(</span><em class="sig-param">model: Any = None</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._base.Potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.apps.pes._base.PotentialMixin" title="maml.apps.pes._base.PotentialMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.PotentialMixin</span></code></a>, <a class="reference internal" href="maml.base._model.html#maml.base._model.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a></p>
+<p>Potential model that can be used to fit struccture-[energy, force, stress]
+pairs</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.apps.pes._base.PotentialMixin">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes._base.</code><code class="sig-name descname">PotentialMixin</code><a class="headerlink" href="#maml.apps.pes._base.PotentialMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract base class for a Interatomic Potential.</p>
+<dl class="method">
+<dt id="maml.apps.pes._base.PotentialMixin.evaluate">
+<em class="property">abstract </em><code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_structures</em>, <em class="sig-param">test_energies</em>, <em class="sig-param">test_forces</em>, <em class="sig-param">test_stresses</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._base.PotentialMixin.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate energies, forces and stresses of structures with trained
+interatomic potentials.</p>
+<dl>
+<dt>Args:</dt><dd><p>test_structures (list): List of Pymatgen Structure Objects.
+test_energies (list): List of DFT-calculated total energies of each</p>
+<blockquote>
+<div><p>structure in structures list.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>test_forces (list): List of DFT-calculated (m, 3) forces of each</dt><dd><p>structure with m atoms in structures list. m can be varied with
+each single structure case.</p>
+</dd>
+<dt>test_stresses (list): List of DFT-calculated (6, ) viriral stresses of</dt><dd><p>each structure in structures list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._base.PotentialMixin.from_config">
+<em class="property">abstract </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._base.PotentialMixin.from_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize potentials with parameters file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._base.PotentialMixin.predict_efs">
+<em class="property">abstract </em><code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._base.PotentialMixin.predict_efs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict energy, forces and stresses of the structure.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>energy, forces, stress</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._base.PotentialMixin.train">
+<em class="property">abstract </em><code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_structures</em>, <em class="sig-param">train_energies</em>, <em class="sig-param">train_forces</em>, <em class="sig-param">train_stresses</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._base.PotentialMixin.train" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Train interatomic potentials with energies, forces ann stresses corresponding</dt><dd><p>to structures.</p>
+</dd>
+<dt>Args:</dt><dd><p>train_structures (list): List of Pymatgen Structure objects.
+train_energies (list): List of DFT-calculated total energies of each</p>
+<blockquote>
+<div><p>structure in structures list.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>train_forces (list): List of DFT-calculated (m, 3) forces of each</dt><dd><p>structure with m atoms in structures list. m can be varied with
+each single structure case.</p>
+</dd>
+<dt>train_stresses (list): List of DFT-calculated (6, ) virial stresses of</dt><dd><p>each structure in structures list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.apps.pes._base.PotentialMixin.write_param">
+<em class="property">abstract </em><code class="sig-name descname">write_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes._base.PotentialMixin.write_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write optimized weights file to perform energy and force prediction via
+lammps calculation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="maml.apps.html">maml.apps package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="maml.apps.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="maml.apps.pes.html">maml.apps.pes package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="maml.apps.pes.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="maml.apps.pes.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">maml.apps.pes._base module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._gap.html">maml.apps.pes._gap module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._mtp.html">maml.apps.pes._mtp module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._nnp.html">maml.apps.pes._nnp module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="maml.apps.pes._snap.html">maml.apps.pes._snap module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="maml.apps.pes.html#module-maml.apps.pes">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maml.apps.html#module-maml.apps">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maml.base.html">maml.base package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.data.html">maml.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.database.html">maml.database package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.describer.html">maml.describer package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.model.html">maml.model package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maml.utils.html">maml.utils package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="maml.apps.html">maml.apps package</a><ul>
+  <li><a href="maml.apps.pes.html">maml.apps.pes package</a><ul>
+      <li>Previous: <a href="maml.apps.pes.lammps._calcs.html" title="previous chapter">maml.apps.pes.lammps._calcs module</a></li>
+      <li>Next: <a href="maml.apps.pes._gap.html" title="next chapter">maml.apps.pes._gap module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.apps.pes._base.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
