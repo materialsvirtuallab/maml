@@ -43,25 +43,24 @@ def make_doc(ctx):
         ctx.run("rm maml.*.rst", warn=True)
         ctx.run("sphinx-apidoc --separate -P -d 7 -o . -f ../maml")
         ctx.run("rm maml*.tests.*rst", warn=True)
-    # for f in glob.glob("*.rst"):
-    #     if f.startswith('maml') and f.endswith('rst'):
-    #         newoutput = []
-    #         suboutput = []
-    #         subpackage = False
-    #         with open(f, 'r') as fid:
-    #             for line in fid:
-    #                 clean = line.strip()
-    #                 if clean == "Subpackages":
-    #                     subpackage = True
-    #                 if not subpackage and not clean.endswith("tests"):
-    #                     newoutput.append(line)
-    #                 else:
-    #                     if not clean.endswith("tests"):
-    #                         suboutput.append(line)
-    #                     if clean.startswith("maml") and not clean.endswith("tests"):
-    #                         newoutput.extend(suboutput)
-    #                         subpackage = False
-    #                         suboutput = []
+        # for f in glob.glob("maml*.rst"):
+        #     newoutput = []
+        #     suboutput = []
+        #     subpackage = False
+        #     with open(f, 'r') as fid:
+        #         for line in fid:
+        #             clean = line.strip()
+        #             if clean == "Subpackages":
+        #                 subpackage = True
+        #             if not subpackage and not clean.endswith("tests"):
+        #                 newoutput.append(line)
+        #             else:
+        #                 if not clean.endswith("tests"):
+        #                     suboutput.append(line)
+        #                 if clean.startswith("maml") and not clean.endswith("tests"):
+        #                     newoutput.extend(suboutput)
+        #                     subpackage = False
+        #                     suboutput = []
 
             # with open(f, 'w') as fid:
             #     fid.write("".join(newoutput))

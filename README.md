@@ -16,4 +16,8 @@ pip install maml
 
 # Usage
 
-Many Jupyter notebooks are available on usage. See [notebooks].
+Many Jupyter notebooks are available on usage. See [notebooks](/notebooks).
+
+# API documentation
+
+ See [api-docs](/api-docs).
