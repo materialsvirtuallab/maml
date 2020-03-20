@@ -125,7 +125,8 @@ class NNPotential(Potential):
 
             elements.extend(structure.species)
 
-        self.elements = [element.name for element in sorted(set(elements))]
+        if self.elements is None:
+            self.elements = [element.name for element in sorted(set(elements))]
 
         with open(filename, 'w') as f:
             f.write('\n'.join(lines))
