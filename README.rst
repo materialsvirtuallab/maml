@@ -1,23 +1,28 @@
-# maml
+maml
+====
 
 maml (MAterials Machine Learning) is a Python for Materials Machine Learning.
 
-# Features
+Features
+--------
 
 1. Convert materials (crystals/molecules) into features.
 2. Use ML to learn relationship between features and targets.
 3. Applications: modelling the potential energy surface, constructing surrogate models for property prediction.
 
-# Installation
+Installation
+------------
 
-```bash
-pip install maml
-```
+Pip install via PyPI::
 
-# Usage
+    pip install maml
 
-Many Jupyter notebooks are available on usage. See [notebooks](/notebooks).
+Usage
+-----
 
-# API documentation
+Many Jupyter notebooks are available on usage. See `notebooks </notebooks>`_.
 
- See [api-docs](https://guide.materialsvirtuallab.org/maml/api-docs/).
+API documentation
+-----------------
+
+See `API docs <https://guide.materialsvirtuallab.org/maml/modules.html>`_.
