@@ -182,7 +182,6 @@ class ElasticConstantTest(unittest.TestCase):
         cls.test_dir = tempfile.mkdtemp()
         os.chdir(cls.test_dir)
         print(os.getcwd())
-        print(os.listdir('../lammps/tests'))
 
     @classmethod
     def tearDownClass(cls):
