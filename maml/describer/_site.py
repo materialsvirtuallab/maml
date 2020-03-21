@@ -51,7 +51,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
             include_stress (bool): Wether to include stress components.
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        from maml.apps.pes.lammps import SpectralNeighborAnalysis
+        from maml.apps.pes import SpectralNeighborAnalysis
         self.calculator = SpectralNeighborAnalysis(rcut=cutoff,
                                                    twojmax=twojmax,
                                                    element_profile=element_profile,
