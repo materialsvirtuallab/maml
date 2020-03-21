@@ -9,11 +9,22 @@ from ._gap import GAPotential  # noqa
 from ._mtp import MTPotential  # noqa
 from ._snap import SNAPotential  # noqa
 from ._nnp import NNPotential  # noqa
-
+from ._lammps import (  # noqa
+    LMPStaticCalculator, EnergyForceStress,  # noqa
+    SpectralNeighborAnalysis, ElasticConstant,  # noqa
+    LatticeConstant, NudgedElasticBand, DefectFormation  # noqa
+                                 )
 __all__ = [
     "Potential",
     "GAPotential",
     "MTPotential",
     "SNAPotential",
     "NNPotential",
+    "LMPStaticCalculator",
+    "EnergyForceStress",
+    "SpectralNeighborAnalysis",
+    "ElasticConstant",
+    "LatticeConstant",
+    "NudgedElasticBand",
+    "DefectFormation"
 ]

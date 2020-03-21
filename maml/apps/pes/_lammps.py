@@ -16,7 +16,7 @@ from monty.tempfile import ScratchDir
 from pymatgen.io.lammps.data import LammpsData
 from pymatgen import Structure, Lattice, Element
 
-from maml.apps.pes._base import Potential
+from maml.apps.pes import Potential
 
 
 def _pretty_input(lines):

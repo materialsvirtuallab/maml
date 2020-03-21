@@ -19,8 +19,8 @@ from monty.serialization import loadfn
 from pymatgen import Structure, Lattice, Element
 from pymatgen.core import units
 
-from maml.apps.pes._base import Potential
-from maml.apps.pes.lammps import EnergyForceStress
+from maml.apps.pes import Potential
+from maml.apps.pes import EnergyForceStress
 from maml.utils import pool_from, convert_docs
 
 

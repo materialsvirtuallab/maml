@@ -18,8 +18,8 @@ from sklearn.linear_model import LinearRegression
 
 from maml import ModelWithSklearn
 from maml.apps.pes._snap import SNAPotential
-from maml.describer._site import BispectrumCoefficients
-from maml.apps.pes.lammps import SpectralNeighborAnalysis, EnergyForceStress, \
+from maml.describer import BispectrumCoefficients
+from maml.apps.pes import SpectralNeighborAnalysis, EnergyForceStress, \
     ElasticConstant, LatticeConstant, NudgedElasticBand, DefectFormation
 
 CWD = os.getcwd()
@@ -182,7 +182,7 @@ class ElasticConstantTest(unittest.TestCase):
         cls.test_dir = tempfile.mkdtemp()
         os.chdir(cls.test_dir)
         print(os.getcwd())
-        print(os.listdir('.'))
+        print(os.listdir('../lammps/tests'))
 
     @classmethod
     def tearDownClass(cls):
