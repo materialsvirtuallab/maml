@@ -5,6 +5,7 @@ numeric vectors or tensors.
 
 from ._site import BispectrumCoefficients, SmoothOverlapAtomicPosition, BPSymmetryFunctions  # noqa
 from ._structure import DistinctSiteProperty, CoulombMatrix, SortedCoulombMatrix, RandomizedCoulombMatrix  # noqa
+from ._composition import ElementProperty  # noqa
 
 __all__ = [
     'BispectrumCoefficients',
@@ -13,5 +14,6 @@ __all__ = [
     'DistinctSiteProperty',
     'CoulombMatrix',
     'SortedCoulombMatrix',
-    'RandomizedCoulombMatrix'
+    'RandomizedCoulombMatrix',
+    'ElementProperty'
 ]
