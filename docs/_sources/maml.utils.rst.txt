@@ -1,12 +1,6 @@
 maml.utils package
 ==================
 
-Submodules
-----------
-
-.. toctree::
-
-
 Module contents
 ---------------
 

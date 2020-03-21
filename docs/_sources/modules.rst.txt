@@ -2,6 +2,6 @@ maml
 ====
 
 .. toctree::
-   :maxdepth: 7
+   :maxdepth: 3
 
    maml

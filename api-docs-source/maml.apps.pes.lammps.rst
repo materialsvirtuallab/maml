@@ -1,12 +1,6 @@
 maml.apps.pes.lammps package
 ============================
 
-Submodules
-----------
-
-.. toctree::
-
-
 Module contents
 ---------------
 

@@ -1,12 +1,6 @@
 maml.model package
 ==================
 
-Submodules
-----------
-
-.. toctree::
-
-
 Module contents
 ---------------
 

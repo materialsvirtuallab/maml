@@ -1,12 +1,6 @@
 maml.describer package
 ======================
 
-Submodules
-----------
-
-.. toctree::
-
-
 Module contents
 ---------------
 

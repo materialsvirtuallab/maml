@@ -8,11 +8,6 @@ Subpackages
 
    maml.apps.pes.lammps
 
-Submodules
-----------
-
-.. toctree::
-
 
 Module contents
 ---------------
