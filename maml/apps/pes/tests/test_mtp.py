@@ -11,7 +11,7 @@ import numpy as np
 from monty.os.path import which
 from monty.serialization import loadfn
 from pymatgen import Structure
-from maml.apps.pes._mtp import MTPotential
+from maml.apps.pes import MTPotential
 
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'datapool.json'))

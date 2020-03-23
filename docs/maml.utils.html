@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.utils package &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="maml-utils-package">
+<h1>maml.utils package<a class="headerlink" href="#maml-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-maml.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.utils" title="Permalink to this headline">¶</a></h2>
+<p>Utilities package.</p>
+<dl class="function">
+<dt id="maml.utils.serialize_maml_object">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">serialize_maml_object</code><span class="sig-paren">(</span><em class="sig-param">instance</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.serialize_maml_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize maml objects
+Args:</p>
+<blockquote>
+<div><p>instance (maml object): object to serialize</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>for object that has <cite>get_config</cite> method, return the dictionary after <cite>get_config</cite>,
+otherwise return str name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.utils.deserialize_maml_object">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">deserialize_maml_object</code><span class="sig-paren">(</span><em class="sig-param">identifier</em>, <em class="sig-param">module_objects=None</em>, <em class="sig-param">printable_module_name='object'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.deserialize_maml_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize maml object from dict, str or callable</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>identifier (dict, str): the identifier to deserialize
+module_objects (dict): objects in the module
+printable_module_name (str): name for print</p>
+</dd>
+<dt>Returns:</dt><dd><p>deserialized maml object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.utils.load_pickle">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">load_pickle</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#maml.utils.load_pickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load pickled file to objection</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename: filename</p>
+</dd>
+</dl>
+<p>Returns: obj</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.utils.to_pickle">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">to_pickle</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em>, <em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#maml.utils.to_pickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump picklable object to file</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj: object
+filename: file name</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.utils.pool_from">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">pool_from</code><span class="sig-paren">(</span><em class="sig-param">structures</em>, <em class="sig-param">energies=None</em>, <em class="sig-param">forces=None</em>, <em class="sig-param">stresses=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.pool_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to convert structures and their properties in to
+datapool format.</p>
+<dl>
+<dt>Args:</dt><dd><p>structures ([Structure]): The list of Pymatgen Structure object.
+energies ([float]): The list of total energies of each structure</p>
+<blockquote>
+<div><p>in structures list.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>forces ([np.array]): List of (m, 3) forces array of each structure</dt><dd><p>with m atoms in structures list. m can be varied with each
+single structure case.</p>
+</dd>
+<dt>stresses (list): List of (6, ) virial stresses of each</dt><dd><p>structure in structures list.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>([dict])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="maml.utils.convert_docs">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">convert_docs</code><span class="sig-paren">(</span><em class="sig-param">docs</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.convert_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to convert a list of docs into objects, e.g.,
+Structure and DataFrame.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="simple">
+<dt>docs ([dict]): List of docs. Each doc should have the same</dt><dd><p>format as one returned from .dft.parse_dir.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A list of structures, and a DataFrame with energy and force
+data in ‘y_orig’ column, data type (‘energy’ or ‘force’) in
+‘dtype’ column, No. of atoms in ‘n’ column sharing the same row
+of energy data while ‘n’ being 1 for the rows of force data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.utils.ValueProfile">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">ValueProfile</code><span class="sig-paren">(</span><em class="sig-param">max_steps: Optional[int] = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ValueProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for ValueProfile. The base class has the following methods
+methods:</p>
+<blockquote>
+<div><p>increment_step(self): add one to step
+get_value(self): abstract method that return the value</p>
+</div></blockquote>
+<dl class="method">
+<dt id="maml.utils.ValueProfile.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils.ValueProfile.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract method that returns the current value
+Returns: value float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="maml.utils.ValueProfile.increment_step">
+<code class="sig-name descname">increment_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ValueProfile.increment_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>increase step atttribute by one</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.utils.ConstantValue">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">ConstantValue</code><span class="sig-paren">(</span><em class="sig-param">value: float</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ConstantValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></p>
+<p>Return constant value</p>
+<dl class="method">
+<dt id="maml.utils.ConstantValue.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils.ConstantValue.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return constant value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="maml.utils.LinearProfile">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">LinearProfile</code><span class="sig-paren">(</span><em class="sig-param">value_start: float</em>, <em class="sig-param">value_end: float = 0.0</em>, <em class="sig-param">max_steps: int = 100</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.LinearProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._value_profile.ValueProfile</span></code></p>
+<p>LinearProfile by setting starting value and the rate of
+value change. The profile can be initialized either by
+[value_start, value_end, max_step] or [value_start, rate]</p>
+<dl class="method">
+<dt id="maml.utils.LinearProfile.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils.LinearProfile.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get LinearProfile value
+Returns: float</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

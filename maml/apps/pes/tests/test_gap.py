@@ -11,7 +11,7 @@ import numpy as np
 from pymatgen import Structure
 from monty.os.path import which
 from monty.serialization import loadfn
-from maml.apps.pes._gap import GAPotential
+from maml.apps.pes import GAPotential
 
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.abspath(os.path.dirname(__file__)),
