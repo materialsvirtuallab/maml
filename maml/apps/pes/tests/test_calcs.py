@@ -21,6 +21,8 @@ from maml.apps.pes._snap import SNAPotential
 from maml.describer import BispectrumCoefficients
 from maml.apps.pes import SpectralNeighborAnalysis, EnergyForceStress, \
     ElasticConstant, LatticeConstant, NudgedElasticBand, DefectFormation
+from maml.apps.pes import set_lmp_exe, get_lmp_exe
+
 
 CWD = os.getcwd()
 with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'coeff.json')) as f:
@@ -251,12 +253,15 @@ class NudgedElasticBandTest(unittest.TestCase):
     def setUpClass(cls):
         cls.this_dir = os.path.dirname(os.path.abspath(__file__))
         cls.test_dir = tempfile.mkdtemp()
+        cls.init_lmp = get_lmp_exe()
+        set_lmp_exe('lmp_mpi')
         os.chdir(cls.test_dir)
 
     @classmethod
     def tearDownClass(cls):
         os.chdir(CWD)
         shutil.rmtree(cls.test_dir)
+        set_lmp_exe(cls.init_lmp)
 
     def setUp(self):
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
@@ -272,11 +277,11 @@ class NudgedElasticBandTest(unittest.TestCase):
                                                 ['Ni'], [[0, 0, 0]])
         self.ff_settings = snap
 
-    @unittest.skipIf(not which('lmp_serial'), 'No LAMMPS serial cmd found.')
     @unittest.skipIf(not which('lmp_mpi'), 'No LAMMPS mpi cmd found.')
     def test_calculate(self):
         calculator = NudgedElasticBand(ff_settings=self.ff_settings, specie='Ni',
                                        lattice='fcc', alat=3.506)
+        print('NudgedElasticBand using %s' % get_lmp_exe())
         migration_barrier = calculator.calculate()
         np.testing.assert_almost_equal(migration_barrier, 1.013, decimal=2)
         invalid_calculator = NudgedElasticBand(ff_settings=self.ff_settings, specie='Ni',
@@ -319,6 +324,18 @@ class DefectFormationTest(unittest.TestCase):
         invalid_calculator = DefectFormation(ff_settings=self.ff_settings, specie='Ni',
                                              lattice='fccc', alat=3.506)
         self.assertRaises(ValueError, invalid_calculator.calculate)
+
+
+class LMPTest(unittest.TestCase):
+    def test_set_get_lmp_exe(self):
+        init_lmp = get_lmp_exe()
+        lc = LatticeConstant(['dummy setting'])
+        self.assertEqual(init_lmp, lc.LMP_EXE)
+
+        new_lmp = "It can be any directory"
+        set_lmp_exe(new_lmp)
+        self.assertEqual(new_lmp, lc.LMP_EXE)
+        set_lmp_exe(init_lmp)
 
 
 if __name__ == '__main__':

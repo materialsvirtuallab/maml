@@ -9,14 +9,49 @@ import abc
 import io
 import subprocess
 import itertools
+import logging
 
 import numpy as np
 from monty.os.path import which
 from monty.tempfile import ScratchDir
 from pymatgen.io.lammps.data import LammpsData
-from pymatgen import Structure, Lattice, Element
+from pymatgen.core import Structure, Lattice, Element
 
 from ._base import Potential
+
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+LMP_EXE = None  # global lammps executable name
+
+
+def get_lmp_exe():
+    """
+    Get lammps executable
+    Returns: Lammps executable name
+    """
+    global LMP_EXE
+    if LMP_EXE is not None:
+        return LMP_EXE
+    for lmp_exe in ["lmp_serial", "lmp_mpi"]:
+        if which(lmp_exe) is not None:
+            logger.info("Setting Lammps executable to %s" % lmp_exe)
+            LMP_EXE = lmp_exe
+            return lmp_exe
+
+
+def set_lmp_exe(lmp_exe: str) -> None:
+    """
+    Change the lammps executable name
+    Args:
+        lmp_exe (str): lammps executable name, e.g., lmp_mpi or lmp_serial
+            or full path for the installed lammps
+    """
+    global LMP_EXE
+    LMP_EXE = lmp_exe
+    logger.info("Setting Lammps executable to %s" % lmp_exe)
 
 
 def _pretty_input(lines):
@@ -42,11 +77,6 @@ class LMPStaticCalculator:
     Abstract class to perform static structure property calculation
     using LAMMPS.
     """
-
-    LMP_EXE = None
-    for lmp_exe in ["lmp_mpi", "lmp_serial"]:
-        if which(lmp_exe) is not None:
-            LMP_EXE = lmp_exe
 
     _COMMON_CMDS = ['units metal',
                     'atom_style charge',
@@ -124,6 +154,13 @@ class LMPStaticCalculator:
                 results = self._parse()
                 data.append(results)
         return data
+
+    @property
+    def LMP_EXE(cls):
+        """
+        Get lammps executable string
+        """
+        return get_lmp_exe()
 
 
 class EnergyForceStress(LMPStaticCalculator):
