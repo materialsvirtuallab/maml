@@ -6,7 +6,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
-from pymatgen import Structure
+from pymatgen.core import Structure
 
 from maml import BaseDescriber, OutDataFrameConcat
 

@@ -16,7 +16,7 @@ from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
-from pymatgen import Structure, Lattice, Element
+from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core import units
 
 from ._base import Potential

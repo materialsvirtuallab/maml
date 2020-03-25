@@ -19,7 +19,7 @@ from monty.io import zopen
 from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
-from pymatgen import Structure, Lattice
+from pymatgen.core import Structure, Lattice
 
 from ._base import Potential
 from ._lammps import EnergyForceStress
@@ -456,7 +456,8 @@ class MTPotential(Potential):
             MTP_file_path = os.path.join(module_dir, 'params', unfitted_mtp)
             shutil.copyfile(MTP_file_path, os.path.join(os.getcwd(), unfitted_mtp))
 
-            p = subprocess.Popen(['mlp', 'mindist', atoms_filename], stdout=open('min_dist', 'w'))
+            with open('min_dist', 'w') as f:
+                p = subprocess.Popen(['mlp', 'mindist', atoms_filename], stdout=f)
             stdout = p.communicate()[0]
 
             with open('min_dist') as f:

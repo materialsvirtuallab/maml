@@ -16,7 +16,7 @@ from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
-from pymatgen import Structure, Lattice, Element
+from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core.periodic_table import get_el_sp
 
 from ._base import Potential

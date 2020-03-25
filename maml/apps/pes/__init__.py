@@ -12,8 +12,10 @@ from ._nnp import NNPotential  # noqa
 from ._lammps import (  # noqa
     LMPStaticCalculator, EnergyForceStress,  # noqa
     SpectralNeighborAnalysis, ElasticConstant,  # noqa
-    LatticeConstant, NudgedElasticBand, DefectFormation  # noqa
-                                 )
+    LatticeConstant, NudgedElasticBand, DefectFormation,  # noqa
+    get_lmp_exe, set_lmp_exe  # noqa
+    )
+
 __all__ = [
     "Potential",
     "GAPotential",
@@ -26,5 +28,7 @@ __all__ = [
     "ElasticConstant",
     "LatticeConstant",
     "NudgedElasticBand",
-    "DefectFormation"
+    "DefectFormation",
+    "get_lmp_exe",
+    "set_lmp_exe"
 ]
