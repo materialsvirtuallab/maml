@@ -456,7 +456,8 @@ class MTPotential(Potential):
             MTP_file_path = os.path.join(module_dir, 'params', unfitted_mtp)
             shutil.copyfile(MTP_file_path, os.path.join(os.getcwd(), unfitted_mtp))
 
-            p = subprocess.Popen(['mlp', 'mindist', atoms_filename], stdout=open('min_dist', 'w'))
+            with open('min_dist', 'w') as f:
+                p = subprocess.Popen(['mlp', 'mindist', atoms_filename], stdout=f)
             stdout = p.communicate()[0]
 
             with open('min_dist') as f:
