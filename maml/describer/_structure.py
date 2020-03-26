@@ -1,7 +1,7 @@
 """
 Structure-wise describers. These describers include structural information.
 """
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -41,7 +41,7 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
     def __init__(self,
                  properties: List[str],
                  symprec: float = 0.1,
-                 wyckoffs: List[str] = [],
+                 wyckoffs: Optional[List[str]] = None,
                  **kwargs):
         """
 
@@ -74,7 +74,7 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
         symm = a.get_symmetrized_structure()
         data = []
         names = []
-        if not self.wyckoffs:
+        if self.wyckoffs is None:
             self.wyckoffs = symm.wyckoff_symbols
         for w in self.wyckoffs:
             site = symm.equivalent_sites[symm.wyckoff_symbols.index(w)][0]
