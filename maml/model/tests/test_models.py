@@ -24,9 +24,9 @@ class NeuralNetTest(PymatgenTest):
         cls.test_dir = tempfile.mkdtemp()
 
     def setUp(self):
-        self.nn = MultiLayerPerceptron(describer=DistinctSiteProperty(['2c'], ["Z"]),
+        self.nn = MultiLayerPerceptron(describer=DistinctSiteProperty(wyckoffs=['2c'], properties=["Z"]),
                                        hidden_layer_sizes=[25, 5], input_dim=1)
-        self.nn2 = MultiLayerPerceptron(describer=DistinctSiteProperty(['2c'], ["Z"]),
+        self.nn2 = MultiLayerPerceptron(describer=DistinctSiteProperty(wyckoffs=['2c'], properties=["Z"]),
                                         hidden_layer_sizes=[25, 5], input_dim=1)
         self.li2o = self.get_structure("Li2O")
         self.na2o = self.li2o.copy()

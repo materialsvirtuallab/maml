@@ -17,13 +17,31 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
     structure. For now, this assumes that there is only one type of species in
     a particular Wyckoff site.
     """
-
     # todo: generalize to multiple sites with the same Wyckoff.
+    supported_properties = ["mendeleev_no", "electrical_resistivity",
+                            "velocity_of_sound", "reflectivity",
+                            "refractive_index", "poissons_ratio", "molar_volume",
+                            "thermal_conductivity", "boiling_point", "melting_point",
+                            "critical_temperature", "superconduction_temperature",
+                            "liquid_range", "bulk_modulus", "youngs_modulus",
+                            "brinell_hardness", "rigidity_modulus",
+                            "mineral_hardness", "vickers_hardness",
+                            "density_of_solid", "atomic_radius_calculated",
+                            "van_der_waals_radius", "coefficient_of_linear_thermal_expansion",
+                            "ground_state_term_symbol", "valence", "Z", "X",
+                            "atomic_mass", "block", "row", "group", "atomic_radius",
+                            "average_ionic_radius", "average_cationic_radius",
+                            "average_anionic_radius", "metallic_radius", "ionic_radii",
+                            "oxi_state", "max_oxidation_state", "min_oxidation_state",
+                            "is_transition_metal", "is_alkali", "is_alkaline", "is_chalcogen",
+                            "is_halogen", "is_lanthanoid", "is_metal", "is_metalloid",
+                            "is_noble_gas", "is_post_transition_metal", "is_quadrupolar",
+                            "is_rare_earth_metal", "is_actinoid"]
 
     def __init__(self,
                  properties: List[str],
                  symprec: float = 0.1,
-                 wyckoffs: List[str] = None,
+                 wyckoffs: List[str] = [],
                  **kwargs):
         """
 
