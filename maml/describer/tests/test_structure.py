@@ -18,8 +18,8 @@ class DistinctSitePropertyTest(PymatgenTest):
         cls.li2o = cls.get_structure("Li2O")
         cls.na2o = cls.li2o.copy()
         cls.na2o["Li+"] = "Na+"
-        cls.describer = DistinctSiteProperty(['2c', '1a'],
-                                             ["Z", "atomic_radius"])
+        cls.describer = DistinctSiteProperty(wyckoffs=['2c', '1a'],
+                                             properties=["Z", "atomic_radius"])
 
     def test_describe(self):
         descriptor = self.describer.transform_one(self.li2o)
@@ -35,6 +35,10 @@ class DistinctSitePropertyTest(PymatgenTest):
         self.assertEqual(df.iloc[0]["2c-Z"], 3)
         self.assertEqual(df.iloc[0]["2c-atomic_radius"], 1.45)
 
+    def test_wycoffs(self):
+        describer = DistinctSiteProperty(properties=["Z", "atomic_radius"])
+        descriptor = describer.transform_one(self.li2o)
+        self.assertAlmostEqual(descriptor.iloc[0]["2c-Z"], 3)
 
 class CoulomMatrixTest(unittest.TestCase):
 

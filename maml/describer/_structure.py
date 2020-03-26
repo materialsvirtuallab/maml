@@ -21,24 +21,25 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
     # todo: generalize to multiple sites with the same Wyckoff.
 
     def __init__(self,
-                 wyckoffs: List[str],
                  properties: List[str],
                  symprec: float = 0.1,
+                 wyckoffs: List[str] = None,
                  **kwargs):
         """
 
         Args:
-            wyckoffs (list of wyckoff symbols):. E.g., ["48a", "24c"]
             properties (list): Sequence of specie properties. E.g.,
                 ["atomic_radius"]. Look at pymatgen.core.periodic_table.Element and
                 pymatgen.core.periodic_table.Specie for support properties (there
                 are a lot!)
             symprec (float): Symmetry precision for spacegroup determination.
+            wyckoffs (list of wyckoff symbols):. E.g., ["48a", "24c"], if not provided,
+                will get from input structure when doing transform
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        self.wyckoffs = wyckoffs
         self.properties = properties
         self.symprec = symprec
+        self.wyckoffs = wyckoffs
         super().__init__(**kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
@@ -55,6 +56,8 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
         symm = a.get_symmetrized_structure()
         data = []
         names = []
+        if not self.wyckoffs:
+            self.wyckoffs = symm.wyckoff_symbols
         for w in self.wyckoffs:
             site = symm.equivalent_sites[symm.wyckoff_symbols.index(w)][0]
             for p in self.properties:
