@@ -5,6 +5,8 @@ from ._general import (serialize_maml_object, deserialize_maml_object,  # noqa
                        load_pickle, to_pickle)  # noqa
 from ._data_conversion import pool_from, convert_docs  # noqa
 from ._value_profile import ValueProfile, ConstantValue, LinearProfile  # noqa
+from ._jit import njit  # noqa
+
 
 __all__ = [
     'serialize_maml_object',
@@ -15,5 +17,6 @@ __all__ = [
     'convert_docs',
     'ValueProfile',
     'ConstantValue',
-    'LinearProfile'
+    'LinearProfile',
+    'njit'
 ]
