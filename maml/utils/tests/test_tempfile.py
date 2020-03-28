@@ -2,7 +2,7 @@ from glob import glob
 import os
 import unittest
 
-from maml.utils import MultiScratchDir
+from maml.utils._tempfile import MultiScratchDir
 from monty.tempfile import ScratchDir
 
 
