@@ -23,7 +23,7 @@ from pymatgen.core import Structure, Lattice
 
 from ._base import Potential
 from ._lammps import EnergyForceStress
-from maml.utils import pool_from, convert_docs
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 
 
 module_dir = os.path.dirname(__file__)
@@ -441,6 +441,8 @@ class MTPotential(Potential):
             raise RuntimeError("mlp has not been found.\n",
                                "Please refer to http://gitlab.skoltech.ru/shapeev/mlip ",
                                "for further detail.")
+        train_structures, train_forces, train_stresses = \
+            check_structures_forces_stresses(train_structures, train_forces, train_stresses)
         train_pool = pool_from(train_structures, train_energies, train_forces,
                                train_stresses)
         elements = sorted(set(itertools.chain(*[struct.species for struct in train_structures])))
@@ -551,6 +553,8 @@ class MTPotential(Potential):
         fitted_mtp = 'fitted.mtp'
         original_file = 'original.cfgs'
         predict_file = 'predict.cfgs'
+        test_structures, test_forces, test_stresses = \
+            check_structures_forces_stresses(test_structures, test_forces, test_stresses)
         predict_pool = pool_from(test_structures, test_energies, test_forces, test_stresses)
 
         with ScratchDir('.'):
