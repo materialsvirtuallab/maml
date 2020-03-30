@@ -1,6 +1,6 @@
 numpy==1.18.1
 scipy==1.4.1
-pymatgen==2020.1.10
+pymatgen==2020.3.13
 monty==3.0.2
 keras==2.3.1
 pandas==1.0.1
