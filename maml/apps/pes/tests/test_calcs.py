@@ -324,6 +324,8 @@ class DefectFormationTest(unittest.TestCase):
 
 
 class LMPTest(unittest.TestCase):
+
+    @unittest.skipIf(not which('lmp_serial'), 'No LAMMPS serial cmd found.')
     def test_get_lmp_exe(self):
         init_lmp = get_default_lmp_exe()
         lc = LatticeConstant(['dummy setting'])
