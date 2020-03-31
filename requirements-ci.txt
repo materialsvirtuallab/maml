@@ -4,6 +4,6 @@ coverage==5.0.1
 coveralls==1.11.1
 pycodestyle==2.5.0
 mypy==0.770
-pydocstyle==5.0.1
+pydocstyle==5.0.2
 flake8==3.7.9
 pylint==2.4.4
