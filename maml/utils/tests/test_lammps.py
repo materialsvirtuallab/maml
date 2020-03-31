@@ -60,7 +60,7 @@ class TestLAMMPS(unittest.TestCase):
 
         new_structures, new_forces, new_stresses = \
             check_structures_forces_stresses(structures=[s, s], return_none=True)
-        
+
         self.assertTrue(len(new_forces) == 2)
         self.assertTrue(new_forces[0] is None)
         self.assertTrue(len(new_stresses) == 2)

@@ -21,7 +21,7 @@ from maml.apps.pes._snap import SNAPotential
 from maml.describer import BispectrumCoefficients
 from maml.apps.pes import SpectralNeighborAnalysis, EnergyForceStress, \
     ElasticConstant, LatticeConstant, NudgedElasticBand, DefectFormation
-from maml.apps.pes import set_lmp_exe, get_lmp_exe
+from maml.apps.pes import get_default_lmp_exe
 
 
 CWD = os.getcwd()
@@ -253,15 +253,12 @@ class NudgedElasticBandTest(unittest.TestCase):
     def setUpClass(cls):
         cls.this_dir = os.path.dirname(os.path.abspath(__file__))
         cls.test_dir = tempfile.mkdtemp()
-        cls.init_lmp = get_lmp_exe()
-        set_lmp_exe('lmp_mpi')
         os.chdir(cls.test_dir)
 
     @classmethod
     def tearDownClass(cls):
         os.chdir(CWD)
         shutil.rmtree(cls.test_dir)
-        set_lmp_exe(cls.init_lmp)
 
     def setUp(self):
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
@@ -280,12 +277,12 @@ class NudgedElasticBandTest(unittest.TestCase):
     @unittest.skipIf(not which('lmp_mpi'), 'No LAMMPS mpi cmd found.')
     def test_calculate(self):
         calculator = NudgedElasticBand(ff_settings=self.ff_settings, specie='Ni',
-                                       lattice='fcc', alat=3.506)
-        print('NudgedElasticBand using %s' % get_lmp_exe())
+                                       lattice='fcc', alat=3.506, lmp_exe="lmp_mpi", num_replicas=3)
+        print('NudgedElasticBand using %s' % calculator.LMP_EXE)
         migration_barrier = calculator.calculate()
         np.testing.assert_almost_equal(migration_barrier, 1.013, decimal=2)
         invalid_calculator = NudgedElasticBand(ff_settings=self.ff_settings, specie='Ni',
-                                               lattice='fccc', alat=3.506)
+                                               lattice='fcc', alat=3.506)
         self.assertRaises(ValueError, invalid_calculator.calculate)
 
 
@@ -327,15 +324,16 @@ class DefectFormationTest(unittest.TestCase):
 
 
 class LMPTest(unittest.TestCase):
-    def test_set_get_lmp_exe(self):
-        init_lmp = get_lmp_exe()
+    def test_get_lmp_exe(self):
+        init_lmp = get_default_lmp_exe()
         lc = LatticeConstant(['dummy setting'])
+        lc.set_lmp_exe(init_lmp)
         self.assertEqual(init_lmp, lc.LMP_EXE)
 
         new_lmp = "It can be any directory"
-        set_lmp_exe(new_lmp)
+        lc.set_lmp_exe(new_lmp)
         self.assertEqual(new_lmp, lc.LMP_EXE)
-        set_lmp_exe(init_lmp)
+        lc.set_lmp_exe(init_lmp)
 
 
 if __name__ == '__main__':

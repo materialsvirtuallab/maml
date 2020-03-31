@@ -24,34 +24,18 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-LMP_EXE = None  # global lammps executable name
 
-
-def get_lmp_exe():
+def get_default_lmp_exe():
     """
     Get lammps executable
     Returns: Lammps executable name
     """
-    global LMP_EXE
-    if LMP_EXE is not None:
-        return LMP_EXE
+
     for lmp_exe in ["lmp_serial", "lmp_mpi"]:
         if which(lmp_exe) is not None:
             logger.info("Setting Lammps executable to %s" % lmp_exe)
-            LMP_EXE = lmp_exe
             return lmp_exe
-
-
-def set_lmp_exe(lmp_exe: str) -> None:
-    """
-    Change the lammps executable name
-    Args:
-        lmp_exe (str): lammps executable name, e.g., lmp_mpi or lmp_serial
-            or full path for the installed lammps
-    """
-    global LMP_EXE
-    LMP_EXE = lmp_exe
-    logger.info("Setting Lammps executable to %s" % lmp_exe)
+    return None
 
 
 def _pretty_input(lines):
@@ -83,6 +67,26 @@ class LMPStaticCalculator:
                     'box tilt large',
                     'read_data data.static',
                     'run 0']
+
+    allowed_kwargs = ["lmp_exe"]
+
+    def __init__(self, **kwargs):
+        """
+        Initializer for lammps calculator
+        Allowed keyword args are lmp_exe string
+
+        """
+        lmp_exe = kwargs.pop("lmp_exe", None)
+        if lmp_exe is None:
+            lmp_exe = get_default_lmp_exe()
+        if not which(lmp_exe):
+            raise ValueError("lammps executable %s not found" % str(lmp_exe))
+        self.LMP_EXE = lmp_exe
+        for i, j in kwargs.items():
+            if i not in self.allowed_kwargs:
+                raise TypeError("%s not in supported kwargs %s" % (
+                    str(i), str(self.allowed_kwargs)))
+            setattr(self, i, j)
 
     @abc.abstractmethod
     def _setup(self):
@@ -131,6 +135,7 @@ class LMPStaticCalculator:
             ff_settings = getattr(self, 'ff_settings')
             if hasattr(ff_settings, 'elements'):
                 ff_elements = getattr(ff_settings, 'elements')
+
         with ScratchDir('.'):
             input_file = self._setup()
             data = []
@@ -155,12 +160,14 @@ class LMPStaticCalculator:
                 data.append(results)
         return data
 
-    @property
-    def LMP_EXE(cls):
+    def set_lmp_exe(self, lmp_exe: str) -> None:
         """
-        Get lammps executable string
+        Set lammps executable for the instance
+        Args:
+            lmp_exe (str): lammps executable path
+        Returns:
         """
-        return get_lmp_exe()
+        self.LMP_EXE = lmp_exe
 
 
 class EnergyForceStress(LMPStaticCalculator):
@@ -168,7 +175,7 @@ class EnergyForceStress(LMPStaticCalculator):
     Calculate energy, forces and virial stress of structures.
     """
 
-    def __init__(self, ff_settings):
+    def __init__(self, ff_settings, **kwargs):
         """
         Args:
             ff_settings (list/Potential): Configure the force field settings for LAMMPS
@@ -176,6 +183,7 @@ class EnergyForceStress(LMPStaticCalculator):
                 Potential.write_param method to get the force field setting.
         """
         self.ff_settings = ff_settings
+        super().__init__(**kwargs)
 
     def _setup(self):
         template_dir = os.path.join(os.path.dirname(__file__), 'templates', 'efs')
@@ -232,7 +240,7 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
              'dump 3 all custom 1 dump.snad c_snad[*]',
              'dump 4 all custom 1 dump.snav c_snav[*]']
 
-    def __init__(self, rcut, twojmax, element_profile, quadratic=False):
+    def __init__(self, rcut, twojmax, element_profile, quadratic=False, **kwargs):
         """
         For more details on the parameters, please refer to the
         official documentation of LAMMPS.
@@ -258,6 +266,7 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
         self.twojmax = twojmax
         self.element_profile = element_profile
         self.quadratic = quadratic
+        super().__init__(**kwargs)
 
     @staticmethod
     def get_bs_subscripts(twojmax):
@@ -340,7 +349,7 @@ class ElasticConstant(LMPStaticCalculator):
 
     def __init__(self, ff_settings, potential_type='external',
                  deformation_size=1e-6, jiggle=1e-5, lattice='bcc', alat=5.0,
-                 atom_type=1, maxiter=400, maxeval=1000):
+                 atom_type=1, maxiter=400, maxeval=1000, **kwargs):
         """
         Args:
             ff_settings (list/Potential): Configure the force field settings for LAMMPS
@@ -375,6 +384,7 @@ class ElasticConstant(LMPStaticCalculator):
         self.atom_type = atom_type
         self.maxiter = maxiter
         self.maxeval = maxeval
+        super().__init__(**kwargs)
 
     def _setup(self):
         template_dir = os.path.join(os.path.dirname(__file__), 'templates', 'elastic')
@@ -456,7 +466,7 @@ class LatticeConstant(LMPStaticCalculator):
     Lattice Constant Relaxation Calculator.
     """
 
-    def __init__(self, ff_settings):
+    def __init__(self, ff_settings, **kwargs):
         """
         Args:
             ff_settings (list/Potential): Configure the force field settings for
@@ -464,6 +474,7 @@ class LatticeConstant(LMPStaticCalculator):
                 Potential.write_param method to get the force field setting.
         """
         self.ff_settings = ff_settings
+        super().__init__(**kwargs)
 
     def _setup(self):
         template_dir = os.path.join(os.path.dirname(__file__), 'templates', 'latt')
@@ -504,7 +515,7 @@ class NudgedElasticBand(LMPStaticCalculator):
     NudgedElasticBand migration energy calculator.
     """
 
-    def __init__(self, ff_settings, specie, lattice, alat, num_replicas=7):
+    def __init__(self, ff_settings, specie, lattice, alat, num_replicas=7, **kwargs):
         """
         Args:
             ff_settings (list/Potential): Configure the force field settings for
@@ -520,6 +531,7 @@ class NudgedElasticBand(LMPStaticCalculator):
         self.lattice = lattice
         self.alat = alat
         self.num_replicas = num_replicas
+        super().__init__(**kwargs)
 
     def get_unit_cell(self, specie, lattice, alat):
         """
@@ -689,7 +701,7 @@ class DefectFormation(LMPStaticCalculator):
     Defect formation energy calculator.
     """
 
-    def __init__(self, ff_settings, specie, lattice, alat):
+    def __init__(self, ff_settings, specie, lattice, alat, **kwargs):
         """
         Args:
             ff_settings (list/Potential): Configure the force field settings for
@@ -703,6 +715,7 @@ class DefectFormation(LMPStaticCalculator):
         self.specie = specie
         self.lattice = lattice
         self.alat = alat
+        super().__init__(**kwargs)
 
     def get_unit_cell(self, specie, lattice, alat):
         """

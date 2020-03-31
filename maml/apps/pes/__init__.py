@@ -13,7 +13,7 @@ from ._lammps import (  # noqa
     LMPStaticCalculator, EnergyForceStress,  # noqa
     SpectralNeighborAnalysis, ElasticConstant,  # noqa
     LatticeConstant, NudgedElasticBand, DefectFormation,  # noqa
-    get_lmp_exe, set_lmp_exe  # noqa
+    get_default_lmp_exe  # noqa
     )
 
 __all__ = [
@@ -29,6 +29,5 @@ __all__ = [
     "LatticeConstant",
     "NudgedElasticBand",
     "DefectFormation",
-    "get_lmp_exe",
-    "set_lmp_exe"
+    "get_default_lmp_exe"
 ]
