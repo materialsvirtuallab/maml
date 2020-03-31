@@ -2,7 +2,7 @@
 LAMMPS utility
 """
 import logging
-from typing import Any, List, Optional, Union, Tuple
+from typing import List, Optional, Union, Tuple
 
 from pymatgen.core import Structure, Element, Specie, Lattice
 from pymatgen.core.operations import SymmOp
@@ -23,8 +23,8 @@ STRESS_FORMAT = {
 def check_structures_forces_stresses(structures: List[Structure],
                                      forces: Optional[List] = None,
                                      stresses: Optional[List] = None,
-                                     stress_format: str = 'VASP') \
-        -> Union[Tuple[List[Structure]], Optional[Any]]:
+                                     stress_format: str = 'VASP',
+                                     return_none: bool = True):
     """
     Check structures, forces and stresses. The forces and stress are dependent
     on the lattice orientation. This function will rotate the structures
@@ -41,51 +41,68 @@ def check_structures_forces_stresses(structures: List[Structure],
         stresses (list): list of stress vectors
         stress_format (str): stress format, choose from
             "VASP", "LAMMPS", "SNAP"
+        return_none (bool): whether to return list of None
+            for forces and stresses
 
     Returns: structures [forces], [stresses]
 
     """
+
     new_structures = []
     new_forces = []
     new_stresses = []
+
+    no_force = forces is None
+    no_stress = stresses is None
+
+    if forces is None:
+        forces = [None] * len(structures)
+    if stresses is None:
+        stresses = [None] * len(structures)
 
     for i in range(len(structures)):
         s = structures[i]
         # orthogonal structures do not need to rotate
         if s.lattice.is_orthogonal:
             new_structures.append(s)
-            if forces is not None:
-                new_forces.append(forces[i])
-            if stresses is not None:
-                new_stresses.append(stresses[i])
+            new_forces.append(forces[i])  # type: ignore
+            new_stresses.append(stresses[i])  # type: ignore
+            continue
+
+        logger.info("Structure index %d is rotated." % i)
+        new_latt_matrix, symmop, rot_matrix = \
+            get_lammps_lattice_and_rotation(s, (0, 0, 0))
+        coords = symmop.operate_multi(s.cart_coords)
+        new_s = Structure(Lattice(new_latt_matrix), s.species, coords,
+                          site_properties=s.site_properties,
+                          coords_are_cartesian=True)
+        new_structures.append(new_s)
+
+        if not no_force:
+            new_f = symmop.operate_multi(forces[i])
+            new_forces.append(new_f)
         else:
-            logger.info("Structure index %d is rotated." % i)
-            new_latt_matrix, symmop, rot_matrix = \
-                get_lammps_lattice_and_rotation(s, (0, 0, 0))
-            coords = symmop.operate_multi(s.cart_coords)
-            new_s = Structure(Lattice(new_latt_matrix), s.species, coords,
-                              site_properties=s.site_properties,
-                              coords_are_cartesian=True)
-            new_structures.append(new_s)
+            new_forces.append(None)
 
-            if forces is not None:
-                new_f = symmop.operate_multi(forces[i])
-                new_forces.append(new_f)
-            if stresses is not None:
-                stress_matrix = stress_list_to_matrix(stresses[i], stress_format)
-                stress_matrix = rot_matrix.dot(stress_matrix).dot(rot_matrix.T)
-                # R \sigma R^T stress rotation
-                new_stresses.append(stress_matrix_to_list(stress_matrix, stress_format))
+        if not no_stress:
+            stress_matrix = stress_list_to_matrix(stresses[i], stress_format)
+            stress_matrix = rot_matrix.dot(stress_matrix).dot(rot_matrix.T)
+            # R \sigma R^T stress rotation
+            new_stresses.append(stress_matrix_to_list(stress_matrix, stress_format))
+        else:
+            new_stresses.append(None)
 
-    if forces is None and stresses is None:
-        return new_structures
+    if return_none:
+        return new_structures, new_forces, new_stresses
 
     out = [new_structures]
-    if forces is not None:
+    if not no_force:
         out += [new_forces]
-    if stresses is not None:
+    if not no_stress:
         out += [new_stresses]
-    return tuple(out)
+    if len(out) == 1:
+        return out[0]
+    return out
 
 
 def stress_matrix_to_list(stress_matrix: np.ndarray,

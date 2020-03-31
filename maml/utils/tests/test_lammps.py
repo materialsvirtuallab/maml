@@ -53,6 +53,19 @@ class TestLAMMPS(unittest.TestCase):
         self.assertTrue(np.linalg.norm(checked_force - new_forces[0]) < 1e-4)
         self.assertTrue(np.linalg.norm(checked_stress - new_stresses[0]) < 1e-4)
 
+        new_structures = check_structures_forces_stresses(structures=[s], return_none=False)
+
+        self.assertTrue(len(new_structures) == 1)
+        self.assertTrue(isinstance(new_structures[0], Structure))
+
+        new_structures, new_forces, new_stresses = \
+            check_structures_forces_stresses(structures=[s, s], return_none=True)
+        
+        self.assertTrue(len(new_forces) == 2)
+        self.assertTrue(new_forces[0] is None)
+        self.assertTrue(len(new_stresses) == 2)
+        self.assertTrue(new_stresses[0] is None)
+
     def test_write(self):
         s = Structure(Lattice(np.array([[3.16, 0.1, 0.2],
                                         [0.1, 3.17, 0.3],
