@@ -1,12 +1,17 @@
 """
 LAMMPS utility
 """
+import logging
 from typing import Any, List, Optional, Union, Tuple
 
 from pymatgen.core import Structure, Element, Specie, Lattice
 from pymatgen.core.operations import SymmOp
 import numpy as np
 
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 STRESS_FORMAT = {
     "VASP": ['xx', 'yy', 'zz', 'xy', 'yz', 'xz'],
@@ -54,6 +59,7 @@ def check_structures_forces_stresses(structures: List[Structure],
             if stresses is not None:
                 new_stresses.append(stresses[i])
         else:
+            logger.info("Structure index %d is rotated." % i)
             new_latt_matrix, symmop, rot_matrix = \
                 get_lammps_lattice_and_rotation(s, (0, 0, 0))
             coords = symmop.operate_multi(s.cart_coords)
