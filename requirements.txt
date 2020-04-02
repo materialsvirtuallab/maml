@@ -8,6 +8,6 @@ scikit-learn==0.22.2.post1
 tensorflow==2.1.0
 h5py==2.10.0
 joblib==0.14.1
-tqdm==4.44.1
+tqdm==4.45.0
 pymongo==3.10.1
 matminer==0.6.2
