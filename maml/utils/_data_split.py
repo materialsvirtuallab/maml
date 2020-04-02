@@ -12,16 +12,16 @@ class DataSplitter(MSONable):
     """
     Data splitter base class
     """
-    def split(self, mat_ids, targets=None):
+    def split(self, mat_ids, **kwargs):
         """
         Split the mat_ids, optionally one can provide
         targets. This is useful in stratified split.
 
         Args:
             mat_ids (list): list of material ids
-            targets (list): list of targets
 
-        Returns: (train_ids, val_ids, test_ids)
+        Returns: (train_ids, val_ids, test_ids) or
+            (train_ids, test_ids)
         """
         pass
 
@@ -46,7 +46,7 @@ class ShuffleSplitter(DataSplitter):
         int_ratios = [float(i) for i in ratios.strip().split(delim)]
         self.ratios = [i / sum(int_ratios) for i in int_ratios]
 
-    def split(self, mat_ids) -> Tuple:  # type: ignore
+    def split(self, mat_ids, **kwargs) -> Tuple:
         """
         Randomly split the mat_ids
         Args:
