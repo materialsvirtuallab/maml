@@ -8,7 +8,10 @@ from ._value_profile import ValueProfile, ConstantValue, LinearProfile  # noqa
 from ._jit import njit  # noqa
 from ._tempfile import MultiScratchDir  # noqa
 from ._data_split import ShuffleSplitter  # noqa
-
+from ._lammps import (write_data_from_structure,  # noqa
+                      check_structures_forces_stresses, stress_format_change,  # noqa
+                      stress_matrix_to_list, stress_list_to_matrix,  # noqa
+                      get_lammps_lattice_and_rotation)  # noqa
 
 __all__ = [
     'serialize_maml_object',
@@ -22,5 +25,11 @@ __all__ = [
     'LinearProfile',
     'njit',
     'MultiScratchDir',
-    "ShuffleSplitter"
+    "ShuffleSplitter",
+    "write_data_from_structure",
+    "check_structures_forces_stresses",
+    "stress_format_change",
+    "stress_list_to_matrix",
+    "stress_matrix_to_list",
+    "get_lammps_lattice_and_rotation"
 ]

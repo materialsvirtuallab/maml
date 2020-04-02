@@ -13,7 +13,7 @@ from ._base import Potential
 from ._lammps import EnergyForceStress
 from maml import ModelWithSklearn
 from maml.describer import BispectrumCoefficients
-from maml.utils import pool_from, convert_docs
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 
 
 class SNAPotential(Potential):
@@ -56,6 +56,8 @@ class SNAPotential(Potential):
             train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
         """
+        train_structures, train_forces, train_stresses = \
+            check_structures_forces_stresses(train_structures, train_forces, train_stresses)
         train_pool = pool_from(train_structures, train_energies, train_forces,
                                train_stresses)
         _, df = convert_docs(train_pool)
@@ -79,6 +81,8 @@ class SNAPotential(Potential):
             test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
         """
+        test_structures, test_forces, test_stresses = \
+            check_structures_forces_stresses(test_structures, test_forces, test_stresses)
         predict_pool = pool_from(test_structures, test_energies, test_forces,
                                  test_stresses)
         _, df_orig = convert_docs(predict_pool)

@@ -23,9 +23,9 @@ def doc_from(structure, energy=None, force=None, stress=None):
     Returns:
         (dict)
     """
-    energy = energy if energy else 0
-    force = force if force else np.zeros((len(structure), 3))
-    stress = stress if stress else np.zeros(6)
+    energy = energy if energy is not None else 0
+    force = force if force is not None else np.zeros((len(structure), 3))
+    stress = stress if stress is not None else np.zeros(6)
     outputs = dict(energy=energy, forces=force,
                    virial_stress=stress)
     doc = dict(structure=structure.as_dict(),
@@ -52,9 +52,9 @@ def pool_from(structures, energies=None, forces=None, stresses=None):
     Returns:
         ([dict])
     """
-    energies = energies if energies else [None] * len(structures)
-    forces = forces if forces else [None] * len(structures)
-    stresses = stresses if stresses else [None] * len(structures)
+    energies = energies if energies is not None else [None] * len(structures)
+    forces = forces if forces is not None else [None] * len(structures)
+    stresses = stresses if stresses is not None else [None] * len(structures)
     datapool = [doc_from(structure, energy, force, stress)
                 for structure, energy, force, stress
                 in zip(structures, energies, forces, stresses)]

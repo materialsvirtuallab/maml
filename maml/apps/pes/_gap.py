@@ -21,7 +21,7 @@ from pymatgen.core.periodic_table import get_el_sp
 
 from ._base import Potential
 from ._lammps import EnergyForceStress
-from maml.utils import pool_from, convert_docs
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 
 
 module_dir = os.path.dirname(__file__)
@@ -251,6 +251,9 @@ class GAPotential(Potential):
                                "Please refer to https://github.com/libAtoms/QUIP for ",
                                "further detail.")
 
+        train_structures, train_forces, train_stresses = \
+            check_structures_forces_stresses(train_structures, train_forces, train_stresses)
+
         gap_sorted_elements = []
         for struct in train_structures:
             for specie in struct.species:
@@ -387,6 +390,8 @@ class GAPotential(Potential):
             predict_stress (bool): Whether to predict virial stress of
                 configurations.
         """
+        test_structures, test_forces, test_stresses = \
+            check_structures_forces_stresses(test_structures, test_forces, test_stresses)
         if not which('quip'):
             raise RuntimeError("quip has not been found.\n",
                                "Please refer to https://github.com/libAtoms/QUIP for ",

@@ -21,7 +21,7 @@ from pymatgen.core import units
 
 from ._base import Potential
 from ._lammps import EnergyForceStress
-from maml.utils import pool_from, convert_docs
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 
 
 module_dir = os.path.dirname(__file__)
@@ -633,7 +633,8 @@ class NNPotential(Potential):
         """
         if not which('nnp-train'):
             raise RuntimeError("NNP Trainer has not been found.")
-
+        train_structures, train_forces, train_stresses = \
+            check_structures_forces_stresses(train_structures, train_forces, train_stresses)
         train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
         atoms_filename = 'input.data'
 
@@ -704,7 +705,8 @@ class NNPotential(Potential):
 
         original_file = 'input.data'
         predict_file = 'output.data'
-
+        test_structures, test_forces, test_stresses = \
+            check_structures_forces_stresses(test_structures, test_forces, test_stresses)
         predict_pool = pool_from(test_structures, test_energies, test_forces,
                                  test_stresses)
         with ScratchDir('.'):
