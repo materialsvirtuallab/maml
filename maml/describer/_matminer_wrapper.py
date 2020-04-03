@@ -40,6 +40,20 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
 
     new_class.__init__ = __init__  # type: ignore
 
+    def get_params(self, deep=False):
+        params = wrapped_class.get_params(self, deep=deep)
+        return params
+
+    new_class.get_params = get_params  # type: ignore
+
+    new_class.__str__ = wrapped_class.__str__  # type: ignore
+    new_class.__repr__ = wrapped_class.__repr__  # type: ignore
+
+    def _get_param_names(cls=None):  # type: ignore
+        return wrapped_class._get_param_names()
+
+    new_class._get_param_names = _get_param_names  # type: ignore
+
     def transform_one(self, obj: Any):
         """
         featurize to transform_one
