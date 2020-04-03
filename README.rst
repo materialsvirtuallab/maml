@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/materialsvirtuallab/maml.svg?style=svg)](https://circleci.com/gh/materialsvirtuallab/maml)
+[![Coverage Status](https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master)](https://coveralls.io/github/materialsvirtuallab/maml?branch=master)
+
 maml
 ====
 
