@@ -51,7 +51,7 @@ jobs:
             source activate test-environment
             pip install --quiet -e .
             pytest --cov=maml --cov-report html:coverage_reports maml
-            # coveralls
+            coveralls
           no_output_timeout: 3600
       - store_artifacts:
           path: coverage_reports/
