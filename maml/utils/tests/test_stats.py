@@ -29,6 +29,9 @@ class TestStats(unittest.TestCase):
         self.assertAlmostEquals(Stats.moment(self.x, order=1),
                                 np.mean(self.x))
 
+        self.assertAlmostEquals(Stats.moment(self.x),
+                                np.mean(self.x))
+
     def test_kurtosis_skew(self):
         self.assertAlmostEqual(Stats.skewness(self.x), skew(self.x))
         self.assertAlmostEqual(Stats.kurtosis(self.x), kurtosis(self.x, fisher=False))
