@@ -23,10 +23,8 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
         wrapped_class (class object): matminer BaseFeaturizer
     Returns: maml describer class
     """
-    new_class = type(cls_name, (OutDataFrameConcat, BaseDescriber),
-                     {'__doc__': wrapped_class.__doc__})
 
-    def __init__(self, *args, **kwargs):
+    def constructor(self, *args, **kwargs):
         """
         Wrapped __init__ constructor
         """
@@ -38,21 +36,13 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
         base_kwargs = dict(n_jobs=n_jobs, memory=memory, verbose=verbose)
         super(new_class, self).__init__(**base_kwargs)
 
-    new_class.__init__ = __init__  # type: ignore
+    @classmethod  # type: ignore
+    def _get_param_names(cls):  # type: ignore
+        return wrapped_class._get_param_names()
 
     def get_params(self, deep=False):
         params = wrapped_class.get_params(self, deep=deep)
         return params
-
-    new_class.get_params = get_params  # type: ignore
-
-    new_class.__str__ = wrapped_class.__str__  # type: ignore
-    new_class.__repr__ = wrapped_class.__repr__  # type: ignore
-
-    def _get_param_names(cls=None):  # type: ignore
-        return wrapped_class._get_param_names()
-
-    new_class._get_param_names = _get_param_names  # type: ignore
 
     def transform_one(self, obj: Any):
         """
@@ -62,9 +52,8 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
         labels = wrapped_class.feature_labels(self)
         return pd.DataFrame({i: [j] for i, j in zip(labels, results)})
 
-    new_class.transform_one = transform_one  # type: ignore
-
-    def from_preset(name: str, **kwargs):
+    @classmethod  # type: ignore
+    def from_preset(cls, name: str, **kwargs):  # type: ignore
         """
         Wrap matminer's from_preset function
         """
@@ -73,9 +62,22 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
         args = list(sig.parameters.keys())[1:]
         params = {i: None for i in args}
         params.update(**kwargs)
-        instance_new = new_class(**params)
+        instance_new = cls(**params)
         instance_new.__dict__.update(instance.__dict__)
         return instance_new
-    new_class.from_preset = from_preset  # type: ignore
+
+    new_class = type(cls_name, (OutDataFrameConcat, BaseDescriber),
+                     {'__doc__': wrapped_class.__doc__,
+                      '__init__': constructor,
+                      '__str__': wrapped_class.__str__,
+                      '__repr__': wrapped_class.__repr__,
+                      '__getstate__': wrapped_class.__getstate__,
+                      '__setstate__': wrapped_class.__setstate__,
+                      '_get_param_names': _get_param_names,
+                      'transform_one': transform_one,
+                      'from_preset': from_preset,
+                      'get_params': get_params,
+                      '__module__': 'maml.describer'
+                      })
 
     return new_class
