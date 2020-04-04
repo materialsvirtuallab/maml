@@ -165,7 +165,7 @@ class KerasMixin:
 class ModelWithSklearn(BaseModel, SklearnMixin):
     """MAML model with sklearn model as estimator
     """
-    def __init__(self, model: Any,
+    def __init__(self, model: Any = None,
                  describer: TransformerMixin = None, **kwargs):
         """
         Args:
@@ -178,7 +178,7 @@ class ModelWithSklearn(BaseModel, SklearnMixin):
 class ModelWithKeras(BaseModel, KerasMixin):
     """MAML model with keras model as estimators
     """
-    def __init__(self, model: Any,
+    def __init__(self, model: Any = None,
                  describer: TransformerMixin = None, **kwargs):
         """
         Args:

@@ -12,7 +12,7 @@ from pymatgen.util.testing import PymatgenTest
 from sklearn.linear_model import LinearRegression
 from sklearn.gaussian_process import GaussianProcessRegressor
 
-from maml import BaseDescriber, ModelWithSklearn
+from maml import BaseDescriber, ModelWithSklearn, ModelWithKeras
 from maml.describer._structure import DistinctSiteProperty
 from maml.model._neural_network import MultiLayerPerceptron
 
@@ -50,6 +50,12 @@ class NeuralNetTest(PymatgenTest):
             self.nn2.load("test.h5")
         self.assertEqual(self.nn.predict_objs([self.na2o])[0][0],
                          self.nn2.predict_objs([self.na2o])[0][0])
+
+        with ScratchDir('.'):
+            self.nn.save('test.h5')
+            nn3 = ModelWithKeras.from_file('test.h5')
+        self.assertEqual(self.nn.predict_objs([self.na2o])[0][0],
+                         nn3.predict_objs([self.na2o])[0][0])
 
 
 class LinearModelTest(unittest.TestCase):
@@ -92,6 +98,16 @@ class LinearModelTest(unittest.TestCase):
             loaded = self.lm.model.coef_
             self.assertAlmostEqual(ori, loaded)
 
+            lm2 = ModelWithSklearn.from_file('test_lm.save')
+            self.assertAlmostEquals(lm2.model.coef_, ori)
+
+    def model_none(self):
+        m = ModelWithSklearn(model=LinearRegression())
+        x = np.array([[1, 2], [2, 1], [1, 1]])
+        y = np.array([[3], [3], [2]])
+        m.train(x, y)
+        self.assertAlmostEqual(m.model.coef_.ravel()[0], 1.0)
+
 
 class GaussianProcessTest(unittest.TestCase):
     @classmethod
@@ -111,7 +127,6 @@ class GaussianProcessTest(unittest.TestCase):
                 return pd.DataFrame(objs)
 
         self.gpr = ModelWithSklearn(model=GaussianProcessRegressor(), describer=DummyDescriber())
-
 
     @classmethod
     def tearDownClass(cls):
