@@ -673,6 +673,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                                   if m.startswith('ERROR')][0]
                     error_msg += ', '.join(msg[error_line:])
                 except Exception:
+                    logger.info(f"NudgedElasticBand error with message {msg}")
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
             result = self._parse()
@@ -799,7 +800,6 @@ class DefectFormation(LMPStaticCalculator):
                                   if m.startswith('ERROR')][0]
                     error_msg += ', '.join(msg[error_line:])
                 except Exception:
-                    logger.info(f"NudgedElasticBand error with message {msg}")
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
             defect_energy, _, _ = self._parse()
