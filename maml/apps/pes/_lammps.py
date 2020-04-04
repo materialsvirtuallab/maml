@@ -659,7 +659,7 @@ class NudgedElasticBand(LMPStaticCalculator):
         """
         with ScratchDir('.'):
             input_file = self._setup()
-            p = subprocess.Popen(['mpirun', '-n', str(self.num_replicas),
+            p = subprocess.Popen(['mpirun', '--oversubscribe', '-n', str(self.num_replicas),
                                   'lmp_mpi', '-partition', '{}x1'.format(self.num_replicas),
                                   '-in', input_file],
                                  stdout=subprocess.PIPE)
