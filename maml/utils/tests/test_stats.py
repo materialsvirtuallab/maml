@@ -17,6 +17,8 @@ class TestStats(unittest.TestCase):
         self.assertAlmostEqual(Stats.mean(self.x), np.mean(self.x))
         self.assertAlmostEqual(Stats.mean(self.x, self.weights),
                                np.average(self.x, weights=self.weights))
+        self.assertAlmostEqual(Stats.mean(self.x, self.weights),
+                               Stats.average(self.x, self.weights))
 
     def test_max_min_range(self):
         self.assertEqual(Stats.max(self.x), 5)
@@ -26,15 +28,27 @@ class TestStats(unittest.TestCase):
     def test_moment(self):
         np.testing.assert_almost_equal(Stats.moment(self.x, max_order=2),
                                        [np.mean(self.x), np.std(self.x)])
-        self.assertAlmostEquals(Stats.moment(self.x, order=1),
-                                np.mean(self.x))
+        self.assertAlmostEqual(Stats.moment(self.x, order=1),
+                               np.mean(self.x))
 
-        self.assertAlmostEquals(Stats.moment(self.x),
-                                np.mean(self.x))
+        self.assertAlmostEqual(Stats.moment(self.x),
+                               np.mean(self.x))
 
     def test_kurtosis_skew(self):
         self.assertAlmostEqual(Stats.skewness(self.x), skew(self.x))
         self.assertAlmostEqual(Stats.kurtosis(self.x), kurtosis(self.x, fisher=False))
+
+    def test_geometric_mean(self):
+        self.assertAlmostEqual(Stats.geometric_mean(self.x, self.weights),
+                               np.prod(np.power(self.x, self.weights))**(1./np.sum(self.weights)))
+
+    def test_harmonic_mean(self):
+        self.assertAlmostEqual(Stats.harmonic_mean(self.x, self.weights),
+                               np.sum(self.weights) / np.sum(np.array(self.weights) / np.array(self.x)))
+
+    def test_allowed_stats(self):
+        self.assertNotIn("best",  Stats.allowed_stats)
+        self.assertIn("average", Stats.allowed_stats)
 
 
 if __name__ == "__main__":

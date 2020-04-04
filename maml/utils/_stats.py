@@ -7,6 +7,26 @@ from typing import List, Optional
 import numpy as np
 
 
+def _add_allowed_stats(cls):
+    """
+    Decorate to add allowed_stats to the Stats class
+
+    Args:
+        cls: Stats class
+
+    Returns: Stats class with allowed_stats attributes
+
+    """
+    all_keys = list(cls.__dict__.keys())
+    allowed = []
+    for key in all_keys:
+        if isinstance(cls.__dict__[key], staticmethod):
+            allowed.append(key)
+    setattr(cls, "allowed_stats", allowed)
+    return cls
+
+
+@_add_allowed_stats
 class Stats:
     """
     Calculate the stats of a list of values.
@@ -21,7 +41,7 @@ class Stats:
     def max(data: List[float]) -> float:
         """
         Max of value
-        Args:
+        Args:31
             data (list): list of float data
 
         Returns: maximum value
@@ -111,6 +131,21 @@ class Stats:
         return Stats.moment(data, weights=weights, order=1)
 
     @staticmethod
+    def average(data: List[float],
+                weights: Optional[List[float]] = None) -> float:
+        """
+        Weighted average
+
+        Args:
+            data (list): list of float data
+            weights (list or None): weights for each data point
+
+        Returns: average value
+
+        """
+        return Stats.mean(data, weights=weights)
+
+    @staticmethod
     def std(data: List[float],
             weights: Optional[List[float]] = None) -> float:
         """
@@ -159,6 +194,41 @@ class Stats:
         fourth = Stats.moment(data, weights=weights, order=4)
         std = Stats.std(data, weights=weights)
         return fourth ** 4 / std ** 4
+
+    @staticmethod
+    def geometric_mean(data: List[float],
+                       weights: Optional[List[float]] = None) -> float:
+        """
+        Geometric mean of the data
+
+        Args:
+            data (list): list of float data
+            weights (list or None): weights for each data point
+
+        Returns: geometric mean of the distribution
+
+        """
+        if weights is None:
+            weights = [1] * len(data)
+        return np.prod([i ** j for i, j in
+                        zip(data, weights)]) ** (1. / np.sum(weights))
+
+    @staticmethod
+    def harmonic_mean(data: List[float],
+                      weights: Optional[List[float]] = None) -> float:
+        """
+        harmonic mean of the data
+
+        Args:
+            data (list): list of float data
+            weights (list or None): weights for each data point
+
+        Returns: harmonic mean of the distribution
+
+        """
+        if weights is None:
+            weights = [1] * len(data)
+        return np.sum(weights) / np.sum(np.array(weights) / np.array(data))
 
 
 def _root_moment(data, weights, order) -> float:
