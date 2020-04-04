@@ -7,12 +7,11 @@ import tempfile
 
 from monty.tempfile import ScratchDir
 import numpy as np
-import pandas as pd
 from pymatgen.util.testing import PymatgenTest
 from sklearn.linear_model import LinearRegression
 from sklearn.gaussian_process import GaussianProcessRegressor
 
-from maml import BaseDescriber, ModelWithSklearn, ModelWithKeras
+from maml import ModelWithSklearn, ModelWithKeras
 from maml.describer._structure import DistinctSiteProperty
 from maml.model._neural_network import MultiLayerPerceptron
 
@@ -67,14 +66,8 @@ class LinearModelTest(unittest.TestCase):
         cls.y_train = cls.x_train.dot(cls.coef) + cls.intercept
 
     def setUp(self):
-        class DummyDescriber(BaseDescriber):
-            def transform_one(self, obj):
-                pass
 
-            def transform(self, objs):
-                return pd.DataFrame(objs)
-
-        self.lm = ModelWithSklearn(model=LinearRegression(), describer=DummyDescriber())
+        self.lm = ModelWithSklearn(model=LinearRegression())
         self.test_dir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -90,23 +83,25 @@ class LinearModelTest(unittest.TestCase):
         np.testing.assert_array_almost_equal(self.coef, self.lm.model.coef_)
         self.assertAlmostEqual(self.intercept, self.lm.model.intercept_)
 
-    def model_save_load(self):
+    def test_model_save_load(self):
+        self.lm.fit(features=self.x_train, targets=self.y_train)
         with ScratchDir('.'):
             self.lm.save('test_lm.save')
             ori = self.lm.model.coef_
             self.lm.load('test_lm.save')
             loaded = self.lm.model.coef_
-            self.assertAlmostEqual(ori, loaded)
+
+            np.testing.assert_almost_equal(ori, loaded)
 
             lm2 = ModelWithSklearn.from_file('test_lm.save')
-            self.assertAlmostEquals(lm2.model.coef_, ori)
+            np.testing.assert_almost_equal(lm2.model.coef_, ori)
 
-    def model_none(self):
+    def test_model_none(self):
         m = ModelWithSklearn(model=LinearRegression())
         x = np.array([[1, 2], [2, 1], [1, 1]])
         y = np.array([[3], [3], [2]])
         m.train(x, y)
-        self.assertAlmostEqual(m.model.coef_.ravel()[0], 1.0)
+        np.testing.assert_almost_equal(m.model.coef_.ravel(), np.array([1.0, 1.0]))
 
 
 class GaussianProcessTest(unittest.TestCase):
@@ -118,15 +113,7 @@ class GaussianProcessTest(unittest.TestCase):
     def setUp(self):
         self.x_train = np.atleast_2d([1., 3., 5., 6., 7., 8.]).T
         self.y_train = (self.x_train * np.sin(self.x_train)).ravel()
-
-        class DummyDescriber(BaseDescriber):
-            def transform_one(self, obj):
-                pass
-
-            def transform(self, objs):
-                return pd.DataFrame(objs)
-
-        self.gpr = ModelWithSklearn(model=GaussianProcessRegressor(), describer=DummyDescriber())
+        self.gpr = ModelWithSklearn(model=GaussianProcessRegressor())
 
     @classmethod
     def tearDownClass(cls):
