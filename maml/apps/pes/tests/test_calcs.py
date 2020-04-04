@@ -247,6 +247,7 @@ class LatticeConstantTest(unittest.TestCase):
         np.testing.assert_almost_equal(calc_c, c, decimal=2)
 
 
+@unittest.skipIf(not which('lmp_mpi'), 'No LAMMPS mpi cmd found.')
 class NudgedElasticBandTest(unittest.TestCase):
 
     @classmethod
@@ -274,7 +275,6 @@ class NudgedElasticBandTest(unittest.TestCase):
                                                 ['Ni'], [[0, 0, 0]])
         self.ff_settings = snap
 
-    @unittest.skipIf(not which('lmp_mpi'), 'No LAMMPS mpi cmd found.')
     def test_calculate(self):
         calculator = NudgedElasticBand(ff_settings=self.ff_settings, specie='Ni',
                                        lattice='fcc', alat=3.506, lmp_exe="lmp_mpi", num_replicas=3)
