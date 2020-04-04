@@ -38,11 +38,13 @@ class Stats:
     """
 
     @staticmethod
-    def max(data: List[float]) -> float:
+    def max(data: List[float],
+            weights: Optional[List[float]] = None) -> float:
         """
         Max of value
         Args:31
             data (list): list of float data
+            weights (list): optional weights
 
         Returns: maximum value
 
@@ -50,11 +52,13 @@ class Stats:
         return np.max(data)
 
     @staticmethod
-    def min(data: List[float]) -> float:
+    def min(data: List[float],
+            weights: Optional[List[float]] = None) -> float:
         """
         min of value
         Args:
             data (list): list of float data
+            weights (list): optional weights
 
         Returns: minimum value
 
@@ -62,11 +66,13 @@ class Stats:
         return np.min(data)
 
     @staticmethod
-    def range(data: List[float]) -> float:
+    def range(data: List[float],
+              weights: Optional[List[float]] = None) -> float:
         """
         Range of values
         Args:
             data (list): list of float data
+            weights (list): optional weights
 
         Returns: range of values, i.e., max - min
 
