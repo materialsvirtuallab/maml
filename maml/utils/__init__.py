@@ -11,7 +11,7 @@ from ._lammps import (write_data_from_structure,  # noqa
                       stress_matrix_to_list, stress_list_to_matrix,  # noqa
                       get_lammps_lattice_and_rotation)  # noqa
 
-from ._stats import Stats  # noqa
+from ._stats import Stats, STATS_KWARGS, stats_list_conversion  # noqa
 
 __all__ = [
     'pool_from',
@@ -29,5 +29,7 @@ __all__ = [
     'stress_list_to_matrix',
     'stress_matrix_to_list',
     'get_lammps_lattice_and_rotation',
-    'Stats'
+    'Stats',
+    'STATS_KWARGS',
+    'stats_list_conversion'
 ]
