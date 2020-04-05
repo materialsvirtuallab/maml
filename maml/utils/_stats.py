@@ -260,3 +260,49 @@ def _root_moment(data, weights, order) -> float:
                   i, j in zip(data, pmf)])
 
     return moment ** (1. / order)
+
+
+def _convert_a_or_b(v: str, a=int, b=None):
+    try:
+        return a(v)
+    except ValueError:
+        return b
+
+
+def _moment_symbol_conversion(moment_symbol: str):
+    splits = moment_symbol.split(":")
+    max_order = _convert_a_or_b(splits[2], int, None)
+
+    if max_order is None:
+        return moment_symbol
+
+    if max_order > 1:
+        return ['moment:%d:None' % i for i in range(1, max_order + 1)]
+
+
+def stats_list_conversion(stats_list: List[str]) -> List[str]:
+    """
+    Convert a list of stats str into a fully expanded list.
+    This applies mainly to stats that can return a list of values, e.g.,
+    moment with max_order > 1
+
+    Args:
+        stats_list (list): list of stats str
+
+    Returns: list of expanded stats str
+
+    """
+    re_list = []
+    for st in stats_list:
+        if ":" not in st:
+            re_list.append(st)
+        elif 'moment' in st:
+            moment = _moment_symbol_conversion(st)
+            if isinstance(moment, list):
+                re_list.extend(moment)
+            else:
+                re_list.append(moment)
+    return re_list
+
+
+STATS_KWARGS = {'moment': [{'order': int}, {'max_order': int}]}

@@ -1,8 +1,129 @@
 """
 Compositional describers
 """
+from functools import partial
+from typing import Dict, List, Union, Optional
 
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from ._matminer_wrapper import wrap_matminer_describer
+from pymatgen.core import Composition, Structure
+import pandas as pd
+
+from maml.base import BaseDescriber, OutDataFrameConcat
+from maml.utils import Stats, STATS_KWARGS, stats_list_conversion
+
 
 ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty)
+
+
+class ElementStats(OutDataFrameConcat, BaseDescriber):
+    """
+    Element statistics. The allowed stats are accessed via ALLOWED_STATS class
+    attributes. If the stats have multiple parameters, the positional arguments
+    are separated by ::, e.g., moment::1::None
+    """
+
+    ALLOWED_STATS = Stats.allowed_stats  # type: ignore
+
+    def __init__(self, element_properties: Dict, stats: List[str],
+                 property_names: Optional[List[str]] = None, **kwargs):
+        """
+        Elemental stats for composition/str/structure
+
+        Args:
+            element_properties (dict): element properties, e.g.,
+                {'H': [0.1, 0.2, 0.3], 'He': [0.12, ...]}
+            stats (list): list of stats, check ElementStats.ALLOWED_STATS
+                for supported stats. The stats that support additional
+                Keyword args, use ':' to separate the args. For example,
+                'moment:0:None' will calculate moment stats with order=0,
+                and max_order=None.
+            property_names (list): list of property names, has to be consistent
+                in length with properties in element_properties
+            **kwargs:
+        """
+
+        self.element_properties = element_properties
+        properties = list(self.element_properties.values())
+
+        n_property = list(set([len(i) for i in properties]))
+        if len(n_property) > 1:
+            raise ValueError("Property length not consistent")
+        n_single_property = n_property[0]
+
+        if property_names is None:
+            property_names = ['p%d' % i for i in range(n_single_property)]
+
+        if len(property_names) != n_single_property:
+            raise ValueError("Property name length is not consistent")
+        all_property_names = []
+
+        stats_func = []
+        full_stats = stats_list_conversion(stats)
+        for stat in full_stats:
+            all_property_names.extend(['%s_%s' % (p, stat) for p in property_names])
+            if ':' in stat:
+                splits = stat.split(":")
+                stat_name = splits[0]
+
+                if stat_name.lower() not in self.ALLOWED_STATS:
+                    raise ValueError(f"{stat_name.lower()} not in available Stats")
+
+                func = getattr(Stats, stat_name)
+                args = splits[1:]
+                arg_dict = {}
+                for name_dict, arg in zip(STATS_KWARGS[stat_name], args):
+                    name = list(name_dict.keys())[0]
+                    value_type = list(name_dict.values())[0]
+                    try:
+                        value = value_type(arg)
+                    except ValueError:
+                        value = None  # type: ignore
+                    arg_dict[name] = value
+                stats_func.append(partial(func, **arg_dict))
+
+                continue
+            if stat.lower() not in self.ALLOWED_STATS:
+                raise ValueError(f"{stat.lower()} not in available Stats")
+
+            stats_func.append(getattr(Stats, stat))
+
+        self.stats_func = stats_func
+        self.all_property_names = all_property_names
+        super().__init__(**kwargs)
+
+    def transform_one(self, obj: Union[Structure, str, Composition]) -> pd.DataFrame:
+        """
+        Transform one object, the object can be string, Compostion or Structure
+
+        Args:
+            obj (str/Composition/Structure): object to transform
+
+        Returns: pd.DataFrame with property names as column names
+
+        """
+        if isinstance(obj, Structure):
+            comp = obj.composition
+        elif isinstance(obj, str):
+            comp = Composition(obj)
+        else:
+            comp = obj
+
+        element_n_dict = comp.to_data_dict['unit_cell_composition']
+
+        data = []
+        weights = []
+        for i, j in element_n_dict.items():
+            data.append(self.element_properties[i])
+            weights.append(j)
+
+        data = list(zip(*data))
+        features = []
+        for stat in self.stats_func:
+            for d in data:
+                f = stat(d, weights)
+                if isinstance(f, list):
+                    features.extend(f)
+                else:
+                    features.append(f)
+        return pd.DataFrame([features], columns=self.all_property_names)
