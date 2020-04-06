@@ -2,9 +2,15 @@
 Utils for describers
 """
 
+import logging
 from typing import List, Optional
 
 import numpy as np
+
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def _add_allowed_stats(cls):
@@ -111,6 +117,8 @@ class Stats:
             weights = [1.0] * len(data)
 
         if max_order is not None:
+            if order is not None:
+                logger.info("max_order will overwrite the order parameter")
             orders = list(range(1, max_order + 1))
         else:
             orders = [order or 1]
@@ -246,7 +254,7 @@ def _root_moment(data, weights, order) -> float:
         weights (list or None): weights for each data point
         order (int): order of moment
 
-    Returns:
+    Returns: moment of order
 
     """
     weights_sum = np.sum(weights)
@@ -259,7 +267,15 @@ def _root_moment(data, weights, order) -> float:
     moment = sum([(i - mean) ** order * j for
                   i, j in zip(data, pmf)])
 
-    return moment ** (1. / order)
+    # when order is odd, moment can be negative
+    if moment < 0:
+        sign = -1
+    else:
+        sign = 1
+
+    # avoid error like np.power(-0.001, 1./3.)
+    res = (sign * moment) ** (1. / order) * sign
+    return res
 
 
 def _convert_a_or_b(v: str, a=int, b=None):
@@ -276,7 +292,7 @@ def _moment_symbol_conversion(moment_symbol: str):
     if max_order is None:
         return moment_symbol
 
-    if max_order > 1:
+    if max_order > 0:
         return ['moment:%d:None' % i for i in range(1, max_order + 1)]
 
 
