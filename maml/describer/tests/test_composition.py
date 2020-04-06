@@ -39,6 +39,11 @@ class ElementStatsTest(unittest.TestCase):
 
         self.assertListEqual(list(res.columns), all_names)
 
+    def test_from_data(self):
+        es = ElementStats.from_data('megnet', stats=['moment:None:5'])
+        d = es.transform_one('Fe2O3')
+        self.assertTrue(d.shape == (1, 80))
+
 
 if __name__ == "__main__":
     unittest.main()

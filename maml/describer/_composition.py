@@ -2,15 +2,21 @@
 Compositional describers
 """
 from functools import partial
+import os
 from typing import Dict, List, Union, Optional
 
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from ._matminer_wrapper import wrap_matminer_describer
-from pymatgen.core import Composition, Structure
+from pymatgen.core import Composition, Structure, Element
 import pandas as pd
+import json
 
 from maml.base import BaseDescriber, OutDataFrameConcat
 from maml.utils import Stats, STATS_KWARGS, stats_list_conversion
+
+
+CWD = os.path.abspath(os.path.dirname(__file__))
+DATA_MAPPING = {'megnet': 'data/elemental_embedding_1MEGNet_layer.json'}
 
 
 ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty)
@@ -88,8 +94,11 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
 
             stats_func.append(getattr(Stats, stat))
 
-        self.stats_func = stats_func
+        self.stats = full_stats
+        self.element_properties = element_properties
+        self.property_names = property_names
         self.all_property_names = all_property_names
+        self.stats_func = stats_func
         super().__init__(**kwargs)
 
     def transform_one(self, obj: Union[Structure, str, Composition]) -> pd.DataFrame:
@@ -127,3 +136,68 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
                 else:
                     features.append(f)
         return pd.DataFrame([features], columns=self.all_property_names)
+
+    @classmethod
+    def from_file(cls, filename: str, stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+        """
+        ElementStats from a json file of element property dictionary.
+        The keys required are:
+
+            element_properties
+            property_names
+
+        Args:
+            filename (str): filename
+            stats (list): list of stats, check ElementStats.ALLOWED_STATS
+                for supported stats. The stats that support additional
+                Keyword args, use ':' to separate the args. For example,
+                'moment:0:None' will calculate moment stats with order=0,
+                and max_order=None.
+
+        Returns: ElementStats class
+        """
+        with open(filename, "r") as f:
+            d = json.load(f)
+
+        property_names = d.get("property_names", None)
+        if "element_properties" in d:
+            element_properties = d.get("element_properties")
+        else:
+            element_properties = d
+        is_element = _keys_are_elements(element_properties)
+        if not is_element:
+            raise ValueError("File is not in correct format")
+
+        if stats is None:
+            stats = d.get('stats', None)
+
+        if stats is None:
+            raise ValueError("stats not available")
+        return cls(element_properties=element_properties,
+                   property_names=property_names, stats=stats, **kwargs)
+
+    @classmethod
+    def from_data(cls, data_name: str,
+                  stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+        """
+        ElementalStats from existing data file
+        Args:
+            data_name:
+            stats:
+            **kwargs:
+
+        Returns:
+
+        """
+        filename = os.path.join(CWD, DATA_MAPPING[data_name])
+        return cls.from_file(filename, stats=stats, **kwargs)
+
+
+def _keys_are_elements(dic: Dict) -> bool:
+    keys = list(dic.keys())
+    try:
+        for key in keys:
+            _ = Element(key)
+        return True
+    except ValueError:
+        return False
