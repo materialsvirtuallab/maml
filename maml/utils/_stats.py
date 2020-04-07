@@ -443,6 +443,8 @@ def stats_list_conversion(stats_list: List[str]) -> List[str]:
                 re_list.extend(moment)
             else:
                 re_list.append(moment)
+        else:
+            re_list.append(st)
     return re_list
 
 

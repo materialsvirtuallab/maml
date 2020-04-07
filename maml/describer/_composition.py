@@ -7,7 +7,7 @@ from typing import Dict, List, Union, Optional
 
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from ._matminer_wrapper import wrap_matminer_describer
-from pymatgen.core import Composition, Structure, Element
+from pymatgen.core import Composition, Structure, Element, Molecule
 import pandas as pd
 import json
 
@@ -68,6 +68,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
 
         stats_func = []
         full_stats = stats_list_conversion(stats)
+
         for stat in full_stats:
             all_property_names.extend(['%s_%s' % (p, stat) for p in property_names])
             if ':' in stat:
@@ -89,8 +90,8 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
                         value = None  # type: ignore
                     arg_dict[name] = value
                 stats_func.append(partial(func, **arg_dict))
-
                 continue
+
             if stat.lower() not in self.ALLOWED_STATS:
                 raise ValueError(f"{stat.lower()} not in available Stats")
 
@@ -113,7 +114,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         Returns: pd.DataFrame with property names as column names
 
         """
-        if isinstance(obj, Structure):
+        if isinstance(obj, Structure) or isinstance(obj, Molecule):
             comp = obj.composition
         elif isinstance(obj, str):
             comp = Composition(obj)
@@ -133,10 +134,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         for stat in self.stats_func:
             for d in data:
                 f = stat(d, weights)
-                if isinstance(f, list):
-                    features.extend(f)
-                else:
-                    features.append(f)
+                features.append(f)
         return pd.DataFrame([features], columns=self.all_property_names)
 
     @classmethod
@@ -173,8 +171,6 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         if 'stats' in d:
             stats = d.get('stats')
 
-        if stats is None:
-            raise ValueError("stats not available")
         return cls(element_properties=element_properties,
                    property_names=property_names, stats=stats, **kwargs)
 

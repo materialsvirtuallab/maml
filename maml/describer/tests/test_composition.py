@@ -1,10 +1,16 @@
 # coding: utf-8
 
 import unittest
+import os
 
+import numpy as np
 from pymatgen.util.testing import PymatgenTest
+from pymatgen import Composition, Molecule
 
 from maml.describer import ElementProperty, ElementStats
+
+
+CWD = os.path.abspath(os.path.dirname(__file__))
 
 
 class ElementPropertyTest(unittest.TestCase):
@@ -29,6 +35,13 @@ class ElementStatsTest(unittest.TestCase):
         res = test.transform(['H2O', 'H2O'])
         self.assertEqual(res.shape, (2, 36))
 
+        res2 = test.transform([Composition('H2O'), Composition('H2O')])
+        np.testing.assert_allclose(res.values, res2.values)
+
+        dummy_h2o = Molecule(['H', 'H', 'O'], [[-0.5, 0, 0], [0.5, 0, 0], [0, 0, 0]])
+        res3 = test.transform([dummy_h2o, dummy_h2o])
+        np.testing.assert_allclose(res.values, res3.values)
+
         stats = ['min', 'max', *['moment:%d:None' % i for i in range(1, 11)]]
         p0_names = ['p0_%s' % i for i in stats]
         p1_names = ['p1_%s' % i for i in stats]
@@ -52,8 +65,28 @@ class ElementStatsTest(unittest.TestCase):
         d = es2.transform_one('Fe2O3')
         self.assertTrue(d.shape == (1, 160))
 
-        print(d)
+    def test_error(self):
+        with self.assertRaises(ValueError):
+            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2, 3]}, stats=['mean'])
 
+        with self.assertRaises(ValueError):
+            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
+                             property_names=['p1'])
+
+        with self.assertRaises(ValueError):
+            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['super_std'],
+                             property_names=['p1', 'p2'])
+
+        with self.assertRaises(ValueError):
+            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['super_std:-1'],
+                             property_names=['p1', 'p2'])
+
+        with self.assertRaises(ValueError):
+            ElementStats.from_file(os.path.join(CWD, 'test_data/wrong_dummy_property.json'), stats=['max'])
+
+    def test_keys(self):
+        es = ElementStats.from_file(os.path.join(CWD, 'test_data/dummy_property.json'), stats=['max'])
+        self.assertListEqual(es.stats, ['mean'])
 
 
 if __name__ == "__main__":
