@@ -140,7 +140,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         return pd.DataFrame([features], columns=self.all_property_names)
 
     @classmethod
-    def from_file(cls, filename: str, stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+    def from_file(cls, filename: str, stats: List[str], **kwargs) -> "ElementStats":
         """
         ElementStats from a json file of element property dictionary.
         The keys required are:
@@ -170,8 +170,8 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         if not is_element:
             raise ValueError("File is not in correct format")
 
-        if stats is None:
-            stats = d.get('stats', None)
+        if 'stats' in d:
+            stats = d.get('stats')
 
         if stats is None:
             raise ValueError("stats not available")
@@ -179,12 +179,12 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
                    property_names=property_names, stats=stats, **kwargs)
 
     @classmethod
-    def from_data(cls, data_name: str,
-                  stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+    def from_data(cls, data_name: Union[List[str], str],
+                  stats: List[str], **kwargs) -> "ElementStats":
         """
         ElementalStats from existing data file
         Args:
-            data_name (str): data name. Current supported data are
+            data_name (str of list of str): data name. Current supported data are
 
                 megnet_1: megnet elemental embedding from 1 megnet layer
                 megnet_3: megnet elemental embedding from 3 megnet layer
@@ -196,8 +196,37 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         Returns: ElementStats instance
 
         """
-        filename = os.path.join(CWD, DATA_MAPPING[data_name])
-        return cls.from_file(filename, stats=stats, **kwargs)
+        if isinstance(data_name, str):
+            filename = os.path.join(CWD, DATA_MAPPING[data_name])
+            return cls.from_file(filename, stats=stats, **kwargs)
+        else:
+            if len(data_name) == 1:
+                return cls.from_data(data_name[0], stats=stats, **kwargs)
+
+            property_names = []
+
+            instances = []
+            for data_name_ in data_name:
+                instance = cls.from_data(data_name_, stats=stats, **kwargs)
+                instances.append(instance)
+
+            elements = [set(i.element_properties.keys()) for i in instances]
+
+            common_keys = elements[0]
+            for e in elements[1:]:
+                common_keys.intersection_update(e)
+
+            element_properties: Dict = {i: [] for i in common_keys}
+            for index, instance in enumerate(instances):
+                for k in common_keys:
+                    element_properties[k].extend(instance.element_properties[k])
+
+                property_names.extend(['%d_%s' % (index, i) for i in instance.property_names])
+
+            return cls(element_properties=element_properties,
+                       property_names=property_names,
+                       stats=stats,
+                       **kwargs)
 
 
 def _keys_are_elements(dic: Dict) -> bool:

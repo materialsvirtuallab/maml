@@ -44,6 +44,17 @@ class ElementStatsTest(unittest.TestCase):
         d = es.transform_one('Fe2O3')
         self.assertTrue(d.shape == (1, 80))
 
+        es = ElementStats.from_data(['megnet_1'], stats=['moment:None:5'])
+        d = es.transform_one('Fe2O3')
+        self.assertTrue(d.shape == (1, 80))
+
+        es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['moment:None:5'])
+        d = es2.transform_one('Fe2O3')
+        self.assertTrue(d.shape == (1, 160))
+
+        print(d)
+
+
 
 if __name__ == "__main__":
     unittest.main()
