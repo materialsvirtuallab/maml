@@ -184,11 +184,16 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         """
         ElementalStats from existing data file
         Args:
-            data_name:
-            stats:
+            data_name (str): data name. Current supported data are
+
+                megnet_1: megnet elemental embedding from 1 megnet layer
+                megnet_3: megnet elemental embedding from 3 megnet layer
+
+            stats (list): list of stats, use ElementStats.ALLOWED_STATS to
+                check available stats
             **kwargs:
 
-        Returns:
+        Returns: ElementStats instance
 
         """
         filename = os.path.join(CWD, DATA_MAPPING[data_name])
