@@ -24,7 +24,7 @@ Pip install via PyPI::
 
 To run the potential energy surface (pes), lammps installation is required you can install from source or from `conda`::
 
-    conda install -c conda-forge lammps
+    conda install -c conda-forge/label/cf202003 lammps 
 
 Usage
 -----
