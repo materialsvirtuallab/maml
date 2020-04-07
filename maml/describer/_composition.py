@@ -7,8 +7,10 @@ from typing import Dict, List, Union, Optional
 
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from ._matminer_wrapper import wrap_matminer_describer
+import numpy as np
 from pymatgen.core import Composition, Structure, Element, Molecule
 import pandas as pd
+from sklearn.decomposition import PCA
 import json
 
 from maml.base import BaseDescriber, OutDataFrameConcat
@@ -100,6 +102,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         self.stats = full_stats
         self.element_properties = element_properties
         self.property_names = property_names
+        self.n_features = len(property_names)
         self.all_property_names = all_property_names
         self.stats_func = stats_func
         super().__init__(**kwargs)
@@ -176,9 +179,12 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
 
     @classmethod
     def from_data(cls, data_name: Union[List[str], str],
-                  stats: List[str], **kwargs) -> "ElementStats":
+                  stats: List[str], num_dim: Optional[int] = None,
+                  **kwargs) -> "ElementStats":
         """
-        ElementalStats from existing data file
+        ElementalStats from existing data file. If num_dim is provided,
+        PCA dimensional reduction will apply to the elemental properties
+
         Args:
             data_name (str of list of str): data name. Current supported data are
 
@@ -187,6 +193,8 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
 
             stats (list): list of stats, use ElementStats.ALLOWED_STATS to
                 check available stats
+
+            num_dim (int): number of dimensions to keep
             **kwargs:
 
         Returns: ElementStats instance
@@ -218,6 +226,20 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
                     element_properties[k].extend(instance.element_properties[k])
 
                 property_names.extend(['%d_%s' % (index, i) for i in instance.property_names])
+
+            if num_dim is not None:
+                value_array = []
+                p_keys = []
+                for i, j in element_properties.items():
+                    value_array.append(j)
+                    p_keys.append(i)
+                value_np_array = np.array(value_array)
+                pca = PCA(n_components=num_dim)
+                transformed_values = pca.fit_transform(value_np_array)
+
+                for key, value_list in zip(p_keys, transformed_values):
+                    element_properties[key] = value_list.tolist()
+                property_names = ['pca_%d' % i for i in range(num_dim)]
 
             return cls(element_properties=element_properties,
                        property_names=property_names,

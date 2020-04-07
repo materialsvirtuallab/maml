@@ -88,6 +88,11 @@ class ElementStatsTest(unittest.TestCase):
         es = ElementStats.from_file(os.path.join(CWD, 'test_data/dummy_property.json'), stats=['max'])
         self.assertListEqual(es.stats, ['mean'])
 
+    def test_pca(self):
+        es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['moment:None:5'], num_dim=4)
+        d = es2.transform_one('Fe2O3')
+        self.assertTrue(d.shape == (1, 20))
+
 
 if __name__ == "__main__":
     unittest.main()
