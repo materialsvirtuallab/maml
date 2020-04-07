@@ -1,5 +1,7 @@
-[![CircleCI](https://circleci.com/gh/materialsvirtuallab/maml.svg?style=shield)](https://circleci.com/gh/materialsvirtuallab/maml)
-[![Coverage Status](https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master)](https://coveralls.io/github/materialsvirtuallab/maml?branch=master)
+.. image:: https://circleci.com/gh/materialsvirtuallab/maml.svg?style=shield
+    :target: https://circleci.com/gh/materialsvirtuallab/maml
+.. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master
+    :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
 
 maml
 ====
@@ -19,6 +21,10 @@ Installation
 Pip install via PyPI::
 
     pip install maml
+
+To run the potential energy surface (pes), lammps installation is required you can install from source or from `conda`::
+
+    conda install -c conda-forge lammps
 
 Usage
 -----
