@@ -65,6 +65,14 @@ class TestStats(unittest.TestCase):
                                * np.array(self.x) ** 2) ** (1./2)
         self.assertAlmostEqual(p2, holder_mean_2)
 
+    def test_mode(self):
+        self.assertAlmostEqual(Stats.mode(self.x), 1.5)
+        self.assertAlmostEqual(Stats.mode(self.x, self.weights), 2)
+
+    def test_mae(self):
+        self.assertAlmostEqual(Stats.mean_absolute_deviation(self.x),
+                               np.mean(np.abs(np.array(self.x) - np.mean(self.x))))
+
 
 if __name__ == "__main__":
     unittest.main()

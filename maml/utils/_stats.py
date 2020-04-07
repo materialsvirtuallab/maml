@@ -2,6 +2,7 @@
 Utils for describers
 """
 
+from collections import Counter
 import logging
 from typing import List, Optional
 
@@ -86,6 +87,68 @@ class Stats:
         return Stats.max(data) - Stats.min(data)
 
     @staticmethod
+    def mode(data: List[float],
+             weights: Optional[List[float]] = None) -> float:
+        """
+        Mode of data, if multiple entries have equal counts,
+        compute the average of those
+
+        Args:
+            data (list): list of float data
+            weights (list): optional weights
+
+        Returns: mode of values, i.e., max - min
+
+        """
+
+        if weights is None:
+            counts = Counter(data)
+            most_common = counts.most_common()
+            max_count = most_common[0][1]
+            modes = []
+            for v, c in most_common:
+                if c == max_count:
+                    modes.append(v)
+            return np.mean(modes).item()
+
+        else:
+            data_array = np.array(data)
+            weights_array = np.array(weights)
+            maxes = np.isclose(weights_array, weights_array.max())
+            max_data = data_array[maxes]
+            return np.mean(max_data).item()
+
+    @staticmethod
+    def mean_absolute_deviation(data: List[float],
+                                weights: Optional[List[float]] = None) -> float:
+        """
+        mean absolute deviation
+
+        Args:
+            data (list): list of float data
+            weights (list): optional weights
+
+        Returns: mean absolute deviation
+        """
+        mean = Stats.mean(data, weights)
+        data_sub = [abs(i - mean) for i in data]
+        return Stats.mean(data_sub, weights)
+
+    @staticmethod
+    def mean_absolute_error(data: List[float],
+                            weights: Optional[List[float]] = None) -> float:
+        """
+        mean absolute error
+
+        Args:
+            data (list): list of float data
+            weights (list): optional weights
+
+        Returns: mean absolute error
+        """
+        return Stats.mean_absolute_deviation(data=data, weights=weights)
+
+    @staticmethod
     def moment(data: List[float],
                weights: Optional[List[float]] = None,
                order: Optional[int] = None,
@@ -114,7 +177,7 @@ class Stats:
             single = False
 
         if weights is None:
-            weights = [1.0] * len(data)
+            weights = [1.0 / len(data)] * len(data)
 
         if max_order is not None:
             if order is not None:
