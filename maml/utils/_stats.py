@@ -145,6 +145,21 @@ class Stats:
         return Stats.moment(data, weights=weights, order=1)
 
     @staticmethod
+    def inverse_mean(data: List[float],
+                     weights: Optional[List[float]] = None) -> float:
+        """
+        inverse mean
+
+        Args:
+            data (list): list of float data
+            weights (list or None): weights for each data point
+
+        Returns: average value
+
+        """
+        return Stats.mean([1. / x for x in data], weights=weights)
+
+    @staticmethod
     def average(data: List[float],
                 weights: Optional[List[float]] = None) -> float:
         """
@@ -222,10 +237,57 @@ class Stats:
         Returns: geometric mean of the distribution
 
         """
+        return Stats.power_mean(data, weights, p=0)
+
+    @staticmethod
+    def power_mean(data: List[float],
+                   weights: Optional[List[float]] = None,
+                   p: int = 1) -> float:
+        """
+        power mean https://en.wikipedia.org/wiki/Generalized_mean
+
+        Args:
+            data (list): list of float data
+            weights (list or None): weights for each data point
+            p (int): power
+
+        Returns: power mean of the distribution
+
+        """
+
+        if np.any(np.array(data) <= 0.0):
+            raise ValueError("Not possible to calculate geometric means for negative values")
+
         if weights is None:
-            weights = [1] * len(data)
-        return np.prod([i ** j for i, j in
-                        zip(data, weights)]) ** (1. / np.sum(weights))
+            weights = [1. / len(data)] * len(data)
+
+        assert(abs(sum(weights) - 1) < 1e-3)
+
+        if p == 0:
+            return np.prod([i ** j for i, j in zip(data, weights)]).item()
+
+        s = np.sum([j * i ** p for i, j in zip(data, weights)])
+        return s ** (1. / p)
+
+    @staticmethod
+    def shifted_geometric_mean(data: List[float],
+                               weights: Optional[List[float]] = None,
+                               shift: float = 100) -> float:
+        """
+        Since we cannot calculate the geometric means on negative or zero values,
+        we can first shift all values to positive and then calculate the geometric mean
+        afterwards, we shift the computed geometric mean back by a shift value
+
+        Args:
+            data (list): list of float data
+            weights (list or None): weights for each data point
+            shift (float): shift value
+
+        Returns: geometric mean of the distribution
+
+        """
+        data_new = [i + shift for i in data]
+        return Stats.geometric_mean(data_new, weights=weights) - shift
 
     @staticmethod
     def harmonic_mean(data: List[float],

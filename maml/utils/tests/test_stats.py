@@ -17,6 +17,8 @@ class TestStats(unittest.TestCase):
         self.assertAlmostEqual(Stats.mean(self.x), np.mean(self.x))
         self.assertAlmostEqual(Stats.mean(self.x, self.weights),
                                np.average(self.x, weights=self.weights))
+        self.assertAlmostEqual(Stats.inverse_mean(self.x), np.mean(1. / np.array(self.x)))
+
         self.assertAlmostEqual(Stats.mean(self.x, self.weights),
                                Stats.average(self.x, self.weights))
 
@@ -42,6 +44,10 @@ class TestStats(unittest.TestCase):
         self.assertAlmostEqual(Stats.geometric_mean(self.x, self.weights),
                                np.prod(np.power(self.x, self.weights))**(1./np.sum(self.weights)))
 
+    def test_shifted_geometric_mean(self):
+        self.assertAlmostEqual(Stats.shifted_geometric_mean([0.12, -0.08, 0.02], shift=1),
+                               0.0167215)
+
     def test_harmonic_mean(self):
         self.assertAlmostEqual(Stats.harmonic_mean(self.x, self.weights),
                                np.sum(self.weights) / np.sum(np.array(self.weights) / np.array(self.x)))
@@ -49,6 +55,15 @@ class TestStats(unittest.TestCase):
     def test_allowed_stats(self):
         self.assertNotIn("best",  Stats.allowed_stats)
         self.assertIn("average", Stats.allowed_stats)
+
+    def test_power_mean(self):
+        p1 = Stats.power_mean(self.x, self.weights, p=0)
+        self.assertAlmostEqual(p1, Stats.geometric_mean(self.x, self.weights))
+        p2 = Stats.power_mean(self.x, self.weights, p=2)
+
+        holder_mean_2 = np.sum(np.array(self.weights)
+                               * np.array(self.x) ** 2) ** (1./2)
+        self.assertAlmostEqual(p2, holder_mean_2)
 
 
 if __name__ == "__main__":
