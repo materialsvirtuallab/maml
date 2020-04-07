@@ -11,20 +11,20 @@ maml (MAterials Machine Learning) is a Python for Materials Machine Learning.
 Features
 --------
 
-1. Convert materials (crystals/molecules) into features. In addition to common compositional, site and structural features, we provide the following fine-grain local environment features.
+1. Convert materials (crystals and molecules) into features. In addition to common compositional, site and structural features, we provide the following fine-grain local environment features.
 
-    a) Bispectrum coefficients
-    b) Behler Parrinello symmetry functions
-    c) Smooth Overlap of Atom Position (SOAP)
+ a) Bispectrum coefficients
+ b) Behler Parrinello symmetry functions
+ c) Smooth Overlap of Atom Position (SOAP)
     
 2. Use ML to learn relationship between features and targets. Currently, the `maml` supports `sklearn` and `keras` models. 
 
 3. Applications: modelling the potential energy surface, constructing surrogate models for property prediction.
-   
-    a) Neural Network Potential (NNP)
-    b) Gaussian approximation potential (GAP) with SOAP features 
-    c) Spectral neighbor analysis potential (SNAP)
-    d) Moment Tensor Potential (MTP)
+
+ a) Neural Network Potential (NNP)
+ b) Gaussian approximation potential (GAP) with SOAP features 
+ c) Spectral neighbor analysis potential (SNAP)
+ d) Moment Tensor Potential (MTP)
 
 Installation
 ------------
