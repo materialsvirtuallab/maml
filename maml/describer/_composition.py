@@ -8,7 +8,7 @@ from typing import Dict, List, Union, Optional
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from ._matminer_wrapper import wrap_matminer_describer
 import numpy as np
-from pymatgen.core import Composition, Structure, Element, Molecule
+from pymatgen.core import Composition, Structure, Element, Molecule, Specie
 import pandas as pd
 from sklearn.decomposition import PCA
 import json
@@ -22,6 +22,9 @@ CWD = os.path.abspath(os.path.dirname(__file__))
 DATA_MAPPING = {'megnet_1': 'data/elemental_embedding_1MEGNet_layer.json',
                 'megnet_3': 'data/elemental_embedding_3MEGNet_layer.json'}
 
+for length in [2, 3, 4, 8, 16, 32]:
+    DATA_MAPPING['megnet_l%d' % length] = 'data/elemental_embedding_1MEGNet_layer_length_%d.json' % length
+    DATA_MAPPING['megnet_ion_l%d' % length] = 'data/ion_embedding_1MEGNet_layer_length_%d.json' % length
 
 ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty)
 
@@ -203,55 +206,69 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         if isinstance(data_name, str):
             filename = os.path.join(CWD, DATA_MAPPING[data_name])
             return cls.from_file(filename, stats=stats, **kwargs)
-        else:
-            if len(data_name) == 1:
-                return cls.from_data(data_name[0], stats=stats, **kwargs)
 
-            property_names = []
+        if len(data_name) == 1:
+            return cls.from_data(data_name[0], stats=stats, **kwargs)
 
-            instances = []
-            for data_name_ in data_name:
-                instance = cls.from_data(data_name_, stats=stats, **kwargs)
-                instances.append(instance)
+        property_names = []
 
-            elements = [set(i.element_properties.keys()) for i in instances]
+        instances = []
+        for data_name_ in data_name:
+            instance = cls.from_data(data_name_, stats=stats, **kwargs)
+            instances.append(instance)
 
-            common_keys = elements[0]
-            for e in elements[1:]:
-                common_keys.intersection_update(e)
+        elements = [set(i.element_properties.keys()) for i in instances]
 
-            element_properties: Dict = {i: [] for i in common_keys}
-            for index, instance in enumerate(instances):
-                for k in common_keys:
-                    element_properties[k].extend(instance.element_properties[k])
+        common_keys = elements[0]
+        for e in elements[1:]:
+            common_keys.intersection_update(e)
 
-                property_names.extend(['%d_%s' % (index, i) for i in instance.property_names])
+        element_properties: Dict = {i: [] for i in common_keys}
+        for index, instance in enumerate(instances):
+            for k in common_keys:
+                element_properties[k].extend(instance.element_properties[k])
 
-            if num_dim is not None:
-                value_array = []
-                p_keys = []
-                for i, j in element_properties.items():
-                    value_array.append(j)
-                    p_keys.append(i)
-                value_np_array = np.array(value_array)
-                pca = PCA(n_components=num_dim)
-                transformed_values = pca.fit_transform(value_np_array)
+            property_names.extend(['%d_%s' % (index, i) for i in instance.property_names])
 
-                for key, value_list in zip(p_keys, transformed_values):
-                    element_properties[key] = value_list.tolist()
-                property_names = ['pca_%d' % i for i in range(num_dim)]
+        if num_dim is not None:
+            value_array = []
+            p_keys = []
+            for i, j in element_properties.items():
+                value_array.append(j)
+                p_keys.append(i)
+            value_np_array = np.array(value_array)
+            pca = PCA(n_components=num_dim)
 
-            return cls(element_properties=element_properties,
-                       property_names=property_names,
-                       stats=stats,
-                       **kwargs)
+            transformed_values = pca.fit_transform(value_np_array)
+
+            for key, value_list in zip(p_keys, transformed_values):
+                element_properties[key] = value_list.tolist()
+            property_names = ['pca_%d' % i for i in range(num_dim)]
+
+        return cls(element_properties=element_properties,
+                   property_names=property_names,
+                   stats=stats,
+                   **kwargs)
 
 
 def _keys_are_elements(dic: Dict) -> bool:
     keys = list(dic.keys())
-    try:
-        for key in keys:
-            _ = Element(key)
+
+    for key in keys:
+        if not _is_element_or_specie(key):
+            return False
+    return True
+
+
+def _is_element_or_specie(s: str) -> bool:
+    if s in ['D', 'D+', 'D-', 'T']:
         return True
+    try:
+        _ = Element(s)
     except ValueError:
-        return False
+        try:
+            _ = Specie.from_string(s)
+        except ValueError:
+            print(s)
+            return False
+    return True
