@@ -16,7 +16,9 @@ from maml.utils import Stats, STATS_KWARGS, stats_list_conversion
 
 
 CWD = os.path.abspath(os.path.dirname(__file__))
-DATA_MAPPING = {'megnet': 'data/elemental_embedding_1MEGNet_layer.json'}
+
+DATA_MAPPING = {'megnet_1': 'data/elemental_embedding_1MEGNet_layer.json',
+                'megnet_3': 'data/elemental_embedding_3MEGNet_layer.json'}
 
 
 ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty)
