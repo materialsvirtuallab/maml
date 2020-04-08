@@ -3,14 +3,14 @@ Compositional describers
 """
 from functools import partial
 import os
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union, Optional, Tuple
 
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from ._matminer_wrapper import wrap_matminer_describer
 import numpy as np
 from pymatgen.core import Composition, Structure, Element, Molecule, Specie
 import pandas as pd
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, KernelPCA
 import json
 
 from maml.base import BaseDescriber, OutDataFrameConcat
@@ -54,8 +54,19 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
                 and max_order=None.
             property_names (list): list of property names, has to be consistent
                 in length with properties in element_properties
-            **kwargs:
+            **kwargs: optional parameters include
+                num_dim (int): number of dimension to keep
+                reduction_algo (str): dimensional reduction algorithm
+                reduction_params (dict): kwargs for dimensional reduction algorithm
         """
+
+        num_dim = kwargs.pop('num_dim', None)
+        reduction_algo = kwargs.pop('reduction_algo', 'pca')
+        reduction_params = kwargs.pop('reduction_params', {})
+
+        element_properties, property_names = self._reduce_dimension(
+            element_properties=element_properties, property_names=property_names,
+            num_dim=num_dim, reduction_algo=reduction_algo, reduction_params=reduction_params)
 
         self.element_properties = element_properties
         properties = list(self.element_properties.values())
@@ -183,11 +194,9 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
 
     @classmethod
     def from_data(cls, data_name: Union[List[str], str],
-                  stats: List[str], num_dim: Optional[int] = None,
-                  **kwargs) -> "ElementStats":
+                  stats: List[str], **kwargs) -> "ElementStats":
         """
-        ElementalStats from existing data file. If num_dim is provided,
-        PCA dimensional reduction will apply to the elemental properties
+        ElementalStats from existing data file.
 
         Args:
             data_name (str of list of str): data name. Current supported data are
@@ -196,7 +205,6 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
             stats (list): list of stats, use ElementStats.ALLOWED_STATS to
                 check available stats
 
-            num_dim (int): number of dimensions to keep
             **kwargs:
 
         Returns: ElementStats instance
@@ -205,17 +213,17 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         if isinstance(data_name, str):
             if data_name not in ElementStats.AVAILABLE_DATA:
                 raise ValueError("data name not found in the list %s" % str(ElementStats.AVAILABLE_DATA))
+
             filename = os.path.join(CWD, DATA_MAPPING[data_name])
             return cls.from_file(filename, stats=stats, **kwargs)
 
-        if len(data_name) == 1:
+        if isinstance(data_name, list) and len(data_name) == 1:
             return cls.from_data(data_name[0], stats=stats, **kwargs)
 
         property_names = []
-
         instances = []
         for data_name_ in data_name:
-            instance = cls.from_data(data_name_, stats=stats, **kwargs)
+            instance = cls.from_data(data_name_, stats=stats)
             instances.append(instance)
 
         elements = [set(i.element_properties.keys()) for i in instances]
@@ -225,31 +233,61 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
             common_keys.intersection_update(e)
 
         element_properties: Dict = {i: [] for i in common_keys}
+
         for index, instance in enumerate(instances):
             for k in common_keys:
                 element_properties[k].extend(instance.element_properties[k])
 
             property_names.extend(['%d_%s' % (index, i) for i in instance.property_names])
 
-        if num_dim is not None:
-            value_array = []
-            p_keys = []
-            for i, j in element_properties.items():
-                value_array.append(j)
-                p_keys.append(i)
-            value_np_array = np.array(value_array)
-            pca = PCA(n_components=num_dim)
-
-            transformed_values = pca.fit_transform(value_np_array)
-
-            for key, value_list in zip(p_keys, transformed_values):
-                element_properties[key] = value_list.tolist()
-            property_names = ['pca_%d' % i for i in range(num_dim)]
-
         return cls(element_properties=element_properties,
                    property_names=property_names,
                    stats=stats,
                    **kwargs)
+
+    @staticmethod
+    def _reduce_dimension(element_properties, property_names, num_dim: Optional[int] = None,
+                          reduction_algo: Optional[str] = 'pca',
+                          reduction_params: Optional[Dict] = None) -> Tuple[Dict, List[str]]:
+        """
+        Reduce the feature dimension by reduction_algo
+
+        Args:
+            element_properties (dict): dictionary of elemental/specie propeprties
+            property_names (list): list of property names
+            num_dim (int): number of dimension to keep
+            reduction_algo (str): algorithm for dimensional reduction, currently support
+                pca, kpca
+            reduction_params (dict): kwargs for reduction algorithm
+
+        Returns: new element_properties and property_names
+
+        """
+        if num_dim is None:
+            return element_properties, property_names
+
+        value_array = []
+        p_keys = []
+        for i, j in element_properties.items():
+            value_array.append(j)
+            p_keys.append(i)
+        value_np_array = np.array(value_array)
+
+        if reduction_algo == 'pca':
+
+            m = PCA(n_components=num_dim, **reduction_params)
+            property_names = ['pca_%d' % i for i in range(num_dim)]
+        elif reduction_algo == 'kpca':
+            m = KernelPCA(n_components=num_dim, **reduction_params)
+            property_names = ['kpca_%d' % i for i in range(num_dim)]
+        else:
+            raise ValueError('Reduction algorithm not available')
+
+        transformed_values = m.fit_transform(value_np_array)
+
+        for key, value_list in zip(p_keys, transformed_values):
+            element_properties[key] = value_list.tolist()
+        return element_properties, property_names
 
 
 def _keys_are_elements(dic: Dict) -> bool:
