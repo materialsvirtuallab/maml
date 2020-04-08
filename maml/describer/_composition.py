@@ -37,6 +37,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
     """
 
     ALLOWED_STATS = Stats.allowed_stats  # type: ignore
+    AVAILABLE_DATA = list(DATA_MAPPING.keys())
 
     def __init__(self, element_properties: Dict, stats: List[str],
                  property_names: Optional[List[str]] = None, **kwargs):
@@ -190,9 +191,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
 
         Args:
             data_name (str of list of str): data name. Current supported data are
-
-                megnet_1: megnet elemental embedding from 1 megnet layer
-                megnet_3: megnet elemental embedding from 3 megnet layer
+                available from ElementStats.AVAILABLE_DATA
 
             stats (list): list of stats, use ElementStats.ALLOWED_STATS to
                 check available stats
@@ -203,6 +202,8 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         Returns: ElementStats instance
 
         """
+        if data_name not in ElementStats.AVAILABLE_DATA:
+            raise ValueError("data name not found in the list %s" % str(ElementStats.AVAILABLE_DATA))
         if isinstance(data_name, str):
             filename = os.path.join(CWD, DATA_MAPPING[data_name])
             return cls.from_file(filename, stats=stats, **kwargs)

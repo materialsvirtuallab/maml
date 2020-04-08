@@ -84,6 +84,9 @@ class ElementStatsTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             ElementStats.from_file(os.path.join(CWD, 'test_data/wrong_dummy_property.json'), stats=['max'])
 
+        with self.assertRaises(ValueError):
+            ElementStats.from_data('megnet_22', stats=['max'])
+
     def test_keys(self):
         es = ElementStats.from_file(os.path.join(CWD, 'test_data/dummy_property.json'), stats=['max'])
         self.assertListEqual(es.stats, ['mean'])
