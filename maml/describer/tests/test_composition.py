@@ -96,11 +96,16 @@ class ElementStatsTest(unittest.TestCase):
         d = es2.transform_one('Fe2O3')
         self.assertTrue(d.shape == (1, 20))
 
-    def test_tsne(self):
+    def test_kpca(self):
         es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['moment:None:5'], num_dim=2,
                                      reduction_algo='kpca')
         d = es2.transform_one('Fe2O3')
         self.assertTrue(d.shape == (1, 10))
+
+    def test_geometric_mean(self):
+        es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['shifted_geometric_mean:100'])
+        d = es2.transform_one('Fe2O3')
+        self.assertTrue(d.shape == (1, 32))
 
 
 if __name__ == "__main__":

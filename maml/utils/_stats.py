@@ -328,6 +328,9 @@ class Stats:
         if weights is None:
             weights = [1. / len(data)] * len(data)
 
+        else:
+            weights = [i / sum(weights) for i in weights]
+
         assert(abs(sum(weights) - 1) < 1e-3)
 
         if p == 0:
@@ -370,7 +373,9 @@ class Stats:
 
         """
         if weights is None:
-            weights = [1] * len(data)
+            weights = [1. / len(data)] * len(data)
+        else:
+            weights = [i / sum(weights) for i in weights]
         return np.sum(weights) / np.sum(np.array(weights) / np.array(data))
 
 
@@ -452,4 +457,5 @@ def stats_list_conversion(stats_list: List[str]) -> List[str]:
     return re_list
 
 
-STATS_KWARGS = {'moment': [{'order': int}, {'max_order': int}]}
+STATS_KWARGS = {'moment': [{'order': int}, {'max_order': int}],
+                'shifted_geometric_mean': [{'shift': float}]}
