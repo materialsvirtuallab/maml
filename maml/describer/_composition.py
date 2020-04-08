@@ -98,7 +98,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
                 func = getattr(Stats, stat_name)
                 args = splits[1:]
                 arg_dict = {}
-                for name_dict, arg in zip(STATS_KWARGS[stat_name], args):
+                for name_dict, arg in zip(STATS_KWARGS[stat_name], args):  # type: ignore
                     name = list(name_dict.keys())[0]
                     value_type = list(name_dict.values())[0]
                     try:
