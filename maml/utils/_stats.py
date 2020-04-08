@@ -268,6 +268,8 @@ class Stats:
         """
         third = Stats.moment(data, weights=weights, order=3)
         std = Stats.std(data, weights=weights)
+        if std < 1e-4:
+            std = 1.0
         return third ** 3 / std ** 3
 
     @staticmethod
@@ -285,6 +287,8 @@ class Stats:
         """
         fourth = Stats.moment(data, weights=weights, order=4)
         std = Stats.std(data, weights=weights)
+        if std < 1e-4:
+            std = 1.0
         return fourth ** 4 / std ** 4
 
     @staticmethod
