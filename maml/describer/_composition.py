@@ -202,9 +202,9 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         Returns: ElementStats instance
 
         """
-        if data_name not in ElementStats.AVAILABLE_DATA:
-            raise ValueError("data name not found in the list %s" % str(ElementStats.AVAILABLE_DATA))
         if isinstance(data_name, str):
+            if data_name not in ElementStats.AVAILABLE_DATA:
+                raise ValueError("data name not found in the list %s" % str(ElementStats.AVAILABLE_DATA))
             filename = os.path.join(CWD, DATA_MAPPING[data_name])
             return cls.from_file(filename, stats=stats, **kwargs)
 
