@@ -31,9 +31,11 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
         n_jobs = kwargs.pop("n_jobs", 0)
         memory = kwargs.pop("memory", None)
         verbose = kwargs.pop("verbose", False)
+        feature_batch = kwargs.pop("feature_concat", "pandas_concat")
         wrapped_class.__init__(self, *args, **kwargs)
         logger.info(f"Using matminer {wrapped_class.__name__} class")
-        base_kwargs = dict(n_jobs=n_jobs, memory=memory, verbose=verbose)
+        base_kwargs = dict(n_jobs=n_jobs, memory=memory,
+                           verbose=verbose, feature_batch=feature_batch)
         super(new_class, self).__init__(**base_kwargs)
 
     @classmethod  # type: ignore
