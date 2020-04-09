@@ -7,7 +7,6 @@ from tqdm import tqdm  # ignore
 from typing import Any, List
 import tempfile
 
-import pandas as pd
 from monty.json import MSONable
 import numpy as np
 from joblib import cpu_count, Parallel, delayed
@@ -15,6 +14,7 @@ from sklearn.utils.validation import check_memory
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 
+from ._feature_batch import get_feature_batch
 
 _ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
 
@@ -45,12 +45,14 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             n_jobs (int): The number of parallel jobs. 0 means no parallel computations.
                 If this value is set to negative or greater than the total cpu
                 then n_jobs is set to the number of cpu on system.
+            feature_batch (str): method to batch a list of features into one
 
         Args:
             **kwargs: keyword args that contain possibly memory (str/joblib.Memory),
                 verbose (bool), n_jobs (int)
         """
-        allowed_kwargs = ['memory', 'verbose', 'n_jobs']
+        allowed_kwargs = ['memory', 'verbose', 'n_jobs', "feature_batch"]
+
         for k, v in kwargs.items():
             if k not in allowed_kwargs:
                 raise TypeError("%s not allowed as kwargs" % (str(k)))
@@ -60,6 +62,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             logger.info("Created temporary directory %s" % memory)
         verbose = kwargs.get("verbose", False)
         n_jobs = kwargs.get("n_jobs", 0)
+
         self.memory = check_memory(memory)
         self.verbose = verbose
         # find out the number of parallel jobs
@@ -67,6 +70,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             n_jobs = cpu_count()
             logger.info(f"Using {n_jobs} jobs for computation")
         self.n_jobs = n_jobs
+        self.feature_batch = get_feature_batch(kwargs.get("feature_batch", None))
 
     def fit(self, x: Any, y: Any = None) -> "BaseDescriber":
         """
@@ -112,21 +116,9 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         multi_output = self._is_multi_output()
         if not multi_output:
             features = [features]
-        batched_features = [self._batch_features(i) for i in  # type: ignore
+        batched_features = [self.feature_batch(i) for i in  # type: ignore
                             list(*zip(features))]
         return batched_features if multi_output else batched_features[0]
-
-    def _batch_features(self, features: List) -> List:
-        """implement ways to combine list of features to one object.
-        Default is simply return the original list
-
-        Arguments:
-            features (list): list of feature outputs from transform
-
-        Returns:
-            list of features
-        """
-        return features
 
     def _is_multi_output(self) -> bool:
         tags = self._get_tags()
@@ -155,48 +147,6 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         if self.memory.location is not None:
             self.memory.clear()
-
-
-class OutDataFrameConcat:
-    """
-    Concate the output dataframe lists into one dataframe
-    """
-    def _batch_features(self, features: List[pd.DataFrame]) -> pd.DataFrame:
-        """
-        Batch together a list of features by concatenating
-        them into one pandas dataframe
-
-        Args:
-            features (list): list of pandas data frame features
-
-        Returns: pd.DataFrame
-
-        """
-        concated_features = pd.concat(features, 
-                                      keys=range(len(features)), 
-                                      names=['input_index', None])
-        return concated_features
-
-
-class OutStackFirstDim:
-    """
-    Stack the output arrays into a higher dimensional array.
-    For example if the output is a list of n arrays with shape
-    (m, 3), the final output would be a tensor of shape (n, m, 3)
-
-    """
-    def _batch_features(self, features) -> np.ndarray:
-        """
-        Batch together a list of features by stacking them
-        into a higher-dimensional np.ndarray
-
-        Args:
-            features (list): list of np.ndarray frame features
-
-        Returns: np.ndarray
-
-        """
-        return np.stack(features)
 
 
 def _transform_one(describer: BaseDescriber, obj: Any) -> np.ndarray:

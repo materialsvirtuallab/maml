@@ -13,7 +13,7 @@ import pandas as pd
 from sklearn.decomposition import PCA, KernelPCA
 import json
 
-from maml.base import BaseDescriber, OutDataFrameConcat
+from maml.base import BaseDescriber
 from maml.utils import Stats, STATS_KWARGS, stats_list_conversion
 
 
@@ -29,7 +29,7 @@ for length in [2, 3, 4, 8, 16, 32]:
 ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty)
 
 
-class ElementStats(OutDataFrameConcat, BaseDescriber):
+class ElementStats(BaseDescriber):
     """
     Element statistics. The allowed stats are accessed via ALLOWED_STATS class
     attributes. If the stats have multiple parameters, the positional arguments
@@ -40,7 +40,8 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
     AVAILABLE_DATA = list(DATA_MAPPING.keys())
 
     def __init__(self, element_properties: Dict, stats: List[str],
-                 property_names: Optional[List[str]] = None, **kwargs):
+                 property_names: Optional[List[str]] = None,
+                 feature_batch: str = "pandas_concat", **kwargs):
         """
         Elemental stats for composition/str/structure
 
@@ -54,6 +55,8 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
                 and max_order=None.
             property_names (list): list of property names, has to be consistent
                 in length with properties in element_properties
+            feature_batch (str): way to batch a list of feature outputs into a single
+                one
             **kwargs: optional parameters include
                 num_dim (int): number of dimension to keep
                 reduction_algo (str): dimensional reduction algorithm
@@ -120,7 +123,7 @@ class ElementStats(OutDataFrameConcat, BaseDescriber):
         self.n_features = len(property_names)
         self.all_property_names = all_property_names
         self.stats_func = stats_func
-        super().__init__(**kwargs)
+        super().__init__(feature_batch=feature_batch, **kwargs)
 
     def transform_one(self, obj: Union[Structure, str, Composition]) -> pd.DataFrame:
         """

@@ -8,7 +8,7 @@ from typing import Any
 
 import pandas as pd
 
-from maml.base import BaseDescriber, OutDataFrameConcat
+from maml.base import BaseDescriber
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -66,7 +66,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
         instance_new.__dict__.update(instance.__dict__)
         return instance_new
 
-    new_class = type(cls_name, (OutDataFrameConcat, BaseDescriber),
+    new_class = type(cls_name, (BaseDescriber, ),
                      {'__doc__': wrapped_class.__doc__,
                       '__init__': constructor,
                       '__str__': wrapped_class.__str__,

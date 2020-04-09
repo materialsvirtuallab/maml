@@ -15,7 +15,7 @@ from monty.tempfile import ScratchDir
 from pymatgen.core import Element, Structure
 from pymatgen.core.periodic_table import get_el_sp
 
-from maml.base import BaseDescriber, OutDataFrameConcat
+from maml.base import BaseDescriber
 from maml.utils import pool_from
 
 
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
+class BispectrumCoefficients(BaseDescriber):
     """
     Bispectrum coefficients to describe the local environment of each atom.
     Lammps is required to perform this computation.
@@ -36,6 +36,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                  quadratic: bool = False,
                  pot_fit: bool = False,
                  include_stress: bool = False,
+                 feature_batch: str = "pandas_concat",
                  **kwargs):
         """
         Args:
@@ -49,6 +50,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                 Default to False.
             pot_fit (bool): Whether combine the dataframe for potential fitting.
             include_stress (bool): Wether to include stress components.
+            way to batch together a list of features
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         from maml.apps.pes import SpectralNeighborAnalysis
@@ -63,7 +65,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
         self.quadratic = quadratic
         self.pot_fit = pot_fit
         self.include_stress = include_stress
-        super().__init__(**kwargs)
+        super().__init__(feature_batch=feature_batch, **kwargs)
 
     @property
     def subscripts(self) -> List:
@@ -128,7 +130,7 @@ class BispectrumCoefficients(OutDataFrameConcat, BaseDescriber):
                 "volume={104}, number={13}, pages={136403}, year={2010}, publisher={APS}}"]
 
 
-class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
+class SmoothOverlapAtomicPosition(BaseDescriber):
     """
     Smooth overlap of atomic positions (SOAP) to describe the local environment
     of each atom.
@@ -138,6 +140,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                  l_max: int = 8,
                  n_max: int = 8,
                  atom_sigma: float = 0.5,
+                 feature_batch: str = 'pandas_concat',
                  **kwargs):
         """
 
@@ -147,6 +150,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                 Default to 8.
             n_max (int): The number of radial basis function. Default to 8.
             atom_sigma (float): The width of gaussian atomic density. Default to 0.5.
+            feature_batch (str): way to batch together a list of features
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         from maml.apps.pes._gap import GAPotential
@@ -155,7 +159,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
         self.l_max = l_max
         self.n_max = n_max
         self.atom_sigma = atom_sigma
-        super().__init__(**kwargs)
+        super().__init__(feature_batch=feature_batch, **kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
@@ -233,7 +237,7 @@ class SmoothOverlapAtomicPosition(OutDataFrameConcat, BaseDescriber):
                 "publisher={APS}}"]
 
 
-class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
+class BPSymmetryFunctions(BaseDescriber):
     """
     Behler-Parrinello symmetry function to describe the local environment
     of each atom.
@@ -245,6 +249,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
                  a_etas: np.ndarray,
                  zetas: np.ndarray,
                  lambdas: np.ndarray,
+                 feature_batch: str = "pandas_concat",
                  **kwargs):
         """
         Args:
@@ -254,6 +259,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
             a_etas (numpy.ndarray): η in angular function.
             zetas (numpy.ndarray): ζ in angular function.
             lambdas (numpy.ndarray): λ in angular function. Default to (1, -1).
+            feature_batch: str = 'pandas_concat',
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         self.cutoff = cutoff
@@ -262,7 +268,7 @@ class BPSymmetryFunctions(OutDataFrameConcat, BaseDescriber):
         self.a_etas = np.array(a_etas)[None, :, None, None]
         self.zetas = np.array(zetas)[None, None, :, None]
         self.lambdas = np.array(lambdas)[None, None, None, :]
-        super().__init__(**kwargs)
+        super().__init__(feature_batch=feature_batch, **kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """

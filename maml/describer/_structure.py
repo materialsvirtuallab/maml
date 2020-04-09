@@ -8,10 +8,10 @@ import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.core import Structure
 
-from maml import BaseDescriber, OutDataFrameConcat
+from maml import BaseDescriber
 
 
-class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
+class DistinctSiteProperty(BaseDescriber):
     """
     Constructs a describer based on properties of distinct sites in a
     structure. For now, this assumes that there is only one type of species in
@@ -42,6 +42,7 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                  properties: List[str],
                  symprec: float = 0.1,
                  wyckoffs: Optional[List[str]] = None,
+                 feature_batch: str = "pandas_concat",
                  **kwargs):
         """
 
@@ -53,12 +54,13 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
             symprec (float): Symmetry precision for spacegroup determination.
             wyckoffs (list of wyckoff symbols):. E.g., ["48a", "24c"], if not provided,
                 will get from input structure when doing transform
+            feature_batch (str): way to batch a list of features into one
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         self.properties = properties
         self.symprec = symprec
         self.wyckoffs = wyckoffs
-        super().__init__(**kwargs)
+        super().__init__(feature_batch=feature_batch, **kwargs)
 
     def transform_one(self, structure: Structure) -> pd.DataFrame:
         """
@@ -99,7 +101,7 @@ class DistinctSiteProperty(OutDataFrameConcat, BaseDescriber):
                 "publisher={Nature Publishing Group}}"]
 
 
-class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
+class CoulombMatrix(BaseDescriber):
     """
     Coulomb Matrix to decribe structure
 
@@ -115,6 +117,8 @@ class CoulombMatrix(OutDataFrameConcat, BaseDescriber):
 
         self.max_sites = None  # For padding
         self.random_seed = random_seed
+        if 'feature_batch' not in kwargs:
+            kwargs['feature_batch'] = 'pandas_concat'
         super().__init__(**kwargs)
 
     def get_coulomb_mat(self, s: Structure) -> np.ndarray:
