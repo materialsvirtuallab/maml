@@ -19,12 +19,16 @@ Features
     
 2. Use ML to learn relationship between features and targets. Currently, the `maml` supports `sklearn` and `keras` models. 
 
-3. Applications: modelling the potential energy surface, constructing surrogate models for property prediction.
+3. Applications:
 
- a) Neural Network Potential (NNP)
- b) Gaussian approximation potential (GAP) with SOAP features 
- c) Spectral neighbor analysis potential (SNAP)
- d) Moment Tensor Potential (MTP)
+ a) `pes` for modelling the potential energy surface, constructing surrogate models for property prediction.
+
+  i) Neural Network Potential (NNP)
+  ii) Gaussian approximation potential (GAP) with SOAP features
+  iii) Spectral neighbor analysis potential (SNAP)
+  iv) Moment Tensor Potential (MTP)
+
+ b) `rfxas` for random forest models in predicting atomic local environments from X-ray absorption spectroscopy.
 
 Installation
 ------------
