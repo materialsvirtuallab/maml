@@ -12,6 +12,8 @@ from .pes import (  # noqa
     get_default_lmp_exe  # noqa
     )
 
+from .rfxas import XANES, CenvPrediction  # noqa
+
 
 __all__ = [
     'Potential',
@@ -25,5 +27,7 @@ __all__ = [
     "ElasticConstant",
     "LatticeConstant",
     "NudgedElasticBand",
-    "DefectFormation"
+    "DefectFormation",
+    "XANES",
+    "CenvPrediction"
 ]
