@@ -9,6 +9,11 @@ from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.core import Structure
 
 from maml import BaseDescriber
+from ._megnet import MEGNetStructure
+
+
+__all__ = ['DistinctSiteProperty', 'MEGNetStructure', 'CoulombMatrix',
+           'RandomizedCoulombMatrix', 'SortedCoulombMatrix']
 
 
 class DistinctSiteProperty(BaseDescriber):

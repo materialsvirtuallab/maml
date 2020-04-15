@@ -3,8 +3,10 @@ Describer for converting (structural) objects into model-readable
 numeric vectors or tensors.
 """
 
-from ._site import BispectrumCoefficients, SmoothOverlapAtomicPosition, BPSymmetryFunctions  # noqa
-from ._structure import DistinctSiteProperty, CoulombMatrix, SortedCoulombMatrix, RandomizedCoulombMatrix  # noqa
+from ._site import (BispectrumCoefficients, SmoothOverlapAtomicPosition,  # noqa
+                    BPSymmetryFunctions, MEGNetSite)  # noqa
+from ._structure import (DistinctSiteProperty, CoulombMatrix, SortedCoulombMatrix,  # noqa
+                         RandomizedCoulombMatrix, MEGNetStructure)  # noqa
 from ._composition import ElementProperty, ElementStats  # noqa
 
 __all__ = [
@@ -16,5 +18,7 @@ __all__ = [
     'SortedCoulombMatrix',
     'RandomizedCoulombMatrix',
     'ElementProperty',
-    'ElementStats'
+    'ElementStats',
+    'MEGNetSite',
+    'MEGNetStructure'
 ]

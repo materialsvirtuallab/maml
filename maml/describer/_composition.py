@@ -1,7 +1,6 @@
 """
 Compositional describers
 """
-from functools import partial
 import os
 from typing import Dict, List, Union, Optional, Tuple
 
@@ -14,7 +13,7 @@ from sklearn.decomposition import PCA, KernelPCA
 import json
 
 from maml.base import BaseDescriber
-from maml.utils import Stats, STATS_KWARGS, stats_list_conversion
+from maml.utils import Stats, get_full_stats_and_funcs
 
 
 CWD = os.path.abspath(os.path.dirname(__file__))
@@ -84,39 +83,13 @@ class ElementStats(BaseDescriber):
 
         if len(property_names) != n_single_property:
             raise ValueError("Property name length is not consistent")
+
         all_property_names = []
 
-        stats_func = []
-        full_stats = stats_list_conversion(stats)
+        full_stats, stats_func = get_full_stats_and_funcs(stats)
 
         for stat in full_stats:
             all_property_names.extend(['%s_%s' % (p, stat) for p in property_names])
-            if ':' in stat:
-                splits = stat.split(":")
-                stat_name = splits[0]
-
-                if stat_name.lower() not in self.ALLOWED_STATS:
-                    raise ValueError(f"{stat_name.lower()} not in available Stats")
-
-                func = getattr(Stats, stat_name)
-                args = splits[1:]
-                arg_dict = {}
-                for name_dict, arg in zip(STATS_KWARGS[stat_name], args):  # type: ignore
-                    name = list(name_dict.keys())[0]
-                    value_type = list(name_dict.values())[0]
-                    try:
-                        value = value_type(arg)
-                    except ValueError:
-                        value = None  # type: ignore
-                    arg_dict[name] = value
-                stats_func.append(partial(func, **arg_dict))
-                continue
-
-            if stat.lower() not in self.ALLOWED_STATS:
-                raise ValueError(f"{stat.lower()} not in available Stats")
-
-            stats_func.append(getattr(Stats, stat))
-
         self.stats = full_stats
         self.element_properties = element_properties
         self.property_names = property_names

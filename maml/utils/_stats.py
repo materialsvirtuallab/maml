@@ -3,8 +3,9 @@ Utils for describers
 """
 
 from collections import Counter
+from functools import partial
 import logging
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -459,3 +460,45 @@ def stats_list_conversion(stats_list: List[str]) -> List[str]:
 
 STATS_KWARGS = {'moment': [{'order': int}, {'max_order': int}],
                 'shifted_geometric_mean': [{'shift': float}]}
+
+
+def get_full_stats_and_funcs(stats: List) -> Tuple[List[str], List]:
+    """
+    Get expanded stats function name str and the corresponding
+    function callables
+
+    Args:
+        stats (list): a list of stats names, e.g, ['mean', 'std', 'moment:1:None']
+
+    Returns: list of stats names, list of stats callable
+
+    """
+    stats_func = []
+    full_stats = stats_list_conversion(stats)
+
+    for stat in full_stats:
+        if ':' in stat:
+            splits = stat.split(":")
+            stat_name = splits[0]
+
+            if stat_name.lower() not in Stats.allowed_stats:  # type: ignore
+                raise ValueError(f"{stat_name.lower()} not in available Stats")
+
+            func = getattr(Stats, stat_name)
+            args = splits[1:]
+            arg_dict = {}
+            for name_dict, arg in zip(STATS_KWARGS[stat_name], args):  # type: ignore
+                name = list(name_dict.keys())[0]
+                value_type = list(name_dict.values())[0]
+                try:
+                    value = value_type(arg)
+                except ValueError:
+                    value = None  # type: ignore
+                arg_dict[name] = value
+            stats_func.append(partial(func, **arg_dict))
+            continue
+
+        if stat.lower() not in Stats.allowed_stats:  # type: ignore
+            raise ValueError(f"{stat.lower()} not in available Stats")
+        stats_func.append(getattr(Stats, stat))
+    return full_stats, stats_func
