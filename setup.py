@@ -37,4 +37,7 @@ libraries for rapid experimentation and learning of materials data.""",
         "Topic :: Scientific/Engineering :: Chemistry",
         "Topic :: Software Development :: Libraries :: Python Modules"
     ],
+    include_package_data=True,
+    package_data={'maml': ['describer/data/*.json', 'describer/data/megnet_models/*.json'
+        'describer/data/megnet_mdoels/*.hdf5']}
 )
