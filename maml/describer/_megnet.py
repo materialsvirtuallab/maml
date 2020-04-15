@@ -47,6 +47,7 @@ class MEGNetSite(BaseDescriber):
         if level is None:
             n_layers = sum([i.startswith('meg_net') for i in self.describer_model.valid_names]) // 3
             level = n_layers
+        self.name = name
         self.level = level
         super().__init__(**kwargs)
 
@@ -112,7 +113,6 @@ class MEGNetStructure(BaseDescriber):
             name_or_model = load_model(name)
         elif name is None:
             name_or_model = str(DEFAULT_MODEL)
-
         else:
             name_or_model = name
 
@@ -122,11 +122,12 @@ class MEGNetStructure(BaseDescriber):
             n_layers = sum([i.startswith('meg_net') for i in self.describer_model.valid_names]) // 3
             level = n_layers
 
+        self.name = name
         self.level = level
         self.mode = mode
         if stats is None:
             stats = ['min', 'max', 'range', 'mean', 'mean_absolute_error', 'mode']
-
+        self.stats = stats
         full_stats, stats_func = get_full_stats_and_funcs(stats)
         self.full_stats = full_stats
         self.stats_func = stats_func
