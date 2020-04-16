@@ -7,12 +7,10 @@ Simple multi-layer perceptrons
 
 
 from typing import List
-from keras.layers import Dense
-from keras.optimizers import Adam
-from keras.models import Sequential
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.base import TransformerMixin
+import tensorflow as tf
 
 from maml import ModelWithKeras, SequentialDescriber
 from maml import BaseDescriber
@@ -38,13 +36,13 @@ def construct_mlp(hidden_layer_sizes: List[int],
     Returns:
 
     """
-    model = Sequential()
-    model.add(Dense(units=hidden_layer_sizes[0], input_dim=input_dim,
-                    activation=activation))
+    model = tf.keras.models.Sequential()
+    model.add(tf.keras.layers.Dense(units=hidden_layer_sizes[0],
+                                    input_dim=input_dim, activation=activation))
     for l in hidden_layer_sizes[1:]:
-        model.add(Dense(l, activation=activation))
-    model.add(Dense(1))
-    model.compile(loss=loss, optimizer=Adam(lr), metrics=metrics)
+        model.add(tf.keras.layers.Dense(l, activation=activation))
+    model.add(tf.keras.layers.Dense(1))
+    model.compile(loss=loss, optimizer=tf.keras.optimizers.Adam(lr), metrics=metrics)
     return model
 
 

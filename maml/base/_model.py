@@ -142,9 +142,9 @@ class KerasMixin:
         Returns: None
 
         """
-        from keras.models import load_model
+        import tensorflow as tf
         self.describer = joblib.load(filename)
-        self.model = load_model(filename + '.hdf5')
+        self.model = tf.keras.models.load_model(filename + '.hdf5')
 
     @classmethod
     def from_file(cls, filename: str, **kwargs):
