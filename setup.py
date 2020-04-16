@@ -8,7 +8,7 @@ setup(
     name="maml",
     packages=find_packages(),
     version="0.0.1",
-    install_requires=["numpy", "scipy", "monty", "keras", "tensorflow",
+    install_requires=["numpy", "scipy", "monty", "tensorflow",
                       "scikit-learn", "pandas", "pymatgen", "tqdm"],
     author="Materials Virtual Lab",
     author_email="ongsp@eng.ucsd.edu",

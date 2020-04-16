@@ -12,10 +12,10 @@ import warnings
 from zipfile import ZipFile
 
 import joblib
-from keras.models import load_model
 import numpy as np
 from scipy.interpolate import interp1d
 from tqdm import tqdm
+import tensorflow as tf
 
 from ._core import XANES
 
@@ -168,7 +168,7 @@ class CenvPrediction(object):
                 if cnum_model_path.endswith('.sav'):
                     cnum_model_loaded = joblib.load(cnum_model_path)
                 elif cnum_model_path.endswith('.h5'):
-                    cnum_model_loaded = load_model(cnum_model_path)
+                    cnum_model_loaded = tf.keras.models.load_model(cnum_model_path)
                 else:
                     raise ValueError("Cnum model not recognized")
             self.pred_cnum_ranklist = cnum_model_loaded.predict(self.interp_spectrum_reshape)
@@ -205,7 +205,7 @@ class CenvPrediction(object):
                         if cmotif_model_path.endswith('.sav'):
                             cmotif_model_loaded = joblib.load(cmotif_model_path)
                         elif cmotif_model_path.endswith('.h5'):
-                            cmotif_model_loaded = load_model(cmotif_model_path)
+                            cmotif_model_loaded = tf.keras.models.load_model(cmotif_model_path)
                         else:
                             raise ValueError("Model format not recognized")
 
