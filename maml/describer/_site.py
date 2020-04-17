@@ -158,7 +158,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
             feature_batch (str): way to batch together a list of features
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        from maml.apps.pes._gap import GAPotential
+        from maml.apps.pes import GAPotential
         self.operator = GAPotential()
         self.cutoff = cutoff
         self.l_max = l_max

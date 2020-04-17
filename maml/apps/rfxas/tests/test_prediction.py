@@ -1,5 +1,5 @@
-from maml.apps import XANES
-from maml.apps import CenvPrediction
+from maml.apps.rfxas import XANES
+from maml.apps.rfxas import CenvPrediction
 import unittest
 import os
 import numpy as np
