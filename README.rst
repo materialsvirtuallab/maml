@@ -16,6 +16,7 @@ Features
  a) Bispectrum coefficients
  b) Behler Parrinello symmetry functions
  c) Smooth Overlap of Atom Position (SOAP)
+ d) Graph network features (composition, site and structure)
     
 2. Use ML to learn relationship between features and targets. Currently, the `maml` supports `sklearn` and `keras` models. 
 
