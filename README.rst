@@ -1,6 +1,6 @@
 .. image:: https://circleci.com/gh/materialsvirtuallab/maml.svg?style=shield
     :target: https://circleci.com/gh/materialsvirtuallab/maml
-.. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master
+.. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&service=github
     :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
 
 |    
