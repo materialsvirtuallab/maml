@@ -6,7 +6,6 @@
 |    
 
 .. image:: ./resources/logo_horizontal.png
-    :width: 300
 
 
 maml (MAterials Machine Learning) is a Python for Materials Machine Learning.
