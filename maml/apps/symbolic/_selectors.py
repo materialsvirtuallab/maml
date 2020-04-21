@@ -313,10 +313,10 @@ class SCAD(PenalizedLeastSquares):
 
     def _penalty_jac(self, x, y, beta):
         beta = np.abs(beta)
-        x = self.a * self.lambd - beta
-        x[x < 0] = 0
+        z = self.a * self.lambd - beta
+        z[z < 0] = 0
         return self.lambd * (beta <= self.lambd +
-                             x / ((self.a - 1) * self.lambd) * (beta > self.lambd))
+                             z / ((self.a - 1) * self.lambd) * (beta > self.lambd))
 
 
 class Lasso(PenalizedLeastSquares):

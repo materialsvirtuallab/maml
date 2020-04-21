@@ -63,6 +63,11 @@ class TestSelectors(unittest.TestCase):
         selected = lasso.select(self.x, self.y)
         np.testing.assert_allclose(selected, [4, 5, 6, 9])
 
+    def test_scad(self):
+        scad = SCAD(1.0)
+        with self.assertRaises(RuntimeError):
+            _ = scad.select(self.x, self.y)
+
 
 if __name__ == "__main__":
     unittest.main()
