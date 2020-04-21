@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from pymatgen.util.testing import PymatgenTest
 
-from maml.describer._rdf import RadialDistributionFunction
+from maml.describer.rdf import RadialDistributionFunction
 
 
 class TestRDF(PymatgenTest):

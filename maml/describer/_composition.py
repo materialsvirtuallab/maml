@@ -5,7 +5,6 @@ import os
 from typing import Dict, List, Union, Optional, Tuple
 
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
-from ._matminer_wrapper import wrap_matminer_describer
 import numpy as np
 from pymatgen.core import Composition, Structure, Element, Molecule, Specie
 import pandas as pd
@@ -14,6 +13,7 @@ import json
 
 from maml.base import BaseDescriber
 from maml.utils import Stats, get_full_stats_and_funcs
+from .matminer import wrap_matminer_describer
 
 
 CWD = os.path.abspath(os.path.dirname(__file__))

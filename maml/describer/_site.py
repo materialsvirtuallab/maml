@@ -17,7 +17,7 @@ from pymatgen.core.periodic_table import get_el_sp
 
 from maml.base import BaseDescriber
 from maml.utils import pool_from
-from ._megnet import MEGNetSite
+from .megnet import MEGNetSite
 
 
 __all__ = ['MEGNetSite', 'BispectrumCoefficients', 'SmoothOverlapAtomicPosition',
