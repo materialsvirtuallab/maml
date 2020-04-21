@@ -8,7 +8,7 @@
 .. image:: ./resources/logo_horizontal.png
 
 
-maml (MAterials Machine Learning) is a Python for Materials Machine Learning.
+maml (MAterials Machine Learning) is a Python package for Materials Machine Learning.
 
 Features
 --------
