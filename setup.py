@@ -10,6 +10,7 @@ setup(
     version="0.0.1",
     install_requires=["numpy", "scipy", "monty", "tensorflow",
                       "scikit-learn", "pandas", "pymatgen", "tqdm"],
+    extras_requires={"maml.apps.symbolic._selectors_cvxpy": ["cvxpy"]},
     author="Materials Virtual Lab",
     author_email="ongsp@eng.ucsd.edu",
     maintainer="Shyue Ping Ong",
