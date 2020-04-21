@@ -3,9 +3,10 @@
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&service=github
     :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
 
-|    
+.. raw:: html
 
-.. image:: ./resources/logo_horizontal.png
+    <br/>
+    <img src="./resources/logo_horizontal.png"/ width="300px">
 
 
 maml (MAterials Machine Learning) is a Python package for Materials Machine Learning.
