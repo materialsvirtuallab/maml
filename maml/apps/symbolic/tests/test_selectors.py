@@ -1,0 +1,68 @@
+import unittest
+import os
+
+import numpy as np
+import json
+from maml.apps.symbolic._selectors import DantzigSelector, Lasso, AdaptiveLasso, SCAD
+from maml.apps.symbolic._selectors_cvxpy import cp, DantzigSelectorCP, LassoCP, AdaptiveLassoCP
+
+
+CWD = os.path.abspath(os.path.dirname(__file__))
+
+
+class TestSelectors(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        np.random.seed(42)
+        with open(os.path.join(CWD, 'test_data.json'), 'r') as f:
+            djson = json.load(f)
+        cls.x = np.array(djson['x'])
+        cls.beta = np.array(djson['beta'])
+        cls.y = cls.x.dot(cls.beta)
+        cls.lasso_alpha = 0.1
+
+    def test_dantzig(self):
+        dt = DantzigSelector(1)
+        selected = dt.select(self.x, self.y)
+        # selected only [4, 5, 6]
+        np.testing.assert_allclose(selected, [4, 5, 6])
+
+    @unittest.skipIf(cp is None, "cvxpy not installed")
+    def test_dantzigcp(self):
+        dt = DantzigSelectorCP(1)
+        selected = dt.select(self.x, self.y)
+        np.testing.assert_allclose(selected, [4, 5, 6])
+
+    def test_lasso(self):
+        lasso = Lasso(self.lasso_alpha)
+        selected = lasso.select(self.x, self.y, options={'maxiter': 1e5, 'ftol': 1e-15})
+        np.testing.assert_allclose(selected, [4, 5, 6, 9])
+
+    @unittest.skipIf(cp is None, "cvxpy not installed")
+    def test_lassocp(self):
+        lasso = LassoCP(self.lasso_alpha)
+        selected = lasso.select(self.x, self.y)
+        np.testing.assert_allclose(selected, [4, 5, 6, 9])
+
+        from sklearn.linear_model import Lasso
+        lasso = Lasso(self.lasso_alpha, fit_intercept=False)
+        lasso.fit(self.x, self.y)
+        np.testing.assert_allclose(np.where(np.abs(lasso.coef_) > 1e-10)[0],
+                                   [4, 5, 6, 9])
+
+    def test_adaptive_lasso(self):
+        lasso = AdaptiveLasso(self.lasso_alpha, gamma=0.1)
+        selected = lasso.select(self.x, self.y, options={'maxiter': 1e4, 'ftol': 1e-12})
+
+        np.testing.assert_allclose(selected, [4, 5, 6, 9])
+
+    @unittest.skipIf(cp is None, "cvxpy not installed")
+    def test_adaptive_lassocp(self):
+        lasso = AdaptiveLassoCP(self.lasso_alpha, gamma=0.1)
+        selected = lasso.select(self.x, self.y)
+        np.testing.assert_allclose(selected, [4, 5, 6, 9])
+
+
+if __name__ == "__main__":
+    unittest.main()
