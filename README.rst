@@ -3,6 +3,9 @@
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master
     :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
 
+
+.. image:: ./resources/logo_horizontal.png
+
 maml
 ====
 
