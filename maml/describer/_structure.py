@@ -333,7 +333,9 @@ class CoulombEigenSpectrum(BaseDescriber):
     """
     Get the Coulomb Eigen Spectrum describers
     """
-    def __init__(self, feature_batch="stack_padded", **kwargs):
+    def __init__(self,
+                 max_atoms: Optional[int] = None,
+                 **kwargs):
         """
         This method calculates the Coulomb matrix of a molecule and
         then sort the eigen values of the Coulomb matrix as the vector
@@ -342,11 +344,15 @@ class CoulombEigenSpectrum(BaseDescriber):
         describer will stack the results and should the number of atom
 
         Args:
-            feature_batch: method to batch a list of converted descriptors
-                the default is stack_padded where the features are stacked
-
+            max_atoms (int): maximum number of atoms
             **kwargs:
         """
+
+        if max_atoms is None:
+            feature_batch = "stack_padded"
+        else:
+            feature_batch = "stack_first_dim"
+        self.max_atoms = max_atoms
         super().__init__(feature_batch=feature_batch, **kwargs)
 
     def transform_one(self, mol: Molecule) -> np.ndarray:
@@ -362,7 +368,13 @@ class CoulombEigenSpectrum(BaseDescriber):
         if np.any(eig_vals <= 0.0):
             raise RuntimeWarning("Some eigen values are not positive")
 
-        return np.sort(eig_vals)[::-1]
+        f = np.sort(eig_vals)[::-1]
+        if self.max_atoms is not None:
+            if self.max_atoms < len(f):
+                raise RuntimeError("max_atoms is smaller than the "
+                                   "size of current molecule")
+            f = np.pad(f, (0, self.max_atoms - len(f)))
+        return f
 
     def get_citations(self) -> List[str]:
         """

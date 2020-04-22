@@ -137,6 +137,13 @@ class CoulomMatrixTest(unittest.TestCase):
         self.assertTrue(f.shape == (8, ))
         self.assertTrue(f2.shape == (2, 8))
 
+        ces = CoulombEigenSpectrum(max_atoms=9)
+        f2 = ces.transform([self.s1, self.s2])
+        self.assertTrue(f2.shape == (2, 9))
+
+        ces = CoulombEigenSpectrum(max_atoms=3)
+        self.assertRaises(RuntimeError, ces.transform, [self.s1, self.s2])
+
 
 if __name__ == "__main__":
     unittest.main()
