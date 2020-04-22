@@ -36,6 +36,27 @@ def stack_first_dim(features: List[np.ndarray]) -> np.ndarray:
     return np.stack(features)
 
 
+def stack_padded(features: List[np.ndarray]) -> np.ndarray:
+    """
+    Stack the first dimension. If the original features
+    are a list of nxm array, the stacked features will be lxnxm,
+    where l is the number of entries in the list
+    Args:
+        features (list): list of numpy array features
+
+    Returns: stacked features
+
+    """
+    feature_dims = np.array([i.shape[0] for i in features])
+    n_data = len(feature_dims)
+    max_feature_dims = np.max(feature_dims)
+    res = np.zeros((n_data, max_feature_dims))
+    index1 = np.tile(np.arange(max_feature_dims)[None, :], (n_data, 1))
+    masks = index1 < feature_dims[:, None]
+    res[masks] = np.concatenate(features)
+    return res
+
+
 def no_action(features: List[Any]) -> List[Any]:
     """
     return original feature lists
