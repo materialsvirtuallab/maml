@@ -1,12 +1,12 @@
 """
 Structure-wise describers. These describers include structural information.
 """
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
-from pymatgen.core import Structure
+from pymatgen.core import Structure, Molecule
 
 from maml import BaseDescriber
 from .megnet import MEGNetStructure
@@ -113,56 +113,56 @@ class CoulombMatrix(BaseDescriber):
     """
     def __init__(self,
                  random_seed: int = None,
+                 max_atoms: Optional[int] = None,
+                 is_ravel: Optional[bool] = True,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
+            max_atoms (int): maximum number of atoms
+            is_ravel (bool): whether to ravel the matrix to 1D
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
 
-        self.max_sites = None  # For padding
+        self.max_atoms = max_atoms
         self.random_seed = random_seed
+        self.is_ravel = is_ravel
         if 'feature_batch' not in kwargs:
             kwargs['feature_batch'] = 'pandas_concat'
         super().__init__(**kwargs)
 
-    def get_coulomb_mat(self, s: Structure) -> np.ndarray:
+    def get_coulomb_mat(self, s: Union[Molecule, Structure]) \
+            -> np.ndarray:
         """
         Args:
-            s (pymatgen Structure): input structure
+            s (Molecule/Structure): input Molecule or Structure. Structure
+                is not advised since the feature will depend on the supercell size
 
         Returns:
-            np.ndarray Coulomb matrix of the structure
+            Coulomb matrix of the structure
 
         """
         dis = s.distance_matrix
         num_sites = s.num_sites
-        c = np.zeros((num_sites, num_sites))
 
-        for i in range(num_sites):
-            for j in range(num_sites):
-                if i == j:
-                    c[i, j] = 0.5 * (s[i].specie.Z ** 2.4)
+        zs = np.array([i.specie.Z for i in s])
+        z_matrix = zs[:, None] * zs[None, :]
+        z_diag = 0.5 * zs ** 2.4
+        c = z_matrix / dis
+        np.fill_diagonal(c, z_diag)
 
-                elif i < j:
-                    c[i, j] = (s[i].specie.Z * s[j].specie.Z) / dis[i, j]
-                    c[j, i] = c[i, j]
-
-                else:
-                    continue
-
-        if self.max_sites and self.max_sites > num_sites:
-            padding = self.max_sites - num_sites
+        if self.max_atoms is not None and self.max_atoms > num_sites:
+            padding = self.max_atoms - num_sites
             return np.pad(c, (0, padding),
                           mode='constant',
                           constant_values=0)
-
         return c
 
-    def transform_one(self, s: Structure) -> pd.DataFrame:
+    def transform_one(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
         """
         Args:
-            s (Structure): input structure
+            s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
+                advised since the features will depend on supercell size
 
         Returns:
             pandas.DataFrame.
@@ -170,7 +170,9 @@ class CoulombMatrix(BaseDescriber):
             df[0] returns the serials of coulomb_mat raval
         """
         c = self.get_coulomb_mat(s)
-        return pd.DataFrame(c.ravel())
+        if self.is_ravel:
+            c = c.ravel()
+        return pd.DataFrame(c)
 
     def get_citations(self) -> List[str]:
         """
@@ -191,16 +193,17 @@ class RandomizedCoulombMatrix(CoulombMatrix):
     Randomized CoulombMatrix
     """
     def __init__(self,
-                 random_seed: int = None,
+                 random_seed: Optional[int] = None,
+                 is_ravel: Optional[bool] = True,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        super().__init__(random_seed=random_seed, **kwargs)
+        super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
 
-    def get_randomized_coulomb_mat(self, s: Structure) -> pd.DataFrame:
+    def get_randomized_coulomb_mat(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
         """
         Returns the randomized matrix
         (i) take an arbitrary valid Coulomb matrix C
@@ -211,7 +214,8 @@ class RandomizedCoulombMatrix(CoulombMatrix):
             that sorts row_norms + ε
 
         Args:
-            s (pymatgen Structure): pymatgen Structure for computing the randomized Coulomb matrix
+            s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
+                advised since the features will depend on supercell size
 
         Returns:
             pd.DataFrame randomized Coulomb matrix
@@ -221,13 +225,17 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         rng = np.random.RandomState(self.random_seed)
         e = rng.normal(size=row_norms.size)
         p = np.argsort(row_norms + e)
-        return pd.DataFrame(c[p][:, p].ravel())
+        c = c[p][:, p]
+        if self.is_ravel:
+            c = c.ravel()
+        return pd.DataFrame(c)
 
-    def transform_one(self, s: Structure) -> pd.DataFrame:
+    def transform_one(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
         """
         Transform one structure to descriptors
         Args:
-            s (Structure): pymatgen structure
+            s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
+                advised since the features will depend on supercell size
 
         Returns: pandas dataframe descriptors
 
@@ -255,33 +263,39 @@ class SortedCoulombMatrix(CoulombMatrix):
     Sorted CoulombMatrix
     """
     def __init__(self,
-                 random_seed: int = None,
+                 random_seed: Optional[int] = None,
+                 is_ravel: Optional[bool] = True,
                  **kwargs):
         """
         Args:
             random_seed (int): random seed
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
-        super().__init__(random_seed=random_seed, **kwargs)
+        super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
 
-    def get_sorted_coulomb_mat(self, s: Structure) -> pd.DataFrame:
+    def get_sorted_coulomb_mat(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
         """
         Returns the matrix sorted by the row norm
 
         Args:
-            s (pymatgen Structure): pymatgen Structure for computing the Coulomb matrix
+            s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
+                advised since the features will depend on supercell size
 
         Returns:
             pd.DataFrame, sorted Coulomb matrix
         """
         c = self.get_coulomb_mat(s)
-        return pd.DataFrame(c[np.argsort(np.linalg.norm(c, axis=1))].ravel())
+        c = c[np.argsort(np.linalg.norm(c, axis=1))]
+        if self.is_ravel:
+            c = c.ravel()
+        return pd.DataFrame(c)
 
-    def transform_one(self, s: Structure) -> pd.DataFrame:
+    def transform_one(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
         """
         Transform one structure into descriptor
         Args:
-            s (Structure): pymatgen Structure
+            s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
+                advised since the features will depend on supercell size
 
         Returns: pd.DataFrame descriptors
 
