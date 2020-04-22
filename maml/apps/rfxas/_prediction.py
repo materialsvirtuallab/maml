@@ -32,6 +32,9 @@ EXTRA_MODEL_SUB_DICT = {"cnn": "CNN_model", "knn": "KNN_model", "mlp": "MLP_mode
 EXTRA_TEMPLATES = {"cnum": "{}_c_num", "cmotif": "{}_c_env_{}_env_label"}
 
 EXTRA_MODEL_URL = 'https://ndownloader.figshare.com/files/18741755'
+RF_MODEL_PATH = os.path.join(CWD, "./models.zip")
+RF_MODEL_URL = 'https://ndownloader.figshare.com/files/22388406'
+
 
 CN_CLASSES = ['CN_1-CN_4', 'CN_12', 'CN_12-CN_10', 'CN_12-CN_3',
               'CN_12-CN_6-CN_9', 'CN_2', 'CN_2-CN_4-CN_6', 'CN_2-CN_6',
@@ -63,9 +66,12 @@ class CenvPrediction(object):
     """
     _available_models = ['rf', 'knn', 'svc', 'mlp', 'cnn']
 
-    def __init__(self, xanes_spectrum: XANES, energy_reference: str, energy_range: Union[float, List[float]],
+    def __init__(self, xanes_spectrum: XANES, energy_reference: str,
+                 energy_range: Union[float, List[float]],
                  edge_energy: Optional[float] = None,
-                 spectrum_interpolation: bool = True, model: str = 'rf'):
+                 spectrum_interpolation: bool = True, model: str = 'rf',
+                 model_dir: str = os.path.join(CWD, "./models"),
+                 extra_model_dir: str = EXTRA_MODEL_DIR):
         """
         Args:
             xanes_spectrum: XANES object
@@ -83,6 +89,10 @@ class CenvPrediction(object):
                 of xanes_spectrum for coordination environment prediction. The original spectrum need to be a vector
                 with length equals 200.
             model (str): rf, knn, mlp or svc. Default is rf. For other models, model download ~1.28 GB is required.
+            model_dir (str): specifies where the models random forest models are stored.
+                if the dir does not exists, the models will be downloaded from figshare
+            extra_model_dir (str): specifies where the extra models are stored.
+                if the dir does not exists, the extra models will be downloaded from figshare
         """
 
         self.xanes_spectrum = xanes_spectrum
@@ -91,18 +101,21 @@ class CenvPrediction(object):
         self.energy_range = energy_range
         self.cnum_model_name_template = 'RandomForest_{}_c_num.sav'
         self.cmotif_model_name_template = 'RandomForest_{}_c_env_ex_{}.sav'
-        self.model_dir = os.path.join(CWD, "./models")
+        self.model_dir = model_dir
+
+        if not os.path.isdir(self.model_dir):
+            _download_models(RF_MODEL_URL, RF_MODEL_PATH, self.model_dir)
 
         if model not in self._available_models:
             raise ValueError('Model type %s not recognized ' % str(model),
                              ' choose from ', self._available_models)
         if model != 'rf':
-            if os.path.isdir(EXTRA_MODEL_DIR):
+            if os.path.isdir(extra_model_dir):
                 pass
             else:
-                _download_models(EXTRA_MODEL_URL, EXTRA_MODELS)
-            global MODEL_DIR
-            self.model_dir = os.path.join(EXTRA_MODEL_DIR, EXTRA_MODEL_SUB_DICT[model])
+                _download_models(EXTRA_MODEL_URL, EXTRA_MODELS, extra_model_dir)
+
+            self.model_dir = os.path.join(extra_model_dir, EXTRA_MODEL_SUB_DICT[model])
 
             if model.lower() == 'cnn':
                 suffix = '.h5'
@@ -168,6 +181,7 @@ class CenvPrediction(object):
                 if cnum_model_path.endswith('.sav'):
                     cnum_model_loaded = joblib.load(cnum_model_path)
                 elif cnum_model_path.endswith('.h5'):
+                    print('cnum ', cnum_model_path)
                     cnum_model_loaded = tf.keras.models.load_model(cnum_model_path)
                 else:
                     raise ValueError("Cnum model not recognized")
@@ -205,6 +219,7 @@ class CenvPrediction(object):
                         if cmotif_model_path.endswith('.sav'):
                             cmotif_model_loaded = joblib.load(cmotif_model_path)
                         elif cmotif_model_path.endswith('.h5'):
+                            print("cmotif", cmotif_model_path)
                             cmotif_model_loaded = tf.keras.models.load_model(cmotif_model_path)
                         else:
                             raise ValueError("Model format not recognized")
@@ -303,16 +318,18 @@ def find_nearest_energy_index(energy_array, energy_value):
     return energy_index
 
 
-def _download_models(url, file_path=EXTRA_MODELS):
+def _download_models(url, file_path=EXTRA_MODELS, dest='ext_models'):
     """
     Download machine learning model files
 
     Args:
         url: (str) url link for the models
+        dest: (str) destination for extraction
     """
 
-    logger.info("Fetching {} from {} to {}".format(
-        os.path.basename(file_path), url, file_path))
+    logger.info(
+        "Fetching {} from {} to {}".format(
+            os.path.basename(file_path), url, file_path))
 
     r = requests.get(url, stream=True)
     total_size = int(r.headers.get('content-length', 0))
@@ -325,5 +342,5 @@ def _download_models(url, file_path=EXTRA_MODELS):
     t.close()
     r.close()
     logger.info("Start extracting models...")
-    with ZipFile(EXTRA_MODELS, 'r') as zip_obj:
-        zip_obj.extractall(os.path.join(os.path.basename(file_path), 'ex_models'))
+    with ZipFile(file_path, 'r') as zip_obj:
+        zip_obj.extractall(os.path.join(os.path.basename(file_path), dest))

@@ -11,8 +11,11 @@ comp_test_df_path = os.path.join(os.path.dirname(__file__), 'comp_spectra_test.p
 comp_test_df = pd.read_pickle(comp_test_df_path)
 
 Al2O3_test_data_path = os.path.join(os.path.dirname(__file__), 'Al2O3_cenv_testdata.pkl')
+
 with open(Al2O3_test_data_path, 'rb') as fp:
     Al2O3_dataset = pickle.load(fp)
+
+model_dir = os.path.join(os.path.dirname(__file__), "models")
 
 
 class RfxasXANESTest(unittest.TestCase):
@@ -39,26 +42,33 @@ class RfxasXANESTest(unittest.TestCase):
 
     def test_option_validation(self):
         self.assertRaisesRegex(ValueError, "Invalid energy reference option", CenvPrediction,
-                               xanes_spectrum=self.xanes_obj, energy_reference='E1', energy_range=45
+                               xanes_spectrum=self.xanes_obj, energy_reference='E1', energy_range=45,
+                               model_dir=model_dir
                                )
         self.assertRaisesRegex(ValueError, "range needs to be a number", CenvPrediction,
-                               xanes_spectrum=self.xanes_obj, energy_reference='lowest', energy_range=[-5, 45]
+                               xanes_spectrum=self.xanes_obj, energy_reference='lowest', energy_range=[-5, 45],
+                               model_dir=model_dir
                                )
         self.assertRaisesRegex(ValueError, "range needs to be larger than 0", CenvPrediction,
-                               xanes_spectrum=self.xanes_obj, energy_reference='lowest', energy_range=-20
+                               xanes_spectrum=self.xanes_obj, energy_reference='lowest', energy_range=-20,
+                               model_dir=model_dir
                                )
         self.assertRaisesRegex(ValueError, "range needs to be a list", CenvPrediction,
                                xanes_spectrum=self.xanes_obj, energy_reference='E0', energy_range=-20,
+                               model_dir=model_dir
                                )
         self.assertRaisesRegex(ValueError, "lower bound needs to be less than zero", CenvPrediction,
                                xanes_spectrum=self.xanes_obj, energy_reference='E0', energy_range=[10, 20],
+                               model_dir=model_dir
                                )
         self.assertRaisesRegex(ValueError, "higher bound needs to be larger than zero", CenvPrediction,
                                xanes_spectrum=self.xanes_obj, energy_reference='E0', energy_range=[-5, -2],
+                               model_dir=model_dir
                                )
 
     def test_interpolation(self):
-        self.xanes_obj_no_interp = CenvPrediction(self.xanes_obj, 'lowest', 45, None, False)
+        self.xanes_obj_no_interp = CenvPrediction(self.xanes_obj, 'lowest', 45, None, False,
+                                                  model_dir=model_dir)
         self.assertTrue(np.allclose(
             pearsonr(self.xanes_obj_no_interp.interp_spectrum, self.xanes_obj_no_interp.xanes_spectrum.y)[0], 1,
             rtol=1e-7))
@@ -66,7 +76,8 @@ class RfxasXANESTest(unittest.TestCase):
             pearsonr(self.xanes_obj_no_interp.interp_energy, self.xanes_obj_no_interp.xanes_spectrum.x)[0], 1,
             rtol=1e-7))
 
-        self.xanes_obj_interp = CenvPrediction(self.xanes_obj, 'lowest', 45, None, True)
+        self.xanes_obj_interp = CenvPrediction(self.xanes_obj, 'lowest', 45, None, True,
+                                               model_dir=model_dir)
         self.assertTrue(
             np.allclose(pearsonr(self.xanes_obj_interp.interp_spectrum, self.xanes_obj.spectrum_45eV)[0], 1, rtol=1e-3))
         self.assertTrue(
@@ -78,10 +89,26 @@ class RfxasXANESTest(unittest.TestCase):
         self.Al2O3_cenv_pred_origin = CenvPrediction(self.Al2O3_origin_obj, 'E0',
                                                      energy_range=Al2O3_dataset['energy_range'],
                                                      edge_energy=Al2O3_dataset['edge_energy'],
-                                                     spectrum_interpolation=False)
+                                                     spectrum_interpolation=False,
+                                                     model_dir=model_dir)
         self.Al2O3_cenv_pred_origin.cenv_prediction()
         self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cnum_ranklist, 'CN_6')
         self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cenv[0], 'CN_6 coord. motif undetermined')
+
+    def test_cenv_prediction_cnn(self):
+        self.Al2O3_origin_obj = XANES(Al2O3_dataset['prev_interp_energy'], Al2O3_dataset['prev_interp_spectrum'],
+                                      Al2O3_dataset['absorbing_species'], edge='K', e0=Al2O3_dataset['edge_energy'])
+        self.Al2O3_cenv_pred_origin = CenvPrediction(self.Al2O3_origin_obj, 'E0',
+                                                     energy_range=Al2O3_dataset['energy_range'],
+                                                     edge_energy=Al2O3_dataset['edge_energy'],
+                                                     spectrum_interpolation=False,
+                                                     model_dir=model_dir,
+                                                     extra_model_dir=model_dir,
+                                                     model='cnn')
+        self.Al2O3_cenv_pred_origin.cenv_prediction()
+        self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cnum_ranklist, 'CN_4-CN_3-CN_6')
+        self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cenv[0],
+                         'CN_4-tetrahedral-trigonal pyramidal-see-saw-like-square co-planar')
 
 
 if __name__ == "__main__":
