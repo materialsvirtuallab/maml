@@ -8,7 +8,7 @@ from pymatgen import Structure, Element, Lattice
 from pymatgen.util.testing import PymatgenTest
 
 from maml.describer._structure import DistinctSiteProperty, CoulombMatrix, \
-    SortedCoulombMatrix, RandomizedCoulombMatrix
+    SortedCoulombMatrix, RandomizedCoulombMatrix, CoulombEigenSpectrum
 
 
 class DistinctSitePropertyTest(PymatgenTest):
@@ -39,6 +39,7 @@ class DistinctSitePropertyTest(PymatgenTest):
         describer = DistinctSiteProperty(properties=["Z", "atomic_radius"])
         descriptor = describer.transform_one(self.li2o)
         self.assertAlmostEqual(descriptor.iloc[0]["2c-Z"], 3)
+
 
 class CoulomMatrixTest(unittest.TestCase):
 
@@ -125,9 +126,16 @@ class CoulomMatrixTest(unittest.TestCase):
         c = cm.transform([self.s1, self.s2])
         c1 = cm.transform_one(self.s1)
         c2 = cm.transform_one(self.s2)
-        print(c.xs(0, level='input_index'), c1)
         self.assertTrue(np.allclose(c.xs(0, level='input_index'), c1))
         self.assertTrue(np.allclose(c.xs(1, level='input_index'), c2))
+
+    def test_eigenspectrum(self):
+        ces = CoulombEigenSpectrum()
+        f = ces.transform_one(self.s1)
+
+        f2 = ces.transform([self.s1, self.s2])
+        self.assertTrue(f.shape == (8, ))
+        self.assertTrue(f2.shape == (2, 8))
 
 
 if __name__ == "__main__":

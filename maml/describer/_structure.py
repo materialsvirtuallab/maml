@@ -131,8 +131,8 @@ class CoulombMatrix(BaseDescriber):
             kwargs['feature_batch'] = 'pandas_concat'
         super().__init__(**kwargs)
 
-    def get_coulomb_mat(self, s: Union[Molecule, Structure]) \
-            -> np.ndarray:
+    @staticmethod
+    def _get_columb_mat(s: Union[Molecule, Structure]) -> np.ndarray:
         """
         Args:
             s (Molecule/Structure): input Molecule or Structure. Structure
@@ -143,14 +143,26 @@ class CoulombMatrix(BaseDescriber):
 
         """
         dis = s.distance_matrix
-        num_sites = s.num_sites
-
+        np.fill_diagonal(dis, np.inf)  # avoid dividing by zero
         zs = np.array([i.specie.Z for i in s])
         z_matrix = zs[:, None] * zs[None, :]
         z_diag = 0.5 * zs ** 2.4
         c = z_matrix / dis
         np.fill_diagonal(c, z_diag)
+        return c
 
+    def get_coulomb_mat(self, s: Union[Molecule, Structure]) \
+            -> np.ndarray:
+        """
+        Args:
+            s (Molecule/Structure): input Molecule or Structure. Structure
+                is not advised since the feature will depend on the supercell size
+        Returns:
+            Coulomb matrix of the structure
+
+        """
+        c = self._get_columb_mat(s)
+        num_sites = c.shape[0]
         if self.max_atoms is not None and self.max_atoms > num_sites:
             padding = self.max_atoms - num_sites
             return np.pad(c, (0, padding),
@@ -315,3 +327,52 @@ class SortedCoulombMatrix(CoulombMatrix):
                 "and Lilienfeld, Anatole V and M{\"u}ller, Klaus-Robert},"
                 "booktitle={Advances in neural information processing systems},"
                 "pages={440--448}, year={2012}}"]
+
+
+class CoulombEigenSpectrum(BaseDescriber):
+    """
+    Get the Coulomb Eigen Spectrum describers
+    """
+    def __init__(self, feature_batch="stack_padded", **kwargs):
+        """
+        This method calculates the Coulomb matrix of a molecule and
+        then sort the eigen values of the Coulomb matrix as the vector
+        features for the molecule.
+        When multiple molecules are converted at the same time, the
+        describer will stack the results and should the number of atom
+
+        Args:
+            feature_batch: method to batch a list of converted descriptors
+                the default is stack_padded where the features are stacked
+
+            **kwargs:
+        """
+        super().__init__(feature_batch=feature_batch, **kwargs)
+
+    def transform_one(self, mol: Molecule) -> np.ndarray:
+        """
+        Args:
+            mol (Molecule): pymatgen molecule
+
+        Returns: np.ndarray the eigen value vectors of Coulob matrix
+
+        """
+        c_mat = CoulombMatrix._get_columb_mat(mol)
+        eig_vals = np.linalg.eigvals(c_mat)
+        if np.any(eig_vals <= 0.0):
+            raise RuntimeWarning("Some eigen values are not positive")
+
+        return np.sort(eig_vals)[::-1]
+
+    def get_citations(self) -> List[str]:
+        """
+        Citations for CoulombMatrix
+        """
+        return ["@article{rupp2012fast, "
+                "title={Fast and accurate modeling of molecular "
+                "atomization energies with machine learning},"
+                "author={Rupp, Matthias and Tkatchenko, Alexandre and M{\"u}ller, "
+                "Klaus-Robert and Von Lilienfeld, O Anatole},"
+                "journal={Physical review letters}, volume={108}, "
+                "number={5}, pages={058301}, "
+                "year={2012}, publisher={APS}}"]
