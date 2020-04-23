@@ -1,6 +1,7 @@
 """
 Structure-wise describers. These describers include structural information.
 """
+import logging
 from typing import List, Optional, Union
 
 import numpy as np
@@ -12,8 +13,13 @@ from maml import BaseDescriber
 from .megnet import MEGNetStructure
 
 
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
 __all__ = ['DistinctSiteProperty', 'MEGNetStructure', 'CoulombMatrix',
-           'RandomizedCoulombMatrix', 'SortedCoulombMatrix']
+           'RandomizedCoulombMatrix', 'SortedCoulombMatrix', 'CoulombEigenSpectrum']
 
 
 class DistinctSiteProperty(BaseDescriber):
@@ -341,7 +347,8 @@ class CoulombEigenSpectrum(BaseDescriber):
         then sort the eigen values of the Coulomb matrix as the vector
         features for the molecule.
         When multiple molecules are converted at the same time, the
-        describer will stack the results and should the number of atom
+        describer will stack the results. If the number of atoms is
+        not the same for molecules, zeros will padded to the features
 
         Args:
             max_atoms (int): maximum number of atoms
@@ -366,7 +373,7 @@ class CoulombEigenSpectrum(BaseDescriber):
         c_mat = CoulombMatrix._get_columb_mat(mol)
         eig_vals = np.linalg.eigvals(c_mat)
         if np.any(eig_vals <= 0.0):
-            raise RuntimeWarning("Some eigen values are not positive")
+            logger.warning("Some eigen values are not positive")
 
         f = np.sort(eig_vals)[::-1]
         if self.max_atoms is not None:
@@ -378,7 +385,7 @@ class CoulombEigenSpectrum(BaseDescriber):
 
     def get_citations(self) -> List[str]:
         """
-        Citations for CoulombMatrix
+        Citations for CoulombEigenSpectrum
         """
         return ["@article{rupp2012fast, "
                 "title={Fast and accurate modeling of molecular "
