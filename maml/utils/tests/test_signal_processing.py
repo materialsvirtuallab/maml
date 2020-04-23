@@ -43,7 +43,7 @@ class TestSP(unittest.TestCase):
         cwt_res = cwt(self.x, np.arange(1, 31), signal.ricker)
         self.assertTrue(cwt_res.shape == (30, 100))
 
-    @unittest.skipIf(tftb is None)
+    @unittest.skipIf(tftb is None, "tftb is required to run wvd")
     def test_wvd(self):
         wvd_res = wvd(self.x)
         self.assertTrue(wvd_res.shape == (100, 100))
