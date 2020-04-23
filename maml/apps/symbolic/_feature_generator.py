@@ -1,12 +1,12 @@
 """
 Feature Generator
 """
-from itertools import combinations_with_replacement
-import numpy as np
-import pandas as pd
 import math
 from functools import partial
+from itertools import combinations_with_replacement
 from typing import Optional, Callable
+import numpy as np
+import pandas as pd
 
 
 def features_generator(df: pd.DataFrame, operators: list) -> pd.DataFrame:
@@ -23,7 +23,7 @@ def features_generator(df: pd.DataFrame, operators: list) -> pd.DataFrame:
     if not np.all(o in Operator.support_op_rep for o in operators):
         raise ValueError("Contain unsupported operators, check Operator.supported_op_rep")
     ops = [Operator.from_str(o) for o in operators]
-    sop = [op for op in ops if op.is_singular]
+    sop = [op for op in ops if op.is_unary]
     bop = [op for op in ops if op.is_binary]
     for fn1, fn2 in combinations_with_replacement(df.columns, r=2):
         if fn1 == fn2:
@@ -49,37 +49,37 @@ def features_generator(df: pd.DataFrame, operators: list) -> pd.DataFrame:
 class Operator:
     """
     Operator class. Wrap math operators with more attributes including check
-    is_singular, is_binary, and is_commutative, and generate name string
+    is_unary, is_binary, and is_commutative, and generate name string
     for the output.
     """
     support_op_rep = ['^2', '^3', 'sqrt', 'sqrtabs', 'cbrt', 'exp', 'abs', 'log10',
                       '+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']
 
-    def __init__(self, operation: Callable, rep: str, singular: bool, commutative: bool):
+    def __init__(self, operation: Callable, rep: str, unary: bool, commutative: bool):
         """
         Args:
             operation(Callable): operation function
             rep(str): representations of the operator
-            singular(bool): whether it is a singular operator
+            unary(bool): whether it is a unary operator
             commutative(bool): whether it is a commutative operator
         """
         self.opt = operation
         self.rep = rep
-        self.singular = singular
+        self.unary = unary
         self.commutative = commutative
 
     @property
-    def is_singular(self) -> bool:
+    def is_unary(self) -> bool:
         """
         Returns: True if the operator takes one argument else False
 
         """
-        if not self.singular:
+        if not self.unary:
             if self.rep in ['^2', '^3', 'sqrt', 'sqrtabs', 'cbrt', 'exp', 'abs', 'log10']:
-                self.singular = True
+                self.unary = True
             elif self.rep in ['+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']:
-                self.singular = False
-        return self.singular
+                self.unary = False
+        return self.unary
 
     @property
     def is_binary(self) -> bool:
@@ -87,7 +87,7 @@ class Operator:
         Returns: True if the operator takes two arguments else False
 
         """
-        return False if self.is_singular else True
+        return False if self.is_unary else True
 
     @property
     def is_commutative(self) -> bool:
@@ -96,7 +96,7 @@ class Operator:
 
         """
         if not self.commutative:
-            if self.is_singular:
+            if self.is_unary:
                 self.commutative = True
             elif self.rep in ['-', '/']:
                 self.commutative = False
@@ -115,7 +115,7 @@ class Operator:
         """
         if self.is_binary and not np.all(i2):
             raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
-        if self.is_singular:
+        if self.is_unary:
             return self.opt(i1)
         else:
             return self.opt(i1, i2)
@@ -184,64 +184,64 @@ class Operator:
         """
         if op_name == 'sqrtabs':
             opt = _my_abs_sqrt
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
 
         if op_name.startswith('^'):
             n = int(op_name[1:])
             opt = partial(_my_power, n=n)
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
 
         if op_name == 'sqrt':
             opt = partial(_my_power, n=1 / 2)
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
 
         if op_name == 'cbrt':
             opt = partial(_my_power, n=1 / 3)
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
 
         if op_name == 'exp':
             opt = _my_exp
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
 
         if op_name == 'abs':
             opt = abs
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
 
         if op_name == 'log10':
             opt = np.log10
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
 
         if op_name == '+':
             opt = _my_sum
-            return cls(operation=opt, rep=op_name, singular=False, commutative=True)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
 
         if op_name == '|+|':
             opt = _my_abs_sum
-            return cls(operation=opt, rep=op_name, singular=False, commutative=True)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
 
         if op_name == '*':
             opt = _my_mul
-            return cls(operation=opt, rep=op_name, singular=False, commutative=True)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
 
         if op_name == '-':
             opt = _my_diff
-            return cls(operation=opt, rep=op_name, singular=False, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=False)
 
         if op_name == '|-|':
             opt = _my_abs_diff
-            return cls(operation=opt, rep=op_name, singular=False, commutative=True)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
 
         if op_name == '/':
             opt = _my_div
-            return cls(operation=opt, rep=op_name, singular=False, commutative=False)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=False)
 
         if op_name == 'sum_power_2':
             opt = _my_sum_power_2
-            return cls(operation=opt, rep=op_name, singular=False, commutative=True)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
 
         if op_name == 'sum_exp':
             opt = _my_sum_exp
-            return cls(operation=opt, rep=op_name, singular=False, commutative=True)
+            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
 
 
 def _my_power(x: float, n: int) -> float:
