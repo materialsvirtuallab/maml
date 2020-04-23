@@ -24,8 +24,9 @@ class BaseSelector:
         """
         self.coef_thres = coef_thres
         self.is_fitted = False
-        self.coef_ = None
+        self.coef_: Optional[np.ndarray] = None
         self.method = method
+        self.indices: Optional[np.ndarray] = None
 
     def select(self, x, y, options=None) -> List[int]:
         """
@@ -50,7 +51,8 @@ class BaseSelector:
         self.is_fitted = True
         self.coef_ = res.x
         # output coefficient indices that are above certain thresholds
-        return np.where(np.abs(self.coef_) > self.coef_thres)[0]
+        self.indices = np.where(np.abs(self.coef_) > self.coef_thres)[0]
+        return self.indices
 
     def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: np.ndarray) -> float:
         """
@@ -66,8 +68,9 @@ class BaseSelector:
         """
         raise NotImplementedError
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray) \
-            -> Optional[Union[Dict, List[Dict], NonlinearConstraint]]:
+    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
+                              beta: Optional[np.ndarray] = None) \
+            -> Optional[Union[Dict, List, NonlinearConstraint]]:
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
@@ -75,6 +78,7 @@ class BaseSelector:
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
+            beta (np.ndarray): parameter to optimize
 
         Returns: dict of constraints
 
@@ -109,9 +113,9 @@ class BaseSelector:
         """
         metric_func = get_scorer(metric)
         lr = LinearRegression(fit_intercept=False)
-        lr.coef_ = self.coef_
+        lr.coef_ = self.coef_[self.indices]  # type: ignore
         lr.intercept_ = 0
-        return metric_func(lr, x, y)
+        return metric_func(lr, x[:, self.indices], y)
 
     def get_coef(self) -> np.ndarray:
         """
@@ -120,6 +124,33 @@ class BaseSelector:
 
         """
         return self.coef_
+
+    def get_feature_indices(self) -> np.ndarray:
+        """
+        Get selected feature indices
+        Returns:
+        """
+        return self.indices
+
+    def predict(self, x: np.ndarray) -> np.ndarray:
+        """
+        Predict the results using sparsified coefficients
+        Args:
+            x (np.ndarray): design matrix
+        Returns:
+        """
+        return x[:, self.indices].dot(self.coef_[self.indices])  # type: ignore
+
+    def compute_residual(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+        """
+        Compute
+        Args:
+            x (np.ndarray): design matrix
+            y (np.ndarray): target vector
+
+        Returns: residual vector
+        """
+        return y - self.predict(x)
 
 
 class DantzigSelector(BaseSelector):
@@ -171,7 +202,9 @@ class DantzigSelector(BaseSelector):
             return sign
         return _jac
 
-    def construct_constraints(self, x, y) -> NonlinearConstraint:
+    def construct_constraints(self, x: np.ndarray,
+                              y: np.ndarray,
+                              beta: Optional[np.ndarray] = None) -> NonlinearConstraint:
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
@@ -179,6 +212,7 @@ class DantzigSelector(BaseSelector):
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
+            beta (np.ndarray): placeholder
 
         Returns: dict of constraints
 
@@ -241,14 +275,15 @@ class PenalizedLeastSquares(BaseSelector):
             return self._sse_jac(x, y, beta) + self._penalty_jac(x, y, beta)
         return _jac
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray) \
-            -> List[Optional[Dict]]:
+    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
+                              beta: Optional[np.ndarray] = None) -> List[Optional[Dict]]:
         """
         No constraints
 
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
+            beta (np.ndarray): placeholder only
 
         Returns: a list of dictionary constraints
 
