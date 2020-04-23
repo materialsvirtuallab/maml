@@ -65,19 +65,30 @@ def no_action(features: List[Any]) -> List[Any]:
     return features
 
 
+AVAILABLE_FB_METHODS = {
+    "pandas_concat": pandas_concat,
+    "stack_first_dim": stack_first_dim,
+    "stack_padded": stack_padded,
+    "no_action": no_action
+}
+
+
 def get_feature_batch(fb_name: Optional[Union[str, Callable]] = None) \
-        -> Callable:  # type: ignore
+        -> Callable:
     """
     Providing a feature batch name, returning the function callable
     Args:
         fb_name (str): name of the feature batch function
     Returns: callable feature batch function
     """
-
-    if isinstance(fb_name, Callable):  # type: ignore
-        return fb_name  # type: ignore
+    if fb_name is None:
+        return no_action
 
     if isinstance(fb_name, str):
-        return globals()[fb_name]
+        try:
+            return AVAILABLE_FB_METHODS[fb_name]
+        except KeyError:
+            raise KeyError("Feature batch method not supported!"
+                           "Available ones are %s" % str(AVAILABLE_FB_METHODS.keys()))
     else:
-        return no_action
+        return fb_name
