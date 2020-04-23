@@ -372,8 +372,7 @@ class CoulombEigenSpectrum(BaseDescriber):
         """
         c_mat = CoulombMatrix._get_columb_mat(mol)
         eig_vals = np.linalg.eigvals(c_mat)
-        if np.any(eig_vals <= 0.0):
-            logger.warning("Some eigen values are not positive")
+        eig_vals = np.abs(eig_vals)
 
         f = np.sort(eig_vals)[::-1]
         if self.max_atoms is not None:
