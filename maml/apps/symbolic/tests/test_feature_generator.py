@@ -3,6 +3,7 @@ import numpy as np
 import unittest
 from pymatgen.util.testing import PymatgenTest
 from maml.apps.symbolic import features_generator, Operator
+import math
 
 pow2 = Operator.from_str('^2')
 pow3 = Operator.from_str('^3')
@@ -10,6 +11,7 @@ sqrt = Operator.from_str('sqrt')
 cbrt = Operator.from_str('cbrt')
 exp = Operator.from_str('exp')
 log10 = Operator.from_str('log10')
+my_abs = Operator.from_str('abs')
 add = Operator.from_str('+')
 sub = Operator.from_str('-')
 mul = Operator.from_str('*')
@@ -22,7 +24,8 @@ class TestOperator(PymatgenTest):
         x1 = np.array([2, 4, 6, 8, 10])
         x2 = np.array([1, 4, 9, 16, 25])
         x3 = np.array([1, 8, 27, 64, 125])
-        self.df = pd.DataFrame({"i1":x1, "i2":x2, "i3": x3})
+        x4 = np.array([1, -8, 27, -64, 125])
+        self.df = pd.DataFrame({"i1":x1, "i2":x2, "i3": x3, 'i4': x4})
 
     def testSingularOperators(self):
         self.assertArrayEqual(pow2(self.df["i1"]), np.array([4, 16, 36, 64, 100]))
@@ -49,6 +52,18 @@ class TestOperator(PymatgenTest):
         self.assertTrue(cbrt.is_singular)
         self.assertFalse(cbrt.is_binary)
         self.assertTrue(cbrt.is_commutative)
+
+        self.assertArrayEqual(my_abs(self.df["i4"]), self.df['i3'].values)
+        self.assertEqual(my_abs.gen_name('i4'), 'abs(i4)')
+        self.assertTrue(my_abs.is_singular)
+        self.assertFalse(my_abs.is_binary)
+        self.assertTrue(my_abs.is_commutative)
+
+        self.assertArrayEqual(log10(self.df["i1"]), self.df['i1'].apply(np.log10).values)
+        self.assertEqual(log10.gen_name('i1'), 'log10(i1)')
+        self.assertTrue(log10.is_singular)
+        self.assertFalse(log10.is_binary)
+        self.assertTrue(log10.is_commutative)
 
     def testBinaryOperators(self):
         self.assertArrayEqual(add(self.df['i1'], self.df['i2']), np.array([3, 8, 15, 24, 35]))

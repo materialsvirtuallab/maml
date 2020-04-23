@@ -1,9 +1,13 @@
+"""
+Feature Generator
+"""
 from itertools import combinations_with_replacement
 import numpy as np
 import pandas as pd
 import math
 from functools import partial
-from typing import Optional
+from typing import Optional, Callable
+
 
 def features_generator(df: pd.DataFrame, operators: list) -> pd.DataFrame:
     """
@@ -43,18 +47,21 @@ def features_generator(df: pd.DataFrame, operators: list) -> pd.DataFrame:
 
 
 class Operator:
+    """
+    Operator class. Wrap math operators with more attributes including check
+    is_singular, is_binary, and is_commutative, and generate name string
+    for the output.
+    """
     support_op_rep = ['^2', '^3', 'sqrt', 'sqrtabs', 'cbrt', 'exp', 'abs', 'log10',
                       '+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']
 
-    def __init__(self, operation, rep: str, singular: bool, commutative: bool):
+    def __init__(self, operation: Callable, rep: str, singular: bool, commutative: bool):
         """
-        Operator class
         Args:
-            operation: operation function
-            rep: representations of the operator
-            singular: whether it is a singular operator
-            binary: whether it is a bianry operator
-            commutative: whether it is a commutative operator
+            operation(Callable): operation function
+            rep(str): representations of the operator
+            singular(bool): whether it is a singular operator
+            commutative(bool): whether it is a commutative operator
         """
         self.opt = operation
         self.rep = rep
@@ -63,6 +70,10 @@ class Operator:
 
     @property
     def is_singular(self) -> bool:
+        """
+        Returns: True if the operator takes one argument else False
+
+        """
         if not self.singular:
             if self.rep in ['^2', '^3', 'sqrt', 'sqrtabs', 'cbrt', 'exp', 'abs', 'log10']:
                 self.singular = True
@@ -72,10 +83,18 @@ class Operator:
 
     @property
     def is_binary(self) -> bool:
+        """
+        Returns: True if the operator takes two arguments else False
+
+        """
         return False if self.is_singular else True
 
     @property
     def is_commutative(self) -> bool:
+        """
+        Returns: True if the operator is commutative else False
+
+        """
         if not self.commutative:
             if self.is_singular:
                 self.commutative = True
@@ -86,21 +105,46 @@ class Operator:
         return self.commutative
 
     def compute(self, i1: np.ndarray, i2: Optional[np.ndarray] = None) -> np.ndarray:
+        """
+        Compute the results
+        Args:
+            i1(np.ndarray): first input array
+            i2(np.ndarray): second input array (for binary operators)
+
+        Returns: array of computed results
+        """
+        if self.is_binary and not np.all(i2):
+            raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
         if self.is_singular:
             return self.opt(i1)
         else:
-            if np.any(i2):
-                return self.opt(i1, i2)
-            else:
-                raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
+            return self.opt(i1, i2)
 
     def __call__(self, i1: np.ndarray, i2: Optional[np.ndarray] = None) -> np.ndarray:
+        """
+        Compute the results
+        Args:
+            i1(np.ndarray): first input array
+            i2(np.ndarray): second input array (for binary operators)
+
+        Returns: array of computed results
+
+        """
         return self.compute(i1, i2)
 
     def __str__(self) -> str:
         return self.rep
 
     def gen_name(self, f1: str, f2: Optional[str] = None) -> str:
+        """
+        Generate string representation for output
+        Args:
+            f1(str): name of the first input array
+            f2(str): name of the second input array
+
+        Returns: name of the output
+
+        """
         if self.rep.startswith('^'):
             return ('({}){}'.format(f1, self.rep))
         if self.rep in ['sqrt', 'cbrt', 'exp', 'abs']:
@@ -129,6 +173,19 @@ class Operator:
 
     @classmethod
     def from_str(cls, op_name: str):
+        """
+        Operator from name of the operator
+        Args:
+            op_name(str): string representation of the operator,
+            check Operator.support_op_rep for reference
+
+        Returns: Operator
+
+        """
+        if op_name == 'sqrtabs':
+            opt = _my_abs_sqrt
+            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
+
         if op_name.startswith('^'):
             n = int(op_name[1:])
             opt = partial(_my_power, n=n)
@@ -136,10 +193,6 @@ class Operator:
 
         if op_name == 'sqrt':
             opt = partial(_my_power, n=1 / 2)
-            return cls(operation=opt, rep=op_name, singular=True, commutative=False)
-
-        if op_name == 'sqrtabs':
-            opt = _my_abs_sqrt
             return cls(operation=opt, rep=op_name, singular=True, commutative=False)
 
         if op_name == 'cbrt':
@@ -154,9 +207,8 @@ class Operator:
             opt = abs
             return cls(operation=opt, rep=op_name, singular=True, commutative=False)
 
-        if op_name.startswith('log'):
-            n = op_name[3:]
-            opt = partial(math.log, base=n)
+        if op_name == 'log10':
+            opt = np.log10
             return cls(operation=opt, rep=op_name, singular=True, commutative=False)
 
         if op_name == '+':
@@ -254,4 +306,3 @@ def _my_sum_exp_power_2(x, y):
 
 def _my_sum_exp_power_3(x, y):
     return math.exp(pow(x + y, 3))
-
