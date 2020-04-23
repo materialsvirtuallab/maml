@@ -31,6 +31,9 @@ class TestSelectors(unittest.TestCase):
                                0.40040170)
         np.testing.assert_almost_equal(dt.get_coef(), dt.coef_)
 
+        np.testing.assert_almost_equal(dt.get_feature_indices(), selected)
+        self.assertTrue(dt.compute_residual(self.x, self.y).shape == self.y.shape)
+
     @unittest.skipIf(cp is None, "cvxpy not installed")
     def test_dantzigcp(self):
         dt = DantzigSelectorCP(1)
