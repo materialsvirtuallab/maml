@@ -27,6 +27,9 @@ class TestSelectors(unittest.TestCase):
         selected = dt.select(self.x, self.y)
         # selected only [4, 5, 6]
         np.testing.assert_allclose(selected, [4, 5, 6])
+        self.assertAlmostEqual(-dt.evaluate(self.x, self.y),
+                               0.40040170)
+        np.testing.assert_almost_equal(dt.get_coef(), dt.coef_)
 
     @unittest.skipIf(cp is None, "cvxpy not installed")
     def test_dantzigcp(self):
