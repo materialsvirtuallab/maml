@@ -46,7 +46,8 @@ jobs:
             conda update --quiet numpy scipy matplotlib sympy pandas
             pip install --quiet --ignore-installed -r requirements.txt -r requirements-ci.txt
             conda install -c conda-forge/label/cf202003 lammps
-            pip install cvxpy
+            pip install cvxpy  # for apps.symbolic
+            pip install tftb  # for utils._signal_processing
       - run:
           command: |
             export PATH=$HOME/miniconda3/bin:$PATH
