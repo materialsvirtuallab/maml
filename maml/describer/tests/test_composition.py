@@ -2,6 +2,7 @@
 
 import unittest
 import os
+from multiprocessing import cpu_count
 
 import numpy as np
 from pymatgen.util.testing import PymatgenTest
@@ -20,6 +21,7 @@ class ElementPropertyTest(unittest.TestCase):
 
     def test_element_property(self):
         ep = ElementProperty.from_preset("magpie")
+        ep.verbose = True
         res = ep.transform([self.s.composition])
         self.assertEqual(res.shape, (1, 132))
 
@@ -106,6 +108,23 @@ class ElementStatsTest(unittest.TestCase):
         es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['shifted_geometric_mean:100'])
         d = es2.transform_one('Fe2O3')
         self.assertTrue(d.shape == (1, 32))
+
+    def test_initialization(self):
+        self.assertRaises(TypeError, ElementStats,
+                          element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
+                          property_names=['p1'],
+                          some_random_variable='test',
+                          )
+        es = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
+                          property_names=['p1'],
+                          some_random_variable='test',
+                          memory=True,
+                          n_jobs=-1)
+        self.assertTrue(es.memory is not None)
+        self.assertTrue(es.n_jobs == cpu_count())
+        res = es.transform(["H2O", "H2O"])
+        self.assertTrue(res.shape[0] == 2)
+        es.clear_cache()
 
 
 if __name__ == "__main__":
