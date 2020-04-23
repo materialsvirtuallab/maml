@@ -4,9 +4,14 @@ import unittest
 import numpy as np
 from scipy import signal
 
-from maml.utils import get_sp_method, fft_magnitude, cwt, spectrogram
+from maml.utils import get_sp_method, fft_magnitude, cwt, spectrogram, wvd
 
 CWD = os.path.join(os.path.dirname(__file__))
+
+try:
+    import tftb
+except ImportError:
+    tftb = None
 
 
 class TestSP(unittest.TestCase):
@@ -21,6 +26,7 @@ class TestSP(unittest.TestCase):
         self.assertTrue(fft_mag.shape == (100,))
         fft_mag = get_sp_method(fft_magnitude)(self.x)
         self.assertTrue(fft_mag.shape == (100,))
+        self.assertRaises(KeyError, get_sp_method, sp_method="wrong_method")
 
     def test_spectrogram(self):
         spec = spectrogram(self.x)
@@ -36,6 +42,11 @@ class TestSP(unittest.TestCase):
         self.assertTrue(cwt_res.shape == (30, 100))
         cwt_res = cwt(self.x, np.arange(1, 31), signal.ricker)
         self.assertTrue(cwt_res.shape == (30, 100))
+
+    @unittest.skipIf(tftb is None)
+    def test_wvd(self):
+        wvd_res = wvd(self.x)
+        self.assertTrue(wvd_res.shape == (100, 100))
 
 
 if __name__ == "__main__":

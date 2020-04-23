@@ -2,9 +2,15 @@
 from typing import Union, Tuple, Callable
 from math import ceil, floor
 
+from monty.dev import requires
 import numpy as np
 from scipy import fft
 from scipy import signal
+
+try:
+    import tftb
+except ImportError:
+    tftb = None
 
 
 def fft_magnitude(z: np.ndarray) -> np.ndarray:
@@ -59,6 +65,28 @@ def cwt(z: np.ndarray, widths: np.ndarray,
         z, wavelet_func, widths=widths, **kwargs))
 
 
+@requires(tftb is not None, "Requires installation of tftb package")
+def wvd(z: np.ndarray) -> np.ndarray:
+    """
+    Wigner Ville Distribution calculator
+    Args:
+        z (np.ndarray): signal 1D
+    Returns: NxN wvd matrix
+
+    """
+    tfr = tftb.processing.WignerVilleDistribution(z)
+    tfr.run()
+    return tfr.tfr
+
+
+AVAILABLE_SP_METHODS = {
+    "fft_magnitude": fft_magnitude,
+    "spectrogram": spectrogram,
+    "cwt": cwt,
+    "wvd": wvd
+}
+
+
 def get_sp_method(sp_method: Union[str, Callable]) -> Callable:  # type: ignore
     """
     Providing a signal processing method name return the callable
@@ -66,9 +94,11 @@ def get_sp_method(sp_method: Union[str, Callable]) -> Callable:  # type: ignore
         sp_method (str): name of the sp function
     Returns: callable for signal processing
     """
-
-    if isinstance(sp_method, Callable):  # type: ignore
-        return sp_method  # type: ignore
-
     if isinstance(sp_method, str):
-        return globals()[sp_method]
+        try:
+            return AVAILABLE_SP_METHODS[sp_method]
+        except KeyError:
+            raise KeyError(f"{sp_method} is not in available methods: "
+                           f"{AVAILABLE_SP_METHODS.keys()}")
+    else:
+        return sp_method
