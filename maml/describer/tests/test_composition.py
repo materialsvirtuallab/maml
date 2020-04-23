@@ -112,12 +112,11 @@ class ElementStatsTest(unittest.TestCase):
     def test_initialization(self):
         self.assertRaises(TypeError, ElementStats,
                           element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
-                          property_names=['p1'],
+                          property_names=['p1', 'p2'],
                           some_random_variable='test',
                           )
         es = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
-                          property_names=['p1'],
-                          some_random_variable='test',
+                          property_names=['p1', 'p2'],
                           memory=True,
                           n_jobs=-1)
         self.assertTrue(es.memory is not None)
