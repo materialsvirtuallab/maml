@@ -1,9 +1,11 @@
 """
 Selectors
 """
+from itertools import combinations
 from typing import List, Optional, Union, Dict, Callable
 
 import numpy as np
+from joblib import Parallel, delayed, cpu_count
 from scipy.optimize import minimize, NonlinearConstraint
 from scipy.linalg import lstsq
 from sklearn.metrics import get_scorer
@@ -15,6 +17,7 @@ class BaseSelector:
     Feature selector. This is meant to work on relatively smaller
     number of features
     """
+
     def __init__(self, coef_thres: float = 1e-6, method: str = 'SLSQP'):
         """
         Base selector
@@ -28,10 +31,10 @@ class BaseSelector:
         self.method = method
         self.indices: Optional[np.ndarray] = None
 
-    def select(self, x, y, options=None) -> List[int]:
+    def select(self, x: np.ndarray, y: np.ndarray,
+               options: Optional[Dict] = None) -> np.ndarray:
         """
         Select feature indices from x
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -52,19 +55,17 @@ class BaseSelector:
         self.coef_ = res.x
         # output coefficient indices that are above certain thresholds
         self.indices = np.where(np.abs(self.coef_) > self.coef_thres)[0]
+        self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0
         return self.indices
 
     def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: np.ndarray) -> float:
         """
         Get loss function from data and tentative coefficients beta
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: loss value
-
         """
         raise NotImplementedError
 
@@ -74,14 +75,11 @@ class BaseSelector:
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): parameter to optimize
-
         Returns: dict of constraints
-
         """
         return None
 
@@ -91,9 +89,7 @@ class BaseSelector:
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-
         Returns: Jacobian function
-
         """
         return None
 
@@ -101,15 +97,12 @@ class BaseSelector:
                  metric: str = 'neg_mean_absolute_error') -> float:
         """
         Evaluate the linear model using x, and y test data
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             metric (str): scorer function, used with
                 sklearn.metrics.get_scorer
-
         Returns:
-
         """
         metric_func = get_scorer(metric)
         lr = LinearRegression(fit_intercept=False)
@@ -121,7 +114,6 @@ class BaseSelector:
         """
         Get coefficients
         Returns: the coefficients array
-
         """
         return self.coef_
 
@@ -147,7 +139,6 @@ class BaseSelector:
         Args:
             x (np.ndarray): design matrix
             y (np.ndarray): target vector
-
         Returns: residual vector
         """
         return y - self.predict(x)
@@ -159,10 +150,10 @@ class DantzigSelector(BaseSelector):
     https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
     and reference in https://projecteuclid.org/download/pdfview_1/euclid.aos/1201012958
     """
+
     def __init__(self, lambd, sigma=1.0, **kwargs):
         """
         Dantzig selector
-
         Args:
             lamb: tunable parameter
             sigma: standard deviation of the error
@@ -174,14 +165,11 @@ class DantzigSelector(BaseSelector):
     def construct_loss(self, x, y, beta) -> float:
         """
         Get loss function from data and tentative coefficients beta
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: loss value
-
         """
         return np.sum(np.abs(beta)).item()
 
@@ -189,17 +177,17 @@ class DantzigSelector(BaseSelector):
         """
         Jacobian of cost functions
         Args:
-            x: 
-            y: 
-
+            x:
+            y:
         Returns:
-
         """
+
         def _jac(beta):
             sign = np.sign(beta)
             sign[np.abs(sign) < 0.1] = 1.
             sign *= 30.0  # multiply the gradients to get better convergence
             return sign
+
         return _jac
 
     def construct_constraints(self, x: np.ndarray,
@@ -208,15 +196,13 @@ class DantzigSelector(BaseSelector):
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): placeholder
-
         Returns: dict of constraints
-
         """
+
         def _constraint(beta):
             return np.linalg.norm(x.T @ (y - x @ beta), np.infty)
 
@@ -236,22 +222,20 @@ class PenalizedLeastSquares(BaseSelector):
     Penalized least squares. In addition to minimizing the sum of squares loss,
     it adds an additional penalty to the coefficients
     """
+
     def construct_loss(self, x: np.ndarray, y: np.ndarray,
                        beta: np.ndarray) -> float:
         """
         Construct the loss function. An extra penalty term is added
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: sum of errors
-
         """
         n = x.shape[0]
-        se = 1. / (2 * n) * np.sum((y - x.dot(beta))**2) + \
-            self.penalty(beta, x=x, y=y)
+        se = 1. / (2 * n) * np.sum((y - x.dot(beta)) ** 2) + \
+             self.penalty(beta, x=x, y=y)
         return se
 
     def _sse_jac(self, x, y, beta):
@@ -267,26 +251,23 @@ class PenalizedLeastSquares(BaseSelector):
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-
         Returns: jacobian vector
-
         """
+
         def _jac(beta):
             return self._sse_jac(x, y, beta) + self._penalty_jac(x, y, beta)
+
         return _jac
 
     def construct_constraints(self, x: np.ndarray, y: np.ndarray,
                               beta: Optional[np.ndarray] = None) -> List[Optional[Dict]]:
         """
         No constraints
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): placeholder only
-
         Returns: a list of dictionary constraints
-
         """
         return []
 
@@ -294,14 +275,11 @@ class PenalizedLeastSquares(BaseSelector):
                 y: Optional[np.ndarray] = None) -> float:
         """
         Calculate the penalty from input x, output y and coefficient beta
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: penalty value
-
         """
         return 0.
 
@@ -316,7 +294,6 @@ class SCAD(PenalizedLeastSquares):
                  a: float = 3.7, **kwargs):
         """
         Smoothly clipped absolute deviation.
-
         Args:
             lambd (float or list of floats): The weights for the penalty
             a (float): hyperparameter in SCAD penalty
@@ -330,20 +307,17 @@ class SCAD(PenalizedLeastSquares):
         """
         Calculate the SCAD penalty from input x, output y
             and coefficient beta
-
         Args:
             beta (np.ndarray): N coefficients
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-
         Returns: penalty value
-
         """
         beta_abs = np.abs(beta)
         penalty = self.lambd * beta_abs * (beta_abs <= self.lambd) + \
-            - (beta_abs**2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2) / (2 * (self.a - 1)) * \
-            (beta_abs > self.lambd) * (beta_abs <= self.a * self.lambd) + \
-            (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
+                  - (beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2) / (2 * (self.a - 1)) * \
+                  (beta_abs > self.lambd) * (beta_abs <= self.a * self.lambd) + \
+                  (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
         return np.sum(penalty).item()
 
     def _penalty_jac(self, x, y, beta):
@@ -373,14 +347,11 @@ class Lasso(PenalizedLeastSquares):
                 y: Optional[np.ndarray] = None) -> float:
         """
         Calculate the penalty from input x, output y and coefficient beta
-
         Args:
             beta (np.ndarray): N coefficients
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-
         Returns: penalty value
-
         """
         beta_abs = np.abs(beta)
         return np.sum(self.lambd * beta_abs).item()
@@ -396,10 +367,10 @@ class AdaptiveLasso(PenalizedLeastSquares):
     Adaptive lasso regression using OLS coefficients
     as the root-n estimator coefficients
     """
+
     def __init__(self, lambd, gamma, **kwargs):
         """
         Adaptive lasso regression
-
         Args:
             lambd (float or list of floats):
             gamma (float): exponential for hat(beta)
@@ -410,10 +381,9 @@ class AdaptiveLasso(PenalizedLeastSquares):
         self.w = 1
         super().__init__(**kwargs)
 
-    def select(self, x, y, options=None) -> List[int]:
+    def select(self, x, y, options=None) -> np.ndarray:
         """
         Select feature indices from x
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -427,13 +397,10 @@ class AdaptiveLasso(PenalizedLeastSquares):
     def get_w(self, x, y) -> np.ndarray:
         """
         Get adaptive weights from data
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-
         Returns: coefficients array
-
         """
         beta_hat = lstsq(x, y)[0]
         w = 1. / np.abs(beta_hat) ** self.gamma
@@ -443,14 +410,11 @@ class AdaptiveLasso(PenalizedLeastSquares):
                 y: Optional[np.ndarray] = None) -> float:
         """
         Calculate the penalty from input x, output y and coefficient beta
-
         Args:
             beta (np.ndarray): N coefficients
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-
         Returns: penalty value
-
         """
         return np.sum(self.lambd * self.w * np.abs(beta)).item()
 
@@ -458,3 +422,55 @@ class AdaptiveLasso(PenalizedLeastSquares):
         sign = np.sign(beta)
         sign[np.abs(sign) < 0.2] = 1
         return self.lambd * self.w * sign
+
+
+class L0BrutalForce(BaseSelector):
+    """
+    Brutal force combinatorial screening of features.
+    This method takes all possible combinations of features
+    and optimize the following loss function
+        1/2 * mean((y-x @ beta)**2) + lambd * |beta|_0
+    """
+
+    def __init__(self, lambd: float, **kwargs):
+        """
+        Initialization of L0 optimization
+        Args:
+            lambd (float): penalty term
+            **kwargs:
+        """
+        self.lambd = lambd
+        super().__init__(**kwargs)
+
+    def select(self, x: np.ndarray, y: np.ndarray,
+               options: Optional[Dict] = None) -> np.ndarray:
+        """
+        L0 combinatorial optimization
+        Args:
+            x (np.ndarray): design matrix
+            y (np.ndarray): target vector
+            options:
+        Returns:
+        """
+        n, p = x.shape
+        index_array = list(range(p))
+
+        def _lstsq(c):
+            x_comb = x[:, c]
+            beta = lstsq(x_comb, y)[0]
+            res = 1. / 2 * np.mean((x_comb.dot(beta) - y) ** 2)
+            penalty = self.lambd * len(c)
+            res += penalty
+            return res
+
+        indices = []
+        for p_temp in range(1, p + 1):
+            for comb in combinations(index_array, p_temp):
+                indices.append(comb)
+        loss = Parallel(n_jobs=cpu_count())(delayed(_lstsq)(comb) for comb in indices)
+        argmin = np.argmin(loss)
+        self.indices = np.array(indices[argmin])
+        x_temp = x[:, self.indices]
+        self.coef_ = np.zeros_like(x[0, :])
+        self.coef_[self.indices] = lstsq(x_temp, y)[0]
+        return self.indices

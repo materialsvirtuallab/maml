@@ -209,7 +209,7 @@ class Operator:
         Returns: Operator
 
         """
-        opt : Callable[..., Any]
+        opt: Callable[..., Any]
         if op_name == 'sqrtabs':
             opt = _my_abs_sqrt
             return cls(operation=opt, rep=op_name, unary=True, commutative=False)

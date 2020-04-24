@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 import json
-from maml.apps.symbolic._selectors import DantzigSelector, Lasso, AdaptiveLasso, SCAD
+from maml.apps.symbolic._selectors import DantzigSelector, Lasso, AdaptiveLasso, SCAD, L0BrutalForce
 from maml.apps.symbolic._selectors_cvxpy import cp, DantzigSelectorCP, LassoCP, AdaptiveLassoCP
 
 
@@ -74,6 +74,13 @@ class TestSelectors(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             _ = scad.select(self.x, self.y)
 
+    def test_l0(self):
+        lambd = 1e-6
+        l0 = L0BrutalForce(lambd)
+        selected = l0.select(self.x, self.y)
+        self.assertListEqual(selected.tolist(), [6, 7, 8, 9])
+
 
 if __name__ == "__main__":
+
     unittest.main()

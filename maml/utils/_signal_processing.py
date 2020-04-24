@@ -19,7 +19,6 @@ def fft_magnitude(z: np.ndarray) -> np.ndarray:
     the magnitude of the  coefficents
     Args:
         z (np.ndarray): 1D signal array
-
     Returns: 1D magnitude
     """
     return np.absolute(fft.fft(z))
@@ -32,7 +31,6 @@ def spectrogram(z: np.ndarray, return_time_freq: bool = False) \
     Args:
         z (np.ndarray): 1D signal array
         return_time_freq (bool): whether to return time and frequency
-
     Returns: 2D spectrogram
     """
     nx = len(z)
@@ -47,14 +45,13 @@ def spectrogram(z: np.ndarray, return_time_freq: bool = False) \
 
 
 def cwt(z: np.ndarray, widths: np.ndarray,
-        wavelet: Union[str, Callable] = 'morlet', **kwargs) -> np.ndarray:
+        wavelet: Union[str, Callable] = 'morlet2', **kwargs) -> np.ndarray:
     """
     The scalogram of the signal
     Args:
         z (np.ndarray): 1D signal array
         widths (np.ndarray): wavelet widths
         wavelet (str): wavelet name
-
     Returns: 2D scalogram
     """
     if isinstance(wavelet, str):
@@ -66,17 +63,20 @@ def cwt(z: np.ndarray, widths: np.ndarray,
 
 
 @requires(tftb is not None, "Requires installation of tftb package")
-def wvd(z: np.ndarray) -> np.ndarray:
+def wvd(z: np.ndarray, return_all: bool = False) -> Union[Tuple, np.ndarray]:
     """
     Wigner Ville Distribution calculator
     Args:
         z (np.ndarray): signal 1D
+        return_all (bool): whether to return time and freq info, default
+            only return the wvd information
     Returns: NxN wvd matrix
-
     """
     tfr = tftb.processing.WignerVilleDistribution(z)
-    tfr.run()
-    return tfr.tfr
+    res, f1, f2, = tfr.run()
+    if return_all:
+        return res, f1, f2
+    return res
 
 
 AVAILABLE_SP_METHODS = {
