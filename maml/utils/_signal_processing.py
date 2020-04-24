@@ -66,17 +66,21 @@ def cwt(z: np.ndarray, widths: np.ndarray,
 
 
 @requires(tftb is not None, "Requires installation of tftb package")
-def wvd(z: np.ndarray) -> np.ndarray:
+def wvd(z: np.ndarray, return_all: bool = False) -> Union[Tuple, np.ndarray]:
     """
     Wigner Ville Distribution calculator
     Args:
         z (np.ndarray): signal 1D
+        return_all (bool): whether to return time and freq info, default
+            only return the wvd information
     Returns: NxN wvd matrix
 
     """
     tfr = tftb.processing.WignerVilleDistribution(z)
-    tfr.run()
-    return tfr.tfr
+    res, f1, f2, = tfr.run()
+    if return_all:
+        return res, f1, f2
+    return res
 
 
 AVAILABLE_SP_METHODS = {

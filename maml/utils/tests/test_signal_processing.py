@@ -47,6 +47,9 @@ class TestSP(unittest.TestCase):
     def test_wvd(self):
         wvd_res = wvd(self.x)
         self.assertTrue(wvd_res.shape == (100, 100))
+        wvd_res, f1, f2 = wvd(self.x, return_all=True)
+        self.assertTrue(wvd_res.shape == (100, 100))
+        self.assertTrue(f1.shape == (100, ))
 
 
 if __name__ == "__main__":
