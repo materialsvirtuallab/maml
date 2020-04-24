@@ -54,6 +54,7 @@ class BaseSelectorCP(BaseSelector):
         prob.solve(solver=self.method, **options)
         self.coef_ = beta.value
         self.indices = np.where(np.abs(beta.value) > self.coef_thres)[0]
+        self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0
         return self.indices
 
     def construct_constraints(self, x: np.ndarray, y: np.ndarray,

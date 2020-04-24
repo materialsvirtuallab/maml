@@ -6,7 +6,7 @@ try:
 except ImportError:
     cp = None
 
-from ._selectors import SCAD  # noqa
+from ._selectors import SCAD, L0BrutalForce  # noqa
 
 if cp is None:
     from ._selectors import (DantzigSelector, AdaptiveLasso,  # noqa
@@ -24,5 +24,6 @@ __all__ = [
     "AdaptiveLasso",
     "SCAD",
     "Lasso",
-    "SIS"
+    "SIS",
+    "L0BrutalForce"
 ]

@@ -1,9 +1,11 @@
 """
 Selectors
 """
+from itertools import combinations
 from typing import List, Optional, Union, Dict, Callable
 
 import numpy as np
+from joblib import Parallel, delayed, cpu_count
 from scipy.optimize import minimize, NonlinearConstraint
 from scipy.linalg import lstsq
 from sklearn.metrics import get_scorer
@@ -28,7 +30,8 @@ class BaseSelector:
         self.method = method
         self.indices: Optional[np.ndarray] = None
 
-    def select(self, x, y, options=None) -> List[int]:
+    def select(self, x: np.ndarray, y: np.ndarray,
+               options: Optional[Dict] = None) -> np.ndarray:
         """
         Select feature indices from x
 
@@ -52,6 +55,7 @@ class BaseSelector:
         self.coef_ = res.x
         # output coefficient indices that are above certain thresholds
         self.indices = np.where(np.abs(self.coef_) > self.coef_thres)[0]
+        self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0
         return self.indices
 
     def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: np.ndarray) -> float:
@@ -410,7 +414,7 @@ class AdaptiveLasso(PenalizedLeastSquares):
         self.w = 1
         super().__init__(**kwargs)
 
-    def select(self, x, y, options=None) -> List[int]:
+    def select(self, x, y, options=None) -> np.ndarray:
         """
         Select feature indices from x
 
@@ -458,3 +462,58 @@ class AdaptiveLasso(PenalizedLeastSquares):
         sign = np.sign(beta)
         sign[np.abs(sign) < 0.2] = 1
         return self.lambd * self.w * sign
+
+
+class L0BrutalForce(BaseSelector):
+    """
+    Brutal force combinatorial screening of features.
+    This method takes all possible combinations of features
+    and optimize the following loss function
+
+        1/2 * mean((y-x @ beta)**2) + lambd * |beta|_0
+
+    """
+    def __init__(self, lambd: float, **kwargs):
+        """
+        Initialization of L0 optimization
+        Args:
+            lambd (float): penalty term
+            **kwargs:
+        """
+        self.lambd = lambd
+        super().__init__(**kwargs)
+
+    def select(self, x: np.ndarray, y: np.ndarray,
+               options: Optional[Dict] = None) -> np.ndarray:
+        """
+        L0 combinatorial optimization
+
+        Args:
+            x (np.ndarray): design matrix
+            y (np.ndarray): target vector
+            options:
+        Returns:
+
+        """
+        n, p = x.shape
+        index_array = list(range(p))
+
+        def _lstsq(c):
+            x_comb = x[:, c]
+            beta = lstsq(x_comb, y)[0]
+            res = 1. / 2 * np.mean((x_comb.dot(beta) - y) ** 2)
+            penalty = self.lambd * len(c)
+            res += penalty
+            return res
+
+        indices = []
+        for p_temp in range(1, p + 1):
+            for comb in combinations(index_array, p_temp):
+                indices.append(comb)
+        loss = Parallel(n_jobs=cpu_count())(delayed(_lstsq)(comb) for comb in indices)
+        argmin = np.argmin(loss)
+        self.indices = np.array(indices[argmin])
+        x_temp = x[:, self.indices]
+        self.coef_ = np.zeros_like(x[0, :])
+        self.coef_[self.indices] = lstsq(x_temp, y)[0]
+        return self.indices
