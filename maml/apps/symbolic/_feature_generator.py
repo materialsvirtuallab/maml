@@ -10,6 +10,51 @@ import numpy as np
 import pandas as pd
 
 
+def _update_df(df, op, fn1, fn2=None):
+    """Helper function to update the dataframe with new generated feature array"""
+    if op.is_unary:
+        new_fname = op.gen_name(fn1)
+        df[new_fname] = df[fn1].apply(op)
+    elif op.is_binary:
+        new_fname = op.gen_name(fn1, fn2)
+        df[new_fname] = op(df[fn1], df[fn2])
+
+
+def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
+    """
+    Generate new features by applying operators to columns in feature_df
+
+    Args:
+        feature_df(pd.DataFrame): dataframe of original features
+        operators(list): list of str of operators (check Operator.support_op_rep for reference)
+
+    Returns: dataframe of augmented features
+
+    """
+    fdf = feature_df.copy()
+    if not np.all(o in Operator.support_op_rep for o in operators):
+        raise ValueError("Contain unsupported operators, check Operator.supported_op_rep")
+    ops = [Operator.from_str(o) for o in operators]
+    sop = [op for op in ops if op.is_unary]
+    bop = [op for op in ops if op.is_binary]
+    for fn1, fn2 in combinations_with_replacement(fdf.columns, r=2):
+        if fn1 == fn2:
+            if not sop:
+                continue
+            else:
+                for op in sop:
+                    _update_df(fdf, op, fn1)
+        else:
+            if not bop:
+                continue
+            else:
+                for op in bop:
+                    _update_df(fdf, op, fn1, fn2)
+                    if not op.commutative:
+                        _update_df(fdf, op, fn2, fn1)
+    return fdf
+
+
 class FeatureGenerator:
     """FeatureGenerator class for feature augmentation before selection """
 
@@ -23,66 +68,9 @@ class FeatureGenerator:
         self.fdf = feature_df
         self.operators = operators
 
-    def _generate_feature(self, feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
-        """
-        Generate new features by applying operators to columns in feature_df
-
-        Args:
-            feature_df(pd.DataFrame): dataframe of original features
-            operators(list): list of str of operators (check Operator.support_op_rep for reference)
-
-        Returns: dataframe of augmented features
-
-        """
-        fdf = feature_df.copy()
-        if not np.all(o in Operator.support_op_rep for o in operators):
-            raise ValueError("Contain unsupported operators, check Operator.supported_op_rep")
-        ops = [Operator.from_str(o) for o in operators]
-        sop = [op for op in ops if op.is_unary]
-        bop = [op for op in ops if op.is_binary]
-        for fn1, fn2 in combinations_with_replacement(fdf.columns, r=2):
-            if fn1 == fn2:
-                if not sop:
-                    continue
-                else:
-                    for op in sop:
-                        self._update_df(fdf, op, fn1)
-            else:
-                if not bop:
-                    continue
-                else:
-                    for op in bop:
-                        self._update_df(fdf, op, fn1, fn2)
-                        if not op.commutative:
-                            self._update_df(fdf, op, fn2, fn1)
-        return fdf
-
-    def _update_df(self, df, op, fn1, fn2=None):
-        """Helper function to update the dataframe with new generated feature array"""
-        if op.is_unary:
-            new_fname = op.gen_name(fn1)
-            df[new_fname] = df[fn1].apply(op)
-        elif op.is_binary:
-            new_fname = op.gen_name(fn1, fn2)
-            df[new_fname] = op(df[fn1], df[fn2])
-
     def augment(self):
         """Augment features"""
-        return self._generate_feature(self.fdf, self.operators)
-
-    @staticmethod
-    def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
-        """
-        Generate new features by applying operators to columns in feature_df
-
-        Args:
-            feature_df(pd.DataFrame): dataframe of original features
-            operators(list): list of str of operators (check Operator.support_op_rep for reference)
-
-        Returns: dataframe of augmented features
-
-        """
-        return FeatureGenerator(feature_df, operators).augment()
+        return generate_feature(self.fdf, self.operators)
 
 
 class Operator:
