@@ -4,7 +4,7 @@ Feature Generator
 import math
 from functools import partial
 from itertools import combinations_with_replacement
-from typing import Optional, Callable
+from typing import Optional, Callable, Any, Union
 
 import numpy as np
 import pandas as pd
@@ -82,7 +82,7 @@ class Operator:
     support_op_rep = ['^2', '^3', 'sqrt', 'sqrtabs', 'cbrt', 'exp', 'abs', 'log10',
                       '+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']
 
-    def __init__(self, operation: Callable, rep: str, unary: bool, commutative: bool):
+    def __init__(self, operation: Union[Callable[..., Any]], rep: str, unary: bool, commutative: bool):
         """
         Args:
             operation(Callable): operation function
@@ -209,6 +209,7 @@ class Operator:
         Returns: Operator
 
         """
+        opt : Callable[..., Any]
         if op_name == 'sqrtabs':
             opt = _my_abs_sqrt
             return cls(operation=opt, rep=op_name, unary=True, commutative=False)
