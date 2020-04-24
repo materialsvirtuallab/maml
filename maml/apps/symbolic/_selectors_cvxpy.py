@@ -10,9 +10,9 @@ from scipy.linalg import lstsq
 
 from ._selectors import BaseSelector
 
-
 try:
     import cvxpy as cp
+
     Expression = cp.expressions.expression.Expression
 except ImportError:
     cp = None
@@ -89,6 +89,7 @@ class DantzigSelectorCP(BaseSelectorCP):
     https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
     and reference in https://projecteuclid.org/download/pdfview_1/euclid.aos/1201012958
     """
+
     @requires(cp is not None, "cvxpy is not present.")
     def __init__(self, lambd, sigma=1.0, **kwargs):
         """
@@ -163,6 +164,7 @@ class LassoCP(PenalizedLeastSquaresCP):
     """
     Simple Lasso regression
     """
+
     @requires(cp is not None, "cvxpy not installed")
     def __init__(self, lambd, **kwargs):
         """
@@ -193,6 +195,7 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
     Adaptive lasso regression using OLS coefficients
     as the root-n estimator coefficients
     """
+
     @requires(cp is not None, "cvxpy not installed")
     def __init__(self, lambd, gamma, **kwargs):
         """
