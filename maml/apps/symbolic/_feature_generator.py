@@ -4,7 +4,7 @@ Feature Generator
 import math
 from functools import partial
 from itertools import combinations_with_replacement
-from typing import Optional, Callable, Any, Union
+from typing import Optional, Callable, Any, Union, Dict
 
 import numpy as np
 import pandas as pd
@@ -95,6 +95,57 @@ class Operator:
         self.unary = unary
         self.commutative = commutative
 
+    def compute(self, i1: np.ndarray, i2: Optional[np.ndarray] = None) -> np.ndarray:
+        """
+        Compute the results
+        Args:
+            i1(np.ndarray): first input array
+            i2(np.ndarray): second input array (for binary operators)
+
+        Returns: array of computed results
+        """
+        if self.is_binary and not np.all(i2):
+            raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
+        if self.is_unary:
+            return self.opt(i1)
+        else:
+            return self.opt(i1, i2)
+
+    def gen_name(self, f1: str, f2: Optional[str] = None) -> str:
+        """
+        Generate string representation for output
+        Args:
+            f1(str): name of the first input array
+            f2(str): name of the second input array
+
+        Returns: name of the output
+
+        """
+        if self.rep in operation_dict:
+            f_format = str(operation_dict[self.rep]["f_format"])
+            if f2:
+                return f_format.format(f1=f1, f2=f2)
+            return f_format.format(f1=f1)
+        else:
+            if f2:
+                return ('{}(({}) ({}))'.format(self.rep, f1, f2))
+            else:
+                return ('{}({})'.format(self.rep, f1))
+
+    @classmethod
+    def from_str(cls, op_name: str):
+        """
+        Operator from name of the operator
+        Args:
+            op_name(str): string representation of the operator,
+            check Operator.support_op_rep for reference
+
+        Returns: Operator
+
+        """
+        kwgs = operation_dict[op_name]["kwgs"]
+        return cls(**kwgs)
+
     @property
     def is_unary(self) -> bool:
         """
@@ -131,22 +182,6 @@ class Operator:
                 self.commutative = True
         return self.commutative
 
-    def compute(self, i1: np.ndarray, i2: Optional[np.ndarray] = None) -> np.ndarray:
-        """
-        Compute the results
-        Args:
-            i1(np.ndarray): first input array
-            i2(np.ndarray): second input array (for binary operators)
-
-        Returns: array of computed results
-        """
-        if self.is_binary and not np.all(i2):
-            raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
-        if self.is_unary:
-            return self.opt(i1)
-        else:
-            return self.opt(i1, i2)
-
     def __call__(self, i1: np.ndarray, i2: Optional[np.ndarray] = None) -> np.ndarray:
         """
         Compute the results
@@ -161,115 +196,6 @@ class Operator:
 
     def __str__(self) -> str:
         return self.rep
-
-    def gen_name(self, f1: str, f2: Optional[str] = None) -> str:
-        """
-        Generate string representation for output
-        Args:
-            f1(str): name of the first input array
-            f2(str): name of the second input array
-
-        Returns: name of the output
-
-        """
-        if self.rep.startswith('^'):
-            return ('({}){}'.format(f1, self.rep))
-        if self.rep in ['sqrt', 'cbrt', 'exp', 'abs']:
-            return ('{}({})'.format(self.rep, f1))
-        if self.rep.startswith('log'):
-            return ('{}({})'.format(self.rep, f1))
-        if self.rep == 'sqrtabs':
-            return ('sqrt(|{}|)'.format(f1))
-        if self.rep in ['+', '-', '*', '/']:
-            assert f2
-            return ('(({}) {} ({}))'.format(f1, self.rep, f2))
-        if self.rep in ['|+|', '|-|']:
-            assert f2
-            return ('|({}) {} ({})|'.format(f1, self.rep[1], f2))
-        if self.rep == 'sum_power_2':
-            assert f2
-            return ('(({}) + ({}))^2'.format(f1, f2))
-        if self.rep == 'sum_exp':
-            assert f2
-            return ('exp(({}) + ({}))'.format(f1, f2))
-        else:
-            if f2:
-                return ('{}(({}) ({}))'.format(self.rep, f1, f2))
-            else:
-                return ('{}({})'.format(self.rep, f1))
-
-    @classmethod
-    def from_str(cls, op_name: str):
-        """
-        Operator from name of the operator
-        Args:
-            op_name(str): string representation of the operator,
-            check Operator.support_op_rep for reference
-
-        Returns: Operator
-
-        """
-        opt: Callable[..., Any]
-        if op_name == 'sqrtabs':
-            opt = _my_abs_sqrt
-            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
-
-        if op_name.startswith('^'):
-            n = int(op_name[1:])
-            opt = partial(_my_power, n=n)
-            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
-
-        if op_name == 'sqrt':
-            opt = partial(_my_power, n=1 / 2)
-            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
-
-        if op_name == 'cbrt':
-            opt = partial(_my_power, n=1 / 3)
-            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
-
-        if op_name == 'exp':
-            opt = _my_exp
-            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
-
-        if op_name == 'abs':
-            opt = abs
-            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
-
-        if op_name == 'log10':
-            opt = np.log10
-            return cls(operation=opt, rep=op_name, unary=True, commutative=False)
-
-        if op_name == '+':
-            opt = _my_sum
-            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
-
-        if op_name == '|+|':
-            opt = _my_abs_sum
-            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
-
-        if op_name == '*':
-            opt = _my_mul
-            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
-
-        if op_name == '-':
-            opt = _my_diff
-            return cls(operation=opt, rep=op_name, unary=False, commutative=False)
-
-        if op_name == '|-|':
-            opt = _my_abs_diff
-            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
-
-        if op_name == '/':
-            opt = _my_div
-            return cls(operation=opt, rep=op_name, unary=False, commutative=False)
-
-        if op_name == 'sum_power_2':
-            opt = _my_sum_power_2
-            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
-
-        if op_name == 'sum_exp':
-            opt = _my_sum_exp
-            return cls(operation=opt, rep=op_name, unary=False, commutative=True)
 
 
 def _my_power(x: float, n: int) -> float:
@@ -334,3 +260,88 @@ def _my_sum_exp_power_2(x, y):
 
 def _my_sum_exp_power_3(x, y):
     return math.exp(pow(x + y, 3))
+
+operation_dict : Dict[str, Any]
+operation_dict = {
+    "^2": {"kwgs": {"operation": partial(_my_power, n=2),
+                    "rep": "^2",
+                    "unary": True,
+                    "commutative": False},
+           "f_format": '({f1})^2'},
+    "^3": {"kwgs": {"operation": partial(_my_power, n=3),
+                    "rep": "^3",
+                    "unary": True,
+                    "commutative": False},
+           "f_format": '({f1})^3'},
+    "abs": {"kwgs": {"operation": abs,
+                     "rep": "abs",
+                     "unary": True,
+                     "commutative": False},
+            "f_format": "abs({f1})"},
+    "sqrt": {"kwgs": {"operation": partial(_my_power, n=1 / 2),
+                      "rep": "sqrt",
+                      "unary": True,
+                      "commutative": False},
+             "f_format": "sqrt({f1})"},
+    "sqrtabs": {"kwgs": {"operation": _my_abs_sqrt,
+                         "rep": "sqrtabs",
+                         "unary": True,
+                         "commutative": False},
+                "f_format": 'sqrt(|{f1}|)'},
+    "cbrt": {"kwgs": {"operation": partial(_my_power, n=1 / 3),
+                      "rep": "cbrt",
+                      "unary": True,
+                      "commutative": False},
+             "f_format": "cbrt({f1})"},
+    "exp": {"kwgs": {"operation": _my_exp,
+                     "rep": "exp",
+                     "unary": True,
+                     "commutative": False},
+            "f_format": "exp({f1})"},
+    "log10": {"kwgs": {"operation": np.log10,
+                       "rep": "log10",
+                       "unary": True,
+                       "commutative": False},
+              "f_format": "log10({f1})"},
+    "+": {"kwgs": {"operation": _my_sum,
+                   "rep": "+",
+                   "unary": False,
+                   "commutative": True},
+          "f_format": "(({f1}) + ({f2}))"},
+    "|+|": {"kwgs": {"operation": _my_abs_sum,
+                     "rep": "|+|",
+                     "unary": False,
+                     "commutative": True},
+            "f_format": "|({f1}) + ({f2})|"},
+    "-": {"kwgs": {"operation": _my_diff,
+                   "rep": "-",
+                   "unary": False,
+                   "commutative": False},
+          "f_format": "(({f1}) - ({f2}))"},
+    "|-|": {"kwgs": {"operation": _my_abs_diff,
+                     "rep": "|-|",
+                     "unary": False,
+                     "commutative": True},
+            "f_format": "|({f1}) - ({f2})|"},
+    "*": {"kwgs": {"operation": _my_mul,
+                   "rep": "*",
+                   "unary": False,
+                   "commutative": True},
+          "f_format": "(({f1}) * ({f2}))"},
+    "/": {"kwgs": {"operation": _my_div,
+                   "rep": "/",
+                   "unary": False,
+                   "commutative": False},
+          "f_format": "(({f1}) / ({f2}))"},
+    "sum_power_2":
+        {"kwgs": {"operation": _my_sum_power_2,
+                  "rep": "sum_power_2",
+                  "unary": False,
+                  "commutative": True},
+         "f_format": "(({f1}) + ({f2}))^2"},
+    "sum_exp":
+        {"kwgs": {"operation": _my_sum_exp,
+                  "rep": "sum_exp",
+                  "unary": False,
+                  "commutative": True},
+         "f_format": "exp(({f1}) + ({f2}))"}}

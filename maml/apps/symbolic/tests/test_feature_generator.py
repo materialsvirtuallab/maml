@@ -5,6 +5,7 @@ import numpy as np
 from pymatgen.util.testing import PymatgenTest
 
 from maml.apps.symbolic import FeatureGenerator, Operator
+from maml.apps.symbolic._feature_generator import generate_feature
 
 
 pow2 = Operator.from_str('^2')
@@ -87,20 +88,33 @@ class TestFeatureGenerator(PymatgenTest):
         x3 = np.array([1, 8, 27, 64, 125])
         self.df = pd.DataFrame({"i1": x1, "i2": x2, "i3": x3})
 
-    def testFeatureGenerator(self):
+    def testGenerateFeature(self):
         ops = ['^2', '+', '-']
-        fg = FeatureGenerator(self.df, ops)
-        nf_df1 = fg.augment()
-        nf_df2 = FeatureGenerator.generate_feature(self.df, ops)
+        nf_df = generate_feature(self.df, ops)
         new_columns = ['i1', 'i2', 'i3', '(i1)^2', '((i1) + (i2))', '((i1) - (i2))',
                        '((i2) - (i1))', '((i1) + (i3))', '((i1) - (i3))', '((i3) - (i1))',
                        '(i2)^2', '((i2) + (i3))', '((i2) - (i3))', '((i3) - (i2))', '(i3)^2']
-        self.assertTrue(nf_df1.equals(nf_df2))
-        self.assertArrayEqual(nf_df1.columns, np.array(new_columns))
-        self.assertArrayEqual(nf_df1['(i1)^2'].values, self.df['i1'].pow(2).values)
-        self.assertArrayEqual(nf_df1['((i1) + (i2))'].values, (self.df['i1'] + self.df['i2']).values)
-        self.assertArrayEqual(nf_df1['((i1) - (i2))'].values, (self.df['i1'] - self.df['i2']).values)
-        self.assertArrayEqual(nf_df1['((i2) - (i1))'].values, (self.df['i2'] - self.df['i1']).values)
+        self.assertArrayEqual(nf_df.columns, np.array(new_columns))
+        self.assertArrayEqual(nf_df['(i1)^2'].values, self.df['i1'].pow(2).values)
+        self.assertArrayEqual(nf_df['((i1) + (i2))'].values, (self.df['i1'] + self.df['i2']).values)
+        self.assertArrayEqual(nf_df['((i1) - (i2))'].values, (self.df['i1'] - self.df['i2']).values)
+        self.assertArrayEqual(nf_df['((i2) - (i1))'].values, (self.df['i2'] - self.df['i1']).values)
+
+    def testFeatureGenerator(self):
+        ops = ['^2', '+', '-']
+        fg = FeatureGenerator(self.df, ops)
+        nf_df = fg.augment()
+        new_columns = ['i1', 'i2', 'i3', '(i1)^2', '((i1) + (i2))', '((i1) - (i2))',
+                       '((i2) - (i1))', '((i1) + (i3))', '((i1) - (i3))', '((i3) - (i1))',
+                       '(i2)^2', '((i2) + (i3))', '((i2) - (i3))', '((i3) - (i2))', '(i3)^2']
+        self.assertArrayEqual(nf_df.columns, np.array(new_columns))
+        self.assertArrayEqual(nf_df['(i1)^2'].values, self.df['i1'].pow(2).values)
+        self.assertArrayEqual(nf_df['((i1) + (i2))'].values, (self.df['i1'] + self.df['i2']).values)
+        self.assertArrayEqual(nf_df['((i1) - (i2))'].values, (self.df['i1'] - self.df['i2']).values)
+        self.assertArrayEqual(nf_df['((i2) - (i1))'].values, (self.df['i2'] - self.df['i1']).values)
+
 
 if __name__ == '__main__':
     unittest.main()
+
+        
