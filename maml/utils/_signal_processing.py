@@ -47,7 +47,7 @@ def spectrogram(z: np.ndarray, return_time_freq: bool = False) \
 
 
 def cwt(z: np.ndarray, widths: np.ndarray,
-        wavelet: Union[str, Callable] = 'morlet', **kwargs) -> np.ndarray:
+        wavelet: Union[str, Callable] = 'morlet2', **kwargs) -> np.ndarray:
     """
     The scalogram of the signal
     Args:
