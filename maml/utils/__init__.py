@@ -12,6 +12,8 @@ from ._lammps import (write_data_from_structure,  # noqa
                       get_lammps_lattice_and_rotation)  # noqa
 
 from ._stats import Stats, STATS_KWARGS, stats_list_conversion, get_full_stats_and_funcs  # noqa
+from ._signal_processing import spectrogram, cwt, get_sp_method, fft_magnitude, wvd  # noqa
+
 
 __all__ = [
     'pool_from',
@@ -32,5 +34,10 @@ __all__ = [
     'Stats',
     'STATS_KWARGS',
     'stats_list_conversion',
-    'get_full_stats_and_funcs'
+    'get_full_stats_and_funcs',
+    'spectrogram',
+    'cwt',
+    'wvd',
+    'fft_magnitude',
+    'get_sp_method'
 ]

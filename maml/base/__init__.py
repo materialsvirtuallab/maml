@@ -9,6 +9,8 @@ from ._data import BaseDataSource  # noqa
 from ._describer import BaseDescriber, SequentialDescriber  # noqa
 from ._describer import DummyDescriber  # noqa
 from ._model import BaseModel, ModelWithKeras, ModelWithSklearn  # noqa
+from ._feature_batch import get_feature_batch
+
 
 __all__ = [
     'BaseDataSource',
@@ -17,5 +19,6 @@ __all__ = [
     'DummyDescriber',
     'BaseModel',
     'ModelWithKeras',
-    'ModelWithSklearn'
+    'ModelWithSklearn',
+    'get_feature_batch'
 ]

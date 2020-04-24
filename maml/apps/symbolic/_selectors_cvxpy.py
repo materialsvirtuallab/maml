@@ -6,9 +6,9 @@ from typing import Optional, List, Dict, Union
 
 from monty.dev import requires
 import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import get_scorer
 from scipy.linalg import lstsq
+
+from ._selectors import BaseSelector
 
 
 try:
@@ -19,23 +19,20 @@ except ImportError:
     Expression = "Expression"
 
 
-class BaseSelectorCP:
+class BaseSelectorCP(BaseSelector):
     """
     Base selector using cvxpy (CP)
     """
 
     @requires(cp is not None, "cvxpy is not present.")
-    def __init__(self, coef_thres: float = 1e-6, method: Optional[str] = None):
+    def __init__(self, coef_thres: float = 1e-6, method: str = "ECOS"):
         """
         Base selector
         Args:
             coef_thres (float): threshold to discard certain coefficents
-            method (str): solver for cvxpy problem, if None, then ECOS will be used
+            method (str): solver for cvxpy problem. The default is ECOS
         """
-        self.coef_thres = coef_thres
-        self.is_fitted = False
-        self.coef_ = None
-        self.method = method
+        super().__init__(coef_thres=coef_thres, method=method)
 
     def select(self, x: np.ndarray, y: np.ndarray,
                options: Optional[Dict] = None) -> np.ndarray:
@@ -56,9 +53,11 @@ class BaseSelectorCP:
         prob = cp.Problem(objective, constraints)
         prob.solve(solver=self.method, **options)
         self.coef_ = beta.value
-        return np.where(np.abs(self.coef_) > self.coef_thres)[0]
+        self.indices = np.where(np.abs(beta.value) > self.coef_thres)[0]
+        return self.indices
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) \
+    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
+                              beta: Optional[cp.Variable] = None) \
             -> Optional[List[Expression]]:  # type: ignore
         """
         Get constraints dictionary from data, e.g.,
@@ -67,7 +66,7 @@ class BaseSelectorCP:
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-            beta: (cp.Variable): target variable for optimization
+            beta: (np.ndarray): target variable for optimization
 
         Returns: dict of constraints
 
@@ -88,34 +87,6 @@ class BaseSelectorCP:
 
         """
         raise NotImplementedError
-
-    def evaluate(self, x: np.ndarray, y: np.ndarray,
-                 metric: str = 'neg_mean_absolute_error') -> float:
-        """
-        Evaluate the linear model using x, and y test data
-
-        Args:
-            x (np.ndarray): MxN input data array
-            y (np.ndarray): M output targets
-            metric (str): scorer function, used with
-                sklearn.metrics.get_scorer
-
-        Returns:
-
-        """
-        metric_func = get_scorer(metric)
-        lr = LinearRegression(fit_intercept=False)
-        lr.coef_ = self.coef_
-        lr.intercept_ = 0
-        return metric_func(lr, x, y)
-
-    def get_coef(self) -> np.ndarray:
-        """
-        Get coefficients
-        Returns: the coefficients array
-
-        """
-        return self.coef_
 
 
 class DantzigSelectorCP(BaseSelectorCP):
@@ -152,8 +123,8 @@ class DantzigSelectorCP(BaseSelectorCP):
         """
         return cp.norm1(beta)
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) \
-            -> Optional[List[Expression]]:  # type: ignore
+    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
+                              beta: Optional[cp.Variable] = None) -> Optional[List[Expression]]:  # type: ignore
         """
         Dantzig selector constraints
 

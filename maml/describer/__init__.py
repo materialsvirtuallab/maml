@@ -6,7 +6,7 @@ numeric vectors or tensors.
 from ._site import (BispectrumCoefficients, SmoothOverlapAtomicPosition,  # noqa
                     BPSymmetryFunctions, MEGNetSite)  # noqa
 from ._structure import (DistinctSiteProperty, CoulombMatrix, SortedCoulombMatrix,  # noqa
-                         RandomizedCoulombMatrix, MEGNetStructure)  # noqa
+                         RandomizedCoulombMatrix, MEGNetStructure, CoulombEigenSpectrum)  # noqa
 from ._composition import ElementProperty, ElementStats  # noqa
 
 __all__ = [
@@ -20,5 +20,6 @@ __all__ = [
     'ElementProperty',
     'ElementStats',
     'MEGNetSite',
-    'MEGNetStructure'
+    'MEGNetStructure',
+    'CoulombEigenSpectrum'
 ]
