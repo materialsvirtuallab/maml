@@ -261,7 +261,8 @@ def _my_sum_exp_power_2(x, y):
 def _my_sum_exp_power_3(x, y):
     return math.exp(pow(x + y, 3))
 
-operation_dict : Dict[str, Any]
+
+operation_dict: Dict[str, Any]
 operation_dict = {
     "^2": {"kwgs": {"operation": partial(_my_power, n=2),
                     "rep": "^2",
