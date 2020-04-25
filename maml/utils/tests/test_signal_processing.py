@@ -21,7 +21,7 @@ class TestSP(unittest.TestCase):
 
     def test_fft(self):
         fft_mag = fft_magnitude(self.x)
-        self.assertTrue(fft_mag.shape == (100, ))
+        self.assertTrue(fft_mag.shape == (100,))
         fft_mag = get_sp_method('fft_magnitude')(self.x)
         self.assertTrue(fft_mag.shape == (100,))
         fft_mag = get_sp_method(fft_magnitude)(self.x)
@@ -33,8 +33,8 @@ class TestSP(unittest.TestCase):
         self.assertTrue(spec.shape == (129, 8))
 
         freq, time, spec = spectrogram(self.x, return_time_freq=True)
-        self.assertTrue(freq.shape == (129, ))
-        self.assertTrue(time.shape == (8, ))
+        self.assertTrue(freq.shape == (129,))
+        self.assertTrue(time.shape == (8,))
         self.assertTrue(spec.shape == (129, 8))
 
     def test_cwt(self):
@@ -47,12 +47,9 @@ class TestSP(unittest.TestCase):
     def test_wvd(self):
         wvd_res = wvd(self.x)
         self.assertTrue(wvd_res.shape == (100, 100))
-<<<<<<< HEAD
-=======
         wvd_res, f1, f2 = wvd(self.x, return_all=True)
         self.assertTrue(wvd_res.shape == (100, 100))
-        self.assertTrue(f1.shape == (100, ))
->>>>>>> 6e2b727df73ace5b125168a87849fba247f64cf8
+        self.assertTrue(f1.shape == (100,))
 
 
 if __name__ == "__main__":
