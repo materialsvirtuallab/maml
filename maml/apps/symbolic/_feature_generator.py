@@ -12,12 +12,15 @@ import pandas as pd
 
 def _update_df(df, op, fn1, fn2=None):
     """Helper function to update the dataframe with new generated feature array"""
+    fnames = df.columns
     if op.is_unary:
         new_fname = op.gen_name(fn1)
-        df[new_fname] = df[fn1].apply(op)
+        if new_fname not in fnames:
+            df[new_fname] = df[fn1].apply(op)
     elif op.is_binary:
         new_fname = op.gen_name(fn1, fn2)
-        df[new_fname] = op(df[fn1], df[fn2])
+        if new_fname not in fnames:
+            df[new_fname] = op(df[fn1], df[fn2])
 
 
 def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
@@ -68,9 +71,20 @@ class FeatureGenerator:
         self.fdf = feature_df
         self.operators = operators
 
-    def augment(self):
-        """Augment features"""
-        return generate_feature(self.fdf, self.operators)
+    def augment(self, n: int = 1) -> np.ndarray:
+        """
+        Augment features
+        Args:
+            n(int): number of rounds of iteration
+
+        Returns: augmented dataframe
+
+        """
+        df = self.fdf.copy()
+        for _ in range(n):
+            ndf = generate_feature(df, self.operators)
+            df = ndf
+        return df
 
 
 class Operator:
@@ -104,8 +118,8 @@ class Operator:
 
         Returns: array of computed results
         """
-        if self.is_binary and not np.all(i2):
-            raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
+        # if self.is_binary and not np.all(i2):
+        #     raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
         if self.is_unary:
             return self.opt(i1)
         else:

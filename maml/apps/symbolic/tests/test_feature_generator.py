@@ -113,6 +113,19 @@ class TestFeatureGenerator(PymatgenTest):
         self.assertArrayEqual(nf_df['((i1) - (i2))'].values, (self.df['i1'] - self.df['i2']).values)
         self.assertArrayEqual(nf_df['((i2) - (i1))'].values, (self.df['i2'] - self.df['i1']).values)
 
+        df = self.df[["i1", "i2"]]
+        fg = FeatureGenerator(df, ['^2', '+'])
+        new_f1 = ['i1', 'i2', '(i1)^2', '((i1) + (i2))', '(i2)^2']
+        new_f2 = ['i1', 'i2', '(i1)^2', '((i1) + (i2))', '(i2)^2', '((i1) + ((i1)^2))',
+                   '((i1) + (((i1) + (i2))))', '((i1) + ((i2)^2))', '((i2) + ((i1)^2))',
+                   '((i2) + (((i1) + (i2))))', '((i2) + ((i2)^2))', '((i1)^2)^2',
+                   '(((i1)^2) + (((i1) + (i2))))', '(((i1)^2) + ((i2)^2))',
+                   '(((i1) + (i2)))^2', '((((i1) + (i2))) + ((i2)^2))', '((i2)^2)^2']
+        nf1_df = fg.augment(n=1)
+        nf2_df = fg.augment(n=2)
+        self.assertArrayEqual(nf1_df.columns, np.array(new_f1))
+        self.assertArrayEqual(nf2_df.columns, np.array(new_f2))
+
 
 if __name__ == '__main__':
     unittest.main()
