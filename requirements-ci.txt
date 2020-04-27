@@ -6,4 +6,4 @@ pycodestyle==2.5.0
 mypy==0.770
 pydocstyle==5.0.2
 flake8==3.7.9
-pylint==2.4.4
+pylint==2.5.0
