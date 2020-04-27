@@ -189,7 +189,7 @@ class Operator:
         """
         if not self.commutative:
             if self.is_unary:
-                self.commutative = True
+                self.commutative = False
             elif self.rep in ['-', '/']:
                 self.commutative = False
             else:
@@ -221,15 +221,15 @@ def _my_abs_sqrt(x):
 
 
 def _my_exp(x):
-    return math.exp(x)
+    return np.exp(x)
 
 
 def _my_exp_power_2(x):
-    return math.exp(pow(x, 2))
+    return np.exp(pow(x, 2))
 
 
 def _my_exp_power_3(x):
-    return math.exp(pow(x, 3))
+    return np.exp(pow(x, 3))
 
 
 def _my_sum(x, y):
@@ -265,15 +265,14 @@ def _my_sum_power_3(x, y):
 
 
 def _my_sum_exp(x, y):
-    return math.exp(x + y)
+    return np.exp(x + y)
 
-
-def _my_sum_exp_power_2(x, y):
-    return math.exp(pow(x + y, 2))
-
-
-def _my_sum_exp_power_3(x, y):
-    return math.exp(pow(x + y, 3))
+# def _my_sum_exp_power_2(x, y):
+#     return np.exp(pow(x + y, 2))
+#
+#
+# def _my_sum_exp_power_3(x, y):
+#     return np.exp(pow(x + y, 3))
 
 
 operation_dict: Dict[str, Any]
