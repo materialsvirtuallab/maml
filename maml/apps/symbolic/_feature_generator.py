@@ -1,7 +1,6 @@
 """
 Feature Generator
 """
-import math
 from functools import partial
 from itertools import combinations_with_replacement
 from typing import Optional, Callable, Any, Union, Dict
@@ -35,7 +34,7 @@ def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
 
     """
     fdf = feature_df.copy()
-    if not np.all(o in Operator.support_op_rep for o in operators):
+    if not np.all([(o in Operator.support_op_rep) for o in operators]):
         raise ValueError("Contain unsupported operators, check Operator.supported_op_rep")
     ops = [Operator.from_str(o) for o in operators]
     sop = [op for op in ops if op.is_unary]
@@ -118,12 +117,9 @@ class Operator:
 
         Returns: array of computed results
         """
-        # if self.is_binary and not np.all(i2):
-        #     raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
-        if self.is_unary:
-            return self.opt(i1)
-        else:
+        if self.is_binary:
             return self.opt(i1, i2)
+        return self.opt(i1)
 
     def gen_name(self, f1: str, f2: Optional[str] = None) -> str:
         """
@@ -135,16 +131,11 @@ class Operator:
         Returns: name of the output
 
         """
-        if self.rep in operation_dict:
-            f_format = str(operation_dict[self.rep]["f_format"])
-            if f2:
-                return f_format.format(f1=f1, f2=f2)
-            return f_format.format(f1=f1)
-        else:
-            if f2:
-                return ('{}(({}) ({}))'.format(self.rep, f1, f2))
-            else:
-                return ('{}({})'.format(self.rep, f1))
+        assert self.rep in operation_dict
+        f_format = str(operation_dict[self.rep]["f_format"])
+        if self.is_binary:
+            return f_format.format(f1=f1, f2=f2)
+        return f_format.format(f1=f1)
 
     @classmethod
     def from_str(cls, op_name: str):
@@ -189,7 +180,7 @@ class Operator:
         """
         if not self.commutative:
             if self.is_unary:
-                self.commutative = True
+                self.commutative = False
             elif self.rep in ['-', '/']:
                 self.commutative = False
             else:
@@ -217,19 +208,19 @@ def _my_power(x: float, n: int) -> float:
 
 
 def _my_abs_sqrt(x):
-    return math.sqrt(abs(x))
+    return np.sqrt(abs(x))
 
 
 def _my_exp(x):
-    return math.exp(x)
+    return np.exp(x)
 
 
 def _my_exp_power_2(x):
-    return math.exp(pow(x, 2))
+    return np.exp(pow(x, 2))
 
 
 def _my_exp_power_3(x):
-    return math.exp(pow(x, 3))
+    return np.exp(pow(x, 3))
 
 
 def _my_sum(x, y):
@@ -265,15 +256,15 @@ def _my_sum_power_3(x, y):
 
 
 def _my_sum_exp(x, y):
-    return math.exp(x + y)
+    return np.exp(x + y)
 
 
-def _my_sum_exp_power_2(x, y):
-    return math.exp(pow(x + y, 2))
-
-
-def _my_sum_exp_power_3(x, y):
-    return math.exp(pow(x + y, 3))
+# def _my_sum_exp_power_2(x, y):
+#     return np.exp(pow(x + y, 2))
+#
+#
+# def _my_sum_exp_power_3(x, y):
+#     return np.exp(pow(x + y, 3))
 
 
 operation_dict: Dict[str, Any]
