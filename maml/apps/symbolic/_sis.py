@@ -4,7 +4,7 @@ Sure Independence Screening
 https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
 
 """
-from typing import Optional
+from typing import Optional, Dict
 import logging
 
 import numpy as np
@@ -107,3 +107,6 @@ class SIS:
 
         """
         self.selector = selector
+
+
+
