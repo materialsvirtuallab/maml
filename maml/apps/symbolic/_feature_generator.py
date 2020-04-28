@@ -1,7 +1,6 @@
 """
 Feature Generator
 """
-import math
 from functools import partial
 from itertools import combinations_with_replacement
 from typing import Optional, Callable, Any, Union, Dict
@@ -118,12 +117,9 @@ class Operator:
 
         Returns: array of computed results
         """
-        # if self.is_binary and not np.all(i2):
-        #     raise ValueError("Please provide the second input for binary operator {}".format(self.rep))
-        if self.is_unary:
-            return self.opt(i1)
-        else:
+        if self.is_binary:
             return self.opt(i1, i2)
+        return self.opt(i1)
 
     def gen_name(self, f1: str, f2: Optional[str] = None) -> str:
         """
@@ -135,11 +131,11 @@ class Operator:
         Returns: name of the output
 
         """
-        if self.rep in operation_dict:
-            f_format = str(operation_dict[self.rep]["f_format"])
-            if f2:
-                return f_format.format(f1=f1, f2=f2)
-            return f_format.format(f1=f1)
+        assert self.rep in operation_dict
+        f_format = str(operation_dict[self.rep]["f_format"])
+        if self.is_binary:
+            return f_format.format(f1=f1, f2=f2)
+        return f_format.format(f1=f1)
 
     @classmethod
     def from_str(cls, op_name: str):
@@ -261,6 +257,7 @@ def _my_sum_power_3(x, y):
 
 def _my_sum_exp(x, y):
     return np.exp(x + y)
+
 
 # def _my_sum_exp_power_2(x, y):
 #     return np.exp(pow(x + y, 2))
