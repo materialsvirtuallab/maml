@@ -9,6 +9,7 @@ from typing import Optional, Callable, Any, Union, Dict
 import numpy as np
 import pandas as pd
 
+
 def _update_df(df, op, fn1, fn2=None):
     """Helper function to update the dataframe with new generated feature array"""
     fnames = df.columns
@@ -17,9 +18,9 @@ def _update_df(df, op, fn1, fn2=None):
         if new_fname not in fnames:
             if op.rep in ["sqrt", "log10"]:
                 if np.any(df[fn1] < 0):
-                    warnings.warn("Data {} Contains negative number, ".format(fn1) \
-                                   + "sqrt will return complex number. " \
-                                   + "Consider using abssqrt or abslog10")
+                    warnings.warn("Data {} Contains negative number, ".format(fn1)
+                                  + "sqrt will return complex number. "
+                                  + "Consider using abssqrt or abslog10")
             df[new_fname] = df[fn1].apply(op)
     elif op.is_binary:
         new_fname = op.gen_name(fn1, fn2)
@@ -219,6 +220,7 @@ def _my_abs_sqrt(x):
 def _my_exp(x):
     return np.exp(x)
 
+
 def _my_abs_log10(x):
     return np.log10(abs(x))
 
@@ -318,10 +320,10 @@ operation_dict = {
                        "commutative": False},
               "f_format": "log10({f1})"},
     "abslog10": {"kwgs": {"operation": _my_abs_log10,
-                           "rep": "abslog10",
-                           "unary": True,
-                           "commutative": False},
-                  "f_format": "log10(|{f1}|)"},
+                          "rep": "abslog10",
+                          "unary": True,
+                          "commutative": False},
+                 "f_format": "log10(|{f1}|)"},
     "+": {"kwgs": {"operation": _my_sum,
                    "rep": "+",
                    "unary": False,
