@@ -1,4 +1,5 @@
 import unittest
+import warnings
 from functools import partial
 import pandas as pd
 import numpy as np
@@ -191,6 +192,14 @@ class TestFeatureGenerator(PymatgenTest):
 
         _update_df(test_df, add, "i1", "i2")
         self.assertArrayEqual(test_df.columns, np.array(["i1", "i2", "i3", "(i1)^2", "((i1) + (i2))"]))
+
+        # Test negative with sqrt and log10
+        test_df["i4"] = np.array([1, -8, 27, -64, 125])
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            _update_df(test_df, sqrt, "i4")
+            self.assertEqual(len(w), 1)
+            self.assertTrue("abssqrt" in str(w[-1].message))
 
     def testGenerateFeature(self):
         ops = ['^2', '+', '-']

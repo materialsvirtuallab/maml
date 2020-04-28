@@ -1,6 +1,7 @@
 """
 Feature Generator
 """
+import warnings
 from functools import partial
 from itertools import combinations_with_replacement
 from typing import Optional, Callable, Any, Union, Dict
@@ -8,13 +9,17 @@ from typing import Optional, Callable, Any, Union, Dict
 import numpy as np
 import pandas as pd
 
-
 def _update_df(df, op, fn1, fn2=None):
     """Helper function to update the dataframe with new generated feature array"""
     fnames = df.columns
     if op.is_unary:
         new_fname = op.gen_name(fn1)
         if new_fname not in fnames:
+            if op.rep in ["sqrt", "log10"]:
+                if np.any(df[fn1] < 0):
+                    warnings.warn("Data {} Contains negative number, ".format(fn1) \
+                                   + "sqrt will return complex number. " \
+                                   + "Consider using abssqrt or abslog10")
             df[new_fname] = df[fn1].apply(op)
     elif op.is_binary:
         new_fname = op.gen_name(fn1, fn2)
@@ -92,7 +97,7 @@ class Operator:
     is_unary, is_binary, and is_commutative, and generate name string
     for the output.
     """
-    support_op_rep = ['^2', '^3', 'sqrt', 'sqrtabs', 'cbrt', 'exp', 'abs', 'log10',
+    support_op_rep = ['^2', '^3', 'sqrt', 'abssqrt', 'cbrt', 'exp', 'abs', 'log10', 'abslog10',
                       '+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']
 
     def __init__(self, operation: Union[Callable[..., Any]], rep: str, unary: bool, commutative: bool):
@@ -158,7 +163,7 @@ class Operator:
 
         """
         if not self.unary:
-            if self.rep in ['^2', '^3', 'sqrt', 'sqrtabs', 'cbrt', 'exp', 'abs', 'log10']:
+            if self.rep in ['^2', '^3', 'sqrt', 'abssqrt', 'cbrt', 'exp', 'abs', 'log10', 'abslog10']:
                 self.unary = True
             elif self.rep in ['+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']:
                 self.unary = False
@@ -213,6 +218,9 @@ def _my_abs_sqrt(x):
 
 def _my_exp(x):
     return np.exp(x)
+
+def _my_abs_log10(x):
+    return np.log10(abs(x))
 
 
 def _my_exp_power_2(x):
@@ -289,8 +297,8 @@ operation_dict = {
                       "unary": True,
                       "commutative": False},
              "f_format": "sqrt({f1})"},
-    "sqrtabs": {"kwgs": {"operation": _my_abs_sqrt,
-                         "rep": "sqrtabs",
+    "abssqrt": {"kwgs": {"operation": _my_abs_sqrt,
+                         "rep": "abssqrt",
                          "unary": True,
                          "commutative": False},
                 "f_format": 'sqrt(|{f1}|)'},
@@ -309,6 +317,11 @@ operation_dict = {
                        "unary": True,
                        "commutative": False},
               "f_format": "log10({f1})"},
+    "abslog10": {"kwgs": {"operation": _my_abs_log10,
+                           "rep": "abslog10",
+                           "unary": True,
+                           "commutative": False},
+                  "f_format": "log10(|{f1}|)"},
     "+": {"kwgs": {"operation": _my_sum,
                    "rep": "+",
                    "unary": False,
