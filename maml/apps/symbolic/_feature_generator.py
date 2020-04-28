@@ -35,7 +35,7 @@ def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
 
     """
     fdf = feature_df.copy()
-    if not np.all(o in Operator.support_op_rep for o in operators):
+    if not np.all([(o in Operator.support_op_rep) for o in operators]):
         raise ValueError("Contain unsupported operators, check Operator.supported_op_rep")
     ops = [Operator.from_str(o) for o in operators]
     sop = [op for op in ops if op.is_unary]
@@ -140,11 +140,6 @@ class Operator:
             if f2:
                 return f_format.format(f1=f1, f2=f2)
             return f_format.format(f1=f1)
-        else:
-            if f2:
-                return ('{}(({}) ({}))'.format(self.rep, f1, f2))
-            else:
-                return ('{}({})'.format(self.rep, f1))
 
     @classmethod
     def from_str(cls, op_name: str):
@@ -217,7 +212,7 @@ def _my_power(x: float, n: int) -> float:
 
 
 def _my_abs_sqrt(x):
-    return math.sqrt(abs(x))
+    return np.sqrt(abs(x))
 
 
 def _my_exp(x):

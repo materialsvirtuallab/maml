@@ -6,7 +6,10 @@ import numpy as np
 from pymatgen.util.testing import PymatgenTest
 
 from maml.apps.symbolic import FeatureGenerator, Operator
-from maml.apps.symbolic._feature_generator import _update_df, generate_feature, _my_power, operation_dict
+from maml.apps.symbolic._feature_generator import _update_df, generate_feature, operation_dict
+from maml.apps.symbolic._feature_generator import _my_power, _my_abs_sqrt, _my_exp, _my_exp_power_2,\
+    _my_exp_power_3, _my_sum, _my_abs_sum, _my_mul, _my_diff, _my_abs_diff,_my_div, _my_sum_power_2, \
+    _my_sum_power_3, _my_sum_exp
 
 
 pow2 = Operator.from_str('^2')
@@ -29,7 +32,31 @@ class TestOperator(PymatgenTest):
         x2 = np.array([1, 4, 9, 16, 25])
         x3 = np.array([1, 8, 27, 64, 125])
         x4 = np.array([1, -8, 27, -64, 125])
-        self.df = pd.DataFrame({"i1":x1, "i2":x2, "i3": x3, 'i4': x4})
+        x5 = np.array([1, -4, 9, -16, 25])
+        self.df = pd.DataFrame({"i1":x1, "i2":x2, "i3": x3, "i4": x4, "i5": x5})
+
+    def testFuncitons(self):
+        self.assertArrayEqual(_my_power(self.df["i1"], n=2), np.array([4, 16, 36, 64, 100]))
+        self.assertArrayEqual(_my_abs_sqrt(self.df["i5"]), np.array([1, 2, 3, 4, 5]))
+        self.assertArrayEqual(_my_exp(self.df["i1"]), np.exp([2, 4, 6, 8, 10]))
+        self.assertArrayEqual(_my_exp_power_2(self.df["i1"]), np.exp(self.df["i1"].pow(2)).values)
+        self.assertArrayEqual(_my_exp_power_3(self.df["i1"]), np.exp(self.df["i1"].pow(3)).values)
+        self.assertArrayEqual(_my_sum(self.df["i1"], self.df["i2"]), (self.df["i1"] + self.df["i2"]).values)
+        self.assertArrayEqual(_my_abs_sum(self.df["i1"], self.df["i5"]),
+                         abs((self.df["i1"] + self.df["i5"]).values))
+        self.assertArrayEqual(_my_mul(self.df["i1"], self.df["i2"]), (self.df["i1"] * self.df["i2"]).values)
+        self.assertArrayEqual(_my_diff(self.df["i1"], self.df["i2"]), (self.df["i1"] - self.df["i2"]).values)
+        self.assertArrayEqual(_my_abs_diff(self.df["i1"], self.df["i2"]),
+                         abs(self.df["i1"] - self.df["i2"]).values)
+        self.assertArrayEqual(_my_div(self.df["i1"], self.df["i2"]),
+                         (self.df["i1"]/ self.df["i2"]).values)
+        self.assertArrayEqual(_my_sum_power_2(self.df["i1"], self.df["i2"]),
+                         (self.df["i1"] + self.df["i2"]).pow(2).values)
+        self.assertArrayEqual(_my_sum_power_3(self.df["i1"], self.df["i2"]),
+                         (self.df["i1"] + self.df["i2"]).pow(3).values)
+        self.assertArrayEqual(_my_sum_exp(self.df["i1"], self.df["i2"]),
+                         (self.df["i1"] + self.df["i2"]).apply(np.exp).values)
+
 
     def testSingularOperators(self):
         pow2_2 = Operator(operation=partial(_my_power, n=2), rep='^2', unary=True, commutative=False)
@@ -46,6 +73,7 @@ class TestOperator(PymatgenTest):
         self.assertArrayEqual(pow2(self.df["i1"]), np.array([4, 16, 36, 64, 100]))
         self.assertArrayEqual(pow2.compute(self.df["i1"]), np.array([4, 16, 36, 64, 100]))
         self.assertArrayEqual(self.df["i1"].apply(pow2), np.array([4, 16, 36, 64, 100]))
+        self.assertEqual(pow2.__str__(), pow2.rep)
         self.assertEqual(pow2.gen_name('i1'), '(i1)^2')
         self.assertTrue(pow2.is_unary)
         self.assertFalse(pow2.is_binary)
@@ -131,14 +159,14 @@ class TestOperator(PymatgenTest):
         self.assertEqual(add.gen_name("i1", "i2"), "((i1) + (i2))")
         self.assertFalse(add.is_unary)
         self.assertTrue(add.is_binary)
-        self.assertTrue(add.commutative)
+        self.assertTrue(add.is_commutative)
 
         self.assertArrayEqual(sub(self.df['i1'], self.df['i2']), np.array([1, 0, -3, -8, -15]))
         self.assertTrue(sub.__str__(), "-")
         self.assertEqual(sub.gen_name("i1", "i2"), "((i1) - (i2))")
         self.assertFalse(sub.is_unary)
         self.assertTrue(sub.is_binary)
-        self.assertFalse(sub.commutative)
+        self.assertFalse(sub.is_commutative)
 
 
 class TestFeatureGenerator(PymatgenTest):
@@ -176,6 +204,10 @@ class TestFeatureGenerator(PymatgenTest):
         self.assertArrayEqual(nf_df['((i1) + (i2))'].values, (self.df['i1'] + self.df['i2']).values)
         self.assertArrayEqual(nf_df['((i1) - (i2))'].values, (self.df['i1'] - self.df['i2']).values)
         self.assertArrayEqual(nf_df['((i2) - (i1))'].values, (self.df['i2'] - self.df['i1']).values)
+
+        ops = ['^2', 'abcd']
+        self.assertRaises(ValueError, generate_feature, self.df, ops)
+
 
     def testFeatureGenerator(self):
         ops = ['^2', '+', '-']
