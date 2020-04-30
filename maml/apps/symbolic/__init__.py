@@ -19,7 +19,7 @@ else:
     from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso  # noqa
     from ._selectors_cvxpy import LassoCP as Lasso  # noqa
 
-from ._sis import SIS  # noqa
+from ._sis import SIS, ISIS  # noqa
 
 __all__ = [
     "DantzigSelector",
@@ -27,6 +27,7 @@ __all__ = [
     "SCAD",
     "Lasso",
     "SIS",
+    "ISIS",
     "L0BrutalForce",
     "FeatureGenerator",
     "Operator"

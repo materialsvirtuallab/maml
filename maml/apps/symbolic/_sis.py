@@ -4,12 +4,12 @@ Sure Independence Screening
 https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
 
 """
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 import logging
 
 import numpy as np
 
-from ._selectors import BaseSelector
+from ._selectors import BaseSelector, DantzigSelector
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -119,28 +119,74 @@ class SIS:
         """
         self.selector = selector
 
-    def isis(self, x, y, d: int, options: Optional[Dict] = None) -> np.ndarray:
+    def set_gamma(self, gamma):
         """
-        Iterative SIS
+        Set gamma
+
         Args:
-            x (np.ndarray): input array
-            y (np.ndarray): target array
-            d(int): number of features to be selected
-            options (dict): options for the optimization
-
-        Returns: np.array of selected feature indexes
+            gamma(float): new gamma value
 
         """
-        assert d <= x.shape[1]
+        self.gamma = gamma
+
+    def update_gamma(self, step: float = 0.5):
+        """
+        Update the sis object so that sis.select
+        return at least one feature
+
+        Args:
+            step(float): ratio to update the parameters
+
+        """
+        self.set_gamma(self.gamma * (1 + step))
+
+
+class ISIS:
+    """Iterative SIS"""
+
+    def __init__(self,
+                 sis: SIS = SIS(gamma=0.1, selector=DantzigSelector(0.1))):
+        """
+
+        Args:
+            sis(SIS): sis object
+        """
+        self.sis = sis
+        self.selector = sis.selector
+
+    def run(self, x, y, max_p: int = 10,
+            options: Optional[Dict] = None,
+            step: float = 0.5) -> np.array:
+        """
+        Run the ISIS
+        Args:
+            x:
+            y:
+            max_p(int): Number of feature desired
+            options:
+            step(float): update gamma with
+
+        Returns: np.array of index of selected features
+
+        """
+        assert max_p <= x.shape[1]
         findex = np.array(np.arange(0, x.shape[1]))
-        find_sel = self.select(x, y, options)
+        find_sel = self.sis.select(x, y, options)
+        if len(find_sel) >= max_p:
+            return find_sel[:max_p]
         new_findex = np.array(list(set(findex) - set(find_sel)))
-        new_y = self.compute_residual(x, y)
+        new_y = self.sis.compute_residual(x, y)
         new_x = x[:, new_findex]
-        while len(find_sel) < d:
-            find_sel_new = self.select(new_x, new_y, options)
+        while len(find_sel) < max_p:
+            find_sel_new: List[int] = []
+            try:
+                find_sel_new = self.sis.run(new_x, new_y, options)
+            except ValueError:
+                while len(find_sel_new) == 0:
+                    self.sis.update_gamma(step)
+                    find_sel_new = self.sis.run(new_x, new_y)
             find_sel = np.append(find_sel, new_findex[find_sel_new])
             new_findex = np.array(list(set(findex) - set(find_sel)))
-            new_y = self.compute_residual(new_x, new_y)
+            new_y = self.sis.compute_residual(new_x, new_y)
             new_x = x[:, new_findex]
         return find_sel

@@ -384,9 +384,9 @@ class SCAD(PenalizedLeastSquares):
         """
         beta_abs = np.abs(beta)
         penalty = self.lambd * beta_abs * (beta_abs <= self.lambd) + \
-                  - (beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2) / (2 * (self.a - 1)) * \
-                  (beta_abs > self.lambd) * (beta_abs <= self.a * self.lambd) + \
-                  (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
+            - (beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2) / (2 * (self.a - 1)) * \
+            (beta_abs > self.lambd) * (beta_abs <= self.a * self.lambd) + \
+            (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
         return np.sum(penalty).item()
 
     def _penalty_jac(self, x, y, beta):

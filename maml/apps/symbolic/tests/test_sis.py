@@ -4,7 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from maml.apps.symbolic import SIS, L0BrutalForce
+from maml.apps.symbolic import SIS, ISIS, L0BrutalForce
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,12 +22,20 @@ class TestSIS(unittest.TestCase):
         sis = SIS(gamma=0.5, selector=L0BrutalForce(1e-4))
         selected = sis.run(self.x.values, self.y)
         np.testing.assert_almost_equal(selected, [12, 10, 9])
+        sis.set_gamma(0.1)
+        self.assertEqual(sis.gamma, 0.1)
+        sis.update_gamma(step=0.5)
+        self.assertAlmostEqual(sis.gamma, 0.15)
 
     def test_isis(self):
-        sis = SIS(gamma=0.5, selector=L0BrutalForce(1e-4))
-        selected = sis.isis(self.x.values, self.y, d=12)
-        np.testing.assert_equal(selected, [10, 11, 12, 0, 1, 2, 3, 4, 5, 8, 9, 6])
+        isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)))
+        selected = isis.run(self.x.values, self.y, max_p=10)
+        np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
 
+        isis = ISIS(SIS(gamma=0.1, selector=L0BrutalForce(1e-4)))
+        selected = isis.run(self.x.values, self.y, max_p=10)
+        self.assertEqual(isis.sis.gamma, 0.3375)
+        np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
 
 if __name__ == "__main__":
     unittest.main()
