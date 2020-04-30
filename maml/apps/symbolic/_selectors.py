@@ -1,6 +1,8 @@
 """
 Selectors
 """
+import inspect
+from collections import defaultdict
 from itertools import combinations
 from typing import List, Optional, Union, Dict, Callable
 
@@ -142,6 +144,74 @@ class BaseSelector:
         Returns: residual vector
         """
         return y - self.predict(x)
+
+    @classmethod
+    def _get_param_names(cls):
+        init = getattr(cls.__init__, 'deprecated_original', cls.__init__)
+        if init is object.__init__:
+            return []
+        init_signature = inspect.signature(init)
+        parameters = [p for p in init_signature.parameters.values()
+                      if p.name != 'self' and p.kind != p.VAR_KEYWORD]
+        for p in parameters:
+            if p.kind == p.VAR_KEYWORD:
+                raise RuntimeError("scikit-learn estimators should always "
+                                   "specify their parameters in the signature"
+                                   " of their __init__ (no varargs)."
+                                   " %s with constructor %s doesn't "
+                                   " follow this convention."
+                                   % (cls, init_signature))
+        return sorted([p.name for p in parameters])
+
+    def get_params(self):
+        """
+        Get params for this selector
+
+        Returns: mapping of string to any
+                parameter names mapped to their values
+
+        """
+        out = dict()
+        for key in self._get_param_names():
+            value = getattr(self, key, None)
+            out[key] = value
+        return out
+
+    def set_params(self, **params):
+        """
+        Set the parameters of this selector
+        Args:
+            **params: dict
+            Selector parametrs
+
+        Returns:
+            self: selector instance
+
+        """
+        if not params:
+            # Simple optimization to gain speed (inspect is slow)
+            return self
+        valid_params = self.get_params()
+
+        nested_params = defaultdict(dict)  # grouped by prefix
+        for key, value in params.items():
+            key, delim, sub_key = key.partition('__')
+            if key not in valid_params:
+                raise ValueError('Invalid parameter %s for selector %s. '
+                                 'Check the list of available parameters '
+                                 'with `estimator.get_params().keys()`.' %
+                                 (key, self))
+
+            if delim:
+                nested_params[key][sub_key] = value
+            else:
+                setattr(self, key, value)
+                valid_params[key] = value
+
+        for key, sub_params in nested_params.items():
+            valid_params[key].set_params(**sub_params)
+
+        return self
 
 
 class DantzigSelector(BaseSelector):
@@ -314,9 +384,9 @@ class SCAD(PenalizedLeastSquares):
         """
         beta_abs = np.abs(beta)
         penalty = self.lambd * beta_abs * (beta_abs <= self.lambd) + \
-            - (beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2) / (2 * (self.a - 1)) * \
-            (beta_abs > self.lambd) * (beta_abs <= self.a * self.lambd) + \
-            (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
+                  - (beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2) / (2 * (self.a - 1)) * \
+                  (beta_abs > self.lambd) * (beta_abs <= self.a * self.lambd) + \
+                  (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
         return np.sum(penalty).item()
 
     def _penalty_jac(self, x, y, beta):
