@@ -158,13 +158,13 @@ class ISIS:
         self.sis = sis
         self.selector = sis.selector
         self.l0_regulate = l0_regulate
-        self.coeff = []
-        self.find_sel = []
+        self.coeff = []  # type: ignore
+        self.find_sel = []  # type: ignore
 
     def run(self, x, y, max_p: int = 10,
             metric: str = 'neg_mean_absolute_error',
             options: Optional[Dict] = None,
-            step: float = 0.5) -> (np.array, List[float]):
+            step: float = 0.5):
         """
         Run the ISIS
         Args:
