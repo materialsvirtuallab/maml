@@ -11,7 +11,6 @@ import shutil
 import itertools
 import subprocess
 from collections import OrderedDict
-import ruamel.yaml as yaml
 
 
 import numpy as np
