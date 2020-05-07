@@ -459,39 +459,31 @@ class GAPotential(Potential):
         Initialize potentials with parameters file.
 
         ARgs:
-            filename (str): The file storing parameters of potentials.
+            filename (str): The file storing parameters of potentials,
+                filename should ends with ".xml".
 
         Returns:
             GAPotential.
         """
-        if filename.endswith('.yaml'):
-            with open(filename) as f:
-                parameters = yaml.load(f)
-            gap = GAPotential(param=parameters)
-            gap.elements = sorted(parameters.get('element_param').keys(),
-                                  key=lambda x: Element(x))
-            return gap
+        def get_xml(xml_file):
+            tree = ET.parse(xml_file)
+            root = tree.getroot()
+            potential_label = root.tag
+            element_param = {}
 
-        if filename.endswith('.xml'):
-            def get_xml(xml_file):
-                tree = ET.parse(xml_file)
-                root = tree.getroot()
-                potential_label = root.tag
-                element_param = {}
+            for gpcoordinates in list(root.iter('gpCoordinates')):
+                gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
+                gp_descriptor_text = gp_descriptor.findtext('.')
+                Z_pattern = re.compile(' Z=(.*?) ', re.S)
+                element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
+                param = np.loadtxt(gpcoordinates.get('sparseX_filename'))
+                element_param[element] = param.tolist()
 
-                for gpcoordinates in list(root.iter('gpCoordinates')):
-                    gp_descriptor = list(gpcoordinates.iter('descriptor'))[0]
-                    gp_descriptor_text = gp_descriptor.findtext('.')
-                    Z_pattern = re.compile(' Z=(.*?) ', re.S)
-                    element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
-                    param = np.loadtxt(gpcoordinates.get('sparseX_filename'))
-                    element_param[element] = param.tolist()
+            return tree, element_param, potential_label
 
-                return tree, element_param, potential_label
-
-            tree, element_param, potential_label = get_xml(filename)
-            parameters = dict(xml=tree, element_param=element_param,
-                              potential_label=potential_label)
-            gap = GAPotential(param=parameters)
-            gap.elements = sorted(element_param.keys(), key=lambda x: Element(x))
-            return gap
+        tree, element_param, potential_label = get_xml(filename)
+        parameters = dict(xml=tree, element_param=element_param,
+                          potential_label=potential_label)
+        gap = GAPotential(param=parameters)
+        gap.elements = sorted(element_param.keys(), key=lambda x: Element(x))
+        return gap

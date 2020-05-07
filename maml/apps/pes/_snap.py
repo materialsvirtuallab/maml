@@ -148,19 +148,6 @@ class SNAPotential(Potential):
         ff_settings = [pair_style, pair_coeff]
         return ff_settings
 
-    def save(self, filename):
-        """
-        Save parameters of the potentials.
-
-        Args:
-            filename (str): The file to store parameters of potentials.
-
-        Returns:
-            (str)
-        """
-        self.model.save(model_fname=filename)
-        return filename
-
     @staticmethod
     def from_config(param_file, coeff_file, **kwargs):
         """

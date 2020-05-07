@@ -596,47 +596,28 @@ class MTPotential(Potential):
         energy, forces, stress = calculator.calculate(structures=[structure])[0]
         return energy, forces, stress
 
-    def save(self, filename='param.yaml'):
-        """
-        Save parameters of the potentials.
-
-        Args:
-            filename (str): The file to store parameters of potentials.
-
-        Returns:
-            (str)
-        """
-        with open(filename, 'w') as f:
-            yaml.dump(self.param, f)
-
-        return filename
-
     @staticmethod
     def from_config(filename, elements):
         """
         Initialize potentials with parameters file.
 
         Args:
-            filename (str): The file storing parameters of potentials.
+            filename (str): The file storing parameters of potentials, filename should
+                ends with ".mtp".
             elements (list): The list of elements.
 
         Returns:
             MTPotential
         """
-        if filename.endswith('.yaml'):
-            with open(filename) as f:
-                param = yaml.load(f)
-
-        if filename.endswith('.mtp'):
-            param = OrderedDict()
-            with open(filename, 'r') as f:
-                lines = f.readlines()
-            param['safe'] = [line.rstrip() for line in lines[:-2]]
-            for line in lines[-2:]:
-                key = line.rstrip().split(' = ')[0]
-                value = json.loads(
-                    line.rstrip().split(' = ')[1].replace('{', '[').replace('}', ']'))
-                param[key] = value
+        param = OrderedDict()
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+        param['safe'] = [line.rstrip() for line in lines[:-2]]
+        for line in lines[-2:]:
+            key = line.rstrip().split(' = ')[0]
+            value = json.loads(
+                line.rstrip().split(' = ')[1].replace('{', '[').replace('}', ']'))
+            param[key] = value
 
         mtp = MTPotential(param=param)
         mtp.elements = elements
