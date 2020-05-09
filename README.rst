@@ -9,7 +9,9 @@
     <img src="./resources/logo_horizontal.png"/ width="300px">
 
 
-maml (MAterials Machine Learning) is a Python package for Materials Machine Learning.
+maml (MAterials Machine Learning) is a Python package that aims to provide useful high-level interfaces that make ML for materials science as easy as possible. 
+
+The goal of maml is not to duplicate functionality already available in other packages. maml relies on well-established packages such as scikit-learn and tensorflow for implementations of ML algorithms, as well as other materials science packages such as `pymatgen <http://pymatgen.org>`_ and `matminer <http://hackingmaterials.lbl.gov/matminer/>`_ for crystal/molecule manipulation and feature generation.
 
 Features
 --------
