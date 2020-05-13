@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.base import TransformerMixin
 import tensorflow as tf
 
-from maml import ModelWithKeras, SequentialDescriber
+from maml import KerasModel, SequentialDescriber
 from maml import BaseDescriber
 
 
@@ -46,7 +46,7 @@ def construct_mlp(hidden_layer_sizes: List[int],
     return model
 
 
-class MultiLayerPerceptron(ModelWithKeras):
+class MultiLayerPerceptron(KerasModel):
     """
     Multi-layer perceptron model with keras model as predictor
     """

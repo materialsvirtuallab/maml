@@ -5,22 +5,10 @@ import re
 
 from setuptools import setup, find_packages
 
-with open('maml/__init__.py', encoding='utf-8') as fd:
-    try:
-        lines = ''
-        for item in fd.readlines():
-            item = item
-            lines += item + '\n'
-    except Exception as exc:
-        raise Exception('Caught exception {}'.format(exc))
-
-
-version = re.search('__version__ = "(.*)"', lines).group(1)
-
 setup(
     name="maml",
     packages=find_packages(),
-    version=version,
+    version='0.0.2',
     install_requires=["numpy", "scipy", "monty",
                       "scikit-learn", "pandas", "pymatgen", "tqdm"],
     extras_requires={"maml.apps.symbolic._selectors_cvxpy": ["cvxpy"],

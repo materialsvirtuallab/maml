@@ -11,7 +11,7 @@ from pymatgen.util.testing import PymatgenTest
 from sklearn.linear_model import LinearRegression
 from sklearn.gaussian_process import GaussianProcessRegressor
 
-from maml import ModelWithSklearn, ModelWithKeras
+from maml import SKLModel, KerasModel
 from maml.describer._structure import DistinctSiteProperty
 from maml.model._neural_network import MultiLayerPerceptron
 
@@ -52,7 +52,7 @@ class NeuralNetTest(PymatgenTest):
 
         with ScratchDir('.'):
             self.nn.save('test.h5')
-            nn3 = ModelWithKeras.from_file('test.h5')
+            nn3 = KerasModel.from_file('test.h5')
         self.assertEqual(self.nn.predict_objs([self.na2o])[0][0],
                          nn3.predict_objs([self.na2o])[0][0])
 
@@ -67,7 +67,7 @@ class LinearModelTest(unittest.TestCase):
 
     def setUp(self):
 
-        self.lm = ModelWithSklearn(model=LinearRegression())
+        self.lm = SKLModel(model=LinearRegression())
         self.test_dir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -93,11 +93,11 @@ class LinearModelTest(unittest.TestCase):
 
             np.testing.assert_almost_equal(ori, loaded)
 
-            lm2 = ModelWithSklearn.from_file('test_lm.save')
+            lm2 = SKLModel.from_file('test_lm.save')
             np.testing.assert_almost_equal(lm2.model.coef_, ori)
 
     def test_model_none(self):
-        m = ModelWithSklearn(model=LinearRegression())
+        m = SKLModel(model=LinearRegression())
         x = np.array([[1, 2], [2, 1], [1, 1]])
         y = np.array([[3], [3], [2]])
         m.train(x, y)
@@ -113,7 +113,7 @@ class GaussianProcessTest(unittest.TestCase):
     def setUp(self):
         self.x_train = np.atleast_2d([1., 3., 5., 6., 7., 8.]).T
         self.y_train = (self.x_train * np.sin(self.x_train)).ravel()
-        self.gpr = ModelWithSklearn(model=GaussianProcessRegressor())
+        self.gpr = SKLModel(model=GaussianProcessRegressor())
 
     @classmethod
     def tearDownClass(cls):

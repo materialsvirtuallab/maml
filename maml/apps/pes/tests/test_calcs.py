@@ -16,7 +16,7 @@ from monty.os.path import which
 from pymatgen import Structure, Lattice
 from sklearn.linear_model import LinearRegression
 
-from maml import ModelWithSklearn
+from maml import SKLModel
 from maml.apps.pes import SNAPotential
 from maml.describer import BispectrumCoefficients
 from maml.apps.pes import SpectralNeighborAnalysis, EnergyForceStress, \
@@ -148,7 +148,7 @@ class EnergyForceStressTest(unittest.TestCase):
                                             element_profile=element_profile,
                                             quadratic=False,
                                             pot_fit=True)
-        model1 = ModelWithSklearn(describer=describer1, model=LinearRegression())
+        model1 = SKLModel(describer=describer1, model=LinearRegression())
         model1.model.coef_ = coeff
         model1.model.intercept_ = intercept
         snap1 = SNAPotential(model=model1)
@@ -158,7 +158,7 @@ class EnergyForceStressTest(unittest.TestCase):
                                             element_profile=element_profile,
                                             quadratic=True,
                                             pot_fit=True)
-        model2 = ModelWithSklearn(describer=describer2, model=LinearRegression())
+        model2 = SKLModel(describer=describer2, model=LinearRegression())
         model2.model.coef_ = coeff
         model2.model.intercept_ = intercept
         snap2 = SNAPotential(model=model2)
@@ -195,7 +195,7 @@ class ElasticConstantTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = ModelWithSklearn(describer=describer, model=LinearRegression())
+        model = SKLModel(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
@@ -229,7 +229,7 @@ class LatticeConstantTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = ModelWithSklearn(describer=describer, model=LinearRegression())
+        model = SKLModel(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
@@ -265,7 +265,7 @@ class NudgedElasticBandTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = ModelWithSklearn(describer=describer, model=LinearRegression())
+        model = SKLModel(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
@@ -304,7 +304,7 @@ class DefectFormationTest(unittest.TestCase):
         describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
-        model = ModelWithSklearn(describer=describer, model=LinearRegression())
+        model = SKLModel(describer=describer, model=LinearRegression())
         model.model.coef_ = coeff
         model.model.intercept_ = intercept
         snap = SNAPotential(model=model)
