@@ -1,5 +1,5 @@
-maml.base package
-=================
+maml.describer.rdf package
+==========================
 
 Submodules
 ----------
@@ -11,7 +11,7 @@ Submodules
 Module contents
 ---------------
 
-.. automodule:: maml.base
+.. automodule:: maml.describer.rdf
    :members:
    :undoc-members:
    :show-inheritance:

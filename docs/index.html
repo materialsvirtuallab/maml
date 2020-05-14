@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>maml &#8212; maml 0.01 documentation</title>
+    <title>Features &#8212; maml 0.01 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -30,32 +30,64 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="maml">
-<h1>maml<a class="headerlink" href="#maml" title="Permalink to this headline">¶</a></h1>
-<p>maml (MAterials Machine Learning) is a Python for Materials Machine Learning.</p>
+  <a class="reference external image-reference" href="https://circleci.com/gh/materialsvirtuallab/maml"><img alt="https://circleci.com/gh/materialsvirtuallab/maml.svg?style=shield" src="https://circleci.com/gh/materialsvirtuallab/maml.svg?style=shield" /></a>
+<a class="reference external image-reference" href="https://coveralls.io/github/materialsvirtuallab/maml?branch=master"><img alt="https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&amp;service=github" src="https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&amp;service=github" /></a>
+<br/>
+<img src="./resources/logo_horizontal.png"/ width="300px"><p>maml (MAterials Machine Learning) is a Python package that aims to provide useful high-level interfaces that make ML for materials science as easy as possible.</p>
+<p>The goal of maml is not to duplicate functionality already available in other packages. maml relies on well-established packages such as scikit-learn and tensorflow for implementations of ML algorithms, as well as other materials science packages such as <a class="reference external" href="http://pymatgen.org">pymatgen</a> and <a class="reference external" href="http://hackingmaterials.lbl.gov/matminer/">matminer</a> for crystal/molecule manipulation and feature generation.</p>
 <div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
 <ol class="arabic simple">
-<li><p>Convert materials (crystals/molecules) into features.</p></li>
-<li><p>Use ML to learn relationship between features and targets.</p></li>
-<li><p>Applications: modelling the potential energy surface, constructing surrogate models for property prediction.</p></li>
+<li><p>Convert materials (crystals and molecules) into features. In addition to common compositional, site and structural features, we provide the following fine-grain local environment features.</p></li>
 </ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>Bispectrum coefficients</p></li>
+<li><p>Behler Parrinello symmetry functions</p></li>
+<li><p>Smooth Overlap of Atom Position (SOAP)</p></li>
+<li><p>Graph network features (composition, site and structure)</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Use ML to learn relationship between features and targets. Currently, the <cite>maml</cite> supports <cite>sklearn</cite> and <cite>keras</cite> models.</p></li>
+<li><p>Applications:</p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p><cite>pes</cite> for modelling the potential energy surface, constructing surrogate models for property prediction.</p></li>
+</ol>
+<blockquote>
+<div><ol class="lowerroman simple">
+<li><p>Neural Network Potential (NNP)</p></li>
+<li><p>Gaussian approximation potential (GAP) with SOAP features</p></li>
+<li><p>Spectral neighbor analysis potential (SNAP)</p></li>
+<li><p>Moment Tensor Potential (MTP)</p></li>
+</ol>
+</div></blockquote>
+<ol class="loweralpha simple" start="2">
+<li><p><cite>rfxas</cite> for random forest models in predicting atomic local environments from X-ray absorption spectroscopy.</p></li>
+</ol>
+</div></blockquote>
 </div>
 <div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>Pip install via PyPI:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">maml</span>
 </pre></div>
 </div>
+<p>To run the potential energy surface (pes), lammps installation is required you can install from source or from <cite>conda</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span><span class="o">/</span><span class="n">label</span><span class="o">/</span><span class="n">cf202003</span> <span class="n">lammps</span>
+</pre></div>
+</div>
+<p>The SNAP potential comes with this lammps installation. The GAP package for GAP and MLIP package for MTP are needed to run the corresponding potentials. For fitting NNP potential, the <cite>n2p2</cite> package is needed.</p>
 </div>
 <div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>Many Jupyter notebooks are available on usage. See <a class="reference external" href="/notebooks">notebooks</a>.</p>
 </div>
 <div class="section" id="api-documentation">
-<h2>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h2>
+<h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
 <p>See <a class="reference external" href="https://guide.materialsvirtuallab.org/maml/modules.html">API docs</a>.</p>
-</div>
 </div>
 
 
@@ -109,7 +141,7 @@
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

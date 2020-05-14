@@ -1,5 +1,5 @@
-maml.base package
-=================
+maml.apps.symbolic package
+==========================
 
 Submodules
 ----------
@@ -11,7 +11,7 @@ Submodules
 Module contents
 ---------------
 
-.. automodule:: maml.base
+.. automodule:: maml.apps.symbolic
    :members:
    :undoc-members:
    :show-inheritance:

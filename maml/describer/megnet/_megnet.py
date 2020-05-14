@@ -21,6 +21,13 @@ class MEGNetSite(BaseDescriber):
     Use megnet pre-trained models as featurizer to get
     atomic features
 
+    Reference:
+    @article{chen2019graph,title={Graph networks as a universal machine
+                learning framework for molecules and crystals},
+            author={Chen, Chi and Ye, Weike and Zuo, Yunxing and
+                Zheng, Chen and Ong, Shyue Ping},
+            journal={Chemistry of Materials}, volume={31}, number={9},
+            pages={3564--3572}, year={2019},publisher={ACS Publications}}
     """
     AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
 
@@ -64,20 +71,6 @@ class MEGNetSite(BaseDescriber):
         features = self.describer_model.get_atom_features(obj, level=self.level)
         return pd.DataFrame(features)
 
-    def get_citations(self):
-        """
-        Get citations
-
-        Returns: list of string for the citation
-
-        """
-        return ["@article{chen2019graph,title={Graph networks as a universal machine "
-                "learning framework for molecules and crystals}, "
-                "author={Chen, Chi and Ye, Weike and Zuo, Yunxing and "
-                "Zheng, Chen and Ong, Shyue Ping}, "
-                "journal={Chemistry of Materials}, volume={31}, number={9}, "
-                "pages={3564--3572}, year={2019},publisher={ACS Publications}}"]
-
 
 class MEGNetStructure(BaseDescriber):
     """
@@ -91,6 +84,13 @@ class MEGNetStructure(BaseDescriber):
         'site_readout': Use the atomic features at the readout stage
         'final': Use the concatenated atom, bond and global features
 
+    Reference:
+    @article{chen2019graph,title={Graph networks as a universal machine
+                learning framework for molecules and crystals},
+            author={Chen, Chi and Ye, Weike and Zuo, Yunxing and
+                Zheng, Chen and Ong, Shyue Ping},
+            journal={Chemistry of Materials}, volume={31}, number={9},
+            pages={3564--3572}, year={2019},publisher={ACS Publications}}
     """
     AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
 
@@ -157,17 +157,3 @@ class MEGNetStructure(BaseDescriber):
 
         elif self.mode == 'final':
             return pd.DataFrame(self.describer_model.get_structure_features(obj))
-
-    def get_citations(self):
-        """
-        Get citations
-
-        Returns: list of string for the citation
-
-        """
-        return ["@article{chen2019graph,title={Graph networks as a universal machine "
-                "learning framework for molecules and crystals}, "
-                "author={Chen, Chi and Ye, Weike and Zuo, Yunxing and "
-                "Zheng, Chen and Ong, Shyue Ping}, "
-                "journal={Chemistry of Materials}, volume={31}, number={9}, "
-                "pages={3564--3572}, year={2019},publisher={ACS Publications}}"]

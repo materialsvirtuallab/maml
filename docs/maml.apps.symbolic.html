@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.apps.symbolic package &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="maml-apps-symbolic-package">
+<h1>maml.apps.symbolic package<a class="headerlink" href="#maml-apps-symbolic-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="module-maml.apps.symbolic">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.apps.symbolic" title="Permalink to this headline">¶</a></h2>
+<p>Symbolic learning</p>
+<dl class="py attribute">
+<dt id="maml.apps.symbolic.DantzigSelector">
+<code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">DantzigSelector</code><a class="headerlink" href="#maml.apps.symbolic.DantzigSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.symbolic._selectors_cvxpy.DantzigSelectorCP</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="maml.apps.symbolic.AdaptiveLasso">
+<code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">AdaptiveLasso</code><a class="headerlink" href="#maml.apps.symbolic.AdaptiveLasso" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.symbolic._selectors_cvxpy.AdaptiveLassoCP</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.symbolic.SCAD">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">SCAD</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lambd</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">a</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">3.7</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SCAD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.symbolic._selectors.PenalizedLeastSquares</span></code></p>
+<p>Smoothly clipped absolute deviation (SCAD),
+equation 12 and 13 in <a class="reference external" href="https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf">https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf</a></p>
+<dl class="py method">
+<dt id="maml.apps.symbolic.SCAD._penalty_jac">
+<code class="sig-name descname">_penalty_jac</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">beta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SCAD._penalty_jac" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.SCAD.penalty">
+<code class="sig-name descname">penalty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>numpy.ndarray<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>numpy.ndarray<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.apps.symbolic.SCAD.penalty" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Calculate the SCAD penalty from input x, output y</dt><dd><p>and coefficient beta</p>
+</dd>
+<dt>Args:</dt><dd><p>beta (np.ndarray): N coefficients
+x (np.ndarray): MxN input data array
+y (np.ndarray): M output targets</p>
+</dd>
+</dl>
+<p>Returns: penalty value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="maml.apps.symbolic.Lasso">
+<code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">Lasso</code><a class="headerlink" href="#maml.apps.symbolic.Lasso" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.symbolic._selectors_cvxpy.LassoCP</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.symbolic.SIS">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">SIS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">selector</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.apps.symbolic._selectors.BaseSelector<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sure independence screening method.
+The method consists of two steps:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Screen</p></li>
+<li><p>Select</p></li>
+</ol>
+</div></blockquote>
+<dl class="py method">
+<dt id="maml.apps.symbolic.SIS.compute_residual">
+<code class="sig-name descname">compute_residual</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS.compute_residual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute residual
+Args:</p>
+<blockquote>
+<div><p>x (np.ndarray): input array
+y (np.ndarray): target array</p>
+</div></blockquote>
+<p>Returns: residual vector</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.SIS.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">select_options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the SIS with selector
+Args:</p>
+<blockquote>
+<div><p>x (np.ndarray): MxN input data array
+y (np.ndarray): M output targets
+select_options (dict): options in the optimizations provided</p>
+<blockquote>
+<div><p>to scipy.optimize.minimize. If the selector is using cvxpy
+optimization package, this option is fed into cp.Problem.solve</p>
+</div></blockquote>
+</div></blockquote>
+<p>Returns: selected feature indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.SIS.screen">
+<code class="sig-name descname">screen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS.screen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple screening method by comparing the correlation between features
+and the target</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (np.ndarray): input array
+y (np.ndarray): target array</p>
+</dd>
+</dl>
+<p>Returns: top indices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.SIS.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select features using selectors
+Args:</p>
+<blockquote>
+<div><p>x (np.ndarray): input array
+y (np.ndarray): target array
+options (dict): options for the optimization</p>
+</div></blockquote>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.SIS.set_gamma">
+<code class="sig-name descname">set_gamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS.set_gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set gamma</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>gamma(float): new gamma value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.SIS.set_selector">
+<code class="sig-name descname">set_selector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">selector</span><span class="p">:</span> <span class="n">maml.apps.symbolic._selectors.BaseSelector</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS.set_selector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set new selector
+Args:</p>
+<blockquote>
+<div><p>selector (BaseSelector): a feature selector</p>
+</div></blockquote>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.SIS.update_gamma">
+<code class="sig-name descname">update_gamma</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">step</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.SIS.update_gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the sis object so that sis.select
+return at least one feature</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>step(float): ratio to update the parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.symbolic.ISIS">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">ISIS</code><span class="sig-paren">(</span><em class="sig-param">sis: maml.apps.symbolic._sis.SIS = &lt;maml.apps.symbolic._sis.SIS object&gt;</em>, <em class="sig-param">l0_regulate: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.ISIS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Iterative SIS</p>
+<dl class="py method">
+<dt id="maml.apps.symbolic.ISIS._best_combination">
+<code class="sig-name descname">_best_combination</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">find_sel</span></em>, <em class="sig-param"><span class="n">find_sel_new</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'neg_mean_absolute_error'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.ISIS._best_combination" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.ISIS._eval">
+<code class="sig-name descname">_eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">coeff</span></em>, <em class="sig-param"><span class="n">metric</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.ISIS._eval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.ISIS._get_coeff">
+<code class="sig-name descname">_get_coeff</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.ISIS._get_coeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.ISIS.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'neg_mean_absolute_error'</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.apps.symbolic.ISIS.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the linear model using x, and y test data
+Args:</p>
+<blockquote>
+<div><p>x (np.ndarray): MxN input data array
+y (np.ndarray): M output targets
+metric (str): scorer function, used with</p>
+<blockquote>
+<div><p>sklearn.metrics.get_scorer</p>
+</div></blockquote>
+</div></blockquote>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.ISIS.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">max_p</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'neg_mean_absolute_error'</span></em>, <em class="sig-param"><span class="n">options</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">step</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.ISIS.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the ISIS
+Args:</p>
+<blockquote>
+<div><p>x:
+y:
+max_p(int): Number of feature desired
+metric (str): scorer function, used with</p>
+<blockquote>
+<div><p>sklearn.metrics.get_scorer</p>
+</div></blockquote>
+<p>options:
+step(float): step to update gamma with</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>find_sel(np.array): np.array of index of selected features
+coeff(np.array): np.array of coeff of selected features</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.symbolic.L0BrutalForce">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">L0BrutalForce</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lambd</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.L0BrutalForce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.symbolic._selectors.BaseSelector</span></code></p>
+<p>Brutal force combinatorial screening of features.
+This method takes all possible combinations of features
+and optimize the following loss function</p>
+<blockquote>
+<div><p>1/2 * mean((y-x &#64; beta)**2) + lambd * <a href="#id1"><span class="problematic" id="id2">|</span></a>beta|_0</p>
+</div></blockquote>
+<dl class="py method">
+<dt id="maml.apps.symbolic.L0BrutalForce.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">options</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.apps.symbolic.L0BrutalForce.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>L0 combinatorial optimization
+Args:</p>
+<blockquote>
+<div><p>x (np.ndarray): design matrix
+y (np.ndarray): target vector
+options:</p>
+</div></blockquote>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.symbolic.FeatureGenerator">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">FeatureGenerator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feature_df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">operators</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.FeatureGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>FeatureGenerator class for feature augmentation before selection</p>
+<dl class="py method">
+<dt id="maml.apps.symbolic.FeatureGenerator.augment">
+<code class="sig-name descname">augment</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.apps.symbolic.FeatureGenerator.augment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augment features
+Args:</p>
+<blockquote>
+<div><p>n(int): number of rounds of iteration</p>
+</div></blockquote>
+<p>Returns: augmented dataframe</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.symbolic.Operator">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.symbolic.</code><code class="sig-name descname">Operator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operation</span><span class="p">:</span> <span class="n">Callable[[…], Any]</span></em>, <em class="sig-param"><span class="n">rep</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">unary</span><span class="p">:</span> <span class="n">bool</span></em>, <em class="sig-param"><span class="n">commutative</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.Operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Operator class. Wrap math operators with more attributes including check
+is_unary, is_binary, and is_commutative, and generate name string
+for the output.</p>
+<dl class="py method">
+<dt id="maml.apps.symbolic.Operator.compute">
+<code class="sig-name descname">compute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i1</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">i2</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>numpy.ndarray<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.apps.symbolic.Operator.compute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the results
+Args:</p>
+<blockquote>
+<div><p>i1(np.ndarray): first input array
+i2(np.ndarray): second input array (for binary operators)</p>
+</div></blockquote>
+<p>Returns: array of computed results</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.Operator.from_str">
+<em class="property">classmethod </em><code class="sig-name descname">from_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">op_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.symbolic.Operator.from_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Operator from name of the operator
+Args:</p>
+<blockquote>
+<div><p>op_name(str): string representation of the operator,
+check Operator.support_op_rep for reference</p>
+</div></blockquote>
+<p>Returns: Operator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.Operator.gen_name">
+<code class="sig-name descname">gen_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f1</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">f2</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#maml.apps.symbolic.Operator.gen_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate string representation for output
+Args:</p>
+<blockquote>
+<div><p>f1(str): name of the first input array
+f2(str): name of the second input array</p>
+</div></blockquote>
+<p>Returns: name of the output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.Operator.is_binary">
+<em class="property">property </em><code class="sig-name descname">is_binary</code><a class="headerlink" href="#maml.apps.symbolic.Operator.is_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns: True if the operator takes two arguments else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.Operator.is_commutative">
+<em class="property">property </em><code class="sig-name descname">is_commutative</code><a class="headerlink" href="#maml.apps.symbolic.Operator.is_commutative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns: True if the operator is commutative else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.symbolic.Operator.is_unary">
+<em class="property">property </em><code class="sig-name descname">is_unary</code><a class="headerlink" href="#maml.apps.symbolic.Operator.is_unary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns: True if the operator takes one argument else False</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="maml.apps.symbolic.Operator.support_op_rep">
+<code class="sig-name descname">support_op_rep</code><em class="property"> = ['^2', '^3', 'sqrt', 'abssqrt', 'cbrt', 'exp', 'abs', 'log10', 'abslog10', '+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']</em><a class="headerlink" href="#maml.apps.symbolic.Operator.support_op_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.apps.symbolic.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

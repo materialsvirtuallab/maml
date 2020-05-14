@@ -23,10 +23,22 @@ __all__ = ['DistinctSiteProperty', 'MEGNetStructure', 'CoulombMatrix',
 
 
 class DistinctSiteProperty(BaseDescriber):
-    """
+    r"""
     Constructs a describer based on properties of distinct sites in a
     structure. For now, this assumes that there is only one type of species in
     a particular Wyckoff site.
+
+    Reference:
+    @article{ye2018deep,
+            title={Deep neural networks for accurate predictions of crystal stability},
+            author={Ye, Weike and Chen, Chi and Wang, Zhenbin and
+                Chu, Iek-Heng and Ong, Shyue Ping},
+            journal={Nature communications},
+            volume={9},
+            number={1},
+            pages={1--6},
+            year={2018},
+            publisher={Nature Publishing Group}}
     """
     # todo: generalize to multiple sites with the same Wyckoff.
     supported_properties = ["mendeleev_no", "electrical_resistivity",
@@ -96,26 +108,20 @@ class DistinctSiteProperty(BaseDescriber):
                 names.append("%s-%s" % (w, p))
         return pd.DataFrame([data], columns=names)
 
-    def get_citations(self) -> List[str]:
-        """
-        Get distinct site property citations
-        """
-        return ["@article{ye2018deep,"
-                "title={Deep neural networks for accurate predictions of crystal stability},"
-                "author={Ye, Weike and Chen, Chi and Wang, Zhenbin and "
-                "Chu, Iek-Heng and Ong, Shyue Ping},"
-                "journal={Nature communications},"
-                "volume={9},"
-                "number={1},"
-                "pages={1--6},"
-                "year={2018},"
-                "publisher={Nature Publishing Group}}"]
-
 
 class CoulombMatrix(BaseDescriber):
-    """
-    Coulomb Matrix to decribe structure
+    r"""
+    Coulomb Matrix to describe structure
 
+    Reference:
+    @article{rupp2012fast,
+            title={Fast and accurate modeling of molecular
+                atomization energies with machine learning},
+            author={Rupp, Matthias and Tkatchenko, Alexandre and M{\"u}ller,
+                Klaus-Robert and Von Lilienfeld, O Anatole},
+            journal={Physical review letters}, volume={108},
+            number={5}, pages={058301},
+            year={2012}, publisher={APS}}
     """
     def __init__(self,
                  random_seed: int = None,
@@ -192,23 +198,22 @@ class CoulombMatrix(BaseDescriber):
             c = c.ravel()
         return pd.DataFrame(c)
 
-    def get_citations(self) -> List[str]:
-        """
-        Citations for CoulombMatrix
-        """
-        return ["@article{rupp2012fast, "
-                "title={Fast and accurate modeling of molecular "
-                "atomization energies with machine learning},"
-                "author={Rupp, Matthias and Tkatchenko, Alexandre and M{\"u}ller, "
-                "Klaus-Robert and Von Lilienfeld, O Anatole},"
-                "journal={Physical review letters}, volume={108}, "
-                "number={5}, pages={058301}, "
-                "year={2012}, publisher={APS}}"]
-
 
 class RandomizedCoulombMatrix(CoulombMatrix):
-    """
+    r"""
     Randomized CoulombMatrix
+
+    Reference:
+    @article{montavon2013machine,
+            title={Machine learning of molecular electronic properties
+                in chemical compound space},
+            author={Montavon, Gr{\'e}goire and Rupp, Matthias and Gobre,
+                Vivekanand and Vazquez-Mayagoitia, Alvaro and Hansen, Katja
+                and Tkatchenko, Alexandre and M{\"u}ller, Klaus-Robert and
+                Von Lilienfeld, O Anatole},
+            journal={New Journal of Physics},
+            volume={15}, number={9},pages={095003},
+            year={2013},publisher={IOP Publishing}}
     """
     def __init__(self,
                  random_seed: Optional[int] = None,
@@ -260,25 +265,21 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         """
         return self.get_randomized_coulomb_mat(s)
 
-    def get_citations(self) -> List[str]:
-        """
-        citation for randomized coulomb matrix
-        """
-        return ["@article{montavon2013machine,"
-                "title={Machine learning of molecular electronic properties "
-                "in chemical compound space},"
-                "author={Montavon, Gr{\'e}goire and Rupp, Matthias and Gobre, "
-                "Vivekanand and Vazquez-Mayagoitia, Alvaro and Hansen, Katja "
-                "and Tkatchenko, Alexandre and M{\"u}ller, Klaus-Robert and "
-                "Von Lilienfeld, O Anatole},"
-                "journal={New Journal of Physics},"
-                "volume={15}, number={9},pages={095003},"
-                "year={2013},publisher={IOP Publishing}}"]
-
 
 class SortedCoulombMatrix(CoulombMatrix):
-    """
+    r"""
     Sorted CoulombMatrix
+
+    Reference:
+    @inproceedings{montavon2012learning,
+                title={Learning invariant representations
+                    of molecules for atomization energy prediction},
+                author={Montavon, Gr{\'e}goire and Hansen, Katja
+                    and Fazli, Siamac and Rupp, Matthias and Biegler,
+                    Franziska and Ziehe, Andreas and Tkatchenko, Alexandre
+                    and Lilienfeld, Anatole V and M{\"u}ller, Klaus-Robert},
+                booktitle={Advances in neural information processing systems},
+                pages={440--448}, year={2012}}
     """
     def __init__(self,
                  random_seed: Optional[int] = None,
@@ -320,24 +321,20 @@ class SortedCoulombMatrix(CoulombMatrix):
         """
         return self.get_sorted_coulomb_mat(s)
 
-    def get_citations(self) -> List[str]:
-        """
-        Sorted Coulomb matrix
-        """
-        return ["@inproceedings{montavon2012learning,"
-                "title={Learning invariant representations "
-                "of molecules for atomization energy prediction},"
-                "author={Montavon, Gr{\'e}goire and Hansen, Katja "
-                "and Fazli, Siamac and Rupp, Matthias and Biegler, "
-                "Franziska and Ziehe, Andreas and Tkatchenko, Alexandre "
-                "and Lilienfeld, Anatole V and M{\"u}ller, Klaus-Robert},"
-                "booktitle={Advances in neural information processing systems},"
-                "pages={440--448}, year={2012}}"]
-
 
 class CoulombEigenSpectrum(BaseDescriber):
-    """
+    r"""
     Get the Coulomb Eigen Spectrum describers
+
+    Reference:
+    @article{rupp2012fast,
+            title={Fast and accurate modeling of molecular
+                atomization energies with machine learning},
+            author={Rupp, Matthias and Tkatchenko, Alexandre and M{\"u}ller,
+                Klaus-Robert and Von Lilienfeld, O Anatole},
+            journal={Physical review letters}, volume={108},
+            number={5}, pages={058301},
+            year={2012}, publisher={APS}}
     """
     def __init__(self,
                  max_atoms: Optional[int] = None,
@@ -381,16 +378,3 @@ class CoulombEigenSpectrum(BaseDescriber):
                                    "size of current molecule")
             f = np.pad(f, (0, self.max_atoms - len(f)))
         return f
-
-    def get_citations(self) -> List[str]:
-        """
-        Citations for CoulombEigenSpectrum
-        """
-        return ["@article{rupp2012fast, "
-                "title={Fast and accurate modeling of molecular "
-                "atomization energies with machine learning},"
-                "author={Rupp, Matthias and Tkatchenko, Alexandre and M{\"u}ller, "
-                "Klaus-Robert and Von Lilienfeld, O Anatole},"
-                "journal={Physical review letters}, volume={108}, "
-                "number={5}, pages={058301}, "
-                "year={2012}, publisher={APS}}"]

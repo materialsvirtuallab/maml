@@ -1,17 +1,17 @@
-maml.database package
-=====================
+maml.describer.matminer package
+===============================
 
 Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 7
 
-   maml.database.db
 
 Module contents
 ---------------
 
-.. automodule:: maml.database
+.. automodule:: maml.describer.matminer
    :members:
    :undoc-members:
    :show-inheritance:

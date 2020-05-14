@@ -5,11 +5,11 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 7
 
    maml.apps
    maml.base
    maml.data
-   maml.database
    maml.describer
    maml.model
    maml.utils

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>maml.data package &#8212; maml 0.01 documentation</title>
@@ -32,17 +32,22 @@
             
   <div class="section" id="maml-data-package">
 <h1>maml.data package<a class="headerlink" href="#maml-data-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
 <div class="section" id="module-maml.data">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.data" title="Permalink to this headline">¶</a></h2>
 <p>Get data from various sources</p>
-<dl class="class">
+<dl class="py class">
 <dt id="maml.data.MaterialsProject">
-<em class="property">class </em><code class="sig-prename descclassname">maml.data.</code><code class="sig-name descname">MaterialsProject</code><span class="sig-paren">(</span><em class="sig-param">api_key: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.data.MaterialsProject" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.data.</code><code class="sig-name descname">MaterialsProject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.data.MaterialsProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._data.BaseDataSource</span></code></p>
 <p>Query the Materials Project for Data.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="maml.data.MaterialsProject.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">criteria: Union[str, Dict], properties: List[str]</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.data.MaterialsProject.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">criteria</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">properties</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.data.MaterialsProject.get" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Args:</dt><dd><p>criteria (str or dict): Criteria for query
 properties (list): Properties to be queried.</p>
@@ -54,14 +59,14 @@ properties (list): Properties to be queried.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="maml.data.URLSource">
-<em class="property">class </em><code class="sig-prename descclassname">maml.data.</code><code class="sig-name descname">URLSource</code><span class="sig-paren">(</span><em class="sig-param">fmt: str = 'csv'</em>, <em class="sig-param">read_kwargs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.data.URLSource" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.data.</code><code class="sig-name descname">URLSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fmt</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'csv'</span></em>, <em class="sig-param"><span class="n">read_kwargs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.data.URLSource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._data.BaseDataSource</span></code></p>
 <p>Load raw data from a URL, e.g., figshare.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="maml.data.URLSource.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">url: str</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.data.URLSource.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#maml.data.URLSource.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get url data source</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>url: URL to obtain raw data from.</p>
@@ -127,7 +132,7 @@ properties (list): Properties to be queried.</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>maml.apps.pes package &#8212; maml 0.01 documentation</title>
@@ -32,36 +32,30 @@
             
   <div class="section" id="maml-apps-pes-package">
 <h1>maml.apps.pes package<a class="headerlink" href="#maml-apps-pes-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="maml.apps.pes.lammps.html">maml.apps.pes.lammps package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="maml.apps.pes.lammps.html#module-maml.apps.pes.lammps">Module contents</a></li>
-</ul>
-</li>
-</ul>
 </div>
 </div>
 <div class="section" id="module-maml.apps.pes">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.apps.pes" title="Permalink to this headline">¶</a></h2>
 <p>This package contains PotentialMixin classes representing Interatomic Potentials.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="maml.apps.pes.Potential">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">Potential</code><span class="sig-paren">(</span><em class="sig-param">model: Any = None</em>, <em class="sig-param">describer: sklearn.base.TransformerMixin = None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.Potential" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">Potential</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">sklearn.base.TransformerMixin</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.Potential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.PotentialMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></p>
 <p>Potential model that can be used to fit struccture-[energy, force, stress]
 pairs</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="maml.apps.pes.GAPotential">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">GAPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">GAPotential</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">param</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements Smooth Overlap of Atomic Position potentials.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential._line_up">
-<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">energy</em>, <em class="sig-param">forces</em>, <em class="sig-param">virial_stress</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential._line_up" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em>, <em class="sig-param"><span class="n">energy</span></em>, <em class="sig-param"><span class="n">forces</span></em>, <em class="sig-param"><span class="n">virial_stress</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential._line_up" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert input structure, energy, forces, virial_stress to
 proper configuration format for MLIP usage.</p>
 <dl>
@@ -80,9 +74,9 @@ forces (list): The forces should have dimension</p>
 <p>Returns:</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_structures</em>, <em class="sig-param">test_energies</em>, <em class="sig-param">test_forces</em>, <em class="sig-param">test_stresses=None</em>, <em class="sig-param">predict_energies=True</em>, <em class="sig-param">predict_forces=True</em>, <em class="sig-param">predict_stress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_structures</span></em>, <em class="sig-param"><span class="n">test_energies</span></em>, <em class="sig-param"><span class="n">test_forces</span></em>, <em class="sig-param"><span class="n">test_stresses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predict_energies</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">predict_forces</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">predict_stress</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate energies, forces and stresses of structures with trained
 interatomic potentials.</p>
 <dl>
@@ -108,31 +102,34 @@ predict_stress (bool): Whether to predict virial stress of</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.from_config">
-<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.from_config" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.from_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize potentials with parameters file.</p>
 <dl class="simple">
-<dt>ARgs:</dt><dd><p>filename (str): The file storing parameters of potentials.</p>
+<dt>ARgs:</dt><dd><dl class="simple">
+<dt>filename (str): The file storing parameters of potentials,</dt><dd><p>filename should ends with “.xml”.</p>
+</dd>
+</dl>
 </dd>
 <dt>Returns:</dt><dd><p>GAPotential.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.GAPotential.pair_coeff">
 <code class="sig-name descname">pair_coeff</code><em class="property"> = 'pair_coeff        * * {} {} {}'</em><a class="headerlink" href="#maml.apps.pes.GAPotential.pair_coeff" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.GAPotential.pair_style">
 <code class="sig-name descname">pair_style</code><em class="property"> = 'pair_style        quip'</em><a class="headerlink" href="#maml.apps.pes.GAPotential.pair_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.predict_efs">
-<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict energy, forces and stresses of the structure.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
@@ -142,9 +139,9 @@ predict_stress (bool): Whether to predict virial stress of</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.read_cfgs">
-<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">predict=False</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">predict</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read the configuration file.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>filename (str): The configuration file to be read.</p>
@@ -152,9 +149,9 @@ predict_stress (bool): Whether to predict virial stress of</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">filename='param.yaml'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">'param.yaml'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save parameters of the potentials.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>filename (str): The file to store parameters of potentials.</p>
@@ -164,9 +161,9 @@ predict_stress (bool): Whether to predict virial stress of</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_structures, train_energies, train_forces, train_stresses=None, default_sigma=[0.0005, 0.1, 0.05, 0.01], use_energies=True, use_forces=True, use_stress=False, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_structures</span></em>, <em class="sig-param"><span class="n">train_energies</span></em>, <em class="sig-param"><span class="n">train_forces</span></em>, <em class="sig-param"><span class="n">train_stresses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_sigma</span><span class="o">=</span><span class="default_value">[0.0005, 0.1, 0.05, 0.01]</span></em>, <em class="sig-param"><span class="n">use_energies</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_forces</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_stress</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Training data with gaussian process regression.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><dl class="simple">
@@ -226,9 +223,9 @@ specified manually. Default to 0.0.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.write_cfgs">
-<code class="sig-name descname">write_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">cfg_pool</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.write_cfgs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_cfgs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">cfg_pool</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.write_cfgs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the formatted configuration file.</p>
 <dl>
 <dt>Args:</dt><dd><p>filename (str): The filename to be written.
@@ -240,9 +237,9 @@ cfg_pool (list): The configuration pool contains</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.GAPotential.write_param">
-<code class="sig-name descname">write_param</code><span class="sig-paren">(</span><em class="sig-param">xml_filename='gap.xml'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.write_param" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xml_filename</span><span class="o">=</span><span class="default_value">'gap.xml'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.GAPotential.write_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write xml file to perform lammps calculation.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>xml_filename (str): Filename to store xml formatted parameters.</p>
@@ -252,14 +249,14 @@ cfg_pool (list): The configuration pool contains</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="maml.apps.pes.MTPotential">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">MTPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">MTPotential</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">param</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements moment tensor potentials.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential._line_up">
-<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">energy</em>, <em class="sig-param">forces</em>, <em class="sig-param">virial_stress</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential._line_up" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em>, <em class="sig-param"><span class="n">energy</span></em>, <em class="sig-param"><span class="n">forces</span></em>, <em class="sig-param"><span class="n">virial_stress</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential._line_up" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert input structure, energy, forces, virial_stress to
 proper configuration format for mlip usage.</p>
 <dl>
@@ -274,9 +271,9 @@ virial_stress (list): stress should has 6 distinct</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_structures</em>, <em class="sig-param">test_energies</em>, <em class="sig-param">test_forces</em>, <em class="sig-param">test_stresses=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_structures</span></em>, <em class="sig-param"><span class="n">test_energies</span></em>, <em class="sig-param"><span class="n">test_forces</span></em>, <em class="sig-param"><span class="n">test_stresses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate energies, forces and stresses of structures with trained
 interatomic potentials.</p>
 <dl>
@@ -297,32 +294,35 @@ with each single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.from_config">
-<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">elements</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.from_config" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">elements</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.from_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize potentials with parameters file.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>filename (str): The file storing parameters of potentials.
-elements (list): The list of elements.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>filename (str): The file storing parameters of potentials, filename should</dt><dd><p>ends with “.mtp”.</p>
+</dd>
+</dl>
+<p>elements (list): The list of elements.</p>
 </dd>
 <dt>Returns:</dt><dd><p>MTPotential</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.MTPotential.pair_coeff">
 <code class="sig-name descname">pair_coeff</code><em class="property"> = 'pair_coeff        * *'</em><a class="headerlink" href="#maml.apps.pes.MTPotential.pair_coeff" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.MTPotential.pair_style">
 <code class="sig-name descname">pair_style</code><em class="property"> = 'pair_style        mlip {}'</em><a class="headerlink" href="#maml.apps.pes.MTPotential.pair_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.predict_efs">
-<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict energy, forces and stresses of the structure.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
@@ -332,30 +332,18 @@ elements (list): The list of elements.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.read_cfgs">
-<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Args:</dt><dd><p>filename (str): The configuration file to be read.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="maml.apps.pes.MTPotential.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">filename='param.yaml'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save parameters of the potentials.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>filename (str): The file to store parameters of potentials.</p>
-</dd>
-<dt>Returns:</dt><dd><p>(str)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_structures</em>, <em class="sig-param">train_energies</em>, <em class="sig-param">train_forces</em>, <em class="sig-param">train_stresses=None</em>, <em class="sig-param">unfitted_mtp=None</em>, <em class="sig-param">max_dist=5</em>, <em class="sig-param">radial_basis_size=8</em>, <em class="sig-param">max_iter=500</em>, <em class="sig-param">energy_weight=1</em>, <em class="sig-param">force_weight=0.01</em>, <em class="sig-param">stress_weight=0</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_structures</span></em>, <em class="sig-param"><span class="n">train_energies</span></em>, <em class="sig-param"><span class="n">train_forces</span></em>, <em class="sig-param"><span class="n">train_stresses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unfitted_mtp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_dist</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">radial_basis_size</span><span class="o">=</span><span class="default_value">8</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">energy_weight</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">force_weight</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">stress_weight</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Training data with moment tensor method.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
@@ -382,9 +370,9 @@ stress_weight (float): The weight of stresses.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.write_cfg">
-<code class="sig-name descname">write_cfg</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">cfg_pool</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.write_cfg" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_cfg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">cfg_pool</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.write_cfg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write configurations to file
 Args:</p>
 <blockquote>
@@ -394,9 +382,9 @@ cfg_pool (list): list of configurations</p>
 <p>Returns:</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.write_ini">
-<code class="sig-name descname">write_ini</code><span class="sig-paren">(</span><em class="sig-param">Abinitio=0</em>, <em class="sig-param">MLIP='MPT.mpt'</em>, <em class="sig-param">Driver=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.write_ini" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_ini</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Abinitio</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">MLIP</span><span class="o">=</span><span class="default_value">'MPT.mpt'</span></em>, <em class="sig-param"><span class="n">Driver</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.write_ini" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write initial file for mlip package.</p>
 <dl>
 <dt>Args:</dt><dd><p>Abinitio (int): Defines Ab-initio model. Default to 1.</p>
@@ -552,9 +540,9 @@ Default to None.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.MTPotential.write_param">
-<code class="sig-name descname">write_param</code><span class="sig-paren">(</span><em class="sig-param">fitted_mtp='fitted.mtp'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.write_param" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fitted_mtp</span><span class="o">=</span><span class="default_value">'fitted.mtp'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.MTPotential.write_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write fitted mtp parameter file to perform lammps calculation.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>fitted_mtp (str): Filename to store xml formatted parameters.</p>
@@ -564,14 +552,14 @@ Default to None.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="maml.apps.pes.SNAPotential">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">SNAPotential</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">SNAPotential</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements Spectral Neighbor Analysis Potential.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.SNAPotential.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_structures</em>, <em class="sig-param">test_energies</em>, <em class="sig-param">test_forces</em>, <em class="sig-param">test_stresses=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_structures</span></em>, <em class="sig-param"><span class="n">test_energies</span></em>, <em class="sig-param"><span class="n">test_forces</span></em>, <em class="sig-param"><span class="n">test_stresses</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate energies, forces and stresses of structures with trained
 machinea learning potentials.</p>
 <dl>
@@ -591,9 +579,9 @@ with each single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.SNAPotential.from_config">
-<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param">param_file</em>, <em class="sig-param">coeff_file</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.from_config" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">param_file</span></em>, <em class="sig-param"><span class="n">coeff_file</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.from_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize potentials with parameters file and coefficient file.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>param_file (str): The file storing the configuration of potentials.
@@ -604,19 +592,19 @@ coeff_file (str): The file storing the coefficients of potentials.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.SNAPotential.pair_coeff">
 <code class="sig-name descname">pair_coeff</code><em class="property"> = 'pair_coeff        * * {coeff_file} {param_file} {elements}'</em><a class="headerlink" href="#maml.apps.pes.SNAPotential.pair_coeff" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.SNAPotential.pair_style">
 <code class="sig-name descname">pair_style</code><em class="property"> = 'pair_style        snap'</em><a class="headerlink" href="#maml.apps.pes.SNAPotential.pair_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.SNAPotential.predict_efs">
-<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict energy, forces and stresses of the structure.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
@@ -626,21 +614,9 @@ coeff_file (str): The file storing the coefficients of potentials.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="maml.apps.pes.SNAPotential.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save parameters of the potentials.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>filename (str): The file to store parameters of potentials.</p>
-</dd>
-<dt>Returns:</dt><dd><p>(str)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.SNAPotential.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_structures</em>, <em class="sig-param">train_energies</em>, <em class="sig-param">train_forces</em>, <em class="sig-param">train_stresses=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_structures</span></em>, <em class="sig-param"><span class="n">train_energies</span></em>, <em class="sig-param"><span class="n">train_forces</span></em>, <em class="sig-param"><span class="n">train_stresses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Training data with model.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><dl class="simple">
@@ -659,7 +635,7 @@ each single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.SNAPotential.write_param">
 <code class="sig-name descname">write_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SNAPotential.write_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write parameter and coefficient file to perform lammps calculation.</p>
@@ -667,14 +643,14 @@ each single structure case.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="maml.apps.pes.NNPotential">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">NNPotential</code><span class="sig-paren">(</span><em class="sig-param">name=None</em>, <em class="sig-param">param=None</em>, <em class="sig-param">weight_param=None</em>, <em class="sig-param">scaling_param=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">NNPotential</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">param</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">weight_param</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scaling_param</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._base.Potential</span></code></p>
 <p>This class implements Neural Network Potential.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential._line_up">
-<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param">structure</em>, <em class="sig-param">energy</em>, <em class="sig-param">forces</em>, <em class="sig-param">virial_stress</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential._line_up" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_line_up</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em>, <em class="sig-param"><span class="n">energy</span></em>, <em class="sig-param"><span class="n">forces</span></em>, <em class="sig-param"><span class="n">virial_stress</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential._line_up" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert input structure, energy, forces, virial_stress to
 proper configuration format for n2p2 usage. Note that
 n2p2 takes bohr as length unit and Hartree as energy unit.</p>
@@ -693,19 +669,19 @@ forces (list): The forces should have dimension</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.NNPotential.bohr_to_angstrom">
 <code class="sig-name descname">bohr_to_angstrom</code><em class="property"> = 0.529177210903</em><a class="headerlink" href="#maml.apps.pes.NNPotential.bohr_to_angstrom" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.NNPotential.eV_to_Ha">
 <code class="sig-name descname">eV_to_Ha</code><em class="property"> = 0.036749322175655</em><a class="headerlink" href="#maml.apps.pes.NNPotential.eV_to_Ha" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_structures</em>, <em class="sig-param">test_energies</em>, <em class="sig-param">test_forces</em>, <em class="sig-param">test_stresses=None</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_structures</span></em>, <em class="sig-param"><span class="n">test_energies</span></em>, <em class="sig-param"><span class="n">test_forces</span></em>, <em class="sig-param"><span class="n">test_stresses</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate energies, forces and stresses of structures with trained
 interatomic potentials.</p>
 <dl>
@@ -725,9 +701,9 @@ with each single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.from_config">
-<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param">input_filename</em>, <em class="sig-param">scaling_filename</em>, <em class="sig-param">weights_filenames</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.from_config" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_filename</span></em>, <em class="sig-param"><span class="n">scaling_filename</span></em>, <em class="sig-param"><span class="n">weights_filenames</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.from_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize potentials with parameters file.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><dl class="simple">
@@ -742,9 +718,9 @@ with each single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.load_input">
-<code class="sig-name descname">load_input</code><span class="sig-paren">(</span><em class="sig-param">filename='input.nn'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.load_input" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">'input.nn'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.load_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load input file from trained Neural Network Potential.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>filename (str): The input filename.</p>
@@ -752,9 +728,9 @@ with each single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.load_scaler">
-<code class="sig-name descname">load_scaler</code><span class="sig-paren">(</span><em class="sig-param">scaling_filename</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.load_scaler" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_scaler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scaling_filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.load_scaler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load scaling info of trained Neural Network Potential.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>scaling_filename (str): The scaling file.</p>
@@ -762,9 +738,9 @@ with each single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.load_weights">
-<code class="sig-name descname">load_weights</code><span class="sig-paren">(</span><em class="sig-param">weights_filename</em>, <em class="sig-param">specie</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.load_weights" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weights_filename</span></em>, <em class="sig-param"><span class="n">specie</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.load_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load weights file of trained Neural Network Potential.</p>
 <dl class="simple">
 <dt>Args</dt><dd><p>weights_filename (str): The weights file.
@@ -773,19 +749,19 @@ specie (str): The name of specie.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.NNPotential.pair_coeff">
 <code class="sig-name descname">pair_coeff</code><em class="property"> = 'pair_coeff        * * {}'</em><a class="headerlink" href="#maml.apps.pes.NNPotential.pair_coeff" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="maml.apps.pes.NNPotential.pair_style">
 <code class="sig-name descname">pair_style</code><em class="property"> = 'pair_style        nnp dir &quot;./&quot; showew no showewsum 0 maxew 10000000 resetew yes cflength 1.8897261328 cfenergy 0.0367493254'</em><a class="headerlink" href="#maml.apps.pes.NNPotential.pair_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.predict_efs">
-<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param">structure</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_efs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.predict_efs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict energy, forces and stresses of the structure.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
@@ -795,9 +771,9 @@ specie (str): The name of specie.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.read_cfgs">
-<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename='output.data'</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_cfgs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">'output.data'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.read_cfgs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read the configuration file.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>filename (str): The configuration file to be read.</p>
@@ -805,9 +781,9 @@ specie (str): The name of specie.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_structures</em>, <em class="sig-param">train_energies</em>, <em class="sig-param">train_forces</em>, <em class="sig-param">train_stresses=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.train" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_structures</span></em>, <em class="sig-param"><span class="n">train_energies</span></em>, <em class="sig-param"><span class="n">train_forces</span></em>, <em class="sig-param"><span class="n">train_stresses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Training data with moment tensor method.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
@@ -827,9 +803,9 @@ single structure case.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.write_cfgs">
-<code class="sig-name descname">write_cfgs</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">cfg_pool</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.write_cfgs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_cfgs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">cfg_pool</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.write_cfgs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the formatted configuration file.</p>
 <dl>
 <dt>Args:</dt><dd><p>filename (str): The filename to be written.
@@ -841,9 +817,9 @@ cfg_pool (list): The configuration pool contains</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.write_input">
-<code class="sig-name descname">write_input</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.write_input" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.write_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write input.nn file to train the Neural Network Potential.</p>
 <dl>
 <dt>Args:</dt><dd><p>atom_energy (float): Atomic reference energy.</p>
@@ -954,12 +930,318 @@ lambdas (numpy.array): λ in angular function. Default to (1, -1).</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="maml.apps.pes.NNPotential.write_param">
 <code class="sig-name descname">write_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NNPotential.write_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write optimized weights file to perform energy and force prediction.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.pes.LMPStaticCalculator">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">LMPStaticCalculator</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract class to perform static structure property calculation
+using LAMMPS.</p>
+<dl class="py attribute">
+<dt id="maml.apps.pes.LMPStaticCalculator._COMMON_CMDS">
+<code class="sig-name descname">_COMMON_CMDS</code><em class="property"> = ['units metal', 'atom_style charge', 'box tilt large', 'read_data data.static', 'run 0']</em><a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator._COMMON_CMDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.LMPStaticCalculator._parse">
+<em class="property">abstract </em><code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.LMPStaticCalculator._sanity_check">
+<em class="property">abstract </em><code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.LMPStaticCalculator._setup">
+<em class="property">abstract </em><code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="maml.apps.pes.LMPStaticCalculator.allowed_kwargs">
+<code class="sig-name descname">allowed_kwargs</code><em class="property"> = ['lmp_exe']</em><a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator.allowed_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.LMPStaticCalculator.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structures</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the calculation on a series of structures.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>structures [Structure]: Input structures in a list.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of computed data corresponding to each structure,
+varies with different subclasses.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.LMPStaticCalculator.set_lmp_exe">
+<code class="sig-name descname">set_lmp_exe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmp_exe</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#maml.apps.pes.LMPStaticCalculator.set_lmp_exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set lammps executable for the instance
+Args:</p>
+<blockquote>
+<div><p>lmp_exe (str): lammps executable path</p>
+</div></blockquote>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.pes.EnergyForceStress">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">EnergyForceStress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ff_settings</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.EnergyForceStress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._lammps.LMPStaticCalculator</span></code></p>
+<p>Calculate energy, forces and virial stress of structures.</p>
+<dl class="py method">
+<dt id="maml.apps.pes.EnergyForceStress._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.EnergyForceStress._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.EnergyForceStress._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.EnergyForceStress._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.EnergyForceStress._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.EnergyForceStress._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.pes.SpectralNeighborAnalysis">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">SpectralNeighborAnalysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rcut</span></em>, <em class="sig-param"><span class="n">twojmax</span></em>, <em class="sig-param"><span class="n">element_profile</span></em>, <em class="sig-param"><span class="n">quadratic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SpectralNeighborAnalysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._lammps.LMPStaticCalculator</span></code></p>
+<p>Calculator for bispectrum components to characterize the local
+neighborhood of each atom in a general way.</p>
+<dl>
+<dt>Usage:</dt><dd><p>[(b, db, e)] = sna.calculate([Structure])
+b: 2d NumPy array with shape (N, n_bs) containing bispectrum</p>
+<blockquote>
+<div><p>coefficients, where N is the No. of atoms in structure and
+n_bs is the No. of bispectrum components.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>db: 2d NumPy array with shape (N, 3 * n_bs * n_elements)</dt><dd><p>containing the first order derivatives of bispectrum
+coefficients with respect to atomic coordinates,
+where n_elements is the No. of elements in element_profile.</p>
+</dd>
+<dt>e: 2d NumPy array with shape (N, 1) containing the element of</dt><dd><p>each atom.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="maml.apps.pes.SpectralNeighborAnalysis._CMDS">
+<code class="sig-name descname">_CMDS</code><em class="property"> = ['pair_style lj/cut 10', 'pair_coeff * * 1 1', 'compute sna all sna/atom ', 'compute snad all snad/atom ', 'compute snav all snav/atom ', 'dump 1 all custom 1 dump.element element', 'dump 2 all custom 1 dump.sna c_sna[*]', 'dump 3 all custom 1 dump.snad c_snad[*]', 'dump 4 all custom 1 dump.snav c_snav[*]']</em><a class="headerlink" href="#maml.apps.pes.SpectralNeighborAnalysis._CMDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.SpectralNeighborAnalysis._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SpectralNeighborAnalysis._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.SpectralNeighborAnalysis._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SpectralNeighborAnalysis._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.SpectralNeighborAnalysis._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SpectralNeighborAnalysis._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.SpectralNeighborAnalysis.get_bs_subscripts">
+<em class="property">static </em><code class="sig-name descname">get_bs_subscripts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">twojmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.SpectralNeighborAnalysis.get_bs_subscripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to list the subscripts 2j1, 2j2, 2j of bispectrum
+components.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>twojmax (int): Band limit for bispectrum components.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of all subscripts [2j1, 2j2, 2j].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.SpectralNeighborAnalysis.n_bs">
+<em class="property">property </em><code class="sig-name descname">n_bs</code><a class="headerlink" href="#maml.apps.pes.SpectralNeighborAnalysis.n_bs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns No. of bispectrum components to be calculated.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.pes.ElasticConstant">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">ElasticConstant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ff_settings</span></em>, <em class="sig-param"><span class="n">potential_type</span><span class="o">=</span><span class="default_value">'external'</span></em>, <em class="sig-param"><span class="n">deformation_size</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">jiggle</span><span class="o">=</span><span class="default_value">1e-05</span></em>, <em class="sig-param"><span class="n">lattice</span><span class="o">=</span><span class="default_value">'bcc'</span></em>, <em class="sig-param"><span class="n">alat</span><span class="o">=</span><span class="default_value">5.0</span></em>, <em class="sig-param"><span class="n">atom_type</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">maxiter</span><span class="o">=</span><span class="default_value">400</span></em>, <em class="sig-param"><span class="n">maxeval</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.ElasticConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._lammps.LMPStaticCalculator</span></code></p>
+<p>Elastic constant calculator.</p>
+<dl class="py attribute">
+<dt id="maml.apps.pes.ElasticConstant._RESTART_CONFIG">
+<code class="sig-name descname">_RESTART_CONFIG</code><em class="property"> = {'external': {'read_command': 'read_data', 'restart_file': 'data.static', 'write_command': 'write_data'}, 'internal': {'read_command': 'read_restart', 'restart_file': 'restart.equil', 'write_command': 'write_restart'}}</em><a class="headerlink" href="#maml.apps.pes.ElasticConstant._RESTART_CONFIG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.ElasticConstant._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.ElasticConstant._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.ElasticConstant._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.ElasticConstant._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.ElasticConstant._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.ElasticConstant._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.ElasticConstant.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.ElasticConstant.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the elastic constant given Potential class.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.pes.LatticeConstant">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">LatticeConstant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ff_settings</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LatticeConstant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._lammps.LMPStaticCalculator</span></code></p>
+<p>Lattice Constant Relaxation Calculator.</p>
+<dl class="py method">
+<dt id="maml.apps.pes.LatticeConstant._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LatticeConstant._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.LatticeConstant._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LatticeConstant._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.LatticeConstant._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.LatticeConstant._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.pes.NudgedElasticBand">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">NudgedElasticBand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ff_settings</span></em>, <em class="sig-param"><span class="n">specie</span></em>, <em class="sig-param"><span class="n">lattice</span></em>, <em class="sig-param"><span class="n">alat</span></em>, <em class="sig-param"><span class="n">num_replicas</span><span class="o">=</span><span class="default_value">7</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NudgedElasticBand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._lammps.LMPStaticCalculator</span></code></p>
+<p>NudgedElasticBand migration energy calculator.</p>
+<dl class="py method">
+<dt id="maml.apps.pes.NudgedElasticBand._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NudgedElasticBand._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.NudgedElasticBand._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NudgedElasticBand._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.NudgedElasticBand._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NudgedElasticBand._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.NudgedElasticBand.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NudgedElasticBand.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the NEB barrier given Potential class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.NudgedElasticBand.get_unit_cell">
+<code class="sig-name descname">get_unit_cell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">specie</span></em>, <em class="sig-param"><span class="n">lattice</span></em>, <em class="sig-param"><span class="n">alat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.NudgedElasticBand.get_unit_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unit cell from specie, lattice type and lattice constant.</p>
+<dl class="simple">
+<dt>Args</dt><dd><p>specie (str): Name of specie.
+lattice (str): The lattice type of structure. e.g. bcc or diamond.
+alat (float): The lattice constant of specific lattice and specie.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.pes.DefectFormation">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">DefectFormation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ff_settings</span></em>, <em class="sig-param"><span class="n">specie</span></em>, <em class="sig-param"><span class="n">lattice</span></em>, <em class="sig-param"><span class="n">alat</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.DefectFormation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.pes._lammps.LMPStaticCalculator</span></code></p>
+<p>Defect formation energy calculator.</p>
+<dl class="py method">
+<dt id="maml.apps.pes.DefectFormation._parse">
+<code class="sig-name descname">_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.DefectFormation._parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from dump files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.DefectFormation._sanity_check">
+<code class="sig-name descname">_sanity_check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.DefectFormation._sanity_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the structure is valid for this calculation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.DefectFormation._setup">
+<code class="sig-name descname">_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.DefectFormation._setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a calculation, writing input files, etc.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.DefectFormation.calculate">
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.DefectFormation.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the vacancy formation given Potential class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.pes.DefectFormation.get_unit_cell">
+<code class="sig-name descname">get_unit_cell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">specie</span></em>, <em class="sig-param"><span class="n">lattice</span></em>, <em class="sig-param"><span class="n">alat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.DefectFormation.get_unit_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unit cell from specie, lattice type and lattice constant.</p>
+<dl class="simple">
+<dt>Args</dt><dd><p>specie (str): Name of specie.
+lattice (str): The lattice type of structure. e.g. bcc or diamond.
+alat (float): The lattice constant of specific lattice and specie.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.apps.pes.get_default_lmp_exe">
+<code class="sig-prename descclassname">maml.apps.pes.</code><code class="sig-name descname">get_default_lmp_exe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.pes.get_default_lmp_exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get lammps executable
+Returns: Lammps executable name</p>
 </dd></dl>
 
 </div>
@@ -1016,7 +1298,7 @@ lambdas (numpy.array): λ in angular function. Default to (1, -1).</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
