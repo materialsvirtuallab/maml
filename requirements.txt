@@ -5,7 +5,7 @@ monty==3.0.2
 pandas==1.0.3
 scikit-learn==0.23.0
 h5py==2.10.0
-joblib==0.15.0
+joblib==0.15.1
 tqdm==4.46.0
 pymongo==3.10.1
 matminer==0.6.3
