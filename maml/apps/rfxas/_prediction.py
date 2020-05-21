@@ -15,7 +15,6 @@ import joblib
 import numpy as np
 from scipy.interpolate import interp1d
 from tqdm import tqdm
-import tensorflow as tf
 
 from ._core import XANES
 
@@ -181,6 +180,7 @@ class CenvPrediction(object):
                 if cnum_model_path.endswith('.sav'):
                     cnum_model_loaded = joblib.load(cnum_model_path)
                 elif cnum_model_path.endswith('.h5'):
+                    import tensorflow as tf
                     print('cnum ', cnum_model_path)
                     cnum_model_loaded = tf.keras.models.load_model(cnum_model_path)
                 else:
@@ -219,6 +219,7 @@ class CenvPrediction(object):
                         if cmotif_model_path.endswith('.sav'):
                             cmotif_model_loaded = joblib.load(cmotif_model_path)
                         elif cmotif_model_path.endswith('.h5'):
+                            import tensorflow as tf
                             print("cmotif", cmotif_model_path)
                             cmotif_model_loaded = tf.keras.models.load_model(cmotif_model_path)
                         else:

@@ -10,7 +10,6 @@ from typing import List
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.base import TransformerMixin
-import tensorflow as tf
 
 from maml import KerasModel, SequentialDescriber
 from maml import BaseDescriber
@@ -36,6 +35,7 @@ def construct_mlp(hidden_layer_sizes: List[int],
     Returns:
 
     """
+    import tensorflow as tf
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Dense(units=hidden_layer_sizes[0],
                                     input_dim=input_dim, activation=activation))

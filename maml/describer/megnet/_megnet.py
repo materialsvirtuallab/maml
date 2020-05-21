@@ -5,9 +5,6 @@ from pathlib import Path
 from typing import Optional, Any, Union, List
 
 import pandas as pd
-from megnet.models import GraphModel
-from megnet.utils.models import MODEL_MAPPING, load_model
-from megnet.utils.descriptor import MEGNetDescriptor
 
 from maml.base import BaseDescriber
 from maml.utils import get_full_stats_and_funcs
@@ -29,18 +26,20 @@ class MEGNetSite(BaseDescriber):
             journal={Chemistry of Materials}, volume={31}, number={9},
             pages={3564--3572}, year={2019},publisher={ACS Publications}}
     """
-    AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
-
-    def __init__(self, name: Optional[Union[str, GraphModel]] = None,
+    def __init__(self, name: Optional[Union[str, object]] = None,
                  level: Optional[int] = None,
                  **kwargs):
         """
 
-        Args:s
-            name (str or GraphModel): model name keys, megnet model path or a MEGNet GraphModel,
-                if no name is provided, the model will be Eform_MP_2019.
+        Args:
+            name (str or megnet.models.GraphModel): model name keys, megnet model
+                path or a MEGNet GraphModel, if no name is provided, the model will be Eform_MP_2019.
             level (int): megnet graph layer level
         """
+
+        from megnet.utils.models import MODEL_MAPPING, load_model
+        from megnet.utils.descriptor import MEGNetDescriptor
+        self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
         if isinstance(name, str) and name in self.AVAILBLE_MODELS:
             name_or_model = load_model(name)
         elif name is None:
@@ -92,16 +91,15 @@ class MEGNetStructure(BaseDescriber):
             journal={Chemistry of Materials}, volume={31}, number={9},
             pages={3564--3572}, year={2019},publisher={ACS Publications}}
     """
-    AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
 
-    def __init__(self, name: Optional[Union[str, GraphModel]] = None, mode: str = 'site_stats',
+    def __init__(self, name: Optional[Union[str, object]] = None, mode: str = 'site_stats',
                  level: Optional[int] = None, stats: Optional[List] = None,
                  **kwargs):
         """
 
         Args:s
-            name (str or GraphModel): model name keys, megnet model path or a MEGNet GraphModel,
-                if no name is provided, the model will be Eform_MP_2019.
+            name (str or megnet.models.GraphModel): model name keys, megnet model path or
+                a MEGNet GraphModel, if no name is provided, the model will be Eform_MP_2019.
             mode (str): choose one from ['site_stats', 'site_readout', 'final'].
                 'site_stats': Calculate the site features, and then use maml.utils.stats to compute the feature-wise
                     statistics. This requires the specification of level
@@ -109,6 +107,9 @@ class MEGNetStructure(BaseDescriber):
                 'final': Use the concatenated atom, bond and global features
             level (int): megnet graph layer level
         """
+        from megnet.utils.models import MODEL_MAPPING, load_model
+        from megnet.utils.descriptor import MEGNetDescriptor
+        self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
         if isinstance(name, str) and name in self.AVAILBLE_MODELS:
             name_or_model = load_model(name)
         elif name is None:
