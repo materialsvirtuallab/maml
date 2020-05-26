@@ -62,7 +62,7 @@ def construct_deep_sets(
     if symmetry_func == 'set2set':
         from megnet.layers import Set2Set
         layer = Set2Set(**symmetry_func_kwargs)
-    elif symmetry_func == 'mean' or symmetry_func == 'sum':
+    elif symmetry_func in ['mean', 'sum', 'max', 'min', 'prod']:
         from megnet.layers import LinearWithIndex
         layer = LinearWithIndex(mode=symmetry_func)
     else:
