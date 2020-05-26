@@ -6,13 +6,14 @@ from typing import Dict, List, Union, Optional, Tuple
 
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 import numpy as np
-from pymatgen.core import Composition, Structure, Element, Molecule, Specie
+from pymatgen.core import Composition, Structure, Element, Specie
 import pandas as pd
 from sklearn.decomposition import PCA, KernelPCA
 import json
 
 from maml.base import BaseDescriber
 from maml.utils import Stats, get_full_stats_and_funcs
+from maml.utils import to_composition
 from .matminer import wrap_matminer_describer
 
 
@@ -108,13 +109,7 @@ class ElementStats(BaseDescriber):
         Returns: pd.DataFrame with property names as column names
 
         """
-        if isinstance(obj, Structure) or isinstance(obj, Molecule):
-            comp = obj.composition
-        elif isinstance(obj, str):
-            comp = Composition(obj)
-        else:
-            comp = obj
-
+        comp = to_composition(obj)
         element_n_dict = comp.to_data_dict['unit_cell_composition']
 
         data = []

@@ -5,23 +5,23 @@ import re
 import logging
 import itertools
 import subprocess
-from typing import Dict, List
+from typing import Dict, List, Optional, Union
 import numpy as np
 import pandas as pd
 
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-from pymatgen.core import Element, Structure
+from pymatgen.core import Element, Structure, Composition
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.base import BaseDescriber
-from maml.utils import pool_from
+from maml.utils import pool_from, to_composition
 from .megnet import MEGNetSite
 
 
 __all__ = ['MEGNetSite', 'BispectrumCoefficients', 'SmoothOverlapAtomicPosition',
-           'BPSymmetryFunctions']
+           'BPSymmetryFunctions', 'SiteElementProperty']
 
 
 logging.basicConfig()
@@ -344,3 +344,43 @@ class BPSymmetryFunctions(BaseDescriber):
         """
         decay = 0.5 * (np.cos(np.pi * r / self.cutoff) + 1) * (r <= self.cutoff)
         return decay
+
+
+class SiteElementProperty(BaseDescriber):
+    """
+    Site specie property describer. For a structure or composition, return
+    an unordered set of site specie properties
+    """
+    def __init__(self, feature_dict: Optional[dict] = None, **kwargs):
+        """
+        Args:
+            element_features (dict): mapping from atomic number of feature vectors
+        """
+        self.feature_dict = feature_dict
+        super().__init__(feature_batch=None, **kwargs)
+
+    @staticmethod
+    def _get_keys(c: Composition) -> List[int]:
+        d = c.to_data_dict['reduced_cell_composition']
+        str_z = {str(i): i.Z for i in c.elements}
+        z_values: List[int] = sum([int(d[i]) * [str_z[i]] for i in str_z], [])
+        return z_values
+
+    def transform_one(self, obj: Union[str, Composition, Structure]) -> np.ndarray:
+        """
+        Transform one object to features
+
+        Args:
+            obj (str/Composition/Structure): object to transform
+
+        Returns:
+            features array
+        """
+        comp = to_composition(obj)
+        keys = self._get_keys(comp)
+        n = len(keys)
+        if self.feature_dict is not None:
+            features = [self.feature_dict[i] for i in keys]
+        else:
+            features = keys
+        return np.reshape(features, (n, -1))
