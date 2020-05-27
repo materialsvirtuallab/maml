@@ -102,7 +102,7 @@ class DeepSets(KerasModel):
                  ):
         """
         Args:
-            describer (BaseDescriber): describer for the inputs
+            describer (BaseDescriber): site describers
             input_dim (int): input dimension, if None, then integer inputs + embedding are assumed.
             is_embedding (bool): whether the input should be embedded
             n_neurons (tuple): number of hidden-layer neurons before passing to symmetry function

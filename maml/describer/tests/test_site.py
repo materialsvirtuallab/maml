@@ -141,11 +141,11 @@ class TestSiteSpecieProperty(unittest.TestCase):
     def test_unordered_site(self):
         s = Structure(Lattice.cubic(3), ['Mo', 'S'],
                       [[0, 0, 0], [0.5, 0.5, 0.5]])
-        udescriber = UnorderedSiteElementProperty()
+        udescriber = SiteElementProperty()
         np.testing.assert_array_almost_equal(udescriber.transform_one(s),
                                              np.array([[42, 16]]).T)
 
-        udescriber2 = UnorderedSiteElementProperty(feature_dict={16: [16, 16],
+        udescriber2 = SiteElementProperty(feature_dict={16: [16, 16],
                                                                   42: [42, 42]})
         np.testing.assert_array_almost_equal(udescriber2.transform_one(s),
                                              np.array([[42, 42], [16, 16]]))

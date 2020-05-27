@@ -2,10 +2,10 @@
 Materials utils
 """
 from typing import Union
-from pymatgen.core import Composition, Structure
+from pymatgen.core import Composition, Structure, Molecule
 
 
-def to_composition(obj: Union[Composition, Structure, str]) -> Composition:
+def to_composition(obj: Union[Composition, Molecule, Structure, str]) -> Composition:
     """
     Convert str/structure or composition to compositions
 
@@ -17,6 +17,6 @@ def to_composition(obj: Union[Composition, Structure, str]) -> Composition:
     """
     if isinstance(obj, str):
         return Composition(obj)
-    elif isinstance(obj, Structure):
+    elif isinstance(obj, (Structure, Molecule)):
         return obj.composition
     return obj
