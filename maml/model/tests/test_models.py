@@ -6,6 +6,7 @@ from unittest import TestCase, main
 import numpy as np
 
 from maml.model import DeepSets
+from maml.describer import SiteElementProperty
 
 
 class TestDeepSets(TestCase):
@@ -38,6 +39,18 @@ class TestDeepSets(TestCase):
         self.assertTrue(res2.shape == (1, 2, 1))
         res3 = self.model3.model.predict([self.x_vec, self.indices])
         self.assertTrue(res3.shape == (1, 2, 1))
+
+    def test_train(self):
+        s = ['H', 'H2O', 'O2', 'OH', 'H3O']
+        targets = [0., 1./3, 1, 0.5, 1./4]
+        model = DeepSets(describer=SiteElementProperty(),
+                         is_embedding=True,
+                         symmetry_func='mean',
+                         n_neurons=(8, 8),
+                         n_neurons_final=(4, 4),
+                         n_targets=1)
+        model.train(s, targets, epochs=1)
+        self.assertTrue(model.predict_objs(['H2']).shape == (1, 1))
 
 
 if __name__ == "__main__":
