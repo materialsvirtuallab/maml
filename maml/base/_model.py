@@ -57,7 +57,7 @@ class BaseModel:
         """
         features = self.describer.fit_transform(objs)
         if 'val_objs' in kwargs:
-            val_features = self.describer.transform(kwargs.get('val_objs'))
+            val_features = self.describer.transform(kwargs.get('val_objs'))  # type: ignore
             kwargs.update({'val_features': val_features})
         return self.fit(features, targets, **kwargs)
 
