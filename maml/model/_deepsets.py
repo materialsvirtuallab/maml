@@ -192,8 +192,8 @@ class DeepSets(KerasModel):
         is_shuffle = kwargs.get('is_shuffle', True)
         train_generator = self._get_data_generator(features, targets, batch_size=batch_size, is_shuffle=is_shuffle)
         if 'val_features' in kwargs and 'val_targets' in kwargs:
-            val_generator = self._get_data_generator(kwargs.get('val_features'),
-                                                     kwargs.get('val_targets'),
+            val_generator = self._get_data_generator(kwargs.pop('val_features'),
+                                                     kwargs.pop('val_targets'),
                                                      batch_size=batch_size, is_shuffle=is_shuffle)
         else:
             val_generator = None
