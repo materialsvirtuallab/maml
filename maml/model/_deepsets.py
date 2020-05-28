@@ -22,6 +22,7 @@ def construct_deep_sets(
         optimizer: str = 'adam',
         loss: str = 'mse',
         compile_metrics: tuple = (),
+        is_classification: bool = False,
         **symmetry_func_kwargs):
     r"""
     f(X) = \rho(\sum_{x \in X} \phi(x)), where X is a set.
@@ -42,6 +43,7 @@ def construct_deep_sets(
             'max', 'min', 'prod']
         optimizer (str): optimizer for the model
         loss (str): loss function for the model
+        compile_metrics (tuple): metrics for validation
         symmetry_func_kwargs (dict): kwargs for symmetry function
     """
     from tensorflow.keras.layers import Input, Dense, Embedding, Concatenate
@@ -88,7 +90,11 @@ def construct_deep_sets(
     for n_neuron in n_neurons_final:
         out_ = Dense(n_neuron, activation=activation)(out_)
 
-    out_ = Dense(n_targets)(out_)
+    if is_classification:
+        final_act: Optional[str] = "sigmoid"
+    else:
+        final_act = None
+    out_ = Dense(n_targets, activation=final_act)(out_)
     model = Model(inputs=[inp, node_ids], outputs=out_)
     model.compile(optimizer, loss, metrics=compile_metrics)
     return model
@@ -113,6 +119,7 @@ class DeepSets(KerasModel):
                  optimizer: str = 'adam',
                  loss: str = 'mse',
                  compile_metrics: tuple = (),
+                 is_classification: bool = False,
                  **symmetry_func_kwargs
                  ):
         """
@@ -145,6 +152,7 @@ class DeepSets(KerasModel):
                                     optimizer=optimizer,
                                     loss=loss,
                                     compile_metrics=compile_metrics,
+                                    is_classification=is_classification,
                                     **symmetry_func_kwargs)
         self.is_embedding = is_embedding
         super().__init__(model=model, describer=describer)
