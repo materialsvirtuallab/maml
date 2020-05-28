@@ -188,8 +188,8 @@ class DeepSets(KerasModel):
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
         """
-        batch_size = kwargs.get('batch_size', 128)
-        is_shuffle = kwargs.get('is_shuffle', True)
+        batch_size = kwargs.pop('batch_size', 128)
+        is_shuffle = kwargs.pop('is_shuffle', True)
         train_generator = self._get_data_generator(features, targets, batch_size=batch_size, is_shuffle=is_shuffle)
         if 'val_features' in kwargs and 'val_targets' in kwargs:
             val_generator = self._get_data_generator(kwargs.pop('val_features'),
