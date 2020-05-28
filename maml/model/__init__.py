@@ -1,10 +1,10 @@
 """MAML models"""
-from ._neural_network import MultiLayerPerceptron  # noqa
-from maml.base import ModelWithSklearn, ModelWithKeras  # noqa
+from maml.base import SKLModel, KerasModel  # noqa
+from ._deepsets import DeepSets  # noqa
 
 
 __all__ = [
-    'MultiLayerPerceptron',
-    'ModelWithSklearn',
-    'ModelWithKeras'
+    'SKLModel',
+    'KerasModel',
+    'DeepSets'
 ]

@@ -2,28 +2,74 @@ import unittest
 import os
 
 import numpy as np
-import json
+import pandas as pd
+from pymatgen.util.testing import PymatgenTest
 
-from maml.apps.symbolic import SIS, DantzigSelector
+from maml.apps.symbolic import SIS, ISIS, L0BrutalForce
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
 
-class TestSIS(unittest.TestCase):
+class TestSIS(PymatgenTest):
     @classmethod
     def setUpClass(cls):
         np.random.seed(42)
-        with open(os.path.join(CWD, 'test_data_sis.json'), 'r') as f:
-            djson = json.load(f)
-        cls.x = np.array(djson['x'])
-        cls.beta = np.array(djson['beta'])
-        cls.y = cls.x.dot(cls.beta)
-        cls.lasso_alpha = 0.1
+        df = pd.read_csv(os.path.join(CWD, "sis_test.csv"), index_col=[0])
+        cls.x = df[['x0', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', \
+                    'x7', 'x8', 'x9', 'x', 'pow2', 'exp']]
+        cls.y = df['y']
 
     def test_sis(self):
-        sis = SIS(gamma=0.1, selector=DantzigSelector(0.1))
-        selected = sis.run(self.x, self.y)
-        np.testing.assert_almost_equal(selected, [91, 59, 65, 84, 15, 23, 89,  1, 76])
+        sis = SIS(gamma=0.5, selector=L0BrutalForce(1e-4))
+        selected = sis.run(self.x.values, self.y)
+        np.testing.assert_almost_equal(selected, [12, 10, 9])
+        sis.set_gamma(0.1)
+        self.assertEqual(sis.gamma, 0.1)
+        sis.update_gamma(step=0.5)
+        self.assertAlmostEqual(sis.gamma, 0.15)
+
+
+class testISIS(PymatgenTest):
+    @classmethod
+    def setUpClass(cls):
+        np.random.seed(42)
+        df = pd.read_csv(os.path.join(CWD, "sis_test.csv"), index_col=[0])
+        cls.x = df[['x0', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', \
+                    'x7', 'x8', 'x9', 'x', 'pow2', 'exp']]
+        cls.y = df['y']
+
+    def test_coeff(self):
+        isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)))
+        coeff = isis._get_coeff(self.x.values, self.y)
+        self.assertArrayAlmostEqual(coeff[10:], [1, 1, 1])
+
+    def test_evaluate(self):
+        isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)), l0_regulate=False)
+        _ = isis.run(self.x.values, self.y, max_p=4)
+        mae = isis.evaluate(self.x.values, self.y)
+        self.assertAlmostEqual(mae, 0)
+
+    def test_best_combination(self):
+        isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)), l0_regulate=False)
+        _ = isis.run(self.x.values, self.y, max_p=4)
+        comb_best, coeff_best, score_best = isis._best_combination(self.x.values, self.y,
+                                                                   np.array([10, 11]),
+                                                                   np.array([12, 0]))
+        self.assertArrayEqual(comb_best, [10, 11, 12])
+        self.assertArrayAlmostEqual(coeff_best, [1, 1, 1])
+        self.assertAlmostEqual(score_best, 0)
+
+    def test_isis(self):
+        isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)))
+        selected = isis.run(self.x.values, self.y, max_p=5)
+        # np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
+        np.testing.assert_equal(selected, [10, 11, 12,  5,  0])
+
+        isis = ISIS(SIS(gamma=0.1, selector=L0BrutalForce(1e-4)))
+        selected = isis.run(self.x.values, self.y, max_p=5)
+        self.assertAlmostEqual(isis.sis.gamma, 0.15)
+        #     # np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
+        np.testing.assert_equal(selected, [10, 11, 12,  5,  0])
 
 
 if __name__ == "__main__":

@@ -125,22 +125,6 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         multi_output = tags["multioutput"]  # this is from BaseEstimator
         return multi_output
 
-    def get_citations(self) -> List[str]:
-        """
-        Get citations for the describer
-
-        e.g.,
-        ["@article{chen2019graph, title={Graph networks as a universal"
-         "machine learning framework for molecules and crystals}, "
-         "author={Chen, Chi and Ye, Weike and Zuo, Yunxing and Zheng, "
-         "Chen and Ong, Shyue Ping}, journal={Chemistry of Materials},"
-         "volume={31}, number={9}, pages={3564--3572}, year={2019}, publisher"
-         "={ACS Publications}}"]
-
-        Returns: a list of citation str
-        """
-        return [""]
-
     def clear_cache(self):
         """
         Clear cache

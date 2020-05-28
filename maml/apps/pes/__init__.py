@@ -14,7 +14,7 @@ from ._lammps import (  # noqa
     SpectralNeighborAnalysis, ElasticConstant,  # noqa
     LatticeConstant, NudgedElasticBand, DefectFormation,  # noqa
     get_default_lmp_exe  # noqa
-    )
+)
 
 __all__ = [
     "Potential",

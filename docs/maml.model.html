@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>maml.model package &#8212; maml 0.01 documentation</title>
@@ -32,14 +32,33 @@
             
   <div class="section" id="maml-model-package">
 <h1>maml.model package<a class="headerlink" href="#maml-model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
 <div class="section" id="module-maml.model">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.model" title="Permalink to this headline">¶</a></h2>
 <p>MAML models</p>
-<dl class="class">
+<dl class="py class">
 <dt id="maml.model.MultiLayerPerceptron">
-<em class="property">class </em><code class="sig-prename descclassname">maml.model.</code><code class="sig-name descname">MultiLayerPerceptron</code><span class="sig-paren">(</span><em class="sig-param">describer: maml.base._describer.BaseDescriber, hidden_layer_sizes: List[int], input_dim: int, preprocessor: sklearn.base.TransformerMixin = StandardScaler(copy=True, with_mean=True, with_std=True), activation: str = 'relu', loss: str = 'mse', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#maml.model.MultiLayerPerceptron" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.ModelWithKeras</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">maml.model.</code><code class="sig-name descname">MultiLayerPerceptron</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">maml.base._describer.BaseDescriber</span></em>, <em class="sig-param"><span class="n">hidden_layer_sizes</span><span class="p">:</span> <span class="n">List<span class="p">[</span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">input_dim</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">preprocessor</span><span class="p">:</span> <span class="n">sklearn.base.TransformerMixin</span> <span class="o">=</span> <span class="default_value">StandardScaler(copy=True, with_mean=True, with_std=True)</span></em>, <em class="sig-param"><span class="n">activation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'relu'</span></em>, <em class="sig-param"><span class="n">loss</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mse'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.model.MultiLayerPerceptron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasModel</span></code></p>
 <p>Multi-layer perceptron model with keras model as predictor</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.model.SKLModel">
+<em class="property">class </em><code class="sig-prename descclassname">maml.model.</code><code class="sig-name descname">SKLModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">sklearn.base.TransformerMixin</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.model.SKLModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></p>
+<p>MAML model with sklearn model as estimator</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.model.KerasModel">
+<em class="property">class </em><code class="sig-prename descclassname">maml.model.</code><code class="sig-name descname">KerasModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">sklearn.base.TransformerMixin</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.model.KerasModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></p>
+<p>MAML model with keras model as estimators</p>
 </dd></dl>
 
 </div>
@@ -96,7 +115,7 @@
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

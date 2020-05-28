@@ -1,135 +1,57 @@
-# coding: utf-8
+"""
+Test models
+"""
+from unittest import TestCase, main
 
-import unittest
-import os
-import shutil
-import tempfile
-
-from monty.tempfile import ScratchDir
 import numpy as np
-from pymatgen.util.testing import PymatgenTest
-from sklearn.linear_model import LinearRegression
-from sklearn.gaussian_process import GaussianProcessRegressor
 
-from maml import ModelWithSklearn, ModelWithKeras
-from maml.describer._structure import DistinctSiteProperty
-from maml.model._neural_network import MultiLayerPerceptron
+from maml.model import DeepSets
+from maml.describer import SiteElementProperty
 
 
-class NeuralNetTest(PymatgenTest):
-    @classmethod
-    def setUpClass(cls):
-        cls.this_dir = os.path.dirname(os.path.abspath(__file__))
-        cls.test_dir = tempfile.mkdtemp()
-
-    def setUp(self):
-        self.nn = MultiLayerPerceptron(describer=DistinctSiteProperty(wyckoffs=['2c'], properties=["Z"]),
-                                       hidden_layer_sizes=[25, 5], input_dim=1)
-        self.nn2 = MultiLayerPerceptron(describer=DistinctSiteProperty(wyckoffs=['2c'], properties=["Z"]),
-                                        hidden_layer_sizes=[25, 5], input_dim=1)
-        self.li2o = self.get_structure("Li2O")
-        self.na2o = self.li2o.copy()
-        self.na2o["Li+"] = "Na+"
-        self.structures = [self.li2o] * 100 + [self.na2o] * 100
-        self.energies = np.array([3] * 100 + [4] * 100)
+class TestDeepSets(TestCase):
 
     @classmethod
-    def tearDownClass(cls):
-        os.chdir(cls.this_dir)
-        shutil.rmtree(cls.test_dir)
+    def setUpClass(cls) -> None:
+        cls.x = np.array([[0, 1, 0, 1, 0, 1]], dtype=np.int32).reshape((1, -1))
+        cls.x_vec = np.random.normal(size=(1, 6, 20))
+        cls.indices = np.array([[0, 0, 0, 1, 1, 1]], dtype=np.int32).reshape((1, -1))
+        cls.y = np.array([[0.1, 0.2]]).reshape((1, 2, 1))
+        cls.model1 = DeepSets(
+            describer=None,
+            is_embedding=True, n_neurons=(4, 4), n_neurons_final=(4, 4))
+        cls.model2 = DeepSets(
+            input_dim=20,
+            is_embedding=False,
+            n_neurons=(4, 4), n_neurons_final=(4, 4))
+        cls.model3 = DeepSets(
+            input_dim=20,
+            is_embedding=False,
+            symmetry_func='set2set',
+            n_neurons=(4, 4), n_neurons_final=(4, 4),
+            T=2,
+            n_hidden=10)
 
-    def test_fit_predict(self):
-        self.nn.train(objs=self.structures, targets=self.energies, epochs=2)
-        self.assertTrue(self.nn.predict_objs([self.na2o]).shape == (1, 1))
+    def test_predict(self):
+        res = self.model1.model.predict([self.x, self.indices])
+        self.assertTrue(res.shape == (1, 2, 1))
+        res2 = self.model2.model.predict([self.x_vec, self.indices])
+        self.assertTrue(res2.shape == (1, 2, 1))
+        res3 = self.model3.model.predict([self.x_vec, self.indices])
+        self.assertTrue(res3.shape == (1, 2, 1))
 
-    def test_model_save_load(self):
-        self.nn.train(objs=self.structures, targets=self.energies, epochs=2)
-        with ScratchDir('.'):
-            self.nn.save("test.h5")
-            self.nn2.load("test.h5")
-        self.assertEqual(self.nn.predict_objs([self.na2o])[0][0],
-                         self.nn2.predict_objs([self.na2o])[0][0])
-
-        with ScratchDir('.'):
-            self.nn.save('test.h5')
-            nn3 = ModelWithKeras.from_file('test.h5')
-        self.assertEqual(self.nn.predict_objs([self.na2o])[0][0],
-                         nn3.predict_objs([self.na2o])[0][0])
-
-
-class LinearModelTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.x_train = np.random.rand(10, 2)
-        cls.coef = np.random.rand(2)
-        cls.intercept = np.random.rand()
-        cls.y_train = cls.x_train.dot(cls.coef) + cls.intercept
-
-    def setUp(self):
-
-        self.lm = ModelWithSklearn(model=LinearRegression())
-        self.test_dir = tempfile.mkdtemp()
-
-    def tearDown(self):
-        # Remove the directory after the test
-        shutil.rmtree(self.test_dir)
-
-    def test_fit_predict(self):
-        self.lm.fit(features=self.x_train, targets=self.y_train)
-        x_test = np.random.rand(10, 2)
-        y_test = x_test.dot(self.coef) + self.intercept
-        y_pred = self.lm._predict(x_test)
-        np.testing.assert_array_almost_equal(y_test, y_pred)
-        np.testing.assert_array_almost_equal(self.coef, self.lm.model.coef_)
-        self.assertAlmostEqual(self.intercept, self.lm.model.intercept_)
-
-    def test_model_save_load(self):
-        self.lm.fit(features=self.x_train, targets=self.y_train)
-        with ScratchDir('.'):
-            self.lm.save('test_lm.save')
-            ori = self.lm.model.coef_
-            self.lm.load('test_lm.save')
-            loaded = self.lm.model.coef_
-
-            np.testing.assert_almost_equal(ori, loaded)
-
-            lm2 = ModelWithSklearn.from_file('test_lm.save')
-            np.testing.assert_almost_equal(lm2.model.coef_, ori)
-
-    def test_model_none(self):
-        m = ModelWithSklearn(model=LinearRegression())
-        x = np.array([[1, 2], [2, 1], [1, 1]])
-        y = np.array([[3], [3], [2]])
-        m.train(x, y)
-        np.testing.assert_almost_equal(m.model.coef_.ravel(), np.array([1.0, 1.0]))
-
-
-class GaussianProcessTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.this_dir = os.path.dirname(os.path.abspath(__file__))
-        cls.test_dir = tempfile.mkdtemp()
-
-    def setUp(self):
-        self.x_train = np.atleast_2d([1., 3., 5., 6., 7., 8.]).T
-        self.y_train = (self.x_train * np.sin(self.x_train)).ravel()
-        self.gpr = ModelWithSklearn(model=GaussianProcessRegressor())
-
-    @classmethod
-    def tearDownClass(cls):
-        os.chdir(cls.this_dir)
-        shutil.rmtree(cls.test_dir)
-
-    def test_fit_predict(self):
-        self.gpr.fit(features=self.x_train, targets=self.y_train)
-        x_test = np.atleast_2d(np.linspace(0, 9, 1000)).T
-        y_test = x_test * np.sin(x_test)
-        y_pred, sigma = self.gpr._predict(x_test, return_std=True)
-        upper_bound = y_pred + 1.96 * sigma
-        lower_bound = y_pred - 1.96 * sigma
-        self.assertTrue(np.all([l < y and y < u
-                                for u, y, l in zip(upper_bound, y_test, lower_bound)]))
+    def test_train(self):
+        s = ['H', 'H2O', 'O2', 'OH', 'H3O']
+        targets = [0., 1./3, 1, 0.5, 1./4]
+        model = DeepSets(describer=SiteElementProperty(),
+                         is_embedding=True,
+                         symmetry_func='mean',
+                         n_neurons=(8, 8),
+                         n_neurons_final=(4, 4),
+                         n_targets=1)
+        model.train(s, targets, epochs=1)
+        self.assertTrue(model.predict_objs(['H2']).shape == (1, 1))
 
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

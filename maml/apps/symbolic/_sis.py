@@ -4,13 +4,15 @@ Sure Independence Screening
 https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
 
 """
-from typing import Optional
+from typing import Optional, Dict, List
+from itertools import combinations
 import logging
 
 import numpy as np
+from sklearn.metrics import get_scorer
+from sklearn.linear_model import LinearRegression
 
-from ._selectors import BaseSelector
-
+from ._selectors import BaseSelector, DantzigSelector
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -97,6 +99,18 @@ class SIS:
         """
         return self.selector.select(x, y, options)
 
+    def compute_residual(self, x, y):
+        """
+        Compute residual
+        Args:
+            x (np.ndarray): input array
+            y (np.ndarray): target array
+
+        Returns: residual vector
+
+        """
+        return self.selector.compute_residual(x, y)
+
     def set_selector(self, selector: BaseSelector):
         """
         Set new selector
@@ -107,3 +121,137 @@ class SIS:
 
         """
         self.selector = selector
+
+    def set_gamma(self, gamma):
+        """
+        Set gamma
+
+        Args:
+            gamma(float): new gamma value
+
+        """
+        self.gamma = gamma
+
+    def update_gamma(self, step: float = 0.5):
+        """
+        Update the sis object so that sis.select
+        return at least one feature
+
+        Args:
+            step(float): ratio to update the parameters
+
+        """
+        self.set_gamma(self.gamma * (1 + step))
+
+
+class ISIS:
+    """Iterative SIS"""
+
+    def __init__(self,
+                 sis: SIS = SIS(gamma=0.1, selector=DantzigSelector(0.1)), l0_regulate: bool = True):
+        """
+
+        Args:
+            sis(SIS): sis object
+            l0_regulate(bool): Whether to regulate features in each iteration, default True
+        """
+        self.sis = sis
+        self.selector = sis.selector
+        self.l0_regulate = l0_regulate
+        self.coeff = []  # type: ignore
+        self.find_sel = []  # type: ignore
+
+    def run(self, x, y, max_p: int = 10,
+            metric: str = 'neg_mean_absolute_error',
+            options: Optional[Dict] = None,
+            step: float = 0.5):
+        """
+        Run the ISIS
+        Args:
+            x:
+            y:
+            max_p(int): Number of feature desired
+            metric (str): scorer function, used with
+                sklearn.metrics.get_scorer
+            options:
+            step(float): step to update gamma with
+
+        Returns:
+            find_sel(np.array): np.array of index of selected features
+            coeff(np.array): np.array of coeff of selected features
+
+        """
+        assert max_p <= x.shape[1]
+        findex = np.array(np.arange(0, x.shape[1]))
+        find_sel = self.sis.select(x, y, options)
+        self.coeff = self._get_coeff(x[:, find_sel], y)
+        if len(find_sel) >= max_p:
+            self.coeff = self._get_coeff(x[:, find_sel[:max_p]], y)
+            return find_sel[:max_p]
+        new_findex = np.array(list(set(findex) - set(find_sel)))
+        new_y = self.sis.compute_residual(x, y)
+        new_x = x[:, new_findex]
+        while len(find_sel) < max_p:
+            find_sel_new: List[int] = []
+            try:
+                find_sel_new = self.sis.run(new_x, new_y, options)
+            except ValueError:
+                while len(find_sel_new) == 0:
+                    self.sis.update_gamma(step)
+                    find_sel_new = self.sis.run(new_x, new_y)
+            if self.l0_regulate:
+                find_sel, _, _ = self._best_combination(x, y, find_sel,
+                                                        new_findex[find_sel_new], metric)
+            else:
+                find_sel = np.append(find_sel, new_findex[find_sel_new])
+            new_findex = np.array(list(set(findex) - set(find_sel)))
+            new_y = self.sis.compute_residual(new_x, new_y)
+            new_x = x[:, new_findex]
+        self.coeff = self._get_coeff(x[:, find_sel], y)
+        self.find_sel = find_sel
+        return find_sel
+
+    def _get_coeff(self, x, y):
+        coeff, _, _, _ = np.linalg.lstsq(x, y, rcond=-1)
+        return coeff
+
+    def _best_combination(self, x, y, find_sel, find_sel_new,
+                          metric: str = 'neg_mean_absolute_error'):
+        if len(find_sel_new) == 1:
+            comb_best = np.append(find_sel, find_sel_new)
+            coeff_best = self._get_coeff(x[:, comb_best], y)
+            score_best = self._eval(x[:, comb_best], y, coeff_best, metric)
+            return comb_best, coeff_best, score_best
+        combs = combinations(np.append(find_sel, find_sel_new), len(find_sel) + 1)
+        coeff_best = self._get_coeff(x[:, find_sel], y)
+        score_best = self._eval(x[:, find_sel], y, coeff_best, metric)
+        comb_best = find_sel
+        for ind_comb in combs:
+            d = x[:, ind_comb]
+            coeff = self._get_coeff(d, y)
+            score = self._eval(d, y, coeff, metric)
+            if score > score_best:
+                score_best = score
+                comb_best = ind_comb
+                coeff_best = coeff
+        return comb_best, coeff_best, score_best
+
+    def _eval(self, x, y, coeff, metric):
+        metric_func = get_scorer(metric)
+        lr = LinearRegression(fit_intercept=False)
+        lr.coef_ = coeff  # type: ignore
+        lr.intercept_ = 0
+        return metric_func(lr, x, y)
+
+    def evaluate(self, x: np.ndarray, y: np.ndarray,
+                 metric: str = 'neg_mean_absolute_error') -> float:
+        """
+        Evaluate the linear model using x, and y test data
+        Args:
+            x (np.ndarray): MxN input data array
+            y (np.ndarray): M output targets
+            metric (str): scorer function, used with
+                sklearn.metrics.get_scorer
+        Returns:
+        """
+        return self._eval(x[:, self.find_sel], y, self.coeff, metric)

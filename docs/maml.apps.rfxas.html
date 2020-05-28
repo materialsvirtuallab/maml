@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>maml.apps.rfxas package &#8212; maml 0.01 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="maml-apps-rfxas-package">
+<h1>maml.apps.rfxas package<a class="headerlink" href="#maml-apps-rfxas-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="module-maml.apps.rfxas">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.apps.rfxas" title="Permalink to this headline">¶</a></h2>
+<p>MAML XAS app</p>
+<dl class="py class">
+<dt id="maml.apps.rfxas.XANES">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">XANES</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">absorption_specie</span></em>, <em class="sig-param"><span class="n">edge</span></em>, <em class="sig-param"><span class="n">structure</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">e0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymatgen.core.spectrum.Spectrum</span></code></p>
+<p>Basic XANES object</p>
+<dl class="py attribute">
+<dt id="maml.apps.rfxas.XANES.XLABEL">
+<code class="sig-name descname">XLABEL</code><em class="property"> = 'Energy'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.XLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="maml.apps.rfxas.XANES.YLABEL">
+<code class="sig-name descname">YLABEL</code><em class="property"> = 'Intensity'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.YLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.rfxas.XANES.from_K_XANES_MP_tsv">
+<em class="property">static </em><code class="sig-name descname">from_K_XANES_MP_tsv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsv_file</span></em>, <em class="sig-param"><span class="n">header</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">absorption_specie</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES.from_K_XANES_MP_tsv" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Args:</dt><dd><p>tsv_file: tsv file contains spectrum infor. downloaded from the Materials Project website
+header: number of header row to skip, default to 3
+absorption_specie (str): Specie associated with the XANES. If not given, will be derived using the</p>
+<blockquote>
+<div><p>edge energy.</p>
+</div></blockquote>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: Other attributes of the spectrum object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>XANES object generated from tsv file</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.rfxas.CenvPrediction">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">CenvPrediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xanes_spectrum</span><span class="p">:</span> <span class="n">maml.apps.rfxas._core.XANES</span></em>, <em class="sig-param"><span class="n">energy_reference</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">energy_range</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">edge_energy</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">spectrum_interpolation</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'rf'</span></em>, <em class="sig-param"><span class="n">model_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/Users/chenchi/repos/maml/maml/apps/rfxas/./models'</span></em>, <em class="sig-param"><span class="n">extra_model_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/Users/chenchi/repos/maml/maml/apps/rfxas/./ex_models/Model_share'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="simple">
+<dt>Coordination environment predictor. Supported models are</dt><dd><p>RandomForest (rf)
+K-neareset Neighbors (knn)
+Support-vector Classifier (svc)
+Multi-layer Perceptron (mlp)
+Convolutional Neural Network (cnn)</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="maml.apps.rfxas.CenvPrediction._available_models">
+<code class="sig-name descname">_available_models</code><em class="property"> = ['rf', 'knn', 'svc', 'mlp', 'cnn']</em><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._available_models" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.rfxas.CenvPrediction._cmotif_prediction">
+<code class="sig-name descname">_cmotif_prediction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._cmotif_prediction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.rfxas.CenvPrediction._cnum_prediction">
+<code class="sig-name descname">_cnum_prediction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._cnum_prediction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.rfxas.CenvPrediction._energy_interp">
+<code class="sig-name descname">_energy_interp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._energy_interp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.rfxas.CenvPrediction._parameter_validation">
+<code class="sig-name descname">_parameter_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._parameter_validation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.rfxas.CenvPrediction.cenv_prediction">
+<code class="sig-name descname">cenv_prediction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction.cenv_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used for coordination environment prediction</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Two new attributes of CenvPrediction object. The attribute ‘pred_cnum_ranklist’ is the predicted
+coordination number ranklist. The attribute pred_cenv contains the final predicted coordination
+environment ranklists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">maml</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Materials Virtual Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/maml.apps.rfxas.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -11,7 +11,7 @@ from sklearn.linear_model import LinearRegression
 
 from ._base import Potential
 from ._lammps import EnergyForceStress
-from maml import ModelWithSklearn
+from maml import SKLModel
 from maml.describer import BispectrumCoefficients
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 
@@ -148,19 +148,6 @@ class SNAPotential(Potential):
         ff_settings = [pair_style, pair_coeff]
         return ff_settings
 
-    def save(self, filename):
-        """
-        Save parameters of the potentials.
-
-        Args:
-            filename (str): The file to store parameters of potentials.
-
-        Returns:
-            (str)
-        """
-        self.model.save(model_fname=filename)
-        return filename
-
     @staticmethod
     def from_config(param_file, coeff_file, **kwargs):
         """
@@ -201,8 +188,8 @@ class SNAPotential(Potential):
         describer = BispectrumCoefficients(cutoff=rcut, twojmax=twojmax,
                                            element_profile=element_profile,
                                            quadratic=quadratic, pot_fit=True)
-        model = ModelWithSklearn(model=LinearRegression(),
-                                 describer=describer, **kwargs)
+        model = SKLModel(model=LinearRegression(),
+                         describer=describer, **kwargs)
         coef = np.array(np.concatenate([coeff_lines[
                                         (2 + nbc * n + n): (2 + nbc * (n + 1) + n)]
                                         for n in range(ne)]), dtype=np.float)

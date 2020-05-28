@@ -56,6 +56,9 @@ class BaseModel:
 
         """
         features = self.describer.fit_transform(objs)
+        if 'val_objs' in kwargs:
+            val_features = self.describer.transform(kwargs.get('val_objs'))  # type: ignore
+            kwargs.update({'val_features': val_features})
         return self.fit(features, targets, **kwargs)
 
     def _predict(self, features: np.ndarray, **kwargs) -> np.ndarray:
@@ -162,7 +165,7 @@ class KerasMixin:
         return instance
 
 
-class ModelWithSklearn(BaseModel, SklearnMixin):
+class SKLModel(BaseModel, SklearnMixin):
     """MAML model with sklearn model as estimator
     """
     def __init__(self, model: Any = None,
@@ -175,7 +178,7 @@ class ModelWithSklearn(BaseModel, SklearnMixin):
         super().__init__(model=model, describer=describer, **kwargs)
 
 
-class ModelWithKeras(BaseModel, KerasMixin):
+class KerasModel(BaseModel, KerasMixin):
     """MAML model with keras model as estimators
     """
     def __init__(self, model: Any = None,

@@ -1,5 +1,5 @@
 """
-This module implements more robust optmization 
+This module implements more robust optmization
 using the cvxpy package
 """
 from typing import Optional, List, Dict, Union
@@ -10,9 +10,9 @@ from scipy.linalg import lstsq
 
 from ._selectors import BaseSelector
 
-
 try:
     import cvxpy as cp
+
     Expression = cp.expressions.expression.Expression
 except ImportError:
     cp = None
@@ -38,7 +38,6 @@ class BaseSelectorCP(BaseSelector):
                options: Optional[Dict] = None) -> np.ndarray:
         """
         Select feature indices from x
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -63,14 +62,11 @@ class BaseSelectorCP(BaseSelector):
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta: (np.ndarray): target variable for optimization
-
         Returns: dict of constraints
-
         """
         return None
 
@@ -78,14 +74,11 @@ class BaseSelectorCP(BaseSelector):
             -> Expression:  # type: ignore
         """
         Get loss function from data and tentative coefficients beta
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: loss value
-
         """
         raise NotImplementedError
 
@@ -94,14 +87,13 @@ class DantzigSelectorCP(BaseSelectorCP):
     """
     Equation 11 in
     https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
-
     and reference in https://projecteuclid.org/download/pdfview_1/euclid.aos/1201012958
     """
+
     @requires(cp is not None, "cvxpy is not present.")
     def __init__(self, lambd, sigma=1.0, **kwargs):
         """
         Dantzig selector
-
         Args:
             lamb: tunable parameter
             sigma: standard deviation of the error
@@ -118,9 +110,7 @@ class DantzigSelectorCP(BaseSelectorCP):
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (cp.Variable): dimension N vector for optimization
-
         Returns: loss expression
-
         """
         return cp.norm1(beta)
 
@@ -128,7 +118,6 @@ class DantzigSelectorCP(BaseSelectorCP):
                               beta: Optional[cp.Variable] = None) -> Optional[List[Expression]]:  # type: ignore
         """
         Dantzig selector constraints
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -152,9 +141,7 @@ class PenalizedLeastSquaresCP(BaseSelectorCP):
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (cp.Variable): dimension N vector for optimization
-
         Returns: loss expression
-
         """
         n = x.shape[0]
         se = 1. / (2 * n) * cp.sum_squares(y - x @ beta) + self.penalty(beta, x=x, y=y)
@@ -164,14 +151,11 @@ class PenalizedLeastSquaresCP(BaseSelectorCP):
                 y: Optional[np.ndarray] = None) -> Union[Expression, float]:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: penalty value
-
         """
         return 0.
 
@@ -180,6 +164,7 @@ class LassoCP(PenalizedLeastSquaresCP):
     """
     Simple Lasso regression
     """
+
     @requires(cp is not None, "cvxpy not installed")
     def __init__(self, lambd, **kwargs):
         """
@@ -195,14 +180,11 @@ class LassoCP(PenalizedLeastSquaresCP):
                 y: Optional[np.ndarray] = None) -> Union[Expression, float]:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: penalty value
-
         """
         beta_abs = cp.norm1(beta)
         return self.lambd * beta_abs
@@ -213,11 +195,11 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
     Adaptive lasso regression using OLS coefficients
     as the root-n estimator coefficients
     """
+
     @requires(cp is not None, "cvxpy not installed")
     def __init__(self, lambd, gamma, **kwargs):
         """
         Adaptive lasso regression
-
         Args:
             lambd (float or list of floats):
             gamma (float): exponential for hat(beta)
@@ -232,7 +214,6 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
                options: Optional[Dict] = None) -> np.ndarray:
         """
         Select feature indices from x
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -245,13 +226,10 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
     def get_w(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         Get adaptive weights from data
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
-
         Returns: coefficients array
-
         """
         beta_hat = lstsq(x, y)[0]
         w = 1. / np.abs(beta_hat) ** self.gamma
@@ -261,13 +239,10 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
                 y: Optional[np.ndarray] = None) -> Union[Expression, float]:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
-
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             beta (np.ndarray): N coefficients
-
         Returns: penalty value
-
         """
         return cp.sum(self.lambd * cp.multiply(self.w, cp.abs(beta)))

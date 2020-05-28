@@ -10,7 +10,8 @@ from monty.os.path import which
 from pymatgen import Lattice, Structure
 
 from maml.describer._site import \
-    BispectrumCoefficients, SmoothOverlapAtomicPosition, BPSymmetryFunctions
+    BispectrumCoefficients, SmoothOverlapAtomicPosition, BPSymmetryFunctions, \
+    SiteElementProperty
 
 
 class BispectrumCoefficientsTest(unittest.TestCase):
@@ -134,6 +135,20 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
                          len(self.r_etas) * len(self.r_shift) * len(binary_elements) +
                          len(self.a_etas) * len(self.zetas) * len(self.lambdas)
                          * len(list(itertools.combinations_with_replacement(binary_elements, 2))))
+
+
+class TestSiteSpecieProperty(unittest.TestCase):
+    def test_unordered_site(self):
+        s = Structure(Lattice.cubic(3), ['Mo', 'S'],
+                      [[0, 0, 0], [0.5, 0.5, 0.5]])
+        udescriber = SiteElementProperty()
+        np.testing.assert_array_almost_equal(udescriber.transform_one(s),
+                                             np.array([[42, 16]]).T)
+
+        udescriber2 = SiteElementProperty(feature_dict={16: [16, 16],
+                                                                  42: [42, 42]})
+        np.testing.assert_array_almost_equal(udescriber2.transform_one(s),
+                                             np.array([[42, 42], [16, 16]]))
 
 
 if __name__ == "__main__":

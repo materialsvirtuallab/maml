@@ -5,23 +5,23 @@ import re
 import logging
 import itertools
 import subprocess
-from typing import Dict, List
+from typing import Dict, List, Optional, Union
 import numpy as np
 import pandas as pd
 
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-from pymatgen.core import Element, Structure
+from pymatgen.core import Element, Structure, Composition
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.base import BaseDescriber
-from maml.utils import pool_from
+from maml.utils import pool_from, to_composition
 from .megnet import MEGNetSite
 
 
 __all__ = ['MEGNetSite', 'BispectrumCoefficients', 'SmoothOverlapAtomicPosition',
-           'BPSymmetryFunctions']
+           'BPSymmetryFunctions', 'SiteElementProperty']
 
 
 logging.basicConfig()
@@ -30,9 +30,18 @@ logger.setLevel(logging.INFO)
 
 
 class BispectrumCoefficients(BaseDescriber):
-    """
+    r"""
     Bispectrum coefficients to describe the local environment of each atom.
     Lammps is required to perform this computation.
+
+    Reference:
+    @article{bartok2010gaussian,
+             title={Gaussian approximation potentials: The
+                accuracy of quantum mechanics, without the electrons},
+             author={Bart{\'o}k, Albert P and Payne, Mike C
+                and Kondor, Risi and Cs{\'a}nyi, G{\'a}bor},
+             journal={Physical review letters},
+             volume={104}, number={13}, pages={136403}, year={2010}, publisher={APS}}
     """
     def __init__(self,
                  cutoff: float,
@@ -123,22 +132,18 @@ class BispectrumCoefficients(BaseDescriber):
             return df
         return process(raw_data[0], self.pot_fit)
 
-    def get_citations(self) -> List[str]:
-        """
-        Bispectrum coefficient citations
-        """
-        return ["@article{bartok2010gaussian, "
-                "title={Gaussian approximation potentials: The"
-                " accuracy of quantum mechanics, without the electrons}, "
-                "author={Bart{\'o}k, Albert P and Payne, Mike C and Kondor,"
-                "Risi and Cs{\'a}nyi, G{\'a}bor}, journal={Physical review letters},"
-                "volume={104}, number={13}, pages={136403}, year={2010}, publisher={APS}}"]
-
 
 class SmoothOverlapAtomicPosition(BaseDescriber):
-    """
+    r"""
     Smooth overlap of atomic positions (SOAP) to describe the local environment
     of each atom.
+
+    Reference:
+    @article{bartok2013representing,
+             title={On representing chemical environments},
+             author={Bart{\'o}k, Albert P and Kondor, Risi and Cs{\'a}nyi, G{\'a}bor},
+             journal={Physical Review B},
+             volume={87}, number={18}, pages={184115}, year={2013}, publisher={APS}}
     """
     def __init__(self,
                  cutoff: float,
@@ -227,25 +232,23 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
 
         return descriptors
 
-    def get_citations(self) -> List[str]:
-        """
-        Get SOAP citations
-        """
-        return ["@article{bartok2013representing,"
-                "title={On representing chemical environments},"
-                "author={Bart{\'o}k, Albert P and Kondor, Risi and Cs{\'a}nyi, G{\'a}bor},"
-                "journal={Physical Review B},"
-                "volume={87},"
-                "number={18},"
-                "pages={184115},"
-                "year={2013},"
-                "publisher={APS}}"]
-
 
 class BPSymmetryFunctions(BaseDescriber):
-    """
+    r"""
     Behler-Parrinello symmetry function to describe the local environment
     of each atom.
+
+    Reference:
+    @article{behler2007generalized,
+            title={Generalized neural-network representation of
+                high-dimensional potential-energy surfaces},
+            author={Behler, J{\"o}rg and Parrinello, Michele},
+            journal={Physical review letters},
+            volume={98},
+            number={14},
+            pages={146401},
+            year={2007},
+            publisher={APS}}
     """
     def __init__(self,
                  cutoff: float,
@@ -342,17 +345,42 @@ class BPSymmetryFunctions(BaseDescriber):
         decay = 0.5 * (np.cos(np.pi * r / self.cutoff) + 1) * (r <= self.cutoff)
         return decay
 
-    def get_citations(self) -> List[str]:
+
+class SiteElementProperty(BaseDescriber):
+    """
+    Site specie property describer. For a structure or composition, return
+    an unordered set of site specie properties
+    """
+    def __init__(self, feature_dict: Optional[dict] = None, **kwargs):
         """
-        Get symmetry function citations
+        Args:
+            element_features (dict): mapping from atomic number of feature vectors
         """
-        return ["@article{behler2007generalized,"
-                "title={Generalized neural-network representation of "
-                "high-dimensional potential-energy surfaces},"
-                "author={Behler, J{\"o}rg and Parrinello, Michele},"
-                "journal={Physical review letters},"
-                "volume={98},"
-                "number={14},"
-                "pages={146401},"
-                "year={2007},"
-                "publisher={APS}}"]
+        self.feature_dict = feature_dict
+        super().__init__(feature_batch=None, **kwargs)
+
+    @staticmethod
+    def _get_keys(c: Composition) -> List[int]:
+        d = c.to_data_dict['reduced_cell_composition']
+        str_z = {str(i): i.Z for i in c.elements}
+        z_values: List[int] = sum([int(d[i]) * [str_z[i]] for i in str_z], [])
+        return z_values
+
+    def transform_one(self, obj: Union[str, Composition, Structure]) -> np.ndarray:
+        """
+        Transform one object to features
+
+        Args:
+            obj (str/Composition/Structure): object to transform
+
+        Returns:
+            features array
+        """
+        comp = to_composition(obj)
+        keys = self._get_keys(comp)
+        n = len(keys)
+        if self.feature_dict is not None:
+            features = [self.feature_dict[i] for i in keys]
+        else:
+            features = keys
+        return np.reshape(features, (n, -1))

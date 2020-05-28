@@ -7,6 +7,8 @@ except ImportError:
     cp = None
 
 from ._selectors import SCAD, L0BrutalForce  # noqa
+from ._selectors import SCAD  # noqa
+from ._feature_generator import FeatureGenerator, Operator  # noqa
 
 if cp is None:
     from ._selectors import (DantzigSelector, AdaptiveLasso,  # noqa
@@ -17,7 +19,7 @@ else:
     from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso  # noqa
     from ._selectors_cvxpy import LassoCP as Lasso  # noqa
 
-from ._sis import SIS  # noqa
+from ._sis import SIS, ISIS  # noqa
 
 __all__ = [
     "DantzigSelector",
@@ -25,5 +27,8 @@ __all__ = [
     "SCAD",
     "Lasso",
     "SIS",
-    "L0BrutalForce"
+    "ISIS",
+    "L0BrutalForce",
+    "FeatureGenerator",
+    "Operator"
 ]

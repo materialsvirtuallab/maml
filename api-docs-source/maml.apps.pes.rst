@@ -1,12 +1,11 @@
 maml.apps.pes package
 =====================
 
-Subpackages
------------
+Submodules
+----------
 
 .. toctree::
-
-   maml.apps.pes.lammps
+   :maxdepth: 7
 
 
 Module contents
