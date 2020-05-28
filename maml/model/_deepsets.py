@@ -18,7 +18,7 @@ def construct_deep_sets(
         activation: str = 'relu',
         embedding_vcal: int = 95,
         embedding_dim: int = 32,
-        symmetry_func: str = "mean",
+        symmetry_func: Union[List[str], str] = "mean",
         optimizer: str = 'adam',
         loss: str = 'mse',
         compile_metrics: tuple = (),
@@ -44,7 +44,7 @@ def construct_deep_sets(
         loss (str): loss function for the model
         symmetry_func_kwargs (dict): kwargs for symmetry function
     """
-    from tensorflow.keras.layers import Input, Dense, Embedding
+    from tensorflow.keras.layers import Input, Dense, Embedding, Concatenate
     from tensorflow.keras.models import Model
     if is_embedding and input_dim is not None:
         raise ValueError("When embedding is used, input dim needs to be None")
@@ -63,16 +63,26 @@ def construct_deep_sets(
         out_ = Dense(n_neuron, activation=activation)(out_)
 
     # apply symmetry function \rho
-    if symmetry_func == 'set2set':
-        from megnet.layers import Set2Set
-        layer = Set2Set(**symmetry_func_kwargs)
-    elif symmetry_func in ['mean', 'sum', 'max', 'min', 'prod']:
-        from megnet.layers import LinearWithIndex
-        layer = LinearWithIndex(mode=symmetry_func)
-    else:
-        raise ValueError("symmetry function not supported")
+    if isinstance(symmetry_func, str):
+        symmetry_func = [symmetry_func]
 
-    out_ = layer([out_, node_ids])
+    symmetry_layers = []
+    for symm in symmetry_func:
+        if symm == 'set2set':
+            from megnet.layers import Set2Set
+            layer = Set2Set(**symmetry_func_kwargs)
+        elif symm in ['mean', 'sum', 'max', 'min', 'prod']:
+            from megnet.layers import LinearWithIndex
+            layer = LinearWithIndex(mode=symm)
+        else:
+            raise ValueError("symmetry function not supported")
+        symmetry_layers.append(layer)
+    outs = [i([out_, node_ids]) for i in symmetry_layers]
+
+    if len(outs) > 1:
+        out_ = Concatenate(axis=-1)(outs)
+    else:
+        out_ = outs[0]
 
     # neural networks
     for n_neuron in n_neurons_final:
@@ -99,7 +109,7 @@ class DeepSets(KerasModel):
                  activation: str = 'relu',
                  embedding_vcal: int = 95,
                  embedding_dim: int = 32,
-                 symmetry_func: str = "mean",
+                 symmetry_func: Union[List[str], str] = "mean",
                  optimizer: str = 'adam',
                  loss: str = 'mse',
                  compile_metrics: tuple = (),
