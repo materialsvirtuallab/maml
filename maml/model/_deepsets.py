@@ -21,6 +21,7 @@ def construct_deep_sets(
         symmetry_func: str = "mean",
         optimizer: str = 'adam',
         loss: str = 'mse',
+        compile_metrics: tuple = (),
         **symmetry_func_kwargs):
     r"""
     f(X) = \rho(\sum_{x \in X} \phi(x)), where X is a set.
@@ -79,7 +80,7 @@ def construct_deep_sets(
 
     out_ = Dense(n_targets)(out_)
     model = Model(inputs=[inp, node_ids], outputs=out_)
-    model.compile(optimizer, loss)
+    model.compile(optimizer, loss, metrics=compile_metrics)
     return model
 
 
@@ -101,6 +102,7 @@ class DeepSets(KerasModel):
                  symmetry_func: str = "mean",
                  optimizer: str = 'adam',
                  loss: str = 'mse',
+                 compile_metrics: tuple = (),
                  **symmetry_func_kwargs
                  ):
         """
@@ -132,6 +134,7 @@ class DeepSets(KerasModel):
                                     symmetry_func=symmetry_func,
                                     optimizer=optimizer,
                                     loss=loss,
+                                    compile_metrics=compile_metrics,
                                     **symmetry_func_kwargs)
         self.is_embedding = is_embedding
         super().__init__(model=model, describer=describer)
