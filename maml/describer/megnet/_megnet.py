@@ -2,9 +2,10 @@
 MEGNet-based describers
 """
 from pathlib import Path
-from typing import Optional, Any, Union, List
+from typing import Optional, Union, List
 
 import pandas as pd
+from pymatgen.core import Structure, Molecule
 
 from maml.base import BaseDescriber
 from maml.utils import get_full_stats_and_funcs
@@ -57,7 +58,7 @@ class MEGNetSite(BaseDescriber):
         self.level = level
         super().__init__(**kwargs)
 
-    def transform_one(self, obj: Any):
+    def transform_one(self, obj: Union[Structure, Molecule]):
         """
         Get megnet site features from structure object
 
@@ -134,7 +135,7 @@ class MEGNetStructure(BaseDescriber):
         self.stats_func = stats_func
         super().__init__(**kwargs)
 
-    def transform_one(self, obj: Any):
+    def transform_one(self, obj: Union[Structure, Molecule]):
         """
         Transform structure/molecule objects into features
         Args:

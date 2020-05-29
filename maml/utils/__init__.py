@@ -1,7 +1,7 @@
 """
 Utilities package.
 """
-from ._data_conversion import pool_from, convert_docs  # noqa
+from ._data_conversion import pool_from, convert_docs, to_array  # noqa
 from ._value_profile import ValueProfile, ConstantValue, LinearProfile  # noqa
 from ._jit import njit  # noqa
 from ._tempfile import MultiScratchDir  # noqa
@@ -14,11 +14,14 @@ from ._lammps import (write_data_from_structure,  # noqa
 from ._stats import Stats, STATS_KWARGS, stats_list_conversion, get_full_stats_and_funcs  # noqa
 from ._signal_processing import spectrogram, cwt, get_sp_method, fft_magnitude, wvd  # noqa
 from ._material import to_composition  # noqa
+from ._inspect import get_full_args  # noqa
+from ._dummy import get_describer_dummy_obj, feature_dim_from_test_system  # noqa
 
 
 __all__ = [
     'pool_from',
     'convert_docs',
+    'to_array',
     'ValueProfile',
     'ConstantValue',
     'LinearProfile',
@@ -41,5 +44,8 @@ __all__ = [
     'wvd',
     'fft_magnitude',
     'get_sp_method',
-    'to_composition'
+    'to_composition',
+    'get_full_args',
+    'get_describer_dummy_obj',
+    'feature_dim_from_test_system'
 ]

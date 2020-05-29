@@ -2,14 +2,14 @@
 neural network models
 """
 import math
-from typing import Optional, Sequence, Union, List
+from typing import Optional, Sequence, Union, List, Any
 
 import numpy as np
 
 from maml.base import KerasModel, BaseDescriber, BaseModel
 
 
-def construct_deep_sets(
+def construct_atom_sets(
         input_dim: Optional[int] = None,
         is_embedding: bool = True,
         n_neurons: Sequence[int] = (64, 64),
@@ -100,7 +100,7 @@ def construct_deep_sets(
     return model
 
 
-class DeepSets(KerasModel):
+class AtomSets(KerasModel):
     r"""
     This class implements the DeepSets model
     """
@@ -140,7 +140,8 @@ class DeepSets(KerasModel):
             symmetry_func_kwargs (dict): kwargs for symmetry function
 
         """
-        model = construct_deep_sets(input_dim=input_dim,
+        input_dim = self.get_input_dim(describer, input_dim)
+        model = construct_atom_sets(input_dim=input_dim,
                                     is_embedding=is_embedding,
                                     n_neurons=n_neurons,
                                     n_neurons_final=n_neurons_final,
@@ -158,6 +159,8 @@ class DeepSets(KerasModel):
         super().__init__(model=model, describer=describer)
 
     def _get_data_generator(self, features, targets, batch_size=128, is_shuffle=True):
+        if features is None:
+            return None
         from tensorflow.keras.utils import Sequence as KerasSequence
 
         def _generate_atom_indices(lengths):
@@ -169,7 +172,9 @@ class DeepSets(KerasModel):
         is_embedding = self.is_embedding
 
         class _DataGenerator(KerasSequence):
-            def __init__(self, features=features, targets=targets, batch_size=batch_size,
+            def __init__(self, features=features,
+                         targets=targets,
+                         batch_size=batch_size,
                          is_shuffle=is_shuffle):
                 self.features, self.targets = features, targets
                 self.batch_size = batch_size
@@ -197,7 +202,10 @@ class DeepSets(KerasModel):
         return _DataGenerator()
 
     def fit(self, features: Union[List, np.ndarray],
-            targets: Union[List, np.ndarray] = None, **kwargs) -> "BaseModel":
+            targets: Union[List, np.ndarray] = None,
+            val_features: Optional[Union[List, np.ndarray]] = None,
+            val_targets: Optional[Union[List, np.ndarray]] = None,
+            **kwargs) -> "BaseModel":
         """
         Args:
             features (list or np.ndarray): Numerical input feature list or
@@ -205,17 +213,16 @@ class DeepSets(KerasModel):
                 n is the feature dimension.
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
+            val_features (list or np.ndarray): validation features
+            val_targets (list or np.ndarray): validation targets
+
         """
         batch_size = kwargs.pop('batch_size', 128)
         is_shuffle = kwargs.pop('is_shuffle', True)
-        train_generator = self._get_data_generator(features, targets, batch_size=batch_size, is_shuffle=is_shuffle)
-        if 'val_features' in kwargs and 'val_targets' in kwargs:
-            val_generator = self._get_data_generator(kwargs.pop('val_features'),
-                                                     kwargs.pop('val_targets'),
-                                                     batch_size=batch_size, is_shuffle=is_shuffle)
-        else:
-            val_generator = None
-
+        train_generator = self._get_data_generator(features, targets,
+                                                   batch_size=batch_size, is_shuffle=is_shuffle)
+        val_generator = self._get_data_generator(val_features, val_targets,
+                                                 batch_size=batch_size, is_shuffle=is_shuffle)
         return self.model.fit(train_generator,  # type: ignore
                               validation_data=val_generator, **kwargs)
 
@@ -235,3 +242,16 @@ class DeepSets(KerasModel):
         for batch in predict_generator:
             predicted.append(self.model.predict(batch[0])[0])  # type: ignore
         return np.concatenate(predicted, axis=0)
+
+    def evaluate(self, eval_objs: Any, eval_targets: Any):
+        """
+        Evaluate objs, targets
+
+        Args:
+            eval_objs (list): objs for evaluation
+            eval_targets (list): target list for the corresponding objects
+        """
+
+        eval_features = self.describer.transform(eval_objs)
+        eval_generator = self._get_data_generator(eval_features, eval_targets)
+        return self.model.evaluate(eval_generator)

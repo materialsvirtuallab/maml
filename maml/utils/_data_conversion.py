@@ -98,3 +98,21 @@ def convert_docs(docs, **kwargs):
     for k, v in kwargs.items():
         df[k] = v
     return structures, df
+
+
+def to_array(x):
+    """
+    Convert x into numerical array
+    Args:
+        x: x can be a dataframe, a list or an array
+    return np.ndarray
+    """
+
+    if isinstance(x, pd.DataFrame):
+        return x.values
+    elif isinstance(x, list):
+        return np.array(x)
+    elif isinstance(x, np.ndarray):
+        return x
+    else:
+        raise ValueError("Not recognized data type")

@@ -26,7 +26,9 @@ for length in [2, 3, 4, 8, 16, 32]:
     DATA_MAPPING['megnet_l%d' % length] = 'data/elemental_embedding_1MEGNet_layer_length_%d.json' % length
     DATA_MAPPING['megnet_ion_l%d' % length] = 'data/ion_embedding_1MEGNet_layer_length_%d.json' % length
 
-ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty)
+
+ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty,
+                                          to_composition, obj_type='Composition')
 
 
 class ElementStats(BaseDescriber):
@@ -39,7 +41,7 @@ class ElementStats(BaseDescriber):
     ALLOWED_STATS = Stats.allowed_stats  # type: ignore
     AVAILABLE_DATA = list(DATA_MAPPING.keys())
 
-    def __init__(self, element_properties: Dict, stats: List[str],
+    def __init__(self, element_properties: Dict, stats: Optional[List[str]] = None,
                  property_names: Optional[List[str]] = None,
                  feature_batch: str = "pandas_concat", **kwargs):
         """
@@ -87,8 +89,10 @@ class ElementStats(BaseDescriber):
 
         all_property_names = []
 
-        full_stats, stats_func = get_full_stats_and_funcs(stats)
+        if stats is None:
+            stats = ['mean', 'max', 'min', 'range', 'std', 'mode']
 
+        full_stats, stats_func = get_full_stats_and_funcs(stats)
         for stat in full_stats:
             all_property_names.extend(['%s_%s' % (p, stat) for p in property_names])
         self.stats = full_stats
@@ -127,7 +131,8 @@ class ElementStats(BaseDescriber):
         return pd.DataFrame([features], columns=self.all_property_names)
 
     @classmethod
-    def from_file(cls, filename: str, stats: List[str], **kwargs) -> "ElementStats":
+    def from_file(cls, filename: str,
+                  stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
         """
         ElementStats from a json file of element property dictionary.
         The keys required are:
@@ -165,7 +170,7 @@ class ElementStats(BaseDescriber):
 
     @classmethod
     def from_data(cls, data_name: Union[List[str], str],
-                  stats: List[str], **kwargs) -> "ElementStats":
+                  stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
         """
         ElementalStats from existing data file.
 
