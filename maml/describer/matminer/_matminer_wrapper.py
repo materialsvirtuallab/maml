@@ -4,7 +4,7 @@ Wrapper for matminer featurizers
 
 from inspect import signature
 import logging
-from typing import Any
+from typing import Any, Callable, Optional
 
 import pandas as pd
 
@@ -15,12 +15,18 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
+def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
+                            obj_conversion: Callable,
+                            obj_type: Optional[Any] = None):
     """
     Wrapper of matminer describers.
     Args:
         cls_name (str): new class name
         wrapped_class (class object): matminer BaseFeaturizer
+        obj_conversion (callable): function to convert objects into desired
+            object type within transform_one
+        obj_type (object): object type
+
     Returns: maml describer class
     """
 
@@ -50,6 +56,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
         """
         featurize to transform_one
         """
+        obj = obj_conversion(obj)
         results = wrapped_class.featurize(self, obj)
         labels = wrapped_class.feature_labels(self)
         return pd.DataFrame({i: [j] for i, j in zip(labels, results)})
@@ -79,7 +86,8 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any):
                       'transform_one': transform_one,
                       'from_preset': from_preset,
                       'get_params': get_params,
-                      '__module__': 'maml.describer'
+                      '__module__': 'maml.describer',
+                      'obj_type': obj_type
                       })
 
     return new_class

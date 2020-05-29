@@ -5,11 +5,11 @@ from unittest import TestCase, main
 
 import numpy as np
 
-from maml.model import DeepSets
+from maml.model import AtomSets
 from maml.describer import SiteElementProperty
 
 
-class TestDeepSets(TestCase):
+class TestAtomSets(TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -17,14 +17,14 @@ class TestDeepSets(TestCase):
         cls.x_vec = np.random.normal(size=(1, 6, 20))
         cls.indices = np.array([[0, 0, 0, 1, 1, 1]], dtype=np.int32).reshape((1, -1))
         cls.y = np.array([[0.1, 0.2]]).reshape((1, 2, 1))
-        cls.model1 = DeepSets(
+        cls.model1 = AtomSets(
             describer=None,
             is_embedding=True, n_neurons=(4, 4), n_neurons_final=(4, 4))
-        cls.model2 = DeepSets(
+        cls.model2 = AtomSets(
             input_dim=20,
             is_embedding=False,
             n_neurons=(4, 4), n_neurons_final=(4, 4))
-        cls.model3 = DeepSets(
+        cls.model3 = AtomSets(
             input_dim=20,
             is_embedding=False,
             symmetry_func='set2set',
@@ -43,7 +43,7 @@ class TestDeepSets(TestCase):
     def test_train(self):
         s = ['H', 'H2O', 'O2', 'OH', 'H3O']
         targets = [0., 1./3, 1, 0.5, 1./4]
-        model = DeepSets(describer=SiteElementProperty(),
+        model = AtomSets(describer=SiteElementProperty(),
                          is_embedding=True,
                          symmetry_func='mean',
                          n_neurons=(8, 8),

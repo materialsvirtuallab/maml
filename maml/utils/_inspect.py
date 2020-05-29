@@ -1,0 +1,36 @@
+"""
+Inspect function args
+"""
+from inspect import signature
+from typing import Callable, List
+
+
+def get_full_args(func: Callable) -> List:
+    """
+    Get args from function
+
+    Args:
+        func (callable): function to determine the args
+    """
+    all_params = list(signature(func).parameters.keys())
+    return [i for i in all_params if i != 'self']
+
+
+def get_param_types(func):
+    """
+    Get param and type info
+
+    Args:
+        func (callable): function to determine the arg types
+    """
+    all_params = get_full_args(func)
+    params = signature(func).parameters
+    param_dict = {}
+
+    for i in all_params:
+        annotation = params[i].annotation
+        if '__args__' in annotation.__dict__:
+            param_dict[i] = annotation.__args__[0].__name__
+        else:
+            param_dict[i] = annotation.__name__
+    return param_dict

@@ -132,6 +132,23 @@ class BispectrumCoefficients(BaseDescriber):
             return df
         return process(raw_data[0], self.pot_fit)
 
+    @property
+    def feature_dim(self) -> Union[int, None]:
+        """
+        Bispectrum feature dimension
+        """
+        n = 0
+        for i in range(self.twojmax + 1):
+            for j in range(i + 1):
+                for k in range(j - i, min(self.twojmax, i + j) + 1, 2):
+                    if k >= i:
+                        n += 1
+        if self.pot_fit:
+            n += 1
+        n_elements = len(self.elements)
+        n *= n_elements
+        return n
+
 
 class SmoothOverlapAtomicPosition(BaseDescriber):
     r"""
@@ -384,3 +401,14 @@ class SiteElementProperty(BaseDescriber):
         else:
             features = keys
         return np.reshape(features, (n, -1))
+
+    @property
+    def feature_dim(self):
+        """
+        Feature dimension
+        """
+        if self.feature_dict is None:
+            return None
+        else:
+            key = list(self.feature_dict.keys())[0]
+            return np.array(self.feature_dict[key]).size()

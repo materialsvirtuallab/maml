@@ -15,6 +15,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 
 from ._feature_batch import get_feature_batch
+from maml.utils import feature_dim_from_test_system
+
 
 _ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
 
@@ -131,6 +133,14 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         if self.memory.location is not None:
             self.memory.clear()
+
+    @property
+    def feature_dim(self):
+        """
+        Feature dimension, useful when certain models need to specif
+        the feature dimension, e.g., MLP model.
+        """
+        return feature_dim_from_test_system(self)
 
 
 def _transform_one(describer: BaseDescriber, obj: Any) -> np.ndarray:
