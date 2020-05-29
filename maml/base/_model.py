@@ -211,11 +211,8 @@ class KerasMixin:
             describer (Describer): describer
             input_dim (int): optional input dim int
         """
-        if describer is None:
-            return None
-
         if input_dim is not None:
-            feature_size = input_dim
+            feature_size: Union[int, None] = input_dim
         elif describer is not None:
             feature_size = describer.feature_dim
         else:
