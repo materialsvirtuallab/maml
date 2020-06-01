@@ -29,8 +29,9 @@ def get_param_types(func):
 
     for i in all_params:
         annotation = params[i].annotation
-        if '__args__' in annotation.__dict__:
-            param_dict[i] = annotation.__args__[0].__name__
+        param_type = getattr(annotation, "__args__", None)
+        if param_type is not None:
+            param_dict[i] = param_type[0].__name__
         else:
             param_dict[i] = annotation.__name__
     return param_dict
