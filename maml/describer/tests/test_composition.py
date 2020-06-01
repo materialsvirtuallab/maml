@@ -117,12 +117,10 @@ class ElementStatsTest(unittest.TestCase):
                           )
         es = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
                           property_names=['p1', 'p2'],
-                          memory=True,
                           n_jobs=-1)
-        self.assertTrue(es.memory is not None)
         self.assertTrue(es.n_jobs == cpu_count())
-        res = es.transform(["H2O", "H2O"])
-        self.assertTrue(res.shape[0] == 2)
+        res = es.transform(["H2O", "H2O", "H2O", "H2O"])
+        self.assertTrue(res.shape[0] == 4)
         es.clear_cache()
 
 

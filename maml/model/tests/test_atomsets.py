@@ -17,9 +17,11 @@ class TestAtomSets(TestCase):
         cls.x_vec = np.random.normal(size=(1, 6, 20))
         cls.indices = np.array([[0, 0, 0, 1, 1, 1]], dtype=np.int32).reshape((1, -1))
         cls.y = np.array([[0.1, 0.2]]).reshape((1, 2, 1))
+
         cls.model1 = AtomSets(
             describer=None,
-            is_embedding=True, n_neurons=(4, 4), n_neurons_final=(4, 4))
+            is_embedding=True, n_neurons=(4, 4),
+            n_neurons_final=(4, 4))
         cls.model2 = AtomSets(
             input_dim=20,
             is_embedding=False,
