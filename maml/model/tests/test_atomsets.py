@@ -1,7 +1,7 @@
 """
 Test models
 """
-from unittest import TestCase, main
+from unittest import TestCase, main, skip
 
 import numpy as np
 
@@ -38,12 +38,6 @@ class TestAtomSets(TestCase):
         self.assertTrue(res.shape == (2, 1))
         res3 = self.model2.model.predict([self.x_vec, self.indices])
         self.assertTrue(res3.shape == (1, 2, 1))
-
-    def test_train(self):
-        s = ['H', 'H2O', 'O2', 'OH', 'H3O']
-        targets = [0., 1./3, 1, 0.5, 1./4]
-        self.model1.train(s, targets, epochs=1)
-        self.assertTrue(self.model1.predict_objs(['H2']).shape == (1, 1))
 
 
 if __name__ == "__main__":

@@ -16,7 +16,6 @@ class TestAtomSets(TestCase):
         cls.model = MLP(describer=ElementStats.from_data("megnet_3"))
 
     def test_train(self):
-        self.model.train(self.x, self.y, epochs=2)
         self.assertTrue(self.model.predict_objs(['H2O']).shape == (1, 1))
 
 

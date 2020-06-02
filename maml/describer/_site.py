@@ -378,7 +378,7 @@ class SiteElementProperty(BaseDescriber):
 
     @staticmethod
     def _get_keys(c: Composition) -> List[int]:
-        d = c.to_data_dict['reduced_cell_composition']
+        d = c.to_data_dict['unit_cell_composition']
         str_z = {str(i): i.Z for i in c.elements}
         z_values: List[int] = sum([int(d[i]) * [str_z[i]] for i in str_z], [])
         return z_values
