@@ -33,8 +33,9 @@ class TestAtomSets(TestCase):
             n_hidden=10)
 
     def test_predict(self):
-        res = self.model1.predict_objs(['H2O'])
-        self.assertTrue(res.shape == (1, 2, 1))
+        res = self.model1.predict_objs(['H2O', 'FeO'])
+        print(res.shape, ' res.shape')
+        self.assertTrue(res.shape == (2, 1))
         res3 = self.model2.model.predict([self.x_vec, self.indices])
         self.assertTrue(res3.shape == (1, 2, 1))
 
