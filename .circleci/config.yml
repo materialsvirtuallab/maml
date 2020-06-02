@@ -53,7 +53,7 @@ jobs:
             export PATH=$HOME/miniconda3/bin:$PATH
             source activate test-environment
             pip install --quiet -e .
-            pytest --cov=maml --cov-report html:coverage_reports maml
+            pytest -v --cov=maml --cov-report html:coverage_reports maml
             coveralls
           no_output_timeout: 3600
       - store_artifacts:
