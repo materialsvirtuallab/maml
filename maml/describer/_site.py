@@ -411,4 +411,4 @@ class SiteElementProperty(BaseDescriber):
             return None
         else:
             key = list(self.feature_dict.keys())[0]
-            return np.array(self.feature_dict[key]).size()
+            return np.array(self.feature_dict[key]).size
