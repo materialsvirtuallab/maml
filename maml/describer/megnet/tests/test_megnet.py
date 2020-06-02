@@ -16,10 +16,6 @@ class MEGNETTest(unittest.TestCase):
             ['Na', 'Cl'], [[0, 0, 0], [0, 0, 0.5]])
 
     def test_megnet_site_transform(self):
-        msite = MEGNetSite()
-        features = msite.transform_one(self.s)
-        self.assertListEqual(list(features.shape), [8, 32])
-
         msite = MEGNetSite(feature_batch='pandas_concat')
         features2 = msite.transform([self.s, self.s])
         self.assertListEqual(list(features2.shape), [16, 32])
@@ -28,10 +24,10 @@ class MEGNETTest(unittest.TestCase):
         mstruct = MEGNetStructure(mode='site_stats')
         self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 32 * 6])
 
-        mstruct = MEGNetStructure(mode='site_readout')
+        mstruct.mode = 'site_readout'
         self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 32])
 
-        mstruct = MEGNetStructure(mode='final')
+        mstruct.mode = 'final'
         self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 32 * 3])
 
 
