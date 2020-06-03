@@ -58,6 +58,8 @@ def construct_atom_sets(
         inp = Input(shape=(None, input_dim),
                     dtype='float32', name='node_feature_input')
         out_ = inp
+
+    weight_inputs = Input(shape=(None, ), dtype='float32', name='weight_input')
     node_ids = Input(shape=(None,), dtype='int32', name='node_in_graph_id')
 
     # start neural networks \phi
@@ -71,15 +73,16 @@ def construct_atom_sets(
     symmetry_layers = []
     for symm in symmetry_func:
         if symm == 'set2set':
-            from megnet.layers import Set2Set
-            layer = Set2Set(**symmetry_func_kwargs)
-        elif symm in ['mean', 'sum', 'max', 'min', 'prod']:
-            from megnet.layers import LinearWithIndex
-            layer = LinearWithIndex(mode=symm)
+            from ._layers import WeightedSet2Set
+            layer = WeightedSet2Set(**symmetry_func_kwargs)
+        elif symm == 'mean':
+            from ._layers import WeightedAverageLayer
+            alpha = symmetry_func_kwargs.pop('alpha', 1)
+            layer = WeightedAverageLayer(alpha=alpha)
         else:
             raise ValueError("symmetry function not supported")
         symmetry_layers.append(layer)
-    outs = [i([out_, node_ids]) for i in symmetry_layers]
+    outs = [i([out_, weight_inputs, node_ids]) for i in symmetry_layers]
 
     if len(outs) > 1:
         out_ = Concatenate(axis=-1)(outs)
@@ -95,7 +98,7 @@ def construct_atom_sets(
     else:
         final_act = None
     out_ = Dense(n_targets, activation=final_act)(out_)
-    model = Model(inputs=[inp, node_ids], outputs=out_)
+    model = Model(inputs=[inp, weight_inputs, node_ids], outputs=out_)
     model.compile(optimizer, loss, metrics=compile_metrics)
     return model
 
@@ -176,7 +179,13 @@ class AtomSets(KerasModel):
                          targets=targets,
                          batch_size=batch_size,
                          is_shuffle=is_shuffle):
-                self.features, self.targets = features, targets
+                if isinstance(features[0], list) and len(features[0]) == 2:
+                    self.features = [i[0] for i in features]
+                    self.weights = [i[1] for i in features]
+                else:
+                    self.features = features
+                    self.weights = [np.ones(shape=(len(i),)) for i in features]
+                self.targets = targets
                 self.batch_size = batch_size
                 self.is_shuffle = is_shuffle
 
@@ -190,15 +199,19 @@ class AtomSets(KerasModel):
                     batch_x = batch_x[..., 0]
                 lengths = [len(i) for i in features_temp]
                 f_index = _generate_atom_indices(lengths)
+                batch_weights = self.weights[idx * self.batch_size: (idx + 1) * self.batch_size]
                 batch_y = self.targets[idx * self.batch_size: (idx + 1) * self.batch_size]
-                return (np.array(batch_x)[None, :], f_index[None, :]), np.array(batch_y)[None, :]
+                return (np.array(batch_x)[None, ...], np.concatenate(batch_weights)[None, :], f_index[None, :]), \
+                    np.array(batch_y)[None, :]
 
             def on_epoch_end(self):
                 if self.is_shuffle:
                     indices = list(range(len(self.features)))
                     np.random.shuffle(indices)
                     self.features = [self.features[i] for i in indices]
+                    self.weights = [self.weights[i] for i in indices]
                     self.targets = [self.targets[i] for i in indices]
+
         return _DataGenerator()
 
     def fit(self, features: Union[List, np.ndarray],

@@ -1,8 +1,6 @@
 """MAML models"""
 from maml.base import SKLModel, KerasModel  # noqa
-from ._atomsets import AtomSets  # noqa
-from ._mlp import MLP  # noqa
-from .dl import WeightedSet2Set, WeightedAverageLayer  # noqa
+from .dl import WeightedSet2Set, WeightedAverageLayer, AtomSets, MLP  # noqa
 
 
 __all__ = [

@@ -152,6 +152,18 @@ class TestSiteSpecieProperty(unittest.TestCase):
 
         self.assertTrue(udescriber.describer_type == 'site')
 
+        udescriber = SiteElementProperty(output_weights=True)
+        vec, weight = udescriber.transform_one(s)
+        np.testing.assert_array_almost_equal(vec, np.array([[42, 16]]).T)
+        np.testing.assert_array_almost_equal(weight, np.array([[1, 1]]).T)
+
+        s2 = s.copy()
+        s2.replace_species({"Mo": {"S": 0.1, "Mo": 0.9}})
+        self.assertRaises(ValueError, udescriber2.transform_one, s2)
+        vec, weight = udescriber.transform_one(s2)
+        np.testing.assert_array_almost_equal(vec, np.array([[16, 42, 16]]).T)
+        np.testing.assert_array_almost_equal(weight, np.array([0.1, 0.9, 1]))
+
 
 if __name__ == "__main__":
     unittest.main()

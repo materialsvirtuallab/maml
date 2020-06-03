@@ -5,14 +5,14 @@ import re
 import logging
 import itertools
 import subprocess
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Tuple
 import numpy as np
 import pandas as pd
 
 from monty.io import zopen
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-from pymatgen.core import Element, Structure, Composition
+from pymatgen.core import Element, Structure, Composition, Molecule
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.base import BaseDescriber, describer_type
@@ -372,39 +372,65 @@ class SiteElementProperty(BaseDescriber):
     Site specie property describers. For a structure or composition, return
     an unordered set of site specie properties
     """
-    def __init__(self, feature_dict: Optional[dict] = None, **kwargs):
+    def __init__(self, feature_dict: Optional[dict] = None, output_weights: bool = False,
+                 **kwargs):
         """
         Args:
             element_features (dict): mapping from atomic number of feature vectors
+            allow_disordered (bool): whether to allow disordered structures
         """
         self.feature_dict = feature_dict
+        self.output_weights = output_weights
         super().__init__(feature_batch=None, **kwargs)
 
     @staticmethod
-    def _get_keys(c: Composition) -> List[int]:
-        d = c.to_data_dict['unit_cell_composition']
+    def _get_keys(c: Composition) -> Tuple[List[int], List[float]]:
+        d = {str(i): j for i, j in c._data.items()}
         str_z = {str(i): i.Z for i in c.elements}
-        z_values: List[int] = sum([int(d[i]) * [str_z[i]] for i in str_z], [])
-        return z_values
+        elements = list(d.keys())
+        z_values: List[int] = [str_z[i] for i in elements]
+        weights: List[float] = [d[i] for i in elements]
+        return z_values, weights
 
-    def transform_one(self, obj: Union[str, Composition, Structure]) -> np.ndarray:
+    def transform_one(self, obj: Union[str, Composition, Structure,
+                                       Molecule]) -> Union[List[np.ndarray], np.ndarray]:
         """
         Transform one object to features
 
         Args:
-            obj (str/Composition/Structure): object to transform
+            obj (str/Composition/Structure/Molecule): object to transform
 
         Returns:
             features array
         """
-        comp = to_composition(obj)
-        keys = self._get_keys(comp)
+        if isinstance(obj, (Structure, Molecule)):
+            keys = []
+            weights = []
+            for i in obj:
+                d = i.species._data
+                for k, w in d.items():
+                    keys.append(k.Z)
+                    weights.append(w)
+        else:
+            comp = to_composition(obj)
+            keys, weights = self._get_keys(comp)
+
         n = len(keys)
         if self.feature_dict is not None:
             features = [self.feature_dict[i] for i in keys]
         else:
             features = keys
-        return np.reshape(features, (n, -1))
+        features = np.reshape(features, (n, -1))
+        weights = np.reshape(weights, (n, ))
+        if self.output_weights:
+            return [features, weights]
+
+        int_weights = weights.astype(int)  # type: ignore
+        if not np.allclose(int_weights, weights):
+            raise ValueError("Number of atoms are not integers and the describer"
+                             " cannot output single feature matrix. Try set "
+                             "output_weights = True")
+        return np.repeat(features, int_weights, axis=0)
 
     @property
     def feature_dim(self):
