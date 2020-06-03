@@ -115,7 +115,9 @@ class ElementStats(BaseDescriber):
 
         """
         comp = to_composition(obj)
-        element_n_dict = comp.to_data_dict['unit_cell_composition']
+        element_n_dict = {str(i): j for i, j in comp._data.items()} 
+        # it is more stable when element fraction is extremely small 
+        # Previously, this was `comp.to_data_dict['unit_cell_composition']`
 
         data = []
         weights = []
