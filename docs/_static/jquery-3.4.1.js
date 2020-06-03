@@ -6586,7 +6586,7 @@ function getWidthOrHeight( elem, dimension, extra ) {
 	// Normalize "" and auto
 	val = parseFloat( val ) || 0;
 
-	// Adjust for the element's box model
+	// Adjust for the element's box models
 	return ( val +
 		boxModelAdjustment(
 			elem,

@@ -8,7 +8,7 @@ import numpy as np
 from pymatgen.util.testing import PymatgenTest
 from pymatgen import Composition, Molecule
 
-from maml.describer import ElementProperty, ElementStats
+from maml.describers import ElementProperty, ElementStats
 
 
 CWD = os.path.abspath(os.path.dirname(__file__))

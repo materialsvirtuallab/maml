@@ -34,8 +34,8 @@ class MEGNetSite(BaseDescriber):
         """
 
         Args:
-            name (str or megnet.models.GraphModel): model name keys, megnet model
-                path or a MEGNet GraphModel, if no name is provided, the model will be Eform_MP_2019.
+            name (str or megnet.models.GraphModel): models name keys, megnet models
+                path or a MEGNet GraphModel, if no name is provided, the models will be Eform_MP_2019.
             level (int): megnet graph layer level
         """
 
@@ -101,8 +101,8 @@ class MEGNetStructure(BaseDescriber):
         """
 
         Args:s
-            name (str or megnet.models.GraphModel): model name keys, megnet model path or
-                a MEGNet GraphModel, if no name is provided, the model will be Eform_MP_2019.
+            name (str or megnet.models.GraphModel): models name keys, megnet models path or
+                a MEGNet GraphModel, if no name is provided, the models will be Eform_MP_2019.
             mode (str): choose one from ['site_stats', 'site_readout', 'final'].
                 'site_stats': Calculate the site features, and then use maml.utils.stats to compute the feature-wise
                     statistics. This requires the specification of level

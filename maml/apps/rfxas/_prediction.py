@@ -87,7 +87,7 @@ class CenvPrediction(object):
                 spectrum_interpolation option if False, then the CenvPrediction object will use the original spectrum
                 of xanes_spectrum for coordination environment prediction. The original spectrum need to be a vector
                 with length equals 200.
-            model (str): rf, knn, mlp or svc. Default is rf. For other models, model download ~1.28 GB is required.
+            model (str): rf, knn, mlp or svc. Default is rf. For other models, models download ~1.28 GB is required.
             model_dir (str): specifies where the models random forest models are stored.
                 if the dir does not exists, the models will be downloaded from figshare
             extra_model_dir (str): specifies where the extra models are stored.
@@ -168,7 +168,7 @@ class CenvPrediction(object):
             cnum_pred_elements = json.load(fp)
 
         if self.absorption_specie not in cnum_pred_elements:
-            warning_msg = 'Coordination number prediction model for {} is unavailable.'.format(self.absorption_specie)
+            warning_msg = 'Coordination number prediction models for {} is unavailable.'.format(self.absorption_specie)
             warnings.warn(warning_msg)
             self.pred_cnum_ranklist = 'cnum undetermined'
         else:
@@ -176,7 +176,7 @@ class CenvPrediction(object):
             cnum_model_path = os.path.join(self.model_dir, 'cnum', cnum_model_name)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=UserWarning)
-                logger.info('Loaded %s model' % cnum_model_path)
+                logger.info('Loaded %s models' % cnum_model_path)
                 if cnum_model_path.endswith('.sav'):
                     cnum_model_loaded = joblib.load(cnum_model_path)
                 elif cnum_model_path.endswith('.h5'):
@@ -184,7 +184,7 @@ class CenvPrediction(object):
                     print('cnum ', cnum_model_path)
                     cnum_model_loaded = tf.keras.models.load_model(cnum_model_path)
                 else:
-                    raise ValueError("Cnum model not recognized")
+                    raise ValueError("Cnum models not recognized")
             self.pred_cnum_ranklist = cnum_model_loaded.predict(self.interp_spectrum_reshape)
             if self.model == 'cnn':
                 self.pred_cnum_ranklist = CN_CLASSES[np.argmax(self.pred_cnum_ranklist)]
@@ -206,7 +206,7 @@ class CenvPrediction(object):
             for indi_pred_cnum in pred_cnum_ranklist.split('-'):
                 cmotif_pred_cenv = 'ex_{}'.format(indi_pred_cnum)
 
-                # No available coord. motif prediction model for this particular coord. num. of this element
+                # No available coord. motif prediction models for this particular coord. num. of this element
                 if cmotif_pred_cenv not in ele_env_valid_prediction:
                     pseudo_cmotif_label = '{} coord. motif undetermined'.format(indi_pred_cnum)
                     spectral_env_pred.append(pseudo_cmotif_label)
@@ -215,7 +215,7 @@ class CenvPrediction(object):
                     cmotif_model_path = os.path.join(self.model_dir, 'cmotif', cmotif_model_name)
                     with warnings.catch_warnings():
                         warnings.simplefilter("ignore", category=UserWarning)
-                        logger.info('Loaded %s model' % cmotif_model_path)
+                        logger.info('Loaded %s models' % cmotif_model_path)
                         if cmotif_model_path.endswith('.sav'):
                             cmotif_model_loaded = joblib.load(cmotif_model_path)
                         elif cmotif_model_path.endswith('.h5'):
@@ -321,7 +321,7 @@ def find_nearest_energy_index(energy_array, energy_value):
 
 def _download_models(url, file_path=EXTRA_MODELS, dest='ext_models'):
     """
-    Download machine learning model files
+    Download machine learning models files
 
     Args:
         url: (str) url link for the models

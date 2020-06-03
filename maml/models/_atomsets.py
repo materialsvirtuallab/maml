@@ -41,8 +41,8 @@ def construct_atom_sets(
         embedding_dim (int): int, embedding dimension
         symmetry_func (str): symmetry function, choose from ['set2set', 'sum', 'mean',
             'max', 'min', 'prod']
-        optimizer (str): optimizer for the model
-        loss (str): loss function for the model
+        optimizer (str): optimizer for the models
+        loss (str): loss function for the models
         compile_metrics (tuple): metrics for validation
         symmetry_func_kwargs (dict): kwargs for symmetry function
     """
@@ -102,7 +102,7 @@ def construct_atom_sets(
 
 class AtomSets(KerasModel):
     r"""
-    This class implements the DeepSets model
+    This class implements the DeepSets models
     """
 
     def __init__(self,
@@ -135,8 +135,8 @@ class AtomSets(KerasModel):
             embedding_dim (int): int, embedding dimension
             symmetry_func (str): symmetry function, choose from ['set2set', 'sum', 'mean',
                 'max', 'min', 'prod']
-            optimizer (str): optimizer for the model
-            loss (str): loss function for the model
+            optimizer (str): optimizer for the models
+            loss (str): loss function for the models
             symmetry_func_kwargs (dict): kwargs for symmetry function
 
         """
@@ -228,7 +228,7 @@ class AtomSets(KerasModel):
 
     def _predict(self, features: np.ndarray, **kwargs) -> np.ndarray:
         """
-        Predict the values given a set of inputs based on fitted model.
+        Predict the values given a set of inputs based on fitted models.
 
         Args:
             features (np.ndarray): array-like input features.

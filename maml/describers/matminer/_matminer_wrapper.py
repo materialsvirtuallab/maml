@@ -27,7 +27,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
             object type within transform_one
         describer_type (object): object type
 
-    Returns: maml describer class
+    Returns: maml describers class
     """
 
     def constructor(self, *args, **kwargs):
@@ -86,7 +86,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
                       'transform_one': transform_one,
                       'from_preset': from_preset,
                       'get_params': get_params,
-                      '__module__': 'maml.describer',
+                      '__module__': 'maml.describers',
                       'describer_type': describer_type
                       })
 

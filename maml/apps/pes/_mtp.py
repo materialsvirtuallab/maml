@@ -150,9 +150,9 @@ class MTPotential(Potential):
         Write initial file for mlip package.
 
         Args:
-            Abinitio (int): Defines Ab-initio model. Default to 1.
+            Abinitio (int): Defines Ab-initio models. Default to 1.
 
-                0: If Ab-initio model is not required.
+                0: If Ab-initio models is not required.
                 1: Used if driver provides EFS data with configurations.
                 2: Use embedded Lennard-Jones pair potentials.
 
@@ -162,7 +162,7 @@ class MTPotential(Potential):
                         Default to 1.0.
                     cutoff (float): Cutoff radius (in Angstroms). Default to 5.0.
 
-                3: Use DFT model by VASP. Linking via files exchange.
+                3: Use DFT models by VASP. Linking via files exchange.
 
                     POSCAR (str): Relative path of POSCAR file.
                     OUTCAR (str): Relative path of OUTCAR file.
@@ -227,7 +227,7 @@ class MTPotential(Potential):
                         No logging if not specified. Default to None.
 
                 Check_errors (bool): If True, comparison and accumulation of
-                    error statistics for EFS calculated by ab-initio model and MTP.
+                    error statistics for EFS calculated by ab-initio models and MTP.
                     Default to False.
 
                     Log (str): Filename to write log of learning on the fly process.

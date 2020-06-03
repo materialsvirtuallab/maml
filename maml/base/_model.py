@@ -1,5 +1,5 @@
 """
-MAML model base classes
+MAML models base classes
 """
 from typing import Any, Union, List, Optional
 import joblib
@@ -20,7 +20,7 @@ class BaseModel:
                  describer: Optional[BaseDescriber] = None, **kwargs):
         """
         Args:
-            model (Any): ML models, for example, sklearn model or keras model
+            model (Any): ML models, for example, sklearn models or keras models
             describer (BaseDescriber): Describer that converts object into features
         """
         if describer is None:
@@ -56,7 +56,7 @@ class BaseModel:
               val_targets: Optional[Union[List, np.ndarray]] = None,
               **kwargs) -> "BaseModel":
         """
-        Train the model from object, target pairs
+        Train the models from object, target pairs
 
         Args:
             objs (list of objects): List of objects
@@ -86,7 +86,7 @@ class BaseModel:
 
     def _predict(self, features: np.ndarray, **kwargs) -> np.ndarray:
         """
-        Predict the values given a set of inputs based on fitted model.
+        Predict the values given a set of inputs based on fitted models.
 
         Args:
             features (np.ndarray): array-like input features.
@@ -120,34 +120,34 @@ class BaseModel:
 
 class SklearnMixin:
     """
-    Sklearn model save and load functionality
+    Sklearn models save and load functionality
     """
     def save(self, filename: str):
-        """Save the model and describer
+        """Save the models and describers
 
         Arguments:
             filename (str): filename for save
         """
-        joblib.dump({"model": self.model,
-                     "describer": self.describer}, filename)
+        joblib.dump({"models": self.model,
+                     "describers": self.describer}, filename)
 
     def load(self, filename: str):
         """
-        Load model parameters from filename
+        Load models parameters from filename
         Args:
-            filename (str): model file name
+            filename (str): models file name
 
         Returns: None
 
         """
         m = joblib.load(filename)
-        self.model = m["model"]
-        self.describer = m["describer"]
+        self.model = m["models"]
+        self.describer = m["describers"]
 
     @classmethod
     def from_file(cls, filename: str, **kwargs):
         """
-        Load the model from file
+        Load the models from file
         Args:
             filename (str): filename
             **kwargs:
@@ -162,10 +162,10 @@ class SklearnMixin:
 
 class KerasMixin:
     """
-    keras model mixin with save and load functionality
+    keras models mixin with save and load functionality
     """
     def save(self, filename: str):
-        """Save the model and describer
+        """Save the models and describers
 
         Arguments:
             filename (str): filename for save
@@ -175,9 +175,9 @@ class KerasMixin:
 
     def load(self, filename: str):
         """
-        Load model parameters from filename
+        Load models parameters from filename
         Args:
-            filename (str): model file name
+            filename (str): models file name
 
         Returns: None
 
@@ -189,7 +189,7 @@ class KerasMixin:
     @classmethod
     def from_file(cls, filename: str, **kwargs):
         """
-        Load the model from file
+        Load the models from file
         Args:
             filename (str): filename
             **kwargs:
@@ -205,10 +205,10 @@ class KerasMixin:
     def get_input_dim(describer: Optional[BaseDescriber] = None,
                       input_dim: Optional[int] = None) -> Union[int, None]:
         """
-        Get feature dimension/input_dim from describer or input_dim
+        Get feature dimension/input_dim from describers or input_dim
 
         Args:
-            describer (Describer): describer
+            describer (Describer): describers
             input_dim (int): optional input dim int
         """
         if input_dim is not None:
@@ -221,26 +221,26 @@ class KerasMixin:
 
 
 class SKLModel(BaseModel, SklearnMixin):
-    """MAML model with sklearn model as estimator
+    """MAML models with sklearn models as estimator
     """
     def __init__(self, model: Any,
                  describer: Optional[BaseDescriber] = None, **kwargs):
         """
         Args:
-            model (Any): ML models, for example, sklearn model or keras model
+            model (Any): ML models, for example, sklearn models or keras models
             describer (BaseDescriber): Describer that converts object into features
         """
         super().__init__(model=model, describer=describer, **kwargs)
 
 
 class KerasModel(BaseModel, KerasMixin):
-    """MAML model with keras model as estimators
+    """MAML models with keras models as estimators
     """
     def __init__(self, model: Any,
                  describer: Optional[BaseDescriber] = None, **kwargs):
         """
         Args:
-            model (Any): ML models, for example, sklearn model or keras model
+            model (Any): ML models, for example, sklearn models or keras models
             describer (BaseDescriber): Describer that converts object into features
         """
         super().__init__(model=model, describer=describer, **kwargs)

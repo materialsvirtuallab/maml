@@ -3,8 +3,8 @@ Test models
 """
 from unittest import TestCase, main
 
-from maml.model import MLP
-from maml.describer import ElementStats
+from maml.models import MLP
+from maml.describers import ElementStats
 
 
 class TestAtomSets(TestCase):

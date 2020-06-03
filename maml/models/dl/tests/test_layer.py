@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from maml.model.dl import WeightedAverageLayer, WeightedSet2Set
+from maml.models.dl import WeightedAverageLayer, WeightedSet2Set
 
 
 class TestLayer(unittest.TestCase):

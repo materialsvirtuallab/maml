@@ -1,5 +1,5 @@
 """
-Batch a list of features output by describer.transform method
+Batch a list of features output by describers.transform method
 """
 from typing import Any, List, Callable, Optional, Union
 

@@ -1,5 +1,5 @@
 """
-Describer for converting (structural) objects into model-readable
+Describer for converting (structural) objects into models-readable
 numeric vectors or tensors.
 """
 

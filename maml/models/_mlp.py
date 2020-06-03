@@ -1,5 +1,5 @@
 """
-Multi-layer perceptron model
+Multi-layer perceptron models
 """
 from typing import Optional
 
@@ -47,7 +47,7 @@ def construct_mlp(input_dim: int,
 
 class MLP(KerasModel):
     """
-    This class implements the multi-layer perceptron model
+    This class implements the multi-layer perceptron models
     """
     def __init__(self,
                  input_dim: Optional[int] = None,

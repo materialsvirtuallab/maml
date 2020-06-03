@@ -13,7 +13,7 @@ from sklearn.linear_model import LinearRegression
 
 from maml.apps.pes import SNAPotential
 from maml import SKLModel
-from maml.describer import BispectrumCoefficients
+from maml.describers import BispectrumCoefficients
 
 CWD = os.getcwd()
 DIR = os.path.abspath(os.path.dirname(__file__))

@@ -5,8 +5,8 @@ from unittest import TestCase, main, skip
 
 import numpy as np
 
-from maml.model import AtomSets
-from maml.describer import SiteElementProperty
+from maml.models import AtomSets
+from maml.describers import SiteElementProperty
 
 
 class TestAtomSets(TestCase):

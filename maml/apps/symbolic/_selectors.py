@@ -98,7 +98,7 @@ class BaseSelector:
     def evaluate(self, x: np.ndarray, y: np.ndarray,
                  metric: str = 'neg_mean_absolute_error') -> float:
         """
-        Evaluate the linear model using x, and y test data
+        Evaluate the linear models using x, and y test data
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets

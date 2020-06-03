@@ -18,7 +18,7 @@ from sklearn.linear_model import LinearRegression
 
 from maml import SKLModel
 from maml.apps.pes import SNAPotential
-from maml.describer import BispectrumCoefficients
+from maml.describers import BispectrumCoefficients
 from maml.apps.pes import SpectralNeighborAnalysis, EnergyForceStress, \
     ElasticConstant, LatticeConstant, NudgedElasticBand, DefectFormation
 from maml.apps.pes import get_default_lmp_exe

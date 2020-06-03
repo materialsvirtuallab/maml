@@ -369,7 +369,7 @@ class BPSymmetryFunctions(BaseDescriber):
 @describer_type('site')
 class SiteElementProperty(BaseDescriber):
     """
-    Site specie property describer. For a structure or composition, return
+    Site specie property describers. For a structure or composition, return
     an unordered set of site specie properties
     """
     def __init__(self, feature_dict: Optional[dict] = None, **kwargs):

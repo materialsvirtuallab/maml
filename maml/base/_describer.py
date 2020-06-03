@@ -1,5 +1,5 @@
 """
-MAML describer base classes
+MAML describers base classes
 """
 import abc
 import logging
@@ -30,9 +30,9 @@ logger.setLevel(logging.INFO)
 
 class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABCMeta):
     """
-    Base class for a Describer. A describer converts an object to a descriptor,
+    Base class for a Describer. A describers converts an object to a descriptor,
     typically a numerical representation useful for machine learning.
-    The output for the describer can be a single DataFrame/numpy.ndarray or
+    The output for the describers can be a single DataFrame/numpy.ndarray or
     a list of DataFrame/numpy.ndarray.
     """
 
@@ -138,7 +138,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     def feature_dim(self):
         """
         Feature dimension, useful when certain models need to specif
-        the feature dimension, e.g., MLP model.
+        the feature dimension, e.g., MLP models.
         """
         return feature_dim_from_test_system(self)
 
@@ -148,7 +148,7 @@ def _transform_one(describer: BaseDescriber, obj: Any) -> np.ndarray:
     A wrapper to make a pure function.
 
     Args:
-        describer (BaseDescriber): a describer
+        describer (BaseDescriber): a describers
 
     Returns:
         np.ndarray
@@ -191,10 +191,10 @@ class SequentialDescriber(Pipeline):
 
 def describer_type(dtype: str):
     """
-    Decorate to set describer class type
+    Decorate to set describers class type
 
     Args:
-        dtype (str): describer type, e.g., site, composition, structure etc.
+        dtype (str): describers type, e.g., site, composition, structure etc.
 
     Return:
         wrapped class

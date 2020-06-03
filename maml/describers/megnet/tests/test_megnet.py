@@ -5,7 +5,7 @@ import unittest
 from pymatgen import Lattice, Structure
 from megnet.models import MEGNetModel
 
-from maml.describer.megnet import MEGNetSite, MEGNetStructure
+from maml.describers.megnet import MEGNetSite, MEGNetStructure
 
 
 class MEGNETTest(unittest.TestCase):

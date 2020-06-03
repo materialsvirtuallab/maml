@@ -12,7 +12,7 @@ from sklearn.linear_model import LinearRegression
 from ._base import Potential
 from ._lammps import EnergyForceStress
 from maml import SKLModel
-from maml.describer import BispectrumCoefficients
+from maml.describers import BispectrumCoefficients
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 
 
@@ -26,8 +26,8 @@ class SNAPotential(Potential):
 
     def __init__(self, model, name=None):
         """
-        Initialize the SNAPotential Potential with atomic describer
-        and model, which are used to generate the Bispectrum coefficients
+        Initialize the SNAPotential Potential with atomic describers
+        and models, which are used to generate the Bispectrum coefficients
         features for structures and to train the parameters.
 
         Args:
@@ -42,7 +42,7 @@ class SNAPotential(Potential):
     def train(self, train_structures, train_energies, train_forces,
               train_stresses=None, **kwargs):
         """
-        Training data with model.
+        Training data with models.
 
         Args:
             train_structures ([Structure]): The list of Pymatgen Structure object.

@@ -25,7 +25,7 @@ __all__ = ['DistinctSiteProperty', 'MEGNetStructure', 'CoulombMatrix',
 @describer_type('structure')
 class DistinctSiteProperty(BaseDescriber):
     r"""
-    Constructs a describer based on properties of distinct sites in a
+    Constructs a describers based on properties of distinct sites in a
     structure. For now, this assumes that there is only one type of species in
     a particular Wyckoff site.
 
@@ -349,7 +349,7 @@ class CoulombEigenSpectrum(BaseDescriber):
         then sort the eigen values of the Coulomb matrix as the vector
         features for the molecule.
         When multiple molecules are converted at the same time, the
-        describer will stack the results. If the number of atoms is
+        describers will stack the results. If the number of atoms is
         not the same for molecules, zeros will padded to the features
 
         Args:

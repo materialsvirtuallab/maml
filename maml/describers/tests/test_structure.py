@@ -7,7 +7,7 @@ import numpy as np
 from pymatgen import Structure, Element, Lattice
 from pymatgen.util.testing import PymatgenTest
 
-from maml.describer._structure import DistinctSiteProperty, CoulombMatrix, \
+from maml.describers._structure import DistinctSiteProperty, CoulombMatrix, \
     SortedCoulombMatrix, RandomizedCoulombMatrix, CoulombEigenSpectrum
 
 

@@ -19,11 +19,11 @@ DUMMY_OBJECTS = {
 
 def get_describer_dummy_obj(instance):
     """
-    For a describer, get a dummy object for transform_one.
+    For a describers, get a dummy object for transform_one.
     This relies on the type hint.
 
     Args:
-        instance (BaseDescriber): describer instance
+        instance (BaseDescriber): describers instance
     """
     obj_type = getattr(instance, "describer_type", None)
     if obj_type is not None:
@@ -41,7 +41,7 @@ def feature_dim_from_test_system(describer):
     Get feature size from a test system
 
     Args:
-        describer (BaseDescriber): describer instance
+        describer (BaseDescriber): describers instance
     """
     dummy_obj = get_describer_dummy_obj(describer)
     features = to_array(describer.transform_one(dummy_obj))
