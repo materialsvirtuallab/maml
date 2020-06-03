@@ -189,17 +189,17 @@ class SequentialDescriber(Pipeline):
         super().__init__(steps, **kwargs)
 
 
-def describer_type(d_type: str):
+def describer_type(dtype: str):
     """
     Decorate to set describer class type
 
     Args:
-        d_type (str): describer type, e.g., site, composition, structure etc.
+        dtype (str): describer type, e.g., site, composition, structure etc.
 
     Return:
         wrapped class
     """
     def wrapped_describer(klass):
-        klass.describer_type = describer_type
+        klass.describer_type = dtype
         return klass
     return wrapped_describer
