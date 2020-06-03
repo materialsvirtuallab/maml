@@ -152,6 +152,6 @@ class TestSiteSpecieProperty(unittest.TestCase):
 
         self.assertTrue(udescriber.describer_type == 'site')
 
-        
+
 if __name__ == "__main__":
     unittest.main()
