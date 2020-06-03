@@ -15,7 +15,7 @@ from monty.tempfile import ScratchDir
 from pymatgen.core import Element, Structure, Composition
 from pymatgen.core.periodic_table import get_el_sp
 
-from maml.base import BaseDescriber
+from maml.base import BaseDescriber, describer_type
 from maml.utils import pool_from, to_composition
 from .megnet import MEGNetSite
 
@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+@describer_type('site')
 class BispectrumCoefficients(BaseDescriber):
     r"""
     Bispectrum coefficients to describe the local environment of each atom.
@@ -150,6 +151,7 @@ class BispectrumCoefficients(BaseDescriber):
         return n
 
 
+@describer_type('site')
 class SmoothOverlapAtomicPosition(BaseDescriber):
     r"""
     Smooth overlap of atomic positions (SOAP) to describe the local environment
@@ -250,6 +252,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         return descriptors
 
 
+@describer_type('site')
 class BPSymmetryFunctions(BaseDescriber):
     r"""
     Behler-Parrinello symmetry function to describe the local environment
@@ -363,6 +366,7 @@ class BPSymmetryFunctions(BaseDescriber):
         return decay
 
 
+@describer_type('site')
 class SiteElementProperty(BaseDescriber):
     """
     Site specie property describer. For a structure or composition, return

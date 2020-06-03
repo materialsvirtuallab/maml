@@ -7,13 +7,14 @@ from typing import Optional, Union, List
 import pandas as pd
 from pymatgen.core import Structure, Molecule
 
-from maml.base import BaseDescriber
+from maml.base import BaseDescriber, describer_type
 from maml.utils import get_full_stats_and_funcs
 
 
 DEFAULT_MODEL = Path(__file__).parent / '../data/megnet_models/formation_energy.hdf5'
 
 
+@describer_type('site')
 class MEGNetSite(BaseDescriber):
     """
     Use megnet pre-trained models as featurizer to get
@@ -72,6 +73,7 @@ class MEGNetSite(BaseDescriber):
         return pd.DataFrame(features)
 
 
+@describer_type('structure')
 class MEGNetStructure(BaseDescriber):
     """
     Use megnet pre-trained models as featurizer to get
@@ -121,7 +123,8 @@ class MEGNetStructure(BaseDescriber):
         self.describer_model = MEGNetDescriptor(name_or_model)
 
         if level is None:
-            n_layers = sum([i.startswith('meg_net') for i in self.describer_model.valid_names]) // 3
+            n_layers = sum([i.startswith('meg_net') or i.startswith('megnet')
+                            for i in self.describer_model.valid_names]) // 3
             level = n_layers
 
         self.name = name

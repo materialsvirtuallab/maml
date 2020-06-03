@@ -11,7 +11,7 @@ import pandas as pd
 from sklearn.decomposition import PCA, KernelPCA
 import json
 
-from maml.base import BaseDescriber
+from maml.base import BaseDescriber, describer_type
 from maml.utils import Stats, get_full_stats_and_funcs
 from maml.utils import to_composition
 from .matminer import wrap_matminer_describer
@@ -28,9 +28,10 @@ for length in [2, 3, 4, 8, 16, 32]:
 
 
 ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty,
-                                          to_composition, obj_type='Composition')
+                                          to_composition, describer_type='composition')
 
 
+@describer_type('composition')
 class ElementStats(BaseDescriber):
     """
     Element statistics. The allowed stats are accessed via ALLOWED_STATS class

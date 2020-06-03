@@ -9,11 +9,11 @@ from ._data_conversion import to_array
 
 DUMMY_OBJECTS = {
     'str': 'H2O',
-    'Composition': Composition('H2O'),
-    'Structure': Structure(Lattice.cubic(3.167),
+    'composition': Composition('H2O'),
+    'structure': Structure(Lattice.cubic(3.167),
                            ['Mo', 'Mo'],
                            [[0, 0, 0], [0.5, 0.5, 0.5]]),
-    'Molecule': Molecule(['C', 'O'], [[0, 0, 0], [1, 0, 0]])
+    'molecule': Molecule(['C', 'O'], [[0, 0, 0], [1, 0, 0]])
 }
 
 
@@ -25,9 +25,9 @@ def get_describer_dummy_obj(instance):
     Args:
         instance (BaseDescriber): describer instance
     """
-    obj_type = getattr(instance, "obj_type", None)
+    obj_type = getattr(instance, "describer_type", None)
     if obj_type is not None:
-        return DUMMY_OBJECTS[obj_type]
+        return DUMMY_OBJECTS[obj_type.lower()]
     arg_types = get_param_types(instance.transform_one)
     arg_type = list(arg_types.values())[0]
     str_t = str(arg_type)

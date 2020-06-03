@@ -3,6 +3,7 @@
 import unittest
 
 from pymatgen import Lattice, Structure
+from megnet.models import MEGNetModel
 
 from maml.describer.megnet import MEGNetSite, MEGNetStructure
 
@@ -14,21 +15,23 @@ class MEGNETTest(unittest.TestCase):
         cls.s = Structure.from_spacegroup(
             'Fm-3m', Lattice.cubic(5.69169),
             ['Na', 'Cl'], [[0, 0, 0], [0, 0, 0.5]])
+        cls.dummy_model = MEGNetModel(100, 2, nblocks=1, n1=4, n2=2, n3=2,
+                                      npass=1)
 
     def test_megnet_site_transform(self):
-        msite = MEGNetSite(feature_batch='pandas_concat')
+        msite = MEGNetSite(name=self.dummy_model, level=1, feature_batch='pandas_concat')
         features2 = msite.transform([self.s, self.s])
-        self.assertListEqual(list(features2.shape), [16, 32])
+        self.assertListEqual(list(features2.shape), [16, 2])
 
     def test_megnet_structure_transform(self):
-        mstruct = MEGNetStructure(mode='site_stats')
-        self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 32 * 6])
+        mstruct = MEGNetStructure(name=self.dummy_model, mode='site_stats', level=1)
+        self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 2 * 6])
 
         mstruct.mode = 'site_readout'
-        self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 32])
+        self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 4])
 
         mstruct.mode = 'final'
-        self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 32 * 3])
+        self.assertListEqual(list(mstruct.transform_one(self.s).shape), [1, 10])
 
 
 if __name__ == "__main__":
