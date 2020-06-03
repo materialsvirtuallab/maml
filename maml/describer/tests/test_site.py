@@ -150,6 +150,8 @@ class TestSiteSpecieProperty(unittest.TestCase):
         np.testing.assert_array_almost_equal(udescriber2.transform_one(s),
                                              np.array([[42, 42], [16, 16]]))
 
+        self.assertTrue(udescriber.describer_type == 'site')
+
 
 if __name__ == "__main__":
     unittest.main()

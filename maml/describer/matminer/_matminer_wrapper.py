@@ -17,7 +17,7 @@ logger.setLevel(logging.INFO)
 
 def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
                             obj_conversion: Callable,
-                            obj_type: Optional[Any] = None):
+                            describer_type: Optional[Any] = None):
     """
     Wrapper of matminer describers.
     Args:
@@ -25,7 +25,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
         wrapped_class (class object): matminer BaseFeaturizer
         obj_conversion (callable): function to convert objects into desired
             object type within transform_one
-        obj_type (object): object type
+        describer_type (object): object type
 
     Returns: maml describer class
     """
@@ -87,7 +87,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
                       'from_preset': from_preset,
                       'get_params': get_params,
                       '__module__': 'maml.describer',
-                      'obj_type': obj_type
+                      'describer_type': describer_type
                       })
 
     return new_class

@@ -9,7 +9,7 @@ import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.core import Structure, Molecule
 
-from maml import BaseDescriber
+from maml.base import BaseDescriber, describer_type
 from .megnet import MEGNetStructure
 
 
@@ -22,6 +22,7 @@ __all__ = ['DistinctSiteProperty', 'MEGNetStructure', 'CoulombMatrix',
            'RandomizedCoulombMatrix', 'SortedCoulombMatrix', 'CoulombEigenSpectrum']
 
 
+@describer_type('structure')
 class DistinctSiteProperty(BaseDescriber):
     r"""
     Constructs a describer based on properties of distinct sites in a
@@ -109,6 +110,7 @@ class DistinctSiteProperty(BaseDescriber):
         return pd.DataFrame([data], columns=names)
 
 
+@describer_type('structure')
 class CoulombMatrix(BaseDescriber):
     r"""
     Coulomb Matrix to describe structure
@@ -199,6 +201,7 @@ class CoulombMatrix(BaseDescriber):
         return pd.DataFrame(c)
 
 
+@describer_type('structure')
 class RandomizedCoulombMatrix(CoulombMatrix):
     r"""
     Randomized CoulombMatrix
@@ -266,6 +269,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         return self.get_randomized_coulomb_mat(s)
 
 
+@describer_type('structure')
 class SortedCoulombMatrix(CoulombMatrix):
     r"""
     Sorted CoulombMatrix
@@ -322,6 +326,7 @@ class SortedCoulombMatrix(CoulombMatrix):
         return self.get_sorted_coulomb_mat(s)
 
 
+@describer_type('structure')
 class CoulombEigenSpectrum(BaseDescriber):
     r"""
     Get the Coulomb Eigen Spectrum describers
