@@ -69,13 +69,13 @@ class BaseModel:
 
         """
         features = to_array(self.describer.fit_transform(objs))
-        targets = np.array(targets)
+        targets = to_array(targets)
 
         if (val_objs is None) and (val_targets is not None):
             raise ValueError("training objects are none, but the targets are not")
         if val_objs is not None:
             val_features = to_array(self.describer.transform(val_objs))
-            val_targets = np.array(val_targets)
+            val_targets = to_array(val_targets)
         else:
             val_features = None
             val_targets = None
@@ -265,7 +265,8 @@ class KerasModel(BaseModel, KerasMixin):
         """
         if (val_features is None) and (val_targets is not None):
             raise ValueError("Validation data incorrect")
-
+        targets = np.array(targets)
+        val_targets = np.array(val_targets)
         fit_args = get_full_args(self.model.fit)  # type: ignore
 
         # construct validation data for keras models

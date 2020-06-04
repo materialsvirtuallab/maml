@@ -13,7 +13,7 @@ class TestAtomSets(TestCase):
     def setUpClass(cls) -> None:
         cls.x = ['H2O', 'Fe2O3']
         cls.y = [0.1, 0.2]
-        cls.model = MLP(describer=ElementStats.from_data("megnet_3"))
+        cls.model = MLP(describer=ElementStats.from_data("megnet_3"), n_neurons=(2, 2))
 
     def test_train(self):
         self.model.train(self.x, self.y, epochs=0)
