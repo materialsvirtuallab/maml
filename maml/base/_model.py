@@ -292,4 +292,4 @@ class KerasModel(BaseModel, KerasMixin):
         construct validation data, the default is just returning a list of
         val_features and val_targets
         """
-        return [val_features, val_targets]
+        return (val_features, val_targets)
