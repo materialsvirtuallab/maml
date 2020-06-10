@@ -160,7 +160,7 @@ class MEGNetStructure(BaseDescriber):
 
         elif self.mode == 'site_readout':
             return pd.DataFrame(self.describer_model.get_set2set(obj, ftype='atom'))
-        elif self.model == 'state':
+        elif self.mode == 'state':
             return pd.DataFrame(self.describer_model.get_global_features(obj, level=self.level))
         elif self.mode == 'final':
             return pd.DataFrame(self.describer_model.get_structure_features(obj))
