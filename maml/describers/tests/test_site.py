@@ -155,7 +155,7 @@ class TestSiteSpecieProperty(unittest.TestCase):
         udescriber = SiteElementProperty(output_weights=True)
         vec, weight = udescriber.transform_one(s)
         np.testing.assert_array_almost_equal(vec, np.array([[42, 16]]).T)
-        np.testing.assert_array_almost_equal(weight, np.array([[1, 1]]).T)
+        np.testing.assert_array_almost_equal(weight, np.array([1, 1]))
 
         s2 = s.copy()
         s2.replace_species({"Mo": {"S": 0.1, "Mo": 0.9}})
