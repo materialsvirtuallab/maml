@@ -107,6 +107,7 @@ class MEGNetStructure(BaseDescriber):
                 'site_stats': Calculate the site features, and then use maml.utils.stats to compute the feature-wise
                     statistics. This requires the specification of level
                 'site_readout': Use the atomic features at the readout stage
+                'state': Use the state attributes 
                 'final': Use the concatenated atom, bond and global features
             level (int): megnet graph layer level
         """
@@ -159,6 +160,7 @@ class MEGNetStructure(BaseDescriber):
 
         elif self.mode == 'site_readout':
             return pd.DataFrame(self.describer_model.get_set2set(obj, ftype='atom'))
-
+        elif self.mode == 'state':
+            return pd.DataFrame(self.describer_model.get_global_features(obj, level=self.level))
         elif self.mode == 'final':
             return pd.DataFrame(self.describer_model.get_structure_features(obj))
