@@ -70,7 +70,7 @@ class testISIS(PymatgenTest):
         selected = isis.run(self.x.values, self.y, max_p=5)
         self.assertAlmostEqual(isis.sis.gamma, 0.15)
         #     # np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
-        np.testing.assert_equal(selected, [10, 11, 12,  4, 5])
+        np.testing.assert_equal(selected, [10, 11, 12,  5, 0])
 
 
 if __name__ == "__main__":
