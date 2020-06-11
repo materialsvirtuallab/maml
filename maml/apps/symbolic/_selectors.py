@@ -7,7 +7,7 @@ from itertools import combinations
 from typing import List, Optional, Union, Dict, Callable
 
 import numpy as np
-from joblib import Parallel, delayed, cpu_count
+from joblib import Parallel, delayed, #cpu_count
 from scipy.optimize import minimize, NonlinearConstraint
 from scipy.linalg import lstsq
 from sklearn.metrics import get_scorer
@@ -512,7 +512,7 @@ class L0BrutalForce(BaseSelector):
         super().__init__(**kwargs)
 
     def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None) -> np.ndarray:
+               options: Optional[Dict] = None, n_job: int = 1) -> np.ndarray:
         """
         L0 combinatorial optimization
         Args:
@@ -536,7 +536,7 @@ class L0BrutalForce(BaseSelector):
         for p_temp in range(1, p + 1):
             for comb in combinations(index_array, p_temp):
                 indices.append(comb)
-        loss = Parallel(n_jobs=cpu_count())(delayed(_lstsq)(comb) for comb in indices)
+        loss = Parallel(n_jobs=n_job)(delayed(_lstsq)(comb) for comb in indices)
         argmin = np.argmin(loss)
         self.indices = np.array(indices[argmin])
         x_temp = x[:, self.indices]
