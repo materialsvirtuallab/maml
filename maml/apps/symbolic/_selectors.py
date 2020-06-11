@@ -7,7 +7,7 @@ from itertools import combinations
 from typing import List, Optional, Union, Dict, Callable
 
 import numpy as np
-from joblib import Parallel, delayed, #cpu_count
+from joblib import Parallel, delayed
 from scipy.optimize import minimize, NonlinearConstraint
 from scipy.linalg import lstsq
 from sklearn.metrics import get_scorer
