@@ -2,7 +2,7 @@ numpy==1.18.5
 scipy==1.4.1
 pymatgen==2020.6.8
 monty==3.0.2
-pandas==1.0.4
+pandas==1.0.5
 scikit-learn==0.23.1
 h5py==2.10.0
 joblib==0.15.1
