@@ -256,15 +256,15 @@ class AtomSets(KerasModel):
             predicted.append(self.model.predict(batch[0])[0])  # type: ignore
         return np.concatenate(predicted, axis=0)
 
-    def evaluate(self, eval_objs: Any, eval_targets: Any):
+    def evaluate(self, eval_objs: Any, eval_targets: Any, is_feature: bool = False):
         """
         Evaluate objs, targets
 
         Args:
             eval_objs (list): objs for evaluation
             eval_targets (list): target list for the corresponding objects
+            is_feature (bool): whether x is feature matrix
         """
-
-        eval_features = self.describer.transform(eval_objs)
+        eval_features = eval_objs if is_feature else self.describer.transform(eval_objs)
         eval_generator = self._get_data_generator(eval_features, eval_targets)
         return self.model.evaluate(eval_generator)

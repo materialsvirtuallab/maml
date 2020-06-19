@@ -104,16 +104,16 @@ class BaseModel:
         return self._predict(self.describer.transform(objs))
 
     def evaluate(self, eval_objs: Union[List, np.ndarray],
-                 eval_targets: Union[List, np.ndarray]) -> np.ndarray:
+                 eval_targets: Union[List, np.ndarray], is_feature: bool = False) -> np.ndarray:
         """
         Evaluate objs, targets
 
         Args:
             eval_objs (list): objs for evaluation
             eval_targets (list): target list for the corresponding objects
+            is_feature (bool): whether the input x is feature matrix
         """
-
-        eval_features = self.describer.transform(eval_objs)
+        eval_features = eval_objs if is_feature else self.describer.transform(eval_objs)
         return self.model.evaluate(to_array(eval_features),  # type: ignore
                                    to_array(eval_targets))
 
