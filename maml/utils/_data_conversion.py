@@ -61,7 +61,7 @@ def pool_from(structures, energies=None, forces=None, stresses=None):
     return datapool
 
 
-def convert_docs(docs, **kwargs):
+def convert_docs(docs, include_stress=False, **kwargs):
     """
     Method to convert a list of docs into objects, e.g.,
     Structure and DataFrame.
@@ -69,6 +69,7 @@ def convert_docs(docs, **kwargs):
     Args:
         docs ([dict]): List of docs. Each doc should have the same
             format as one returned from .dft.parse_dir.
+        include_stress (bool): Whether to include stress components.
 
     Returns:
         A list of structures, and a DataFrame with energy and force
@@ -88,10 +89,16 @@ def convert_docs(docs, **kwargs):
         assert force_arr.shape == (len(structure), 3), \
             'Wrong force array not matching structure'
         force_arr = force_arr.ravel()
-        y = np.concatenate(([outputs['energy']], force_arr))
+        virial_stress = outputs['virial_stress']
+        if include_stress:
+            y = np.concatenate(([outputs['energy']], force_arr, virial_stress))
+            dtype.extend(['energy'] + ['force'] * len(force_arr) + ['stress'] * len(virial_stress))
+        else:
+            y = np.concatenate(([outputs['energy']], force_arr))
+            dtype.extend(['energy'] + ['force'] * len(force_arr))
         y_orig.append(y)
         n.append(np.insert(np.ones(len(y) - 1), 0, d['num_atoms']))
-        dtype.extend(['energy'] + ['force'] * len(force_arr))
+
         structures.append(structure)
     df = pd.DataFrame(dict(y_orig=np.concatenate(y_orig), n=np.concatenate(n),
                            dtype=dtype))
