@@ -40,7 +40,7 @@ class SNAPotential(Potential):
         self.elements = self.model.describer.elements
 
     def train(self, train_structures, train_energies, train_forces,
-              train_stresses=None, **kwargs):
+              train_stresses=None, include_stress=False, **kwargs):
         """
         Training data with models.
 
@@ -55,18 +55,19 @@ class SNAPotential(Potential):
                 each single structure case.
             train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
+            include_stress (bool): Whether to include stress components.
         """
         train_structures, train_forces, train_stresses = \
             check_structures_forces_stresses(train_structures, train_forces, train_stresses)
         train_pool = pool_from(train_structures, train_energies, train_forces,
                                train_stresses)
-        _, df = convert_docs(train_pool)
+        _, df = convert_docs(train_pool, include_stress=include_stress)
         ytrain = df['y_orig'] / df['n']
         xtrain = self.model.describer.transform(train_structures)
         self.model.fit(features=xtrain, targets=ytrain, **kwargs)
 
     def evaluate(self, test_structures, test_energies, test_forces,
-                 test_stresses=None):
+                 test_stresses=None, include_stress=False):
         """
         Evaluate energies, forces and stresses of structures with trained
         machinea learning potentials.
@@ -80,13 +81,14 @@ class SNAPotential(Potential):
                 with each single structure case.
             test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
+            include_stress (bool): Whether to include stress components.
         """
         test_structures, test_forces, test_stresses = \
             check_structures_forces_stresses(test_structures, test_forces, test_stresses)
         predict_pool = pool_from(test_structures, test_energies, test_forces,
                                  test_stresses)
-        _, df_orig = convert_docs(predict_pool)
-        _, df_predict = convert_docs(pool_from(test_structures))
+        _, df_orig = convert_docs(predict_pool, include_stress=include_stress)
+        _, df_predict = convert_docs(pool_from(test_structures), include_stress=include_stress)
         outputs = self.model.predict_objs(objs=test_structures)
         df_predict['y_orig'] = df_predict['n'] * outputs
 
