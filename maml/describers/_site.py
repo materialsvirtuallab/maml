@@ -64,7 +64,7 @@ class BispectrumCoefficients(BaseDescriber):
             quadratic (bool): Whether including quadratic terms.
                 Default to False.
             pot_fit (bool): Whether combine the dataframe for potential fitting.
-            include_stress (bool): Wether to include stress components.
+            include_stress (bool): Whether to include stress components.
             way to batch together a list of features
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
