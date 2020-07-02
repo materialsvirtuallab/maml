@@ -89,8 +89,8 @@ def convert_docs(docs, include_stress=False, **kwargs):
         assert force_arr.shape == (len(structure), 3), \
             'Wrong force array not matching structure'
         force_arr = force_arr.ravel()
-        virial_stress = outputs['virial_stress']
         if include_stress:
+            virial_stress = outputs['virial_stress']
             y = np.concatenate(([outputs['energy']], force_arr, virial_stress))
             dtype.extend(['energy'] + ['force'] * len(force_arr) + ['stress'] * len(virial_stress))
         else:
