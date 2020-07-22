@@ -1,4 +1,4 @@
-numpy==1.19.0
+numpy==1.19.1
 scipy==1.5.1
 pymatgen==2020.7.18
 monty==3.0.4
