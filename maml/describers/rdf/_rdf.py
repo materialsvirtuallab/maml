@@ -6,8 +6,8 @@ from math import ceil
 from typing import List, Tuple, Optional, Dict
 
 import numpy as np
-from pymatgen.core import Structure
 from scipy.ndimage import gaussian_filter1d
+from pymatgen.core import Structure
 
 
 class RadialDistributionFunction:
@@ -82,7 +82,7 @@ class RadialDistributionFunction:
                 The rdfs are calculated on these species.
         Returns:
         """
-        all_species = list(set([str(i.specie) for i in structure.sites]))
+        all_species = list({str(i.specie) for i in structure.sites})
         density = self._get_specie_density(structure)
         n_atoms = structure.composition.to_data_dict['unit_cell_composition']
         if ref_species is None:
@@ -150,7 +150,7 @@ class RadialDistributionFunction:
                 The rdfs are calculated on these species.
         Returns:
         """
-        all_species = list(set([str(i.specie) for i in structure.sites]))
+        all_species = list({str(i.specie) for i in structure.sites})
         if ref_species is None:
             ref_species = all_species
         if species is None:
@@ -221,8 +221,9 @@ def get_pair_distances(structure: Structure, r_max: float = 8.0) \
     species = np.array([str(i.specie) for i in structure.sites])
     res = [{"specie": i, "neighbors": {}} for i in species]
     neighbor_species = species[index2]
-    tuples = np.array([(i, j) for i, j in zip(index1, neighbor_species)],
-                      dtype=[("index", "i4"), ("specie", "<U10")])
+    tuples = np.array(zip(index1, neighbor_species),
+                      dtype=[("index", "i4"),
+                             ("specie", "<U10")])
     unique_tuples, indices = np.unique(tuples, return_inverse=True)
     for index, unique_tuple in enumerate(unique_tuples):
         res[unique_tuple[0]]["neighbors"][unique_tuple[1]] = \

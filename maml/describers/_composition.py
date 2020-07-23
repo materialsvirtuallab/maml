@@ -7,14 +7,14 @@ from typing import Dict, List, Union, Optional, Tuple
 
 import numpy as np
 import pandas as pd
+from sklearn.decomposition import PCA, KernelPCA
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from pymatgen.core import Composition, Structure, Element, Specie
-from sklearn.decomposition import PCA, KernelPCA
 
 from maml.base import BaseDescriber, describer_type
 from maml.utils import Stats, get_full_stats_and_funcs
 from maml.utils import to_composition
-from .matminer import wrap_matminer_describer
+from maml.describers.matminer_wrapper import wrap_matminer_describer
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
@@ -38,7 +38,7 @@ class ElementStats(BaseDescriber):
     are separated by ::, e.g., moment::1::None
     """
 
-    ALLOWED_STATS = Stats.allowed_stats  # type: ignore
+    ALLOWED_STATS = getattr(Stats, "allowed_stats")  # type: ignore
     AVAILABLE_DATA = list(DATA_MAPPING.keys())
 
     def __init__(self, element_properties: Dict, stats: Optional[List[str]] = None,
@@ -76,7 +76,7 @@ class ElementStats(BaseDescriber):
         self.element_properties = element_properties
         properties = list(self.element_properties.values())
 
-        n_property = list(set([len(i) for i in properties]))
+        n_property = list({len(i) for i in properties})
         if len(n_property) > 1:
             raise ValueError("Property length not consistent")
         n_single_property = n_property[0]
@@ -114,8 +114,8 @@ class ElementStats(BaseDescriber):
 
         """
         comp = to_composition(obj)
-        element_n_dict = {str(i): j for i, j in comp._data.items()} 
-        # it is more stable when element fraction is extremely small 
+        element_n_dict = {str(i): j for i, j in comp._data.items()}
+        # it is more stable when element fraction is extremely small
         # Previously, this was `comp.to_data_dict['unit_cell_composition']`
 
         data = []

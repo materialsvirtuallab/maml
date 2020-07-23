@@ -10,7 +10,7 @@ from pymatgen.core import Structure, Molecule
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from maml.base import BaseDescriber, describer_type
-from .megnet import MEGNetStructure
+from maml.describers.megnet import MEGNetStructure
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

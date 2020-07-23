@@ -17,7 +17,7 @@ from pymatgen.core.periodic_table import get_el_sp
 
 from maml.base import BaseDescriber, describer_type
 from maml.utils import pool_from, to_composition
-from .megnet import MEGNetSite
+from maml.describers.megnet import MEGNetSite
 
 __all__ = ['MEGNetSite', 'BispectrumCoefficients', 'SmoothOverlapAtomicPosition',
            'BPSymmetryFunctions', 'SiteElementProperty']
@@ -315,7 +315,7 @@ class BPSymmetryFunctions(BaseDescriber):
                                                                  key=lambda neighbor:
                                                                  neighbor.species_string)}
             for specie in elements:
-                distances = np.array([nn_distance for _, nn_distance 
+                distances = np.array([nn_distance for _, nn_distance
                                       in temp_dict[specie]])[:, None, None]
                 g2 = np.sum(np.exp(-self.r_etas * (distances - self.r_shift) ** 2)
                             * self._fc(distances), axis=0)
@@ -438,6 +438,5 @@ class SiteElementProperty(BaseDescriber):
         """
         if self.feature_dict is None:
             return None
-        else:
-            key = list(self.feature_dict.keys())[0]
-            return np.array(self.feature_dict[key]).size
+        key = list(self.feature_dict.keys())[0]
+        return np.array(self.feature_dict[key]).size
