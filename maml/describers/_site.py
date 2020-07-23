@@ -327,7 +327,7 @@ class BPSymmetryFunctions(BaseDescriber):
 
                 c = itertools.combinations(range(len(group1)), 2) if specie1 == specie2 \
                     else itertools.product(range(len(group1)), range(len(group2)))
-                index_combination = np.array(list(c)).T
+                index_combination = np.array(list(c)).T.tolist()
 
                 coords_group1 = np.array([coords for coords, _ in group1])
                 coords_group2 = np.array([coords for coords, _ in group2])

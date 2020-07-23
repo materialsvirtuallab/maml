@@ -66,7 +66,8 @@ class WeightedAverageLayer(Layer):
         out = tf.transpose(a=out, perm=perm)
         return out
 
-    def compute_output_shape(self, input_shape: Sequence) -> tuple:
+    @staticmethod
+    def compute_output_shape(input_shape: Sequence) -> tuple:
         """
         Compute output shape from input shape
         Args:

@@ -205,6 +205,9 @@ class AtomSets(KerasModel):
                     np.array(batch_y)[None, :]
 
             def on_epoch_end(self):
+                """
+                Codes executed at the end of each epoch
+                """
                 if self.is_shuffle:
                     indices = list(range(len(self.features)))
                     np.random.shuffle(indices)
