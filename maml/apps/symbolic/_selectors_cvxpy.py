@@ -50,7 +50,6 @@ class BaseSelectorCP(BaseSelector):
         n, p = x.shape
         beta = cp.Variable(p)
         objective = cp.Minimize(self.construct_loss(x, y, beta))
-        constraints: Optional[List[Expression]]
         constraints = self.construct_constraints(x, y, beta)
         prob = cp.Problem(objective, constraints)
         prob.solve(solver=self.method, **options)
