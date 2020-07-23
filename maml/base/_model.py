@@ -287,7 +287,8 @@ class KerasModel(BaseModel, KerasMixin):
         self.model.fit(features, targets, validation_data=validation_data, **kwargs)  # type: ignore
         return self
 
-    def _get_validation_data(self, val_features, val_targets, **val_kwargs):
+    @staticmethod
+    def _get_validation_data(val_features, val_targets, **val_kwargs):
         """
         construct validation data, the default is just returning a list of
         val_features and val_targets
