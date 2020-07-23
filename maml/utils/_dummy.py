@@ -3,9 +3,8 @@ Dummy test systems
 """
 from pymatgen.core import Composition, Structure, Lattice, Molecule
 
-from ._inspect import get_param_types
 from ._data_conversion import to_array
-
+from ._inspect import get_param_types
 
 DUMMY_OBJECTS = {
     'str': 'H2O',

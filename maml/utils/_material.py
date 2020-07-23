@@ -2,6 +2,7 @@
 Materials utils
 """
 from typing import Union
+
 from pymatgen.core import Composition, Structure, Molecule
 
 

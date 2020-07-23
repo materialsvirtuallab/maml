@@ -3,8 +3,8 @@ Data split
 """
 from typing import Optional, Tuple
 
-from monty.json import MSONable
 import numpy as np
+from monty.json import MSONable
 from sklearn.utils import shuffle
 
 

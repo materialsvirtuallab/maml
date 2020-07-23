@@ -4,9 +4,9 @@
 
 """This module provides NNP interatomic potential class."""
 
-import re
-import os
 import itertools
+import os
+import re
 import subprocess
 from collections import OrderedDict
 
@@ -14,15 +14,14 @@ import numpy as np
 import pandas as pd
 from monty.io import zopen
 from monty.os.path import which
-from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
+from monty.tempfile import ScratchDir
 from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core import units
 
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 from ._base import Potential
 from ._lammps import EnergyForceStress
-from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-
 
 module_dir = os.path.dirname(__file__)
 NNinput_params = loadfn(os.path.join(module_dir, 'params', 'NNinput.json'))

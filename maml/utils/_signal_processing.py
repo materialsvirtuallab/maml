@@ -1,9 +1,9 @@
 """Signal processing utils"""
-from typing import Union, Tuple, Callable
 from math import ceil, floor
+from typing import Union, Tuple, Callable
 
-from monty.dev import requires
 import numpy as np
+from monty.dev import requires
 from scipy import fft
 from scipy import signal
 

@@ -3,20 +3,19 @@ MAML describers base classes
 """
 import abc
 import logging
-from tqdm import tqdm  # ignore
-from typing import Any, List
 import tempfile
+from typing import Any, List
 
-from monty.json import MSONable
 import numpy as np
 from joblib import cpu_count, Parallel, delayed
-from sklearn.utils.validation import check_memory
+from monty.json import MSONable
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
+from sklearn.utils.validation import check_memory
+from tqdm import tqdm  # ignore
 
-from ._feature_batch import get_feature_batch
 from maml.utils import feature_dim_from_test_system
-
+from ._feature_batch import get_feature_batch
 
 _ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
 

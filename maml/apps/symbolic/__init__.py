@@ -6,9 +6,9 @@ try:
 except ImportError:
     cp = None
 
-from ._selectors import SCAD, L0BrutalForce  # noqa
-from ._selectors import SCAD  # noqa
 from ._feature_generator import FeatureGenerator, Operator  # noqa
+from ._selectors import SCAD  # noqa
+from ._selectors import SCAD, L0BrutalForce  # noqa
 from ._sis import SIS, ISIS  # noqa
 
 if cp is None:

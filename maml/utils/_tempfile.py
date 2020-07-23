@@ -6,10 +6,9 @@ This file is adapted from monty.tempfile
 import os
 import shutil
 import tempfile
-from typing import Any, Union, List, Optional
 import warnings
-
 from pathlib import Path
+from typing import Any, Union, List, Optional
 
 from monty.shutil import copy_r, remove
 

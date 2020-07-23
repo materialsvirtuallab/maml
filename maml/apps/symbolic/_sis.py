@@ -4,13 +4,13 @@ Sure Independence Screening
 https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
 
 """
-from typing import Optional, Dict, List
-from itertools import combinations
 import logging
+from itertools import combinations
+from typing import Optional, Dict, List
 
 import numpy as np
-from sklearn.metrics import get_scorer
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import get_scorer
 
 from ._selectors import BaseSelector, DantzigSelector
 

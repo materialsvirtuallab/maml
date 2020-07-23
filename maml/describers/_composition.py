@@ -1,21 +1,20 @@
 """
 Compositional describers
 """
+import json
 import os
 from typing import Dict, List, Union, Optional, Tuple
 
-from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 import numpy as np
-from pymatgen.core import Composition, Structure, Element, Specie
 import pandas as pd
+from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
+from pymatgen.core import Composition, Structure, Element, Specie
 from sklearn.decomposition import PCA, KernelPCA
-import json
 
 from maml.base import BaseDescriber, describer_type
 from maml.utils import Stats, get_full_stats_and_funcs
 from maml.utils import to_composition
 from .matminer import wrap_matminer_describer
-
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 

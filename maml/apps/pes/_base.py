@@ -6,6 +6,7 @@ Base classes for potentials
 """
 
 import abc
+
 from maml.base import BaseModel
 
 

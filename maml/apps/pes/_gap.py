@@ -4,25 +4,24 @@
 
 """This module provides SOAP-GAP interatomic potential class."""
 
-import re
 import os
+import re
 import subprocess
-import ruamel.yaml as yaml
 import xml.etree.ElementTree as ET
 from collections import OrderedDict, defaultdict
 
 import numpy as np
+import ruamel.yaml as yaml
 from monty.io import zopen
 from monty.os.path import which
-from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
+from monty.tempfile import ScratchDir
 from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core.periodic_table import get_el_sp
 
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 from ._base import Potential
 from ._lammps import EnergyForceStress
-from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-
 
 module_dir = os.path.dirname(__file__)
 soap_params = loadfn(os.path.join(module_dir, 'params', 'GAP.json'))

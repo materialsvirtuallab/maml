@@ -4,21 +4,20 @@
 
 """This module provides basic LAMMPS calculator classes."""
 
-import os
 import abc
 import io
-import subprocess
 import itertools
 import logging
+import os
+import subprocess
 
 import numpy as np
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-from pymatgen.io.lammps.data import LammpsData
 from pymatgen.core import Structure, Lattice, Element
+from pymatgen.io.lammps.data import LammpsData
 
 from ._base import Potential
-
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

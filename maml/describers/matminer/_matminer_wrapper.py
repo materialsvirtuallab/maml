@@ -2,8 +2,8 @@
 Wrapper for matminer featurizers
 """
 
-from inspect import signature
 import logging
+from inspect import signature
 from typing import Any, Callable, Optional
 
 import pandas as pd

@@ -2,8 +2,8 @@
 MAML models base classes
 """
 from typing import Any, Union, List, Optional
-import joblib
 
+import joblib
 import numpy as np
 
 from maml.base import DummyDescriber, BaseDescriber

@@ -2,13 +2,12 @@
 Utils for describers
 """
 
+import logging
 from collections import Counter
 from functools import partial
-import logging
 from typing import List, Optional, Tuple
 
 import numpy as np
-
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

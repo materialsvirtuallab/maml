@@ -8,10 +8,10 @@ from typing import List, Optional, Union, Dict, Callable
 
 import numpy as np
 from joblib import Parallel, delayed
-from scipy.optimize import minimize, NonlinearConstraint
 from scipy.linalg import lstsq
-from sklearn.metrics import get_scorer
+from scipy.optimize import minimize, NonlinearConstraint
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import get_scorer
 
 
 # pylint: disable=R0201

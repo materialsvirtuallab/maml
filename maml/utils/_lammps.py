@@ -4,10 +4,9 @@ LAMMPS utility
 import logging
 from typing import List, Optional, Union, Tuple
 
+import numpy as np
 from pymatgen.core import Structure, Element, Specie, Lattice
 from pymatgen.core.operations import SymmOp
-import numpy as np
-
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

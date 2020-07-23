@@ -4,8 +4,8 @@ using the cvxpy package
 """
 from typing import Optional, List, Dict, Union
 
-from monty.dev import requires
 import numpy as np
+from monty.dev import requires
 from scipy.linalg import lstsq
 
 from ._selectors import BaseSelector

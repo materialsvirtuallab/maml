@@ -2,17 +2,17 @@
 Class for performing local environment predictions
 """
 
-import os
 import json
 import logging
-from numbers import Number
-import requests
-from typing import List, Optional, Union
+import os
 import warnings
+from numbers import Number
+from typing import List, Optional, Union
 from zipfile import ZipFile
 
 import joblib
 import numpy as np
+import requests
 from scipy.interpolate import interp1d
 from tqdm import tqdm
 

@@ -6,15 +6,15 @@
 
 from ._base import PotentialMixin, Potential  # noqa
 from ._gap import GAPotential  # noqa
-from ._mtp import MTPotential  # noqa
-from ._snap import SNAPotential  # noqa
-from ._nnp import NNPotential  # noqa
 from ._lammps import (  # noqa
     LMPStaticCalculator, EnergyForceStress,  # noqa
     SpectralNeighborAnalysis, ElasticConstant,  # noqa
     LatticeConstant, NudgedElasticBand, DefectFormation,  # noqa
     get_default_lmp_exe  # noqa
 )
+from ._mtp import MTPotential  # noqa
+from ._nnp import NNPotential  # noqa
+from ._snap import SNAPotential  # noqa
 
 __all__ = [
     "Potential",

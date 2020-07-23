@@ -3,8 +3,8 @@ Batch a list of features output by describers.transform method
 """
 from typing import Any, List, Callable, Optional, Union
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 def pandas_concat(features: List[pd.DataFrame]) -> pd.DataFrame:

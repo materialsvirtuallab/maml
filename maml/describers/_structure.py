@@ -6,12 +6,11 @@ from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
-from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.core import Structure, Molecule
+from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from maml.base import BaseDescriber, describer_type
 from .megnet import MEGNetStructure
-
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

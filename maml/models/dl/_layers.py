@@ -1,11 +1,11 @@
 """Deep learning layers"""
 from typing import Optional, Sequence
 
-from megnet.utils.layer import repeat_with_index
-from megnet.layers.readout import Set2Set
-from tensorflow.keras.layers import Layer
 import tensorflow as tf
 import tensorflow.keras.backend as kb
+from megnet.layers.readout import Set2Set
+from megnet.utils.layer import repeat_with_index
+from tensorflow.keras.layers import Layer
 
 
 class WeightedAverageLayer(Layer):

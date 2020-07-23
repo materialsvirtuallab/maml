@@ -4,14 +4,13 @@
 
 """This module provides MTP interatomic potential class."""
 
+import itertools
+import json
 import os
 import re
-import json
 import shutil
-import itertools
 import subprocess
 from collections import OrderedDict
-
 
 import numpy as np
 from monty.io import zopen
@@ -20,10 +19,9 @@ from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.core import Structure, Lattice
 
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 from ._base import Potential
 from ._lammps import EnergyForceStress
-from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-
 
 module_dir = os.path.dirname(__file__)
 MTini_params = loadfn(os.path.join(module_dir, 'params', 'MTini.json'))

@@ -5,8 +5,8 @@ This was originally written in pymatgen-diffusion
 from math import ceil
 from typing import List, Tuple, Optional, Dict
 
-from pymatgen.core import Structure
 import numpy as np
+from pymatgen.core import Structure
 from scipy.ndimage import gaussian_filter1d
 
 
