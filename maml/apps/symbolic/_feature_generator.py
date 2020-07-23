@@ -49,17 +49,15 @@ def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
         if fn1 == fn2:
             if not sop:
                 continue
-            else:
-                for op in sop:
-                    _update_df(fdf, op, fn1)
+            for op in sop:
+                _update_df(fdf, op, fn1)
         else:
             if not bop:
                 continue
-            else:
-                for op in bop:
-                    _update_df(fdf, op, fn1, fn2)
-                    if not op.commutative:
-                        _update_df(fdf, op, fn2, fn1)
+            for op in bop:
+                _update_df(fdf, op, fn1, fn2)
+                if not op.commutative:
+                    _update_df(fdf, op, fn2, fn1)
     return fdf
 
 
@@ -176,7 +174,7 @@ class Operator:
         Returns: True if the operator takes two arguments else False
 
         """
-        return False if self.is_unary else True
+        return not self.is_unary
 
     @property
     def is_commutative(self) -> bool:

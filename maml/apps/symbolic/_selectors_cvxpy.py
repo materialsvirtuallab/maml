@@ -18,7 +18,7 @@ except ImportError:
     cp = None
     Expression = "Expression"
 
-
+# pylint: disable=R0201
 class BaseSelectorCP(BaseSelector):
     """
     Base selector using cvxpy (CP)
@@ -34,6 +34,7 @@ class BaseSelectorCP(BaseSelector):
         """
         super().__init__(coef_thres=coef_thres, method=method)
 
+    # pylint: disable=E1128
     def select(self, x: np.ndarray, y: np.ndarray,
                options: Optional[Dict] = None) -> np.ndarray:
         """
@@ -48,6 +49,7 @@ class BaseSelectorCP(BaseSelector):
         n, p = x.shape
         beta = cp.Variable(p)
         objective = cp.Minimize(self.construct_loss(x, y, beta))
+        constraints: Optional[List[Expression]]
         constraints = self.construct_constraints(x, y, beta)
         prob = cp.Problem(objective, constraints)
         prob.solve(solver=self.method, **options)

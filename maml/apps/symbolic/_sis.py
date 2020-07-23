@@ -19,6 +19,41 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+def _get_coeff(x, y):
+    coeff, _, _, _ = np.linalg.lstsq(x, y, rcond=-1)
+    return coeff
+
+
+def _eval(x, y, coeff, metric):
+    metric_func = get_scorer(metric)
+    lr = LinearRegression(fit_intercept=False)
+    lr.coef_ = coeff  # type: ignore
+    lr.intercept_ = 0
+    return metric_func(lr, x, y)
+
+
+def _best_combination(x, y, find_sel, find_sel_new,
+                      metric: str = 'neg_mean_absolute_error'):
+    if len(find_sel_new) == 1:
+        comb_best = np.append(find_sel, find_sel_new)
+        coeff_best = _get_coeff(x[:, comb_best], y)
+        score_best = _eval(x[:, comb_best], y, coeff_best, metric)
+        return comb_best, coeff_best, score_best
+    combs = combinations(np.append(find_sel, find_sel_new), len(find_sel) + 1)
+    coeff_best = _get_coeff(x[:, find_sel], y)
+    score_best = _eval(x[:, find_sel], y, coeff_best, metric)
+    comb_best = find_sel
+    for ind_comb in combs:
+        d = x[:, ind_comb]
+        coeff = _get_coeff(d, y)
+        score = _eval(d, y, coeff, metric)
+        if score > score_best:
+            score_best = score
+            comb_best = ind_comb
+            coeff_best = coeff
+    return comb_best, coeff_best, score_best
+
+
 class SIS:
     """
     Sure independence screening method.
@@ -184,9 +219,9 @@ class ISIS:
         assert max_p <= x.shape[1]
         findex = np.array(np.arange(0, x.shape[1]))
         find_sel = self.sis.select(x, y, options)
-        self.coeff = self._get_coeff(x[:, find_sel], y)
+        self.coeff = _get_coeff(x[:, find_sel], y)
         if len(find_sel) >= max_p:
-            self.coeff = self._get_coeff(x[:, find_sel[:max_p]], y)
+            self.coeff = _get_coeff(x[:, find_sel[:max_p]], y)
             return find_sel[:max_p]
         new_findex = np.array(list(set(findex) - set(find_sel)))
         new_y = self.sis.compute_residual(x, y)
@@ -200,48 +235,16 @@ class ISIS:
                     self.sis.update_gamma(step)
                     find_sel_new = self.sis.run(new_x, new_y)
             if self.l0_regulate:
-                find_sel, _, _ = self._best_combination(x, y, find_sel,
+                find_sel, _, _ = _best_combination(x, y, find_sel,
                                                         new_findex[find_sel_new], metric)
             else:
                 find_sel = np.append(find_sel, new_findex[find_sel_new])
             new_findex = np.array(list(set(findex) - set(find_sel)))
             new_y = self.sis.compute_residual(new_x, new_y)
             new_x = x[:, new_findex]
-        self.coeff = self._get_coeff(x[:, find_sel], y)
+        self.coeff = _get_coeff(x[:, find_sel], y)
         self.find_sel = find_sel
         return find_sel
-
-    def _get_coeff(self, x, y):
-        coeff, _, _, _ = np.linalg.lstsq(x, y, rcond=-1)
-        return coeff
-
-    def _best_combination(self, x, y, find_sel, find_sel_new,
-                          metric: str = 'neg_mean_absolute_error'):
-        if len(find_sel_new) == 1:
-            comb_best = np.append(find_sel, find_sel_new)
-            coeff_best = self._get_coeff(x[:, comb_best], y)
-            score_best = self._eval(x[:, comb_best], y, coeff_best, metric)
-            return comb_best, coeff_best, score_best
-        combs = combinations(np.append(find_sel, find_sel_new), len(find_sel) + 1)
-        coeff_best = self._get_coeff(x[:, find_sel], y)
-        score_best = self._eval(x[:, find_sel], y, coeff_best, metric)
-        comb_best = find_sel
-        for ind_comb in combs:
-            d = x[:, ind_comb]
-            coeff = self._get_coeff(d, y)
-            score = self._eval(d, y, coeff, metric)
-            if score > score_best:
-                score_best = score
-                comb_best = ind_comb
-                coeff_best = coeff
-        return comb_best, coeff_best, score_best
-
-    def _eval(self, x, y, coeff, metric):
-        metric_func = get_scorer(metric)
-        lr = LinearRegression(fit_intercept=False)
-        lr.coef_ = coeff  # type: ignore
-        lr.intercept_ = 0
-        return metric_func(lr, x, y)
 
     def evaluate(self, x: np.ndarray, y: np.ndarray,
                  metric: str = 'neg_mean_absolute_error') -> float:
@@ -254,4 +257,4 @@ class ISIS:
                 sklearn.metrics.get_scorer
         Returns:
         """
-        return self._eval(x[:, self.find_sel], y, self.coeff, metric)
+        return _eval(x[:, self.find_sel], y, self.coeff, metric)

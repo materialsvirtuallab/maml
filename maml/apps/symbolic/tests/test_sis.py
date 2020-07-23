@@ -6,6 +6,7 @@ import pandas as pd
 from pymatgen.util.testing import PymatgenTest
 
 from maml.apps.symbolic import SIS, ISIS, L0BrutalForce
+from maml.apps.symbolic._sis import _get_coeff, _best_combination
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
@@ -40,7 +41,7 @@ class testISIS(PymatgenTest):
 
     def test_coeff(self):
         isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)))
-        coeff = isis._get_coeff(self.x.values, self.y)
+        coeff = _get_coeff(self.x.values, self.y)
         self.assertArrayAlmostEqual(coeff[10:], [1, 1, 1])
 
     def test_evaluate(self):
@@ -52,7 +53,7 @@ class testISIS(PymatgenTest):
     def test_best_combination(self):
         isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)), l0_regulate=False)
         _ = isis.run(self.x.values, self.y, max_p=4)
-        comb_best, coeff_best, score_best = isis._best_combination(self.x.values, self.y,
+        comb_best, coeff_best, score_best = _best_combination(self.x.values, self.y,
                                                                    np.array([10, 11]),
                                                                    np.array([12, 0]))
         self.assertArrayEqual(comb_best, [10, 11, 12])
