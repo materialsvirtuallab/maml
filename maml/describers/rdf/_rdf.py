@@ -221,7 +221,7 @@ def get_pair_distances(structure: Structure, r_max: float = 8.0) \
     species = np.array([str(i.specie) for i in structure.sites])
     res = [{"specie": i, "neighbors": {}} for i in species]
     neighbor_species = species[index2]
-    tuples = np.array(zip(index1, neighbor_species),
+    tuples = np.array(list(zip(index1, neighbor_species)),
                       dtype=[("index", "i4"),
                              ("specie", "<U10")])
     unique_tuples, indices = np.unique(tuples, return_inverse=True)

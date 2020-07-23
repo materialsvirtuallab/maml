@@ -421,7 +421,9 @@ def _moment_symbol_conversion(moment_symbol: str):
 
     if max_order is None:
         return [moment_symbol]
-    return ['moment:%d:None' % i for i in range(0, max_order + 1)]
+    if max_order > 0:
+        return ['moment:%d:None' % i for i in range(1, max_order + 1)]
+    return ["moment:0:None"]
 
 
 def stats_list_conversion(stats_list: List[str]) -> List[str]:
