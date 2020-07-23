@@ -3,9 +3,9 @@ from typing import Optional, Sequence
 
 import tensorflow as tf
 import tensorflow.keras.backend as kb
+from tensorflow.keras.layers import Layer
 from megnet.layers.readout import Set2Set
 from megnet.utils.layer import repeat_with_index
-from tensorflow.keras.layers import Layer
 
 
 class WeightedAverageLayer(Layer):

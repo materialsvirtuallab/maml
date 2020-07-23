@@ -73,10 +73,10 @@ def construct_atom_sets(
     symmetry_layers = []
     for symm in symmetry_func:
         if symm == 'set2set':
-            from ._layers import WeightedSet2Set
+            from maml.models.dl._layers import WeightedSet2Set
             layer = WeightedSet2Set(**symmetry_func_kwargs)
         elif symm == 'mean':
-            from ._layers import WeightedAverageLayer
+            from maml.models.dl._layers import WeightedAverageLayer
             alpha = symmetry_func_kwargs.pop('alpha', 1)
             layer = WeightedAverageLayer(alpha=alpha)
         else:
