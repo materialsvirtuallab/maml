@@ -49,11 +49,10 @@ class XANES(Spectrum):
                 self.structure.composition.reduced_formula,
                 super().__str__()
             )
-        else:
-            return "%s %s Edge for %s" % (
-                self.absorption_specie, self.edge,
-                super().__str__()
-            )
+        return "%s %s Edge for %s" % (
+            self.absorption_specie, self.edge,
+            super().__str__()
+        )
 
     @staticmethod
     def from_K_XANES_MP_tsv(tsv_file, header=3, absorption_specie=None, **kwargs):
@@ -85,5 +84,5 @@ class XANES(Spectrum):
                 lambda x: np.abs(x - edge_energy))
             derived_abs_specie = kedge_vs_atomNo_df.sort_values('K_edge_difference').iloc[0]['Element']
             return XANES(spectrum_energy, spectrum_mu, absorption_specie=derived_abs_specie, edge='K', **kwargs)
-        else:
-            return XANES(spectrum_energy, spectrum_mu, absorption_specie=absorption_specie, edge='K', **kwargs)
+
+        return XANES(spectrum_energy, spectrum_mu, absorption_specie=absorption_specie, edge='K', **kwargs)

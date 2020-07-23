@@ -20,8 +20,8 @@ from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from ._base import Potential
-from ._lammps import EnergyForceStress
+from maml.apps.pes._base import Potential
+from maml.apps.pes._lammps import EnergyForceStress
 
 module_dir = os.path.dirname(__file__)
 soap_params = loadfn(os.path.join(module_dir, 'params', 'GAP.json'))
@@ -45,7 +45,8 @@ class GAPotential(Potential):
         self.param = param if param else {}
         self.elements = None
 
-    def _line_up(self, structure, energy, forces, virial_stress):
+    @staticmethod
+    def _line_up(structure, energy, forces, virial_stress):
         """
         Convert input structure, energy, forces, virial_stress to
         proper configuration format for MLIP usage.
@@ -122,7 +123,8 @@ class GAPotential(Potential):
 
         return filename
 
-    def read_cfgs(self, filename, predict=False):
+    @staticmethod
+    def read_cfgs(filename, predict=False):
         """
         Read the configuration file.
 

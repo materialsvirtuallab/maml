@@ -17,7 +17,7 @@ from monty.tempfile import ScratchDir
 from pymatgen.core import Structure, Lattice, Element
 from pymatgen.io.lammps.data import LammpsData
 
-from ._base import Potential
+from maml.apps.pes._base import Potential
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -532,7 +532,8 @@ class NudgedElasticBand(LMPStaticCalculator):
         self.num_replicas = num_replicas
         super().__init__(**kwargs)
 
-    def get_unit_cell(self, specie, lattice, alat):
+    @staticmethod
+    def get_unit_cell(specie, lattice, alat):
         """
         Get the unit cell from specie, lattice type and lattice constant.
 
@@ -717,7 +718,8 @@ class DefectFormation(LMPStaticCalculator):
         self.alat = alat
         super().__init__(**kwargs)
 
-    def get_unit_cell(self, specie, lattice, alat):
+    @staticmethod
+    def get_unit_cell(specie, lattice, alat):
         """
         Get the unit cell from specie, lattice type and lattice constant.
 

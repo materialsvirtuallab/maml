@@ -20,8 +20,8 @@ from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core import units
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from ._base import Potential
-from ._lammps import EnergyForceStress
+from maml.apps.pes._base import Potential
+from maml.apps.pes._lammps import EnergyForceStress
 
 module_dir = os.path.dirname(__file__)
 NNinput_params = loadfn(os.path.join(module_dir, 'params', 'NNinput.json'))
@@ -666,12 +666,13 @@ class NNPotential(Potential):
 
             energy_rmse_pattern = re.compile(r'ENERGY\s*\S*\s*(\S*)\s*(\S*).*?\n')
             forces_rmse_pattern = re.compile(r'FORCES\s*\S*\s*(\S*)\s*(\S*).*?\n')
-            self.train_energy_rmse, self.validation_energy_rmse = \
-                np.array([line for line in energy_rmse_pattern.findall(error_lines)],
-                         dtype=np.float).T
-            self.train_forces_rmse, self.validation_forces_rmse = \
-                np.array([line for line in forces_rmse_pattern.findall(error_lines)],
-                         dtype=np.float).T
+            errors = np.array(energy_rmse_pattern.findall(error_lines), dtype=np.float).T.tolist()
+            self.train_energy_rmse = errors[0]
+            self.validation_energy_rmse = errors[1]
+
+            errors = np.array(forces_rmse_pattern.findall(error_lines), dtype=np.float).T.tolist()
+            self.train_forces_rmse = errors[0]
+            self.validation_forces_rmse = errors[1]
 
             for specie in self.elements:
                 weights_filename = 'weights.{}.{}.out'.format(

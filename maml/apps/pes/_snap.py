@@ -13,8 +13,8 @@ from sklearn.linear_model import LinearRegression
 from maml import SKLModel
 from maml.describers import BispectrumCoefficients
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from ._base import Potential
-from ._lammps import EnergyForceStress
+from maml.apps.pes._base import Potential
+from maml.apps.pes._lammps import EnergyForceStress
 
 
 class SNAPotential(Potential):

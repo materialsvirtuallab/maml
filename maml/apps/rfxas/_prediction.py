@@ -16,7 +16,8 @@ import requests
 from scipy.interpolate import interp1d
 from tqdm import tqdm
 
-from ._core import XANES
+from maml.apps.rfxas._core import XANES
+
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -54,7 +55,7 @@ with open(os.path.join(DATA_DIR, 'cmotif_labels.json'), 'r') as f:
     CMOTIF_LABELS = json.load(f)
 
 
-class CenvPrediction(object):
+class CenvPrediction:
     """
     Coordination environment predictor. Supported models are
         RandomForest (rf)

@@ -20,8 +20,8 @@ from monty.tempfile import ScratchDir
 from pymatgen.core import Structure, Lattice
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from ._base import Potential
-from ._lammps import EnergyForceStress
+from maml.apps.pes._base import Potential
+from maml.apps.pes._lammps import EnergyForceStress
 
 module_dir = os.path.dirname(__file__)
 MTini_params = loadfn(os.path.join(module_dir, 'params', 'MTini.json'))
@@ -143,7 +143,8 @@ class MTPotential(Potential):
 
         return filename
 
-    def write_ini(self, Abinitio=0, MLIP='MPT.mpt', Driver=0, **kwargs):
+    @staticmethod
+    def write_ini(Abinitio=0, MLIP='MPT.mpt', Driver=0, **kwargs):
         """
         Write initial file for mlip package.
 

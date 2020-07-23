@@ -8,7 +8,7 @@ import numpy as np
 from monty.dev import requires
 from scipy.linalg import lstsq
 
-from ._selectors import BaseSelector
+from maml.apps.symbolic._selectors import BaseSelector
 
 try:
     import cvxpy as cp
