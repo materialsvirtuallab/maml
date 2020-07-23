@@ -18,6 +18,7 @@ except ImportError:
     cp = None
     Expression = "Expression"
 
+
 # pylint: disable=R0201
 class BaseSelectorCP(BaseSelector):
     """
