@@ -9,7 +9,7 @@ from typing import Optional
 import numpy as np
 
 
-class ValueProfile(object):
+class ValueProfile:
     """
     Base class for ValueProfile. The base class has the following methods
     methods:

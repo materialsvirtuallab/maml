@@ -18,6 +18,6 @@ def to_composition(obj: Union[Composition, Molecule, Structure, str]) -> Composi
     """
     if isinstance(obj, str):
         return Composition(obj)
-    elif isinstance(obj, (Structure, Molecule)):
+    if isinstance(obj, (Structure, Molecule)):
         return obj.composition
     return obj

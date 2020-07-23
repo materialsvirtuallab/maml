@@ -59,8 +59,7 @@ def check_structures_forces_stresses(structures: List[Structure],
     if stresses is None:
         stresses = [None] * len(structures)
 
-    for i in range(len(structures)):
-        s = structures[i]
+    for i, s in enumerate(structures):
         # orthogonal structures do not need to rotate
         if s.lattice.is_orthogonal:
             new_structures.append(s)

@@ -111,12 +111,11 @@ class Stats:
                     modes.append(v)
             return np.mean(modes).item()
 
-        else:
-            data_array = np.array(data)
-            weights_array = np.array(weights)
-            maxes = np.isclose(weights_array, weights_array.max())
-            max_data = data_array[maxes]
-            return np.mean(max_data).item()
+        data_array = np.array(data)
+        weights_array = np.array(weights)
+        maxes = np.isclose(weights_array, weights_array.max())
+        max_data = data_array[maxes]
+        return np.mean(max_data).item()
 
     @staticmethod
     def mean_absolute_deviation(data: List[float],
@@ -171,10 +170,7 @@ class Stats:
 
         """
         # check if only a single value should be output
-        if max_order is None:
-            single = True
-        else:
-            single = False
+        single = max_order is None
 
         if weights is None:
             weights = [1.0 / len(data)] * len(data)
@@ -331,7 +327,7 @@ class Stats:
         else:
             weights = [i / sum(weights) for i in weights]
 
-        assert(abs(sum(weights) - 1) < 1e-3)
+        assert abs(sum(weights) - 1) < 1e-3
 
         if p == 0:
             return np.prod([i ** j for i, j in zip(data, weights)]).item()
@@ -424,10 +420,8 @@ def _moment_symbol_conversion(moment_symbol: str):
     max_order = _convert_a_or_b(splits[2], int, None)
 
     if max_order is None:
-        return moment_symbol
-
-    if max_order > 0:
-        return ['moment:%d:None' % i for i in range(1, max_order + 1)]
+        return [moment_symbol]
+    return ['moment:%d:None' % i for i in range(0, max_order + 1)]
 
 
 def stats_list_conversion(stats_list: List[str]) -> List[str]:
@@ -448,10 +442,7 @@ def stats_list_conversion(stats_list: List[str]) -> List[str]:
             re_list.append(st)
         elif 'moment' in st:
             moment = _moment_symbol_conversion(st)
-            if isinstance(moment, list):
-                re_list.extend(moment)
-            else:
-                re_list.append(moment)
+            re_list.extend(moment)
         else:
             re_list.append(st)
     return re_list
@@ -480,7 +471,7 @@ def get_full_stats_and_funcs(stats: List) -> Tuple[List[str], List]:
             splits = stat.split(":")
             stat_name = splits[0]
 
-            if stat_name.lower() not in Stats.allowed_stats:  # type: ignore
+            if stat_name.lower() not in getattr(Stats, "allowed_stats", []):  # type: ignore
                 raise ValueError(f"{stat_name.lower()} not in available Stats")
 
             func = getattr(Stats, stat_name)
@@ -497,7 +488,7 @@ def get_full_stats_and_funcs(stats: List) -> Tuple[List[str], List]:
             stats_func.append(partial(func, **arg_dict))
             continue
 
-        if stat.lower() not in Stats.allowed_stats:  # type: ignore
+        if stat.lower() not in getattr(Stats, "allowed_stats", []):  # type: ignore
             raise ValueError(f"{stat.lower()} not in available Stats")
         stats_func.append(getattr(Stats, stat))
     return full_stats, stats_func

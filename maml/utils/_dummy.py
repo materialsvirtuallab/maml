@@ -46,5 +46,5 @@ def feature_dim_from_test_system(describer):
     features = to_array(describer.transform_one(dummy_obj))
     if features.ndim == 1:
         return None
-    else:
-        return features.shape[-1]
+
+    return features.shape[-1]

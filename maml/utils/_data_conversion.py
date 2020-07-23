@@ -117,11 +117,10 @@ def to_array(x):
 
     if isinstance(x, pd.DataFrame):
         return x.values
-    elif isinstance(x, list):
+    if isinstance(x, list):
         return [to_array(i) for i in x]
-    elif isinstance(x, np.ndarray):
+    if isinstance(x, np.ndarray):
         return x
-    elif isinstance(x, (str, int, float)):
+    if isinstance(x, (str, int, float)):
         return x
-    else:
-        raise ValueError("Not recognized data type")
+    raise ValueError("Not recognized data type")
