@@ -58,3 +58,8 @@ API documentation
 -----------------
 
 See `API docs <https://guide.materialsvirtuallab.org/maml/modules.html>`_.
+
+
+.. image:: https://api.codacy.com/project/badge/Grade/ce4948eb43c14774b9227334fc97366e
+   :alt: Codacy Badge
+   :target: https://app.codacy.com/gh/materialsvirtuallab/maml?utm_source=github.com&utm_medium=referral&utm_content=materialsvirtuallab/maml&utm_campaign=Badge_Grade_Dashboard
