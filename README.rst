@@ -1,6 +1,6 @@
 .. image:: https://circleci.com/gh/materialsvirtuallab/maml.svg?style=shield
     :target: https://circleci.com/gh/materialsvirtuallab/maml
-.. image:: https://app.codacy.com/project/badge/Grade/319cd68a2c074140ab2e2f433ab0c83a    
+.. image:: https://app.codacy.com/project/badge/Grade/319cd68a2c074140ab2e2f433ab0c83a
     :target: https://circleci.com/gh/materialsvirtuallab/maml 
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&service=github
     :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
@@ -10,7 +10,7 @@
     :target: https://github.com/materialsvirtuallab/maml
 .. image:: https://static.pepy.tech/badge/maml
     :target: https://static.pepy.tech/badge/maml
-.. image:: https://img.shields.io/github/commit-activity/y/materialsvirtuallab/maml 
+.. image:: https://img.shields.io/github/commit-activity/y/materialsvirtuallab/maml
     :target: https://github.com/materialsvirtuallab/maml
 .. image:: https://img.shields.io/github/repo-size/materialsvirtuallab/maml
     :target: https://github.com/materialsvirtuallab/maml
