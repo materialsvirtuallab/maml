@@ -10,7 +10,7 @@
     :target: https://github.com/materialsvirtuallab/maml
 .. image:: https://static.pepy.tech/badge/maml
     :target: https://static.pepy.tech/badge/maml
-.. image:: https://img.shields.io/github/commit-activity/y/materialsvirtuallab/maml
+.. image:: https://img.shields.io/github/commit-activity/y/materialsvirtuallab/maml 
     :target: https://github.com/materialsvirtuallab/maml
 .. image:: https://img.shields.io/github/repo-size/materialsvirtuallab/maml
     :target: https://github.com/materialsvirtuallab/maml
