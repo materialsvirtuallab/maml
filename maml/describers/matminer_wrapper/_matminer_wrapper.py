@@ -29,7 +29,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
 
     Returns: maml describers class
     """
-    new_class = None
+    new_class = object
 
     def constructor(self, *args, **kwargs):
         """
