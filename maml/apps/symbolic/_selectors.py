@@ -15,7 +15,6 @@ from sklearn.metrics import get_scorer
 from joblib import Parallel, delayed
 
 
-
 # pylint: disable=R0201
 class BaseSelector:
     """

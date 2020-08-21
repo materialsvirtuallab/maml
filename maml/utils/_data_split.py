@@ -8,7 +8,6 @@ from sklearn.utils import shuffle
 from monty.json import MSONable
 
 
-
 class DataSplitter(MSONable):
     """
     Data splitter base class
