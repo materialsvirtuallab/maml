@@ -1,4 +1,4 @@
-.. image:: https://circleci.com/gh/materialsvirtuallab/maml.svg?style=shield
+.. image:: https://github.com/materialsvirtuallab/maml/workflows/Testing/badge.svg
     :target: https://circleci.com/gh/materialsvirtuallab/maml
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&service=github
     :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
