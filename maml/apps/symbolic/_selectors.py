@@ -7,11 +7,13 @@ from itertools import combinations
 from typing import List, Optional, Union, Dict, Callable
 
 import numpy as np
-from joblib import Parallel, delayed
 from scipy.linalg import lstsq
 from scipy.optimize import minimize, NonlinearConstraint
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import get_scorer
+
+from joblib import Parallel, delayed
+
 
 
 # pylint: disable=R0201

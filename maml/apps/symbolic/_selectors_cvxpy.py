@@ -5,8 +5,9 @@ using the cvxpy package
 from typing import Optional, List, Dict, Union
 
 import numpy as np
-from monty.dev import requires
 from scipy.linalg import lstsq
+
+from monty.dev import requires
 
 from maml.apps.symbolic._selectors import BaseSelector
 

@@ -7,12 +7,14 @@ import tempfile
 from typing import Any, List
 
 import numpy as np
-from joblib import cpu_count, Parallel, delayed
-from monty.json import MSONable
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import check_memory
-from tqdm import tqdm  # ignore
+
+from joblib import cpu_count, Parallel, delayed
+from tqdm import tqdm
+
+from monty.json import MSONable
 
 from maml.utils import feature_dim_from_test_system
 from ._feature_batch import get_feature_batch

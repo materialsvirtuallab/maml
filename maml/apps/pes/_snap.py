@@ -7,8 +7,9 @@
 import re
 
 import numpy as np
-from monty.io import zopen
 from sklearn.linear_model import LinearRegression
+
+from monty.io import zopen
 
 from maml import SKLModel
 from maml.describers import BispectrumCoefficients

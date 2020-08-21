@@ -9,10 +9,11 @@ import warnings
 from numbers import Number
 from typing import List, Optional, Union
 from zipfile import ZipFile
+import requests
+import numpy as np
 
 import joblib
-import numpy as np
-import requests
+
 from scipy.interpolate import interp1d
 from tqdm import tqdm
 
