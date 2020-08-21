@@ -20,7 +20,7 @@ class WeightedAverageLayer(Layer):
         Args:
             alpha (float): exponent in weighting
         """
-        super(WeightedAverageLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.alpha = alpha
 
     def build(self, input_shape: Sequence) -> None:
