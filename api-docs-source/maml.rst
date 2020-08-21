@@ -10,8 +10,8 @@ Subpackages
    maml.apps
    maml.base
    maml.data
-   maml.describer
-   maml.model
+   maml.describers
+   maml.models
    maml.utils
 
 Module contents

@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>maml.apps.rfxas package &#8212; maml 0.01 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -41,42 +42,8 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.apps.rfxas" title="Permalink to this headline">¶</a></h2>
 <p>MAML XAS app</p>
 <dl class="py class">
-<dt id="maml.apps.rfxas.XANES">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">XANES</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">absorption_specie</span></em>, <em class="sig-param"><span class="n">edge</span></em>, <em class="sig-param"><span class="n">structure</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">e0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymatgen.core.spectrum.Spectrum</span></code></p>
-<p>Basic XANES object</p>
-<dl class="py attribute">
-<dt id="maml.apps.rfxas.XANES.XLABEL">
-<code class="sig-name descname">XLABEL</code><em class="property"> = 'Energy'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.XLABEL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="maml.apps.rfxas.XANES.YLABEL">
-<code class="sig-name descname">YLABEL</code><em class="property"> = 'Intensity'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.YLABEL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="maml.apps.rfxas.XANES.from_K_XANES_MP_tsv">
-<em class="property">static </em><code class="sig-name descname">from_K_XANES_MP_tsv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsv_file</span></em>, <em class="sig-param"><span class="n">header</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">absorption_specie</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES.from_K_XANES_MP_tsv" title="Permalink to this definition">¶</a></dt>
-<dd><dl>
-<dt>Args:</dt><dd><p>tsv_file: tsv file contains spectrum infor. downloaded from the Materials Project website
-header: number of header row to skip, default to 3
-absorption_specie (str): Specie associated with the XANES. If not given, will be derived using the</p>
-<blockquote>
-<div><p>edge energy.</p>
-</div></blockquote>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: Other attributes of the spectrum object.</p>
-</dd>
-<dt>Returns:</dt><dd><p>XANES object generated from tsv file</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="maml.apps.rfxas.CenvPrediction">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">CenvPrediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xanes_spectrum</span><span class="p">:</span> <span class="n">maml.apps.rfxas._core.XANES</span></em>, <em class="sig-param"><span class="n">energy_reference</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">energy_range</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">edge_energy</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">spectrum_interpolation</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'rf'</span></em>, <em class="sig-param"><span class="n">model_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/Users/chenchi/repos/maml/maml/apps/rfxas/./models'</span></em>, <em class="sig-param"><span class="n">extra_model_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/Users/chenchi/repos/maml/maml/apps/rfxas/./ex_models/Model_share'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">CenvPrediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xanes_spectrum</span><span class="p">:</span> <span class="n">maml.apps.rfxas._core.XANES</span></em>, <em class="sig-param"><span class="n">energy_reference</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">energy_range</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">edge_energy</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">spectrum_interpolation</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'rf'</span></em>, <em class="sig-param"><span class="n">model_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/Users/shyue/repos/maml/maml/apps/rfxas/./models'</span></em>, <em class="sig-param"><span class="n">extra_model_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/Users/shyue/repos/maml/maml/apps/rfxas/./ex_models/Model_share'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="simple">
 <dt>Coordination environment predictor. Supported models are</dt><dd><p>RandomForest (rf)
@@ -119,6 +86,40 @@ Convolutional Neural Network (cnn)</p>
 <dt>Returns:</dt><dd><p>Two new attributes of CenvPrediction object. The attribute ‘pred_cnum_ranklist’ is the predicted
 coordination number ranklist. The attribute pred_cenv contains the final predicted coordination
 environment ranklists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.apps.rfxas.XANES">
+<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">XANES</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">absorption_specie</span></em>, <em class="sig-param"><span class="n">edge</span></em>, <em class="sig-param"><span class="n">structure</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">e0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymatgen.core.spectrum.Spectrum</span></code></p>
+<p>Basic XANES object</p>
+<dl class="py attribute">
+<dt id="maml.apps.rfxas.XANES.XLABEL">
+<code class="sig-name descname">XLABEL</code><em class="property"> = 'Energy'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.XLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="maml.apps.rfxas.XANES.YLABEL">
+<code class="sig-name descname">YLABEL</code><em class="property"> = 'Intensity'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.YLABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.apps.rfxas.XANES.from_K_XANES_MP_tsv">
+<em class="property">static </em><code class="sig-name descname">from_K_XANES_MP_tsv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsv_file</span></em>, <em class="sig-param"><span class="n">header</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">absorption_specie</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES.from_K_XANES_MP_tsv" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Args:</dt><dd><p>tsv_file: tsv file contains spectrum infor. downloaded from the Materials Project website
+header: number of header row to skip, default to 3
+absorption_specie (str): Specie associated with the XANES. If not given, will be derived using the</p>
+<blockquote>
+<div><p>edge energy.</p>
+</div></blockquote>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: Other attributes of the spectrum object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>XANES object generated from tsv file</p>
 </dd>
 </dl>
 </dd></dl>
@@ -179,7 +180,7 @@ environment ranklists.</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
