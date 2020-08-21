@@ -2,7 +2,6 @@
 
 import unittest
 import os
-from multiprocessing import cpu_count
 
 import numpy as np
 from pymatgen.util.testing import PymatgenTest
