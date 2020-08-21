@@ -1,5 +1,5 @@
-maml.describer package
-======================
+maml.describers package
+=======================
 
 Subpackages
 -----------
@@ -7,9 +7,9 @@ Subpackages
 .. toctree::
    :maxdepth: 7
 
-   maml.describer.matminer
-   maml.describer.megnet
-   maml.describer.rdf
+   maml.describers.matminer_wrapper
+   maml.describers.megnet
+   maml.describers.rdf
 
 Submodules
 ----------
@@ -21,7 +21,7 @@ Submodules
 Module contents
 ---------------
 
-.. automodule:: maml.describer
+.. automodule:: maml.describers
    :members:
    :undoc-members:
    :show-inheritance:

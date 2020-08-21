@@ -1,17 +1,18 @@
-maml.model package
-==================
+maml.models package
+===================
 
-Submodules
-----------
+Subpackages
+-----------
 
 .. toctree::
    :maxdepth: 7
 
+   maml.models.dl
 
 Module contents
 ---------------
 
-.. automodule:: maml.model
+.. automodule:: maml.models
    :members:
    :undoc-members:
    :show-inheritance:

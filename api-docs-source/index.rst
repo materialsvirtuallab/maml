@@ -1,13 +1,17 @@
+.. image:: https://github.com/materialsvirtuallab/maml/blob/master/resources/logo_horizontal.png?raw=true
+    :target: https://github.com/materialsvirtuallab/maml
 .. image:: https://github.com/materialsvirtuallab/maml/workflows/Testing/badge.svg
-    :target: https://circleci.com/gh/materialsvirtuallab/maml
+    :target: https://github.com/materialsvirtuallab/maml
+.. image:: https://github.com/materialsvirtuallab/maml/workflows/Linting/badge.svg
+    :target: https://github.com/materialsvirtuallab/maml
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&service=github
     :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
-
-.. raw:: html
-
-    <br/>
-    <img src="./resources/logo_horizontal.png"/ width="300px">
-
+.. image:: https://static.pepy.tech/badge/maml
+    :target: https://static.pepy.tech/badge/maml
+.. image:: https://img.shields.io/github/commit-activity/y/materialsvirtuallab/maml
+    :target: https://github.com/materialsvirtuallab/maml
+.. image:: https://img.shields.io/github/repo-size/materialsvirtuallab/maml
+    :target: https://github.com/materialsvirtuallab/maml
 
 maml (MAterials Machine Learning) is a Python package that aims to provide useful high-level interfaces that make ML for materials science as easy as possible. 
 

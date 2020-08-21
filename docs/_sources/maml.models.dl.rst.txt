@@ -1,5 +1,5 @@
-maml.describer.megnet package
-=============================
+maml.models.dl package
+======================
 
 Submodules
 ----------
@@ -11,7 +11,7 @@ Submodules
 Module contents
 ---------------
 
-.. automodule:: maml.describer.megnet
+.. automodule:: maml.models.dl
    :members:
    :undoc-members:
    :show-inheritance:

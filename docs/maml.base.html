@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>maml.base package &#8212; maml 0.01 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -57,9 +58,9 @@
 <dt id="maml.base.BaseDescriber">
 <em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">BaseDescriber</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">monty.json.MSONable</span></code></p>
-<p>Base class for a Describer. A describer converts an object to a descriptor,
+<p>Base class for a Describer. A describers converts an object to a descriptor,
 typically a numerical representation useful for machine learning.
-The output for the describer can be a single DataFrame/numpy.ndarray or
+The output for the describers can be a single DataFrame/numpy.ndarray or
 a list of DataFrame/numpy.ndarray.</p>
 <dl class="py attribute">
 <dt id="maml.base.BaseDescriber._abc_impl">
@@ -75,6 +76,13 @@ a list of DataFrame/numpy.ndarray.</p>
 <dt id="maml.base.BaseDescriber.clear_cache">
 <code class="sig-name descname">clear_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseDescriber.clear_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear cache</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.base.BaseDescriber.feature_dim">
+<em class="property">property </em><code class="sig-name descname">feature_dim</code><a class="headerlink" href="#maml.base.BaseDescriber.feature_dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature dimension, useful when certain models need to specif
+the feature dimension, e.g., MLP models.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -111,14 +119,78 @@ use df.xs(index, level=’input_index’) to get the result for the i-th object.
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.SequentialDescriber">
-<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">SequentialDescriber</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">describers</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SequentialDescriber" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.pipeline.Pipeline</span></code></p>
-<p>A thin wrapper of sklearn Pipeline</p>
-<dl class="py attribute">
-<dt id="maml.base.SequentialDescriber._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.base.SequentialDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="maml.base.BaseModel">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">BaseModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.base._describer.BaseDescriber<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract Base class for a Model. Basically, it usually wraps around a deep
+learning package, e.g., the Sequential Model in Keras, but provides for
+transparent conversion of arbitrary input and outputs.</p>
+<dl class="py method">
+<dt id="maml.base.BaseModel._predict">
+<code class="sig-name descname">_predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base.BaseModel._predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the values given a set of inputs based on fitted models.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>features (np.ndarray): array-like input features.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of output objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.base.BaseModel.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eval_objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">eval_targets</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">is_feature</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base.BaseModel.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate objs, targets</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>eval_objs (list): objs for evaluation
+eval_targets (list): target list for the corresponding objects
+is_feature (bool): whether the input x is feature matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.base.BaseModel.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_features</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base.BaseModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>features (list or np.ndarray): Numerical input feature list or</dt><dd><p>numpy array with dim (m, n) where m is the number of data and
+n is the feature dimension.</p>
+</dd>
+<dt>targets (list or np.ndarray): Numerical output target list, or</dt><dd><p>numpy array with dim (m, ).</p>
+</dd>
+</dl>
+<p>val_features (list or np.ndarray): validation features
+val_targets (list or np.ndarray): validation targets</p>
+</dd>
+<dt>Returns:</dt><dd><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.base.BaseModel.predict_objs">
+<code class="sig-name descname">predict_objs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base.BaseModel.predict_objs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Predict the values given a set of objects. Usually Pymatgen</dt><dd><p>Structure objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.base.BaseModel.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_objs</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base.BaseModel.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the models from object, target pairs</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>objs (list of objects): List of objects
+targets (list): list of float or np.ndarray
+val_objs (list of objects): list of validation objects
+val_targets (list): list of validation targets
+<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs:</p>
+</dd>
+</dl>
+<p>Returns: self</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -146,28 +218,21 @@ use df.xs(index, level=’input_index’) to get the result for the i-th object.
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.BaseModel">
-<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">BaseModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">sklearn.base.TransformerMixin</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Abstract Base class for a Model. Basically, it usually wraps around a deep
-learning package, e.g., the Sequential Model in Keras, but provides for
-transparent conversion of arbitrary input and outputs.</p>
+<dt id="maml.base.KerasModel">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">KerasModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.base._describer.BaseDescriber<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.KerasModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></p>
+<p>MAML models with keras models as estimators</p>
 <dl class="py method">
-<dt id="maml.base.BaseModel._predict">
-<code class="sig-name descname">_predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base.BaseModel._predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the values given a set of inputs based on fitted model.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>features (np.ndarray): array-like input features.</p>
-</dd>
-<dt>Returns:</dt><dd><p>List of output objects.</p>
-</dd>
-</dl>
+<dt id="maml.base.KerasModel._get_validation_data">
+<em class="property">static </em><code class="sig-name descname">_get_validation_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val_features</span></em>, <em class="sig-param"><span class="n">val_targets</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">val_kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.KerasModel._get_validation_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>construct validation data, the default is just returning a list of
+val_features and val_targets</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseModel.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base.BaseModel.fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
+<dt id="maml.base.KerasModel.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_features</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base.KerasModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
 <dt>Args:</dt><dd><dl class="simple">
 <dt>features (list or np.ndarray): Numerical input feature list or</dt><dd><p>numpy array with dim (m, n) where m is the number of data and
 n is the feature dimension.</p>
@@ -175,51 +240,55 @@ n is the feature dimension.</p>
 <dt>targets (list or np.ndarray): Numerical output target list, or</dt><dd><p>numpy array with dim (m, ).</p>
 </dd>
 </dl>
+<p>val_features (list or np.ndarray): validation features
+val_targets (list or np.ndarray): validation targets</p>
+</dd>
+<dt>Returns:</dt><dd><p>self</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="maml.base.BaseModel.predict_objs">
-<code class="sig-name descname">predict_objs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base.BaseModel.predict_objs" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Predict the values given a set of objects. Usually Pymatgen</dt><dd><p>Structure objects.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="maml.base.BaseModel.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base.BaseModel.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Train the model from object, target pairs</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>objs (list of objects): List of objects
-targets (list): list of float or np.ndarray
-<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs:</p>
-</dd>
-</dl>
-<p>Returns: self</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="maml.base.KerasModel">
-<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">KerasModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">sklearn.base.TransformerMixin</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.KerasModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></p>
-<p>MAML model with keras model as estimators</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="maml.base.SKLModel">
-<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">SKLModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">sklearn.base.TransformerMixin</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SKLModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">SKLModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.base._describer.BaseDescriber<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SKLModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></p>
-<p>MAML model with sklearn model as estimator</p>
+<p>MAML models with sklearn models as estimator</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.base.SequentialDescriber">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">SequentialDescriber</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">describers</span><span class="p">:</span> <span class="n">List</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SequentialDescriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.pipeline.Pipeline</span></code></p>
+<p>A thin wrapper of sklearn Pipeline</p>
+<dl class="py attribute">
+<dt id="maml.base.SequentialDescriber._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.base.SequentialDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="maml.base.SequentialDescriber.steps">
+<code class="sig-name descname">steps</code><em class="property">: List<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#maml.base.SequentialDescriber.steps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.base.describer_type">
+<code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">describer_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dtype</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.describer_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorate to set describers class type</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dtype (str): describers type, e.g., site, composition, structure etc.</p>
+</dd>
+<dt>Return:</dt><dd><p>wrapped class</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="maml.base.get_feature_batch">
-<code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">get_feature_batch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fb_name</span><span class="p">:</span> <span class="n">Union[str, Callable, None]</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#maml.base.get_feature_batch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">get_feature_batch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fb_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#maml.base.get_feature_batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Providing a feature batch name, returning the function callable
 Args:</p>
 <blockquote>
@@ -282,7 +351,7 @@ Args:</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

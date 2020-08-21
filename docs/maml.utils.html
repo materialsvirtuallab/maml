@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>maml.utils package &#8212; maml 0.01 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -40,74 +41,6 @@
 <div class="section" id="module-maml.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.utils" title="Permalink to this headline">¶</a></h2>
 <p>Utilities package.</p>
-<dl class="py function">
-<dt id="maml.utils.pool_from">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">pool_from</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structures</span></em>, <em class="sig-param"><span class="n">energies</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">forces</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stresses</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.pool_from" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to convert structures and their properties in to
-datapool format.</p>
-<dl>
-<dt>Args:</dt><dd><p>structures ([Structure]): The list of Pymatgen Structure object.
-energies ([float]): The list of total energies of each structure</p>
-<blockquote>
-<div><p>in structures list.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>forces ([np.array]): List of (m, 3) forces array of each structure</dt><dd><p>with m atoms in structures list. m can be varied with each
-single structure case.</p>
-</dd>
-<dt>stresses (list): List of (6, ) virial stresses of each</dt><dd><p>structure in structures list.</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>([dict])</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.convert_docs">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">convert_docs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">docs</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.convert_docs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method to convert a list of docs into objects, e.g.,
-Structure and DataFrame.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><dl class="simple">
-<dt>docs ([dict]): List of docs. Each doc should have the same</dt><dd><p>format as one returned from .dft.parse_dir.</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><p>A list of structures, and a DataFrame with energy and force
-data in ‘y_orig’ column, data type (‘energy’ or ‘force’) in
-‘dtype’ column, No. of atoms in ‘n’ column sharing the same row
-of energy data while ‘n’ being 1 for the rows of force data.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="maml.utils.ValueProfile">
-<em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">ValueProfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">max_steps</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ValueProfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Base class for ValueProfile. The base class has the following methods
-methods:</p>
-<blockquote>
-<div><p>increment_step(self): add one to step
-get_value(self): abstract method that return the value</p>
-</div></blockquote>
-<dl class="py method">
-<dt id="maml.utils.ValueProfile.get_value">
-<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils.ValueProfile.get_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>abstract method that returns the current value
-Returns: value float</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="maml.utils.ValueProfile.increment_step">
-<code class="sig-name descname">increment_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ValueProfile.increment_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>increase step atttribute by one</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt id="maml.utils.ConstantValue">
 <em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">ConstantValue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ConstantValue" title="Permalink to this definition">¶</a></dt>
@@ -117,6 +50,26 @@ Returns: value float</p>
 <dt id="maml.utils.ConstantValue.get_value">
 <code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils.ConstantValue.get_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return constant value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.utils.DataSplitter">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">DataSplitter</code><a class="headerlink" href="#maml.utils.DataSplitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">monty.json.MSONable</span></code></p>
+<p>Data splitter base class</p>
+<dl class="py method">
+<dt id="maml.utils.DataSplitter.split">
+<code class="sig-name descname">split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mat_ids</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.DataSplitter.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split the mat_ids, optionally one can provide
+targets. This is useful in stratified split.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mat_ids (list): list of material ids</p>
+</dd>
+<dt>Returns: (train_ids, val_ids, test_ids) or</dt><dd><p>(train_ids, test_ids)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -135,13 +88,6 @@ value change. The profile can be initialized either by
 Returns: float</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.njit">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">njit</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.njit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Equivalent to jit(nopython=True)</p>
-<p>See documentation for jit function/decorator for full description.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -170,26 +116,6 @@ The way it works is as follows:</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.utils.DataSplitter">
-<em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">DataSplitter</code><a class="headerlink" href="#maml.utils.DataSplitter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">monty.json.MSONable</span></code></p>
-<p>Data splitter base class</p>
-<dl class="py method">
-<dt id="maml.utils.DataSplitter.split">
-<code class="sig-name descname">split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mat_ids</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.DataSplitter.split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split the mat_ids, optionally one can provide
-targets. This is useful in stratified split.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>mat_ids (list): list of material ids</p>
-</dd>
-<dt>Returns: (train_ids, val_ids, test_ids) or</dt><dd><p>(train_ids, test_ids)</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="maml.utils.ShuffleSplitter">
 <em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">ShuffleSplitter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ratios</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'80/10/10'</span></em>, <em class="sig-param"><span class="n">delim</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/'</span></em>, <em class="sig-param"><span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ShuffleSplitter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.utils._data_split.DataSplitter</span></code></p>
@@ -206,103 +132,6 @@ Args:</p>
 <p>Returns:</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.write_data_from_structure">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">write_data_from_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span><span class="p">:</span> <span class="n">pymatgen.core.structure.Structure</span></em>, <em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">ff_elements</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">significant_figures</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">6</span></em>, <em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">0, 0, 0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.write_data_from_structure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write structure to lammps data file, this is to speed up
-pymatgen LammpsData</p>
-<dl class="simple">
-<dt>Args:a</dt><dd><p>structure (Structure): pymatgen structure
-filename (str): filename
-ff_elements (list of str): elements to be considered
-significant_figures (int): significant figures of floats in outout
-origin (tuple): origin coordinates</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.check_structures_forces_stresses">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">check_structures_forces_stresses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structures</span><span class="p">:</span> <span class="n">List<span class="p">[</span>pymatgen.core.structure.Structure<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">forces</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stresses</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stress_format</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'VASP'</span></em>, <em class="sig-param"><span class="n">return_none</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.check_structures_forces_stresses" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check structures, forces and stresses. The forces and stress are dependent
-on the lattice orientation. This function will rotate the structures
-and the corresponding forces and structures to lammps format
-[[ax, 0, 0],
-[bx, by, 0],
-[cx, cy, cz]]</p>
-<p>The lattice are formed by the row vectors.</p>
-<dl>
-<dt>Args:</dt><dd><p>structures (list): list of structures
-forces (list): list of force matrixs (m, 3)
-stresses (list): list of stress vectors
-stress_format (str): stress format, choose from</p>
-<blockquote>
-<div><p>“VASP”, “LAMMPS”, “SNAP”</p>
-</div></blockquote>
-<dl class="simple">
-<dt>return_none (bool): whether to return list of None</dt><dd><p>for forces and stresses</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>Returns: structures [forces], [stresses]</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.stress_format_change">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stress_format_change</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stress</span><span class="p">:</span> <span class="n">List<span class="p">[</span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">from_format</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">to_format</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.utils.stress_format_change" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert stress format from from_format to to_format
-Args:</p>
-<blockquote>
-<div><p>stress (list of float): length-6 stress vector
-from_format (str): choose from “VASP”, “LAMMPS”, “SNAP”
-to_format (str): choose from “VASP”, “LAMMPS”, “SNAP”</p>
-</div></blockquote>
-<p>Returns: list of float stress vector</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.stress_list_to_matrix">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stress_list_to_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stress</span><span class="p">:</span> <span class="n">List<span class="p">[</span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">stress_format</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'VASP'</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.utils.stress_list_to_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert a length-6 stress list to stress matrix 3x3</p>
-<dl>
-<dt>Args:</dt><dd><p>stress (list of float): list of stress
-stress_format (str): Supported formats are the follows</p>
-<blockquote>
-<div><p>VASP: xx, yy, zz, xy, yz, xz
-LAMMPS: xx, yy, zz, xy, zx, yz
-SNAP: xx, yy, zz, yz, xz, xy</p>
-</div></blockquote>
-</dd>
-</dl>
-<p>Returns: 3x3 stress matrix</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.stress_matrix_to_list">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stress_matrix_to_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stress_matrix</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">stress_format</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'VASP'</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.utils.stress_matrix_to_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stress matrix to list representation
-Args:</p>
-<blockquote>
-<div><p>stress_matrix (np.ndarray): stress matrix 3x3
-stress_format (str): stress list format</p>
-</div></blockquote>
-<p>Returns: list of float stress vector</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.get_lammps_lattice_and_rotation">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">get_lammps_lattice_and_rotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span><span class="p">:</span> <span class="n">pymatgen.core.structure.Structure</span></em>, <em class="sig-param"><span class="n">origin</span><span class="o">=</span><span class="default_value">0, 0, 0</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>numpy.ndarray<span class="p">, </span>pymatgen.core.operations.SymmOp<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#maml.utils.get_lammps_lattice_and_rotation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform structure to lammps compatible structure. The lattice and rotation
-matrix are returned</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>structure (Structure): pymatgen structure
-origin (tuple): origin coordinates</p>
-</dd>
-</dl>
-<p>Returns: new lattice, rotation symmetry operator, rotation matrix</p>
 </dd></dl>
 
 <dl class="py class">
@@ -538,41 +367,76 @@ weights (list or None): weights for each data point</p>
 
 </dd></dl>
 
-<dl class="py function">
-<dt id="maml.utils.stats_list_conversion">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stats_list_conversion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stats_list</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="headerlink" href="#maml.utils.stats_list_conversion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a list of stats str into a fully expanded list.
-This applies mainly to stats that can return a list of values, e.g.,
-moment with max_order &gt; 1</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>stats_list (list): list of stats str</p>
-</dd>
-</dl>
-<p>Returns: list of expanded stats str</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.get_full_stats_and_funcs">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">get_full_stats_and_funcs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stats</span><span class="p">:</span> <span class="n">List</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>List<span class="p">]</span><a class="headerlink" href="#maml.utils.get_full_stats_and_funcs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get expanded stats function name str and the corresponding
-function callables</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>stats (list): a list of stats names, e.g, [‘mean’, ‘std’, ‘moment:1:None’]</p>
-</dd>
-</dl>
-<p>Returns: list of stats names, list of stats callable</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="maml.utils.spectrogram">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">return_time_freq</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Tuple<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#maml.utils.spectrogram" title="Permalink to this definition">¶</a></dt>
-<dd><p>The spectrogram of the signal
-Args:</p>
+<dl class="py class">
+<dt id="maml.utils.ValueProfile">
+<em class="property">class </em><code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">ValueProfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">max_steps</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ValueProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for ValueProfile. The base class has the following methods
+methods:</p>
 <blockquote>
-<div><p>z (np.ndarray): 1D signal array
-return_time_freq (bool): whether to return time and frequency</p>
+<div><p>increment_step(self): add one to step
+get_value(self): abstract method that return the value</p>
 </div></blockquote>
-<p>Returns: 2D spectrogram</p>
+<dl class="py method">
+<dt id="maml.utils.ValueProfile.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#maml.utils.ValueProfile.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>abstract method that returns the current value
+Returns: value float</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.utils.ValueProfile.increment_step">
+<code class="sig-name descname">increment_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.ValueProfile.increment_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>increase step atttribute by one</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.check_structures_forces_stresses">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">check_structures_forces_stresses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structures</span><span class="p">:</span> <span class="n">List<span class="p">[</span>pymatgen.core.structure.Structure<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">forces</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stresses</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stress_format</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'VASP'</span></em>, <em class="sig-param"><span class="n">return_none</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.check_structures_forces_stresses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check structures, forces and stresses. The forces and stress are dependent
+on the lattice orientation. This function will rotate the structures
+and the corresponding forces and structures to lammps format
+[[ax, 0, 0],
+[bx, by, 0],
+[cx, cy, cz]]</p>
+<p>The lattice are formed by the row vectors.</p>
+<dl>
+<dt>Args:</dt><dd><p>structures (list): list of structures
+forces (list): list of force matrixs (m, 3)
+stresses (list): list of stress vectors
+stress_format (str): stress format, choose from</p>
+<blockquote>
+<div><p>“VASP”, “LAMMPS”, “SNAP”</p>
+</div></blockquote>
+<dl class="simple">
+<dt>return_none (bool): whether to return list of None</dt><dd><p>for forces and stresses</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: structures [forces], [stresses]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.convert_docs">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">convert_docs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">docs</span></em>, <em class="sig-param"><span class="n">include_stress</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.convert_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to convert a list of docs into objects, e.g.,
+Structure and DataFrame.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>docs ([dict]): List of docs. Each doc should have the same</dt><dd><p>format as one returned from .dft.parse_dir.</p>
+</dd>
+</dl>
+<p>include_stress (bool): Whether to include stress components.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A list of structures, and a DataFrame with energy and force
+data in ‘y_orig’ column, data type (‘energy’ or ‘force’) in
+‘dtype’ column, No. of atoms in ‘n’ column sharing the same row
+of energy data while ‘n’ being 1 for the rows of force data.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -589,18 +453,13 @@ wavelet (str): wavelet name</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="maml.utils.wvd">
-<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">wvd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">return_all</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Tuple<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#maml.utils.wvd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wigner Ville Distribution calculator
-Args:</p>
-<blockquote>
-<div><p>z (np.ndarray): signal 1D
-return_all (bool): whether to return time and freq info, default</p>
-<blockquote>
-<div><p>only return the wvd information</p>
-</div></blockquote>
-</div></blockquote>
-<p>Returns: NxN wvd matrix</p>
+<dt id="maml.utils.feature_dim_from_test_system">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">feature_dim_from_test_system</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">describer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.feature_dim_from_test_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get feature size from a test system</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>describer (BaseDescriber): describers instance</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -616,6 +475,52 @@ Args:</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="maml.utils.get_describer_dummy_obj">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">get_describer_dummy_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instance</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.get_describer_dummy_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a describers, get a dummy object for transform_one.
+This relies on the type hint.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>instance (BaseDescriber): describers instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.get_full_args">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">get_full_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; List<a class="headerlink" href="#maml.utils.get_full_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get args from function</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func (callable): function to determine the args</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.get_full_stats_and_funcs">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">get_full_stats_and_funcs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stats</span><span class="p">:</span> <span class="n">List</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>List<span class="p">]</span><a class="headerlink" href="#maml.utils.get_full_stats_and_funcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get expanded stats function name str and the corresponding
+function callables</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>stats (list): a list of stats names, e.g, [‘mean’, ‘std’, ‘moment:1:None’]</p>
+</dd>
+</dl>
+<p>Returns: list of stats names, list of stats callable</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.get_lammps_lattice_and_rotation">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">get_lammps_lattice_and_rotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span><span class="p">:</span> <span class="n">pymatgen.core.structure.Structure</span></em>, <em class="sig-param"><span class="n">origin</span><span class="o">=</span><span class="default_value">0, 0, 0</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>numpy.ndarray<span class="p">, </span>pymatgen.core.operations.SymmOp<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#maml.utils.get_lammps_lattice_and_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform structure to lammps compatible structure. The lattice and rotation
+matrix are returned</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>structure (Structure): pymatgen structure
+origin (tuple): origin coordinates</p>
+</dd>
+</dl>
+<p>Returns: new lattice, rotation symmetry operator, rotation matrix</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="maml.utils.get_sp_method">
 <code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">get_sp_method</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sp_method</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#maml.utils.get_sp_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>Providing a signal processing method name return the callable
@@ -624,6 +529,161 @@ Args:</p>
 <div><p>sp_method (str): name of the sp function</p>
 </div></blockquote>
 <p>Returns: callable for signal processing</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.njit">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">njit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#maml.utils.njit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy decorator, returns the original function
+Args:</p>
+<blockquote>
+<div><p>func (Callable): function to be wrapped</p>
+</div></blockquote>
+<p>Returns: decorated function</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.pool_from">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">pool_from</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structures</span></em>, <em class="sig-param"><span class="n">energies</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">forces</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stresses</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.pool_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to convert structures and their properties in to
+datapool format.</p>
+<dl>
+<dt>Args:</dt><dd><p>structures ([Structure]): The list of Pymatgen Structure object.
+energies ([float]): The list of total energies of each structure</p>
+<blockquote>
+<div><p>in structures list.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>forces ([np.array]): List of (m, 3) forces array of each structure</dt><dd><p>with m atoms in structures list. m can be varied with each
+single structure case.</p>
+</dd>
+<dt>stresses (list): List of (6, ) virial stresses of each</dt><dd><p>structure in structures list.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>([dict])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.spectrogram">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">spectrogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">return_time_freq</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Tuple<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#maml.utils.spectrogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>The spectrogram of the signal
+Args:</p>
+<blockquote>
+<div><p>z (np.ndarray): 1D signal array
+return_time_freq (bool): whether to return time and frequency</p>
+</div></blockquote>
+<p>Returns: 2D spectrogram</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.stats_list_conversion">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stats_list_conversion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stats_list</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="headerlink" href="#maml.utils.stats_list_conversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list of stats str into a fully expanded list.
+This applies mainly to stats that can return a list of values, e.g.,
+moment with max_order &gt; 1</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>stats_list (list): list of stats str</p>
+</dd>
+</dl>
+<p>Returns: list of expanded stats str</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.stress_format_change">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stress_format_change</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stress</span><span class="p">:</span> <span class="n">List<span class="p">[</span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">from_format</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">to_format</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.utils.stress_format_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert stress format from from_format to to_format
+Args:</p>
+<blockquote>
+<div><p>stress (list of float): length-6 stress vector
+from_format (str): choose from “VASP”, “LAMMPS”, “SNAP”
+to_format (str): choose from “VASP”, “LAMMPS”, “SNAP”</p>
+</div></blockquote>
+<p>Returns: list of float stress vector</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.stress_list_to_matrix">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stress_list_to_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stress</span><span class="p">:</span> <span class="n">List<span class="p">[</span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">stress_format</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'VASP'</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.utils.stress_list_to_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert a length-6 stress list to stress matrix 3x3</p>
+<dl>
+<dt>Args:</dt><dd><p>stress (list of float): list of stress
+stress_format (str): Supported formats are the follows</p>
+<blockquote>
+<div><p>VASP: xx, yy, zz, xy, yz, xz
+LAMMPS: xx, yy, zz, xy, zx, yz
+SNAP: xx, yy, zz, yz, xz, xy</p>
+</div></blockquote>
+</dd>
+</dl>
+<p>Returns: 3x3 stress matrix</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.stress_matrix_to_list">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">stress_matrix_to_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stress_matrix</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">stress_format</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'VASP'</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.utils.stress_matrix_to_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stress matrix to list representation
+Args:</p>
+<blockquote>
+<div><p>stress_matrix (np.ndarray): stress matrix 3x3
+stress_format (str): stress list format</p>
+</div></blockquote>
+<p>Returns: list of float stress vector</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.to_array">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">to_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.to_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert x into numerical array
+Args:</p>
+<blockquote>
+<div><p>x: x can be a dataframe, a list or an array</p>
+</div></blockquote>
+<p>return np.ndarray</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.to_composition">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">to_composition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pymatgen.core.composition.Composition<span class="p">, </span>pymatgen.core.structure.Molecule<span class="p">, </span>pymatgen.core.structure.Structure<span class="p">, </span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; pymatgen.core.composition.Composition<a class="headerlink" href="#maml.utils.to_composition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert str/structure or composition to compositions</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj (str/structure/composition): object to convert</p>
+</dd>
+<dt>Returns:</dt><dd><p>Composition object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.write_data_from_structure">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">write_data_from_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">structure</span><span class="p">:</span> <span class="n">pymatgen.core.structure.Structure</span></em>, <em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">ff_elements</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">significant_figures</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">6</span></em>, <em class="sig-param"><span class="n">origin</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">0, 0, 0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.utils.write_data_from_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write structure to lammps data file, this is to speed up
+pymatgen LammpsData</p>
+<dl class="simple">
+<dt>Args:a</dt><dd><p>structure (Structure): pymatgen structure
+filename (str): filename
+ff_elements (list of str): elements to be considered
+significant_figures (int): significant figures of floats in outout
+origin (tuple): origin coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.utils.wvd">
+<code class="sig-prename descclassname">maml.utils.</code><code class="sig-name descname">wvd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">return_all</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Tuple<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#maml.utils.wvd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wigner Ville Distribution calculator
+Args:</p>
+<blockquote>
+<div><p>z (np.ndarray): signal 1D
+return_all (bool): whether to return time and freq info, default</p>
+<blockquote>
+<div><p>only return the wvd information</p>
+</div></blockquote>
+</div></blockquote>
+<p>Returns: NxN wvd matrix</p>
 </dd></dl>
 
 </div>
@@ -680,7 +740,7 @@ Args:</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

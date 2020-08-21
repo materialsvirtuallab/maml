@@ -1,5 +1,5 @@
-maml.describer.matminer package
-===============================
+maml.describers.megnet package
+==============================
 
 Submodules
 ----------
@@ -11,7 +11,7 @@ Submodules
 Module contents
 ---------------
 
-.. automodule:: maml.describer.matminer
+.. automodule:: maml.describers.megnet
    :members:
    :undoc-members:
    :show-inheritance:
