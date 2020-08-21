@@ -68,7 +68,7 @@ def make_doc(ctx):
         ctx.run("rm -r .doctrees", warn=True)
 
         # This makes sure maml.org works to redirect to the Github page
-        # ctx.run("echo \"maml.org\" > CNAME")
+        ctx.run("echo \"maml.ai\" > CNAME")
         # Avoid the use of jekyll so that _dir works as intended.
         ctx.run("touch .nojekyll")
 
