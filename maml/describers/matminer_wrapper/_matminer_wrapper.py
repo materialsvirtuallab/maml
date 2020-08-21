@@ -29,8 +29,6 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
 
     Returns: maml describers class
     """
-    new_class = object
-
     def constructor(self, *args, **kwargs):
         """
         Wrapped __init__ constructor
@@ -43,7 +41,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
         logger.info(f"Using matminer_wrapper {wrapped_class.__name__} class")
         base_kwargs = dict(n_jobs=n_jobs, memory=memory,
                            verbose=verbose, feature_batch=feature_batch)
-        super(new_class, self).__init__(**base_kwargs)
+        BaseDescriber.__init__(self, **base_kwargs)
 
     @classmethod  # type: ignore
     def _get_param_names(cls):  # type: ignore
@@ -76,7 +74,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
         instance_new.__dict__.update(instance.__dict__)
         return instance_new
 
-    new_class = type(cls_name, (BaseDescriber, ),
+    new_klass = type(cls_name, (BaseDescriber, ),
                      {'__doc__': wrapped_class.__doc__,
                       '__init__': constructor,
                       '__str__': wrapped_class.__str__,
@@ -91,4 +89,4 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
                       'describer_type': describer_type
                       })
 
-    return new_class
+    return new_klass
