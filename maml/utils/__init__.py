@@ -15,6 +15,8 @@ from ._signal_processing import spectrogram, cwt, get_sp_method, fft_magnitude, 
 from ._stats import Stats, STATS_KWARGS, stats_list_conversion, get_full_stats_and_funcs  # noqa
 from ._tempfile import MultiScratchDir  # noqa
 from ._value_profile import ValueProfile, ConstantValue, LinearProfile  # noqa
+from ._preprocessing import StandardScaler, Scaler, DummyScaler  # noqa
+
 
 __all__ = [
     'pool_from',
@@ -45,5 +47,8 @@ __all__ = [
     'to_composition',
     'get_full_args',
     'get_describer_dummy_obj',
-    'feature_dim_from_test_system'
+    'feature_dim_from_test_system',
+    'StandardScaler',
+    'Scaler',
+    'DummyScaler'
 ]
