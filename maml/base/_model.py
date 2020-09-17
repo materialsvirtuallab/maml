@@ -1,7 +1,7 @@
 """
 MAML models base classes
 """
-from typing import Any, Union, List, Optional
+from typing import Any, Union, List, Optional, Callable
 
 import joblib
 import numpy as np
@@ -103,20 +103,6 @@ class BaseModel:
         """
         return self._predict(self.describer.transform(objs))
 
-    def evaluate(self, eval_objs: Union[List, np.ndarray],
-                 eval_targets: Union[List, np.ndarray], is_feature: bool = False) -> np.ndarray:
-        """
-        Evaluate objs, targets
-
-        Args:
-            eval_objs (list): objs for evaluation
-            eval_targets (list): target list for the corresponding objects
-            is_feature (bool): whether the input x is feature matrix
-        """
-        eval_features = eval_objs if is_feature else self.describer.transform(eval_objs)
-        return self.model.evaluate(to_array(eval_features),  # type: ignore
-                                   to_array(eval_targets))
-
 
 class SklearnMixin:
     """
@@ -155,9 +141,28 @@ class SklearnMixin:
         Returns: object instance
 
         """
-        instance = cls(**kwargs)  # type: ignore
+        instance = cls(model=None, **kwargs)  # type: ignore
         instance.load(filename)
         return instance
+
+    def evaluate(self, eval_objs: Union[List, np.ndarray],
+                 eval_targets: Union[List, np.ndarray], is_feature: bool = False,
+                 metric: Union[str, Callable] = None) -> np.ndarray:
+        """
+        Evaluate objs, targets
+
+        Args:
+            eval_objs (list): objs for evaluation
+            eval_targets (list): target list for the corresponding objects
+            is_feature (bool): whether the input x is feature matrix
+            metric (callable): metric for evaluation
+        """
+
+        from sklearn.metrics import check_scoring
+        eval_features = eval_objs if is_feature else \
+            self.describer.transform(eval_objs)
+        scorer = check_scoring(self.model, scoring=metric)
+        return scorer(self.model, eval_features, eval_targets)
 
 
 class KerasMixin:
@@ -173,7 +178,7 @@ class KerasMixin:
         joblib.dump(self.describer, filename)
         self.model.save(filename + '.hdf5')
 
-    def load(self, filename: str):
+    def load(self, filename: str, custom_objects: List = None):
         """
         Load models parameters from filename
         Args:
@@ -184,7 +189,8 @@ class KerasMixin:
         """
         import tensorflow as tf
         self.describer = joblib.load(filename)
-        self.model = tf.keras.models.load_model(filename + '.hdf5')
+        self.model = tf.keras.models.load_model(filename + '.hdf5',
+                                                custom_objects=custom_objects)
 
     @classmethod
     def from_file(cls, filename: str, **kwargs):
@@ -197,9 +203,27 @@ class KerasMixin:
         Returns: object instance
 
         """
-        instance = cls(**kwargs)  # type: ignore
+        instance = cls(model=None, **kwargs)  # type: ignore
         instance.load(filename)
         return instance
+
+    def evaluate(self, eval_objs: Union[List, np.ndarray],
+                 eval_targets: Union[List, np.ndarray], is_feature: bool = False,
+                 metric: Union[str, Callable] = None) -> np.ndarray:
+        """
+        Evaluate objs, targets
+
+        Args:
+            eval_objs (list): objs for evaluation
+            eval_targets (list): target list for the corresponding objects
+            is_feature (bool): whether the input x is feature matrix
+            metric (callable): metric for evaluation
+        """
+
+        eval_features = eval_objs if is_feature else \
+            self.describer.transform(eval_objs)
+        return self.model.evaluate(to_array(eval_features),  # type: ignore
+                                   to_array(eval_targets))
 
     @staticmethod
     def get_input_dim(describer: Optional[BaseDescriber] = None,
@@ -294,3 +318,25 @@ class KerasModel(BaseModel, KerasMixin):
         val_features and val_targets
         """
         return val_features, val_targets
+
+
+def is_sklearn_model(model: BaseModel) -> bool:
+    """
+    Check whether the model is sklearn
+    Args:
+        model (BaseModel): model
+    Returns: bool
+    """
+    from sklearn.base import BaseEstimator
+    return isinstance(model.model, BaseEstimator)
+
+
+def is_keras_model(model: BaseModel) -> bool:
+    """
+    Check whether the model is keras
+    Args:
+        model (BaseModel): model
+    Returns: bool
+    """
+    from tensorflow.keras.models import Model
+    return isinstance(model.model, Model)

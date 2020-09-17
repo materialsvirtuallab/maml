@@ -118,7 +118,7 @@ def to_array(x):
     if isinstance(x, pd.DataFrame):
         return x.values
     if isinstance(x, list):
-        return [to_array(i) for i in x]
+        return np.array([to_array(i) for i in x])
     if isinstance(x, np.ndarray):
         return x
     if isinstance(x, (str, int, float)):
