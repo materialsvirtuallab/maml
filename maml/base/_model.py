@@ -208,8 +208,7 @@ class KerasMixin:
         return instance
 
     def evaluate(self, eval_objs: Union[List, np.ndarray],
-                 eval_targets: Union[List, np.ndarray], is_feature: bool = False,
-                 metric: Union[str, Callable] = None) -> np.ndarray:
+                 eval_targets: Union[List, np.ndarray], is_feature: bool = False) -> np.ndarray:
         """
         Evaluate objs, targets
 
