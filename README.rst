@@ -55,8 +55,16 @@ The SNAP potential comes with this lammps installation. The GAP package for GAP 
 
 
 Install all the libraries from requirement.txt file::
-    pip install -r requirement.txt
+    pip install -r requirements.txt
 (If doesn't works provide the path of requirement.txt file)
+
+For all the requirements above::
+    pip install -r requirements-ci.txt
+    pip install -r requirements-optional.txt
+    pip install -r requirements-tf.txt
+    pip install -r requirements.txt
+    
+    (If doesn't works provide the path of requirements.txt file)
 
 Usage
 -----
