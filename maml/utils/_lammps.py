@@ -5,7 +5,7 @@ import logging
 from typing import List, Optional, Union, Tuple
 
 import numpy as np
-from pymatgen.core import Structure, Element, Specie, Lattice
+from pymatgen.core import Structure, Element, Species, Lattice
 from pymatgen.core.operations import SymmOp
 
 logging.basicConfig()
@@ -270,25 +270,25 @@ def _get_atomic_mass(element_or_specie: str) -> float:
     try:
         return Element(element_or_specie).atomic_mass
     except Exception:
-        return Specie.from_string(element_or_specie).element.atomic_mass
+        return Species.from_string(element_or_specie).element.atomic_mass
 
 
-def _get_charge(element_or_specie: Union[str, Element, Specie]) -> float:
+def _get_charge(element_or_specie: Union[str, Element, Species]) -> float:
     """
     Get charge from element or specie
 
     Args:
-        element_or_specie (str or Element or Specie): element or specie
+        element_or_specie (str or Element or Species): element or specie
 
     Returns: charge float
 
     """
 
-    if isinstance(element_or_specie, Specie):
+    if isinstance(element_or_specie, Species):
         return element_or_specie.oxi_state
     if isinstance(element_or_specie, str):
         try:
-            return Specie.from_string(element_or_specie).oxi_state
+            return Species.from_string(element_or_specie).oxi_state
         except Exception:
             return 0.0
     return 0.0
