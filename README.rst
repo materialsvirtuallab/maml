@@ -53,6 +53,19 @@ To run the potential energy surface (pes), lammps installation is required you c
 
 The SNAP potential comes with this lammps installation. The GAP package for GAP and MLIP package for MTP are needed to run the corresponding potentials. For fitting NNP potential, the `n2p2` package is needed. 
 
+
+Install all the libraries from requirement.txt file::
+    pip install -r requirements.txt
+(If doesn't works provide the path of requirement.txt file)
+
+For all the requirements above::
+    pip install -r requirements-ci.txt
+    pip install -r requirements-optional.txt
+    pip install -r requirements-tf.txt
+    pip install -r requirements.txt
+    
+    (If doesn't works provide the path of requirements.txt file)
+
 Usage
 -----
 
@@ -62,3 +75,7 @@ API documentation
 -----------------
 
 See `API docs <https://guide.materialsvirtuallab.org/maml/modules.html>`_.
+
+Machine learning (ML) is the study of computer algorithms that improve automatically through experience.[1][2] It is seen as a subset of artificial intelligence. Machine learning algorithms build a mathematical model based on sample data, known as "training data", in order to make predictions or decisions without being explicitly programmed to do so.[3] Machine learning algorithms are used in a wide variety of applications, such as email filtering and computer vision, where it is difficult or infeasible to develop conventional algorithms to perform the needed tasks.
+
+Machine learning is closely related to computational statistics, which focuses on making predictions using computers. The study of mathematical optimization delivers methods, theory and application domains to the field of machine learning. Data mining is a related field of study, focusing on exploratory data analysis through unsupervised learning.[5][6] In its application across business problems, machine learning is also referred to as predictive analytics.

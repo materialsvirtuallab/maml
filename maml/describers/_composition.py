@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA, KernelPCA
 from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
-from pymatgen.core import Composition, Structure, Element, Specie
+from pymatgen.core import Composition, Structure, Element, Species
 
 from maml.base import BaseDescriber, describer_type
 from maml.utils import Stats, get_full_stats_and_funcs
@@ -284,7 +284,7 @@ def _is_element_or_specie(s: str) -> bool:
         _ = Element(s)
     except ValueError:
         try:
-            _ = Specie.from_string(s)
+            _ = Species.from_string(s)
         except ValueError:
             print(s)
             return False

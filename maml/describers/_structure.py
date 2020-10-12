@@ -72,7 +72,7 @@ class DistinctSiteProperty(BaseDescriber):
         Args:
             properties (list): Sequence of specie properties. E.g.,
                 ["atomic_radius"]. Look at pymatgen.core.periodic_table.Element and
-                pymatgen.core.periodic_table.Specie for support properties (there
+                pymatgen.core.periodic_table.Species for support properties (there
                 are a lot!)
             symprec (float): Symmetry precision for spacegroup determination.
             wyckoffs (list of wyckoff symbols):. E.g., ["48a", "24c"], if not provided,
