@@ -641,7 +641,7 @@ class NNPotential(Potential):
             _ = self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)
             output = 'training_output'
 
-            input_filename = self.write_input(**kwargs)
+            self.write_input(**kwargs)
             p_scaling = subprocess.Popen(['nnp-scaling', '100'],
                                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stdout, stderr = p_scaling.communicate()
