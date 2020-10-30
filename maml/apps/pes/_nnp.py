@@ -642,22 +642,33 @@ class NNPotential(Potential):
             output = 'training_output'
 
             input_filename = self.write_input(**kwargs)
-            p_scaling = subprocess.Popen(['nnp-scaling', input_filename])
-            stdout = p_scaling.communicate()[0]
+            p_scaling = subprocess.Popen(['nnp-scaling', '100'],
+                                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = p_scaling.communicate()
+            rc = p_scaling.returncode
+            if rc != 0:
+                error_msg = 'n2p2 exited with return code %d' % rc
+                msg = stderr.decode("utf-8").split('\n')[:-1]
+                try:
+                    error_line = [i for i, m in enumerate(msg) if m.startswith('ERROR')][0]
+                    error_msg += ', '.join(msg[error_line:])
+                except Exception:
+                    error_msg += ', '
+                    error_msg += msg[-1]
+                raise RuntimeError(error_msg)
 
-            p_train = subprocess.Popen(['nnp-train', input_filename],
-                                       stdout=open(output, 'w'))
-            stdout = p_train.communicate()[0]
-
+            p_train = subprocess.Popen(['nnp-train'],
+                                       stdout=open(output, 'w'), stderr=subprocess.PIPE)
+            stdout, stderr = p_train.communicate()
             rc = p_train.returncode
             if rc != 0:
                 error_msg = 'n2p2 exited with return code %d' % rc
-                msg = stdout.decode("utf-8").split('\n')[:-1]
+                msg = stderr.decode("utf-8").split('\n')[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg)
-                                  if m.startswith('ERROR')][0]
+                    error_line = [i for i, m in enumerate(msg) if m.startswith('ERROR')][0]
                     error_msg += ', '.join(msg[error_line:])
                 except Exception:
+                    error_msg += ', '
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
@@ -719,18 +730,19 @@ class NNPotential(Potential):
             dfs = []
             for data in predict_pool:
                 _ = self.write_cfgs(original_file, cfg_pool=[data])
-                p = subprocess.Popen(['nnp-predict', input_filename], stdout=subprocess.PIPE)
-                stdout = p.communicate()[0]
+                p_evaluation = subprocess.Popen(['nnp-predict', input_filename],
+                                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = p_evaluation.communicate()
 
-                rc = p.returncode
+                rc = p_evaluation.returncode
                 if rc != 0:
                     error_msg = 'n2p2 exited with return code %d' % rc
-                    msg = stdout.decode("utf-8").split('\n')[:-1]
+                    msg = stderr.decode("utf-8").split('\n')[:-1]
                     try:
-                        error_line = [i for i, m in enumerate(msg)
-                                      if m.startswith('ERROR')][0]
+                        error_line = [i for i, m in enumerate(msg) if m.startswith('ERROR')][0]
                         error_msg += ', '.join(msg[error_line:])
                     except Exception:
+                        error_msg += ', '
                         error_msg += msg[-1]
                     raise RuntimeError(error_msg)
 
