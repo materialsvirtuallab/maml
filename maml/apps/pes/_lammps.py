@@ -18,6 +18,8 @@ from pymatgen.core import Structure, Lattice, Element
 from pymatgen.io.lammps.data import LammpsData
 
 from maml.apps.pes._base import Potential
+from maml.utils import get_lammps_lattice_and_rotation, \
+    stress_list_to_matrix, stress_matrix_to_list
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -202,6 +204,34 @@ class EnergyForceStress(LMPStaticCalculator):
 
     def _sanity_check(self, structure):
         return True
+
+    def calculate(self, structures):
+        """
+        Calculate the energy, forces and stresses of structures.
+        Proper rotation of the results are applied when the structure
+        is triclinic.
+
+        Args:
+            structures (list): a list of structures
+
+        Returns: list of (energy, forces, stresses) tuple
+
+        """
+        results = super().calculate(structures=structures)
+        final_results = []
+        for res, s in zip(results, structures):
+            new_forces, new_stresses = self._rotate_force_stress(s, res[1], res[2])
+            final_results.append((res[0], new_forces, new_stresses))
+        return final_results
+
+    def _rotate_force_stress(self, structure, forces, stresses):
+        _, symmop, rot_matrix = get_lammps_lattice_and_rotation(structure)
+        inv_rot_matrix = np.linalg.inv(rot_matrix)
+        forces = forces.dot(inv_rot_matrix.T)
+        stresses = stress_list_to_matrix(stresses, stress_format="LAMMPS")
+        stresses = inv_rot_matrix.dot(stresses.dot(inv_rot_matrix.T))
+        stresses = stress_matrix_to_list(stresses, stress_format="LAMMPS")
+        return forces, stresses
 
     def _parse(self):
         energy = float(np.loadtxt('energy.txt'))
