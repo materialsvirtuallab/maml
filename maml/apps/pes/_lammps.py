@@ -224,6 +224,7 @@ class EnergyForceStress(LMPStaticCalculator):
             final_results.append((res[0], new_forces, new_stresses))
         return final_results
 
+    @staticmethod
     def _rotate_force_stress(self, structure, forces, stresses):
         _, symmop, rot_matrix = get_lammps_lattice_and_rotation(structure)
         inv_rot_matrix = np.linalg.inv(rot_matrix)

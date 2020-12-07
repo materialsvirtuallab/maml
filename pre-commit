@@ -12,7 +12,7 @@ status=0
 files=$(git diff --diff-filter=d --cached --name-only | grep -E 'maml.*\.(py)$' | sed '/test_/d')
 files=`echo $files | tr '\n' ' '`
 if [ "$files" != " " ]; then
-    for cmd in pycodestyle mypy flake8 pydocstyle
+    for cmd in pycodestyle mypy flake8 pydocstyle pylint
     do
         echo "Running $cmd $files..."
         $cmd $files
