@@ -9,4 +9,4 @@ joblib==0.17.0
 tqdm==4.54.1
 pymongo==3.11.2
 matminer==0.6.4
-megnet==1.2.3
+megnet==1.2.4
