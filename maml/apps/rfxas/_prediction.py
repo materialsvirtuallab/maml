@@ -34,7 +34,7 @@ EXTRA_TEMPLATES = {"cnum": "{}_c_num", "cmotif": "{}_c_env_{}_env_label"}
 
 EXTRA_MODEL_URL = 'https://ndownloader.figshare.com/files/18741755'
 RF_MODEL_PATH = os.path.join(CWD, "./models.zip")
-RF_MODEL_URL = 'https://ndownloader.figshare.com/files/22388406'
+RF_MODEL_URL = 'https://ndownloader.figshare.com/files/25946756'
 
 
 CN_CLASSES = ['CN_1-CN_4', 'CN_12', 'CN_12-CN_10', 'CN_12-CN_3',
