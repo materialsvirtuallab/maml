@@ -101,7 +101,7 @@ class CenvPrediction:
         self.energy_reference = energy_reference
         self.energy_range = energy_range
         self.cnum_model_name_template = 'RandomForest_{}_c_num.sav'
-        self.cmotif_model_name_template = 'RandomForest_{}_c_env_ex_{}.sav' 
+        self.cmotif_model_name_template = 'RandomForest_{}_c_env_ex_{}.sav'
         if model_dir is None:
             model_dir = os.path.join(CWD, "models")
         self.model_dir = model_dir
