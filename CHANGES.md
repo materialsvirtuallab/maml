@@ -1,3 +1,7 @@
+# v0.0.3
+* bug fix
+* add atomsets models
+
 # v0.0.2
 * major refactor 
 * move mlearn potential energy surfaces to apps
