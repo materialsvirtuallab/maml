@@ -118,3 +118,33 @@ def set_ver(ctx):
                                 l.rstrip()))
     with open("setup.py", "wt") as f:
         f.write("\n".join(lines))
+
+
+@task
+def release_github(ctx):
+    with open("CHANGES.md") as f:
+        contents = f.read()
+    toks = re.split(r"\#+", contents)
+    desc = toks[1].strip()
+    payload = {
+        "tag_name": "v" + NEW_VER,
+        "target_commitish": "master",
+        "name": "v" + NEW_VER,
+        "body": desc,
+        "draft": False,
+        "prerelease": False
+    }
+    response = requests.post(
+        "https://api.github.com/repos/materialsvirtuallab/maml/releases",
+        data=json.dumps(payload),
+        headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]})
+    print(response.text)
+
+
+@task
+def release(ctx, notest=False):
+    ctx.run("rm -r dist build maml.egg-info", warn=True)
+    if not notest:
+        ctx.run("pytest maml")
+    publish(ctx)
+    release_github(ctx)
