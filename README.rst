@@ -82,7 +82,6 @@ Machine learning is closely related to computational statistics, which focuses o
 
 Citing
 ------
-```
 @misc{maml,
     author = {C. Chen, Y. Zuo, W. Ye and S.P. Ong},
     title = {{Maml - materials machine learning package}},
@@ -91,4 +90,4 @@ Citing
     journal = {GitHub repository},
     howpublished = {\url{https://github.com/materialsvirtuallab/maml}},
 }
-```
+
