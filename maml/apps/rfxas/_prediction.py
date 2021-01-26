@@ -26,14 +26,18 @@ logger.setLevel(logging.INFO)
 
 CWD = os.path.dirname(os.path.abspath(__file__))
 
-DATA_DIR = os.path.join(CWD, "./data")
-EXTRA_MODELS = os.path.join(CWD, "./ex_models.zip")
-EXTRA_MODEL_DIR = os.path.join(CWD, "./ex_models/Model_share")
+DATA_DIR = os.path.join(CWD, "data")
+EXTRA_MODELS = os.path.join(CWD, "ex_models.zip")
+EXTRA_MODEL_DIR = os.path.join(CWD, "ex_models/Model_share")
 EXTRA_MODEL_SUB_DICT = {"cnn": "CNN_model", "knn": "KNN_model", "mlp": "MLP_model", "svc": "SVC_model"}
 EXTRA_TEMPLATES = {"cnum": "{}_c_num", "cmotif": "{}_c_env_{}_env_label"}
 
 EXTRA_MODEL_URL = 'https://ndownloader.figshare.com/files/18741755'
+<<<<<<< HEAD
 RF_MODEL_PATH = os.path.join(CWD, "./models.zip")
+=======
+RF_MODEL_PATH = os.path.join(CWD, "models.zip")
+>>>>>>> 474d035e9d4dd8539da56fa2a24ff86913f096ce
 RF_MODEL_URL = 'https://ndownloader.figshare.com/files/25946756'
 
 
@@ -71,7 +75,7 @@ class CenvPrediction:
                  energy_range: Union[float, List[float]],
                  edge_energy: Optional[float] = None,
                  spectrum_interpolation: bool = True, model: str = 'rf',
-                 model_dir: str = os.path.join(CWD, "./models"),
+                 model_dir: Optional[str] = None,
                  extra_model_dir: str = EXTRA_MODEL_DIR):
         """
         Args:
@@ -102,6 +106,8 @@ class CenvPrediction:
         self.energy_range = energy_range
         self.cnum_model_name_template = 'RandomForest_{}_c_num.sav'
         self.cmotif_model_name_template = 'RandomForest_{}_c_env_ex_{}.sav'
+        if model_dir is None:
+            model_dir = os.path.join(CWD, "models")
         self.model_dir = model_dir
 
         if not os.path.isdir(self.model_dir):
@@ -344,6 +350,6 @@ def _download_models(url, file_path=EXTRA_MODELS, dest='ext_models'):
             file_out.write(chunk)
     t.close()
     r.close()
-    logger.info("Start extracting models...")
+    logger.info("Start extracting models to %s ..." % dest)
     with ZipFile(file_path, 'r') as zip_obj:
-        zip_obj.extractall(os.path.join(os.path.basename(file_path), dest))
+        zip_obj.extractall(dest)
