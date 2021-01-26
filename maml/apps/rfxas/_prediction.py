@@ -33,11 +33,7 @@ EXTRA_MODEL_SUB_DICT = {"cnn": "CNN_model", "knn": "KNN_model", "mlp": "MLP_mode
 EXTRA_TEMPLATES = {"cnum": "{}_c_num", "cmotif": "{}_c_env_{}_env_label"}
 
 EXTRA_MODEL_URL = 'https://ndownloader.figshare.com/files/18741755'
-<<<<<<< HEAD
-RF_MODEL_PATH = os.path.join(CWD, "./models.zip")
-=======
 RF_MODEL_PATH = os.path.join(CWD, "models.zip")
->>>>>>> 474d035e9d4dd8539da56fa2a24ff86913f096ce
 RF_MODEL_URL = 'https://ndownloader.figshare.com/files/25946756'
 
 
