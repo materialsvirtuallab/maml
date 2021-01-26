@@ -14,9 +14,8 @@ CWD = os.path.abspath(os.path.dirname(__file__))
 
 
 class ElementPropertyTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.s = PymatgenTest.get_structure("Li2O")
+
+    s = PymatgenTest.get_structure("Li2O")
 
     def test_element_property(self):
         ep = ElementProperty.from_preset("magpie")

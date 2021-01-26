@@ -11,26 +11,24 @@ from maml.describers import SiteElementProperty
 
 class TestAtomSets(TestCase):
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.x = np.array([[0, 1, 0, 1, 0, 1]], dtype=np.int32).reshape((1, -1))
-        cls.x_vec = np.random.normal(size=(1, 6, 20))
-        cls.indices = np.array([[0, 0, 0, 1, 1, 1]], dtype=np.int32).reshape((1, -1))
-        cls.y = np.array([[0.1, 0.2]]).reshape((1, 2, 1))
+    x = np.array([[0, 1, 0, 1, 0, 1]], dtype=np.int32).reshape((1, -1))
+    x_vec = np.random.normal(size=(1, 6, 20))
+    indices = np.array([[0, 0, 0, 1, 1, 1]], dtype=np.int32).reshape((1, -1))
+    y = np.array([[0.1, 0.2]]).reshape((1, 2, 1))
 
-        cls.model1 = AtomSets(describer=SiteElementProperty(),
-                              is_embedding=True,
-                              symmetry_func='mean',
-                              n_neurons=(8, 8),
-                              n_neurons_final=(4, 4),
-                              n_targets=1)
-        cls.model2 = AtomSets(
-            input_dim=20,
-            is_embedding=False,
-            symmetry_func='set2set',
-            n_neurons=(4, 4), n_neurons_final=(4, 4),
-            T=2,
-            n_hidden=10)
+    model1 = AtomSets(describer=SiteElementProperty(),
+                      is_embedding=True,
+                      symmetry_func='mean',
+                      n_neurons=(8, 8),
+                      n_neurons_final=(4, 4),
+                      n_targets=1)
+    model2 = AtomSets(
+        input_dim=20,
+        is_embedding=False,
+        symmetry_func='set2set',
+        n_neurons=(4, 4), n_neurons_final=(4, 4),
+        T=2,
+        n_hidden=10)
 
     def test_predict(self):
         res = self.model1.predict_objs(['H2O', 'FeO'])
