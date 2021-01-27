@@ -189,7 +189,7 @@ class SNAPotential(Potential):
         else:
             quadratic = False
 
-        describer = BispectrumCoefficients(cutoff=rcut, twojmax=twojmax,
+        describer = BispectrumCoefficients(rcutfac=rcut, twojmax=twojmax,
                                            element_profile=element_profile,
                                            quadratic=quadratic, pot_fit=True)
         model = SKLModel(model=LinearRegression(),

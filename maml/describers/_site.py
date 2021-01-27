@@ -44,7 +44,7 @@ class BispectrumCoefficients(BaseDescriber):
              volume={104}, number={13}, pages={136403}, year={2010}, publisher={APS}}
     """
     def __init__(self,
-                 cutoff: float,
+                 rcutfac: float,
                  twojmax: int,
                  element_profile: Dict,
                  quadratic: bool = False,
@@ -54,12 +54,14 @@ class BispectrumCoefficients(BaseDescriber):
                  **kwargs):
         """
         Args:
-            cutoff (float): The cutoff distance.
+            rcutfac (float): The rcutfac used in computing the cutoff between
+                elements. true cutoff between i, j = rcutfac * (Ri + Rj),
+                where Ri and Rj are cutoff for elements i and j
             twojmax (int): Band limit for bispectrum components.
-            element_profile (dict): Parameters (cutoff factor 'r' and weight 'w')
+            element_profile (dict): Parameters (cutoff radius 'r' and weight 'w')
                 related to each element, e.g.,
-                {'Na': {'r': 0.3, 'w': 0.9},
-                 'Cl': {'r': 0.7, 'w': 3.0}}
+                {'Na': {'r': 4.5, 'w': 0.9},
+                 'Cl': {'r': 5.0, 'w': 3.0}}
             quadratic (bool): Whether including quadratic terms.
                 Default to False.
             pot_fit (bool): Whether combine the dataframe for potential fitting.
@@ -68,11 +70,11 @@ class BispectrumCoefficients(BaseDescriber):
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         from maml.apps.pes import SpectralNeighborAnalysis
-        self.calculator = SpectralNeighborAnalysis(rcut=cutoff,
+        self.calculator = SpectralNeighborAnalysis(rcutfac=rcutfac,
                                                    twojmax=twojmax,
                                                    element_profile=element_profile,
                                                    quadratic=quadratic)
-        self.rcutfac = cutoff
+        self.rcutfac = rcutfac
         self.twojmax = twojmax
         self.elements = sorted(element_profile.keys(), key=lambda x: Element(x))
         self.element_profile = element_profile

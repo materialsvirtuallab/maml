@@ -53,7 +53,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
     def test_calculate(self):
         profile1 = dict(Si=dict(r=0.5, w=1.9), C=dict(r=0.5, w=2.55))
         tjm1 = np.random.randint(1, 11)
-        calculator1 = SpectralNeighborAnalysis(rcut=5, twojmax=tjm1,
+        calculator1 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm1,
                                                element_profile=profile1,
                                                quadratic=False)
         sna1, snad1, snav1, elem1 = calculator1.calculate([self.structure1])[0]
@@ -64,7 +64,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         self.assertEqual(snav1.shape, (len(self.structure1), n1 * 6 * len(profile1)))
         self.assertEqual(len(np.unique(elem1)), 1)
 
-        calculator4 = SpectralNeighborAnalysis(rcut=5, twojmax=tjm1,
+        calculator4 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm1,
                                                element_profile=profile1,
                                                quadratic=True)
         sna4, snad4, snav4, elem4 = calculator4.calculate([self.structure1])[0]
@@ -78,7 +78,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
 
         profile2 = dict(Na=dict(r=0.3, w=0.9), Cl=dict(r=0.7, w=3.0))
         tjm2 = np.random.randint(1, 11)
-        calculator2 = SpectralNeighborAnalysis(rcut=5, twojmax=tjm2,
+        calculator2 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm2,
                                                element_profile=profile2,
                                                quadratic=False)
         sna2, snad2, snav2, elem2 = calculator2.calculate([self.structure2])[0]
@@ -89,7 +89,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         self.assertEqual(snav2.shape, (len(self.structure2), n2 * 6 * len(profile2)))
         self.assertEqual(len(np.unique(elem2)), len(profile2))
 
-        calculator5 = SpectralNeighborAnalysis(rcut=5, twojmax=tjm2,
+        calculator5 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm2,
                                                element_profile=profile2,
                                                quadratic=True)
         sna5, snad5, snav5, elem5 = calculator5.calculate([self.structure2])[0]
@@ -105,7 +105,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
                         Ti=dict(r=0.3, w=1.5),
                         O=dict(r=0.75, w=3.5))
         tjm3 = np.random.randint(1, 11)
-        calculator3 = SpectralNeighborAnalysis(rcut=5, twojmax=tjm3,
+        calculator3 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm3,
                                                element_profile=profile3,
                                                quadratic=False)
         sna3, snad3, snav3, elem3 = calculator3.calculate([self.structure3])[0]
@@ -116,7 +116,7 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         self.assertEqual(snav3.shape, (len(self.structure3), n3 * 6 * len(profile3)))
         self.assertEqual(len(np.unique(elem3)), len(profile3))
 
-        calculator6 = SpectralNeighborAnalysis(rcut=5, twojmax=tjm3,
+        calculator6 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm3,
                                                element_profile=profile3,
                                                quadratic=True)
         sna6, snad6, snav6, elem6 = calculator6.calculate([self.structure3])[0]
@@ -144,7 +144,7 @@ class EnergyForceStressTest(unittest.TestCase):
 
     def setUp(self):
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
-        describer1 = BispectrumCoefficients(cutoff=4.1, twojmax=8,
+        describer1 = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                             element_profile=element_profile,
                                             quadratic=False,
                                             pot_fit=True)
@@ -154,7 +154,7 @@ class EnergyForceStressTest(unittest.TestCase):
         snap1 = SNAPotential(model=model1)
         self.ff_settings1 = snap1
 
-        describer2 = BispectrumCoefficients(cutoff=4.1, twojmax=8,
+        describer2 = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                             element_profile=element_profile,
                                             quadratic=True,
                                             pot_fit=True)
@@ -192,7 +192,7 @@ class ElasticConstantTest(unittest.TestCase):
 
     def setUp(self):
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
-        describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
+        describer = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
         model = SKLModel(describer=describer, model=LinearRegression())
@@ -226,7 +226,7 @@ class LatticeConstantTest(unittest.TestCase):
 
     def setUp(self):
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
-        describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
+        describer = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
         model = SKLModel(describer=describer, model=LinearRegression())
@@ -262,7 +262,7 @@ class NudgedElasticBandTest(unittest.TestCase):
 
     def setUp(self):
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
-        describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
+        describer = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
         model = SKLModel(describer=describer, model=LinearRegression())
@@ -301,7 +301,7 @@ class DefectFormationTest(unittest.TestCase):
 
     def setUp(self):
         element_profile = {'Ni': {'r': 0.5, 'w': 1}}
-        describer = BispectrumCoefficients(cutoff=4.1, twojmax=8,
+        describer = BispectrumCoefficients(rcutfac=4.1, twojmax=8,
                                            element_profile=element_profile,
                                            pot_fit=True)
         model = SKLModel(describer=describer, model=LinearRegression())

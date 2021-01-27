@@ -270,7 +270,7 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
              'dump 3 all custom 1 dump.snad c_snad[*]',
              'dump 4 all custom 1 dump.snav c_snav[*]']
 
-    def __init__(self, rcut, twojmax, element_profile, quadratic=False, **kwargs):
+    def __init__(self, rcutfac, twojmax, element_profile, quadratic=False, **kwargs):
         """
         For more details on the parameters, please refer to the
         official documentation of LAMMPS.
@@ -282,17 +282,19 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
             document (http://lammps.sandia.gov/doc/pair_snap.html).
 
         Args:
-            rcut (float): The cutoff distance.
+            rcutfac (float): The rcutfac in bispectrum coefficient calculations.
+                The cutoff radius between element i and j are rcutfac * (R_i + R_j)
+                where R_i and R_j are cutoff set for element i and j.
             twojmax (int): Band limit for bispectrum components.
-            element_profile (dict): Parameters (cutoff factor 'r' and
+            element_profile (dict): Parameters (cutoff radius 'r' and
                 weight 'w') related to each element, e.g.,
-                {'Na': {'r': 0.3, 'w': 0.9},
-                 'Cl': {'r': 0.7, 'w': 3.0}}
+                {'Na': {'r': 4.5, 'w': 0.9},
+                 'Cl': {'r': 4.8, 'w': 3.0}}
             quadratic (bool): Whether including quadratic terms.
                 Default to False.
 
         """
-        self.rcutfac = rcut
+        self.rcutfac = rcutfac
         self.twojmax = twojmax
         self.element_profile = element_profile
         self.quadratic = quadratic

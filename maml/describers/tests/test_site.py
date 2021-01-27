@@ -29,7 +29,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
             inds = np.random.randint(16, size=n)
             s.remove_sites(inds)
 
-        bc_atom = BispectrumCoefficients(cutoff=5, twojmax=3, element_profile=profile,
+        bc_atom = BispectrumCoefficients(rcutfac=5, twojmax=3, element_profile=profile,
                                          quadratic=False, pot_fit=False)
         df_atom = bc_atom.transform(structures)
         for i, s in enumerate(structures):
@@ -37,7 +37,7 @@ class BispectrumCoefficientsTest(unittest.TestCase):
             self.assertEqual(df_s.shape, (len(s), 8))
             self.assertTrue(df_s.equals(bc_atom.transform_one(s)))
 
-        bc_pot = BispectrumCoefficients(cutoff=5, twojmax=3, element_profile=profile,
+        bc_pot = BispectrumCoefficients(rcutfac=5, twojmax=3, element_profile=profile,
                                         quadratic=False, pot_fit=True, include_stress=True)
         df_pot = bc_pot.transform(structures)
         for i, s in enumerate(structures):

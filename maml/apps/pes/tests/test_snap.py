@@ -38,13 +38,13 @@ class SNAPotentialTest(unittest.TestCase):
 
     def setUp(self):
         profile = {'Mo': {'r': 0.6, 'w': 1.}}
-        self.describer1 = BispectrumCoefficients(cutoff=4.6, twojmax=6,
+        self.describer1 = BispectrumCoefficients(rcutfac=4.6, twojmax=6,
                                                  element_profile=profile,
                                                  quadratic=False,
                                                  pot_fit=True)
         model1 = SKLModel(describer=self.describer1, model=LinearRegression())
         self.potential1 = SNAPotential(model=model1, name='test')
-        self.describer2 = BispectrumCoefficients(cutoff=4.6, twojmax=6,
+        self.describer2 = BispectrumCoefficients(rcutfac=4.6, twojmax=6,
                                                  element_profile=profile,
                                                  quadratic=True,
                                                  pot_fit=True)
