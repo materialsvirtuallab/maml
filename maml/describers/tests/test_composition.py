@@ -25,27 +25,24 @@ class ElementPropertyTest(unittest.TestCase):
 
 
 class ElementStatsTest(unittest.TestCase):
-
     def test_element_stats(self):
-        test = ElementStats({'H': [4, 2, 3],
-                             'O': [2, 3, 4]},
-                            stats=['min', 'max', 'moment:1:10'])
-        self.assertEqual(test.transform(['H2O']).shape, (1, 36))
+        test = ElementStats({"H": [4, 2, 3], "O": [2, 3, 4]}, stats=["min", "max", "moment:1:10"])
+        self.assertEqual(test.transform(["H2O"]).shape, (1, 36))
 
-        res = test.transform(['H2O', 'H2O'])
+        res = test.transform(["H2O", "H2O"])
         self.assertEqual(res.shape, (2, 36))
 
-        res2 = test.transform([Composition('H2O'), Composition('H2O')])
+        res2 = test.transform([Composition("H2O"), Composition("H2O")])
         np.testing.assert_allclose(res.values, res2.values)
 
-        dummy_h2o = Molecule(['H', 'H', 'O'], [[-0.5, 0, 0], [0.5, 0, 0], [0, 0, 0]])
+        dummy_h2o = Molecule(["H", "H", "O"], [[-0.5, 0, 0], [0.5, 0, 0], [0, 0, 0]])
         res3 = test.transform([dummy_h2o, dummy_h2o])
         np.testing.assert_allclose(res.values, res3.values)
 
-        stats = ['min', 'max', *['moment:%d:None' % i for i in range(1, 11)]]
-        p0_names = ['p0_%s' % i for i in stats]
-        p1_names = ['p1_%s' % i for i in stats]
-        p2_names = ['p2_%s' % i for i in stats]
+        stats = ["min", "max", *["moment:%d:None" % i for i in range(1, 11)]]
+        p0_names = ["p0_%s" % i for i in stats]
+        p1_names = ["p1_%s" % i for i in stats]
+        p2_names = ["p2_%s" % i for i in stats]
         all_names = []
         for i, j, k in zip(p0_names, p1_names, p2_names):
             all_names.extend([i, j, k])
@@ -53,69 +50,74 @@ class ElementStatsTest(unittest.TestCase):
         self.assertListEqual(list(res.columns), all_names)
 
     def test_from_data(self):
-        es = ElementStats.from_data('megnet_1', stats=['moment:None:5'])
-        d = es.transform_one('Fe2O3')
+        es = ElementStats.from_data("megnet_1", stats=["moment:None:5"])
+        d = es.transform_one("Fe2O3")
         self.assertTrue(d.shape == (1, 80))
 
-        es = ElementStats.from_data(['megnet_1'], stats=['moment:None:5'])
-        d = es.transform_one('Fe2O3')
+        es = ElementStats.from_data(["megnet_1"], stats=["moment:None:5"])
+        d = es.transform_one("Fe2O3")
         self.assertTrue(d.shape == (1, 80))
 
-        es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['moment:None:5'])
-        d = es2.transform_one('Fe2O3')
+        es2 = ElementStats.from_data(["megnet_1", "megnet_3"], stats=["moment:None:5"])
+        d = es2.transform_one("Fe2O3")
         self.assertTrue(d.shape == (1, 160))
 
     def test_error(self):
         with self.assertRaises(ValueError):
-            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2, 3]}, stats=['mean'])
+            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2, 3]}, stats=["mean"])
 
         with self.assertRaises(ValueError):
-            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
-                             property_names=['p1'])
+            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=["mean"], property_names=["p1"])
 
         with self.assertRaises(ValueError):
-            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['super_std'],
-                             property_names=['p1', 'p2'])
+            _ = ElementStats(
+                element_properties={"H": [1, 2], "O": [1, 2]}, stats=["super_std"], property_names=["p1", "p2"]
+            )
 
         with self.assertRaises(ValueError):
-            _ = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['super_std:-1'],
-                             property_names=['p1', 'p2'])
+            _ = ElementStats(
+                element_properties={"H": [1, 2], "O": [1, 2]}, stats=["super_std:-1"], property_names=["p1", "p2"]
+            )
 
         with self.assertRaises(ValueError):
-            ElementStats.from_file(os.path.join(CWD, 'test_data/wrong_dummy_property.json'), stats=['max'])
+            ElementStats.from_file(os.path.join(CWD, "test_data/wrong_dummy_property.json"), stats=["max"])
 
         with self.assertRaises(ValueError):
-            ElementStats.from_data('megnet_22', stats=['max'])
+            ElementStats.from_data("megnet_22", stats=["max"])
 
     def test_keys(self):
-        es = ElementStats.from_file(os.path.join(CWD, 'test_data/dummy_property.json'), stats=['max'])
-        self.assertListEqual(es.stats, ['mean'])
+        es = ElementStats.from_file(os.path.join(CWD, "test_data/dummy_property.json"), stats=["max"])
+        self.assertListEqual(es.stats, ["mean"])
 
     def test_pca(self):
-        es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['moment:None:5'], num_dim=4)
-        d = es2.transform_one('Fe2O3')
+        es2 = ElementStats.from_data(["megnet_1", "megnet_3"], stats=["moment:None:5"], num_dim=4)
+        d = es2.transform_one("Fe2O3")
         self.assertTrue(d.shape == (1, 20))
 
     def test_kpca(self):
-        es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['moment:None:5'], num_dim=2,
-                                     reduction_algo='kpca')
-        d = es2.transform_one('Fe2O3')
+        es2 = ElementStats.from_data(
+            ["megnet_1", "megnet_3"], stats=["moment:None:5"], num_dim=2, reduction_algo="kpca"
+        )
+        d = es2.transform_one("Fe2O3")
         self.assertTrue(d.shape == (1, 10))
 
     def test_geometric_mean(self):
-        es2 = ElementStats.from_data(['megnet_1', 'megnet_3'], stats=['shifted_geometric_mean:100'])
-        d = es2.transform_one('Fe2O3')
+        es2 = ElementStats.from_data(["megnet_1", "megnet_3"], stats=["shifted_geometric_mean:100"])
+        d = es2.transform_one("Fe2O3")
         self.assertTrue(d.shape == (1, 32))
 
     def test_initialization(self):
-        self.assertRaises(TypeError, ElementStats,
-                          element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
-                          property_names=['p1', 'p2'],
-                          some_random_variable='test',
-                          )
-        es = ElementStats(element_properties={"H": [1, 2], "O": [1, 2]}, stats=['mean'],
-                          property_names=['p1', 'p2'],
-                          n_jobs=-1)
+        self.assertRaises(
+            TypeError,
+            ElementStats,
+            element_properties={"H": [1, 2], "O": [1, 2]},
+            stats=["mean"],
+            property_names=["p1", "p2"],
+            some_random_variable="test",
+        )
+        es = ElementStats(
+            element_properties={"H": [1, 2], "O": [1, 2]}, stats=["mean"], property_names=["p1", "p2"], n_jobs=-1
+        )
         self.assertTrue(es.n_jobs > 0)
         res = es.transform(["H2O", "H2O", "H2O", "H2O"])
         self.assertTrue(res.shape[0] == 4)

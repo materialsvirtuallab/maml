@@ -26,8 +26,7 @@ def fft_magnitude(z: np.ndarray) -> np.ndarray:
     return np.absolute(fft.fft(z))
 
 
-def spectrogram(z: np.ndarray, return_time_freq: bool = False) \
-        -> Union[Tuple, np.ndarray]:
+def spectrogram(z: np.ndarray, return_time_freq: bool = False) -> Union[Tuple, np.ndarray]:
     """
     The spectrogram of the signal
     Args:
@@ -39,15 +38,13 @@ def spectrogram(z: np.ndarray, return_time_freq: bool = False) \
     nsc = floor(nx / 4.5)  # use matlab values
     nov = floor(nsc / 2)
     nfft = max(256, 2 ** ceil(np.log2(nsc)))
-    freq, time, s = signal.spectrogram(z, window=signal.get_window('hann', nsc),
-                                       noverlap=nov, nfft=nfft)
+    freq, time, s = signal.spectrogram(z, window=signal.get_window("hann", nsc), noverlap=nov, nfft=nfft)
     if return_time_freq:
         return freq, time, s
     return s
 
 
-def cwt(z: np.ndarray, widths: np.ndarray,
-        wavelet: Union[str, Callable] = 'morlet2', **kwargs) -> np.ndarray:
+def cwt(z: np.ndarray, widths: np.ndarray, wavelet: Union[str, Callable] = "morlet2", **kwargs) -> np.ndarray:
     """
     The scalogram of the signal
     Args:
@@ -60,8 +57,7 @@ def cwt(z: np.ndarray, widths: np.ndarray,
         wavelet_func = getattr(signal, wavelet)
     else:
         wavelet_func = wavelet
-    return np.absolute(signal.cwt(
-        z, wavelet_func, widths=widths, **kwargs))
+    return np.absolute(signal.cwt(z, wavelet_func, widths=widths, **kwargs))
 
 
 @requires(tftb is not None, "Requires installation of tftb package")
@@ -75,18 +71,17 @@ def wvd(z: np.ndarray, return_all: bool = False) -> Union[Tuple, np.ndarray]:
     Returns: NxN wvd matrix
     """
     tfr = tftb.processing.WignerVilleDistribution(z)
-    res, f1, f2, = tfr.run()
+    (
+        res,
+        f1,
+        f2,
+    ) = tfr.run()
     if return_all:
         return res, f1, f2
     return res
 
 
-AVAILABLE_SP_METHODS = {
-    "fft_magnitude": fft_magnitude,
-    "spectrogram": spectrogram,
-    "cwt": cwt,
-    "wvd": wvd
-}
+AVAILABLE_SP_METHODS = {"fft_magnitude": fft_magnitude, "spectrogram": spectrogram, "cwt": cwt, "wvd": wvd}
 
 
 def get_sp_method(sp_method: Union[str, Callable]) -> Callable:  # type: ignore
@@ -100,7 +95,6 @@ def get_sp_method(sp_method: Union[str, Callable]) -> Callable:  # type: ignore
         try:
             return AVAILABLE_SP_METHODS[sp_method]
         except KeyError:
-            raise KeyError(f"{sp_method} is not in available methods: "
-                           f"{AVAILABLE_SP_METHODS.keys()}")
+            raise KeyError(f"{sp_method} is not in available methods: " f"{AVAILABLE_SP_METHODS.keys()}")
     else:
         return sp_method

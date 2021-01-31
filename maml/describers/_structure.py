@@ -17,11 +17,17 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-__all__ = ['DistinctSiteProperty', 'MEGNetStructure', 'CoulombMatrix',
-           'RandomizedCoulombMatrix', 'SortedCoulombMatrix', 'CoulombEigenSpectrum']
+__all__ = [
+    "DistinctSiteProperty",
+    "MEGNetStructure",
+    "CoulombMatrix",
+    "RandomizedCoulombMatrix",
+    "SortedCoulombMatrix",
+    "CoulombEigenSpectrum",
+]
 
 
-@describer_type('structure')
+@describer_type("structure")
 class DistinctSiteProperty(BaseDescriber):
     r"""
     Constructs a describers based on properties of distinct sites in a
@@ -41,32 +47,70 @@ class DistinctSiteProperty(BaseDescriber):
             publisher={Nature Publishing Group}}
     """
     # todo: generalize to multiple sites with the same Wyckoff.
-    supported_properties = ["mendeleev_no", "electrical_resistivity",
-                            "velocity_of_sound", "reflectivity",
-                            "refractive_index", "poissons_ratio", "molar_volume",
-                            "thermal_conductivity", "boiling_point", "melting_point",
-                            "critical_temperature", "superconduction_temperature",
-                            "liquid_range", "bulk_modulus", "youngs_modulus",
-                            "brinell_hardness", "rigidity_modulus",
-                            "mineral_hardness", "vickers_hardness",
-                            "density_of_solid", "atomic_radius_calculated",
-                            "van_der_waals_radius", "coefficient_of_linear_thermal_expansion",
-                            "ground_state_term_symbol", "valence", "Z", "X",
-                            "atomic_mass", "block", "row", "group", "atomic_radius",
-                            "average_ionic_radius", "average_cationic_radius",
-                            "average_anionic_radius", "metallic_radius", "ionic_radii",
-                            "oxi_state", "max_oxidation_state", "min_oxidation_state",
-                            "is_transition_metal", "is_alkali", "is_alkaline", "is_chalcogen",
-                            "is_halogen", "is_lanthanoid", "is_metal", "is_metalloid",
-                            "is_noble_gas", "is_post_transition_metal", "is_quadrupolar",
-                            "is_rare_earth_metal", "is_actinoid"]
+    supported_properties = [
+        "mendeleev_no",
+        "electrical_resistivity",
+        "velocity_of_sound",
+        "reflectivity",
+        "refractive_index",
+        "poissons_ratio",
+        "molar_volume",
+        "thermal_conductivity",
+        "boiling_point",
+        "melting_point",
+        "critical_temperature",
+        "superconduction_temperature",
+        "liquid_range",
+        "bulk_modulus",
+        "youngs_modulus",
+        "brinell_hardness",
+        "rigidity_modulus",
+        "mineral_hardness",
+        "vickers_hardness",
+        "density_of_solid",
+        "atomic_radius_calculated",
+        "van_der_waals_radius",
+        "coefficient_of_linear_thermal_expansion",
+        "ground_state_term_symbol",
+        "valence",
+        "Z",
+        "X",
+        "atomic_mass",
+        "block",
+        "row",
+        "group",
+        "atomic_radius",
+        "average_ionic_radius",
+        "average_cationic_radius",
+        "average_anionic_radius",
+        "metallic_radius",
+        "ionic_radii",
+        "oxi_state",
+        "max_oxidation_state",
+        "min_oxidation_state",
+        "is_transition_metal",
+        "is_alkali",
+        "is_alkaline",
+        "is_chalcogen",
+        "is_halogen",
+        "is_lanthanoid",
+        "is_metal",
+        "is_metalloid",
+        "is_noble_gas",
+        "is_post_transition_metal",
+        "is_quadrupolar",
+        "is_rare_earth_metal",
+        "is_actinoid",
+    ]
 
-    def __init__(self,
-                 properties: List[str],
-                 symprec: float = 0.1,
-                 wyckoffs: Optional[List[str]] = None,
-                 feature_batch: str = "pandas_concat",
-                 **kwargs):
+    def __init__(
+        self,
+        properties: List[str],
+        symprec: float = 0.1,
+        wyckoffs: Optional[List[str]] = None,
+        feature_batch: str = "pandas_concat",
+        **kwargs,
+    ):
         """
 
         Args:
@@ -109,7 +153,7 @@ class DistinctSiteProperty(BaseDescriber):
         return pd.DataFrame([data], columns=names)
 
 
-@describer_type('structure')
+@describer_type("structure")
 class CoulombMatrix(BaseDescriber):
     r"""
     Coulomb Matrix to describe structure
@@ -124,11 +168,10 @@ class CoulombMatrix(BaseDescriber):
             number={5}, pages={058301},
             year={2012}, publisher={APS}}
     """
-    def __init__(self,
-                 random_seed: int = None,
-                 max_atoms: Optional[int] = None,
-                 is_ravel: Optional[bool] = True,
-                 **kwargs):
+
+    def __init__(
+        self, random_seed: int = None, max_atoms: Optional[int] = None, is_ravel: Optional[bool] = True, **kwargs
+    ):
         """
         Args:
             random_seed (int): random seed
@@ -140,8 +183,8 @@ class CoulombMatrix(BaseDescriber):
         self.max_atoms = max_atoms
         self.random_seed = random_seed
         self.is_ravel = is_ravel
-        if 'feature_batch' not in kwargs:
-            kwargs['feature_batch'] = 'pandas_concat'
+        if "feature_batch" not in kwargs:
+            kwargs["feature_batch"] = "pandas_concat"
         super().__init__(**kwargs)
 
     @staticmethod
@@ -164,8 +207,7 @@ class CoulombMatrix(BaseDescriber):
         np.fill_diagonal(c, z_diag)
         return c
 
-    def get_coulomb_mat(self, s: Union[Molecule, Structure]) \
-            -> np.ndarray:
+    def get_coulomb_mat(self, s: Union[Molecule, Structure]) -> np.ndarray:
         """
         Args:
             s (Molecule/Structure): input Molecule or Structure. Structure
@@ -178,9 +220,7 @@ class CoulombMatrix(BaseDescriber):
         num_sites = c.shape[0]
         if self.max_atoms is not None and self.max_atoms > num_sites:
             padding = self.max_atoms - num_sites
-            return np.pad(c, (0, padding),
-                          mode='constant',
-                          constant_values=0)
+            return np.pad(c, (0, padding), mode="constant", constant_values=0)
         return c
 
     def transform_one(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
@@ -200,7 +240,7 @@ class CoulombMatrix(BaseDescriber):
         return pd.DataFrame(c)
 
 
-@describer_type('structure')
+@describer_type("structure")
 class RandomizedCoulombMatrix(CoulombMatrix):
     r"""
     Randomized CoulombMatrix
@@ -217,10 +257,8 @@ class RandomizedCoulombMatrix(CoulombMatrix):
             volume={15}, number={9},pages={095003},
             year={2013},publisher={IOP Publishing}}
     """
-    def __init__(self,
-                 random_seed: Optional[int] = None,
-                 is_ravel: Optional[bool] = True,
-                 **kwargs):
+
+    def __init__(self, random_seed: Optional[int] = None, is_ravel: Optional[bool] = True, **kwargs):
         """
         Args:
             random_seed (int): random seed
@@ -268,7 +306,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         return self.get_randomized_coulomb_mat(s)
 
 
-@describer_type('structure')
+@describer_type("structure")
 class SortedCoulombMatrix(CoulombMatrix):
     r"""
     Sorted CoulombMatrix
@@ -284,10 +322,8 @@ class SortedCoulombMatrix(CoulombMatrix):
                 booktitle={Advances in neural information processing systems},
                 pages={440--448}, year={2012}}
     """
-    def __init__(self,
-                 random_seed: Optional[int] = None,
-                 is_ravel: Optional[bool] = True,
-                 **kwargs):
+
+    def __init__(self, random_seed: Optional[int] = None, is_ravel: Optional[bool] = True, **kwargs):
         """
         Args:
             random_seed (int): random seed
@@ -325,7 +361,7 @@ class SortedCoulombMatrix(CoulombMatrix):
         return self.get_sorted_coulomb_mat(s)
 
 
-@describer_type('structure')
+@describer_type("structure")
 class CoulombEigenSpectrum(BaseDescriber):
     r"""
     Get the Coulomb Eigen Spectrum describers
@@ -340,9 +376,8 @@ class CoulombEigenSpectrum(BaseDescriber):
             number={5}, pages={058301},
             year={2012}, publisher={APS}}
     """
-    def __init__(self,
-                 max_atoms: Optional[int] = None,
-                 **kwargs):
+
+    def __init__(self, max_atoms: Optional[int] = None, **kwargs):
         """
         This method calculates the Coulomb matrix of a molecule and
         then sort the eigen values of the Coulomb matrix as the vector
@@ -378,7 +413,6 @@ class CoulombEigenSpectrum(BaseDescriber):
         f = np.sort(eig_vals)[::-1]
         if self.max_atoms is not None:
             if self.max_atoms < len(f):
-                raise RuntimeError("max_atoms is smaller than the "
-                                   "size of current molecule")
+                raise RuntimeError("max_atoms is smaller than the " "size of current molecule")
             f = np.pad(f, (0, self.max_atoms - len(f)))
         return f

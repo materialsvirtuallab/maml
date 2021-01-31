@@ -16,8 +16,8 @@ class BaseModel:
     learning package, e.g., the Sequential Model in Keras, but provides for
     transparent conversion of arbitrary input and outputs.
     """
-    def __init__(self, model: Any,
-                 describer: Optional[BaseDescriber] = None, **kwargs):
+
+    def __init__(self, model: Any, describer: Optional[BaseDescriber] = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
@@ -28,11 +28,14 @@ class BaseModel:
         self.describer = describer
         self.model = model
 
-    def fit(self, features: Union[List, np.ndarray],
-            targets: Optional[Union[List, np.ndarray]] = None,
-            val_features: Optional[Union[List, np.ndarray]] = None,
-            val_targets: Optional[Union[List, np.ndarray]] = None,
-            **kwargs) -> "BaseModel":
+    def fit(
+        self,
+        features: Union[List, np.ndarray],
+        targets: Optional[Union[List, np.ndarray]] = None,
+        val_features: Optional[Union[List, np.ndarray]] = None,
+        val_targets: Optional[Union[List, np.ndarray]] = None,
+        **kwargs,
+    ) -> "BaseModel":
         """
         Args:
             features (list or np.ndarray): Numerical input feature list or
@@ -49,12 +52,14 @@ class BaseModel:
         self.model.fit(features, targets, **kwargs)  # type: ignore
         return self
 
-    def train(self,
-              objs: Union[List, np.ndarray],
-              targets: Optional[Union[List, np.ndarray]] = None,
-              val_objs: Optional[Union[List, np.ndarray]] = None,
-              val_targets: Optional[Union[List, np.ndarray]] = None,
-              **kwargs) -> "BaseModel":
+    def train(
+        self,
+        objs: Union[List, np.ndarray],
+        targets: Optional[Union[List, np.ndarray]] = None,
+        val_objs: Optional[Union[List, np.ndarray]] = None,
+        val_targets: Optional[Union[List, np.ndarray]] = None,
+        **kwargs,
+    ) -> "BaseModel":
         """
         Train the models from object, target pairs
 
@@ -79,10 +84,9 @@ class BaseModel:
         else:
             val_features = None
             val_targets = None
-        return self.fit(features=features,
-                        targets=targets,
-                        val_features=val_features,
-                        val_targets=val_targets, **kwargs)
+        return self.fit(
+            features=features, targets=targets, val_features=val_features, val_targets=val_targets, **kwargs
+        )
 
     def _predict(self, features: np.ndarray, **kwargs) -> np.ndarray:
         """
@@ -108,14 +112,14 @@ class SklearnMixin:
     """
     Sklearn models save and load functionality
     """
+
     def save(self, filename: str):
         """Save the models and describers
 
         Arguments:
             filename (str): filename for save
         """
-        joblib.dump({"models": self.model,
-                     "describers": self.describer}, filename)
+        joblib.dump({"models": self.model, "describers": self.describer}, filename)
 
     def load(self, filename: str):
         """
@@ -145,9 +149,13 @@ class SklearnMixin:
         instance.load(filename)
         return instance
 
-    def evaluate(self, eval_objs: Union[List, np.ndarray],
-                 eval_targets: Union[List, np.ndarray], is_feature: bool = False,
-                 metric: Union[str, Callable] = None) -> np.ndarray:
+    def evaluate(
+        self,
+        eval_objs: Union[List, np.ndarray],
+        eval_targets: Union[List, np.ndarray],
+        is_feature: bool = False,
+        metric: Union[str, Callable] = None,
+    ) -> np.ndarray:
         """
         Evaluate objs, targets
 
@@ -159,8 +167,8 @@ class SklearnMixin:
         """
 
         from sklearn.metrics import check_scoring
-        eval_features = eval_objs if is_feature else \
-            self.describer.transform(eval_objs)
+
+        eval_features = eval_objs if is_feature else self.describer.transform(eval_objs)
         scorer = check_scoring(self.model, scoring=metric)
         return scorer(self.model, eval_features, eval_targets)
 
@@ -169,6 +177,7 @@ class KerasMixin:
     """
     keras models mixin with save and load functionality
     """
+
     def save(self, filename: str):
         """Save the models and describers
 
@@ -176,7 +185,7 @@ class KerasMixin:
             filename (str): filename for save
         """
         joblib.dump(self.describer, filename)
-        self.model.save(filename + '.hdf5')
+        self.model.save(filename + ".hdf5")
 
     def load(self, filename: str, custom_objects: List = None):
         """
@@ -188,9 +197,9 @@ class KerasMixin:
 
         """
         import tensorflow as tf
+
         self.describer = joblib.load(filename)
-        self.model = tf.keras.models.load_model(filename + '.hdf5',
-                                                custom_objects=custom_objects)
+        self.model = tf.keras.models.load_model(filename + ".hdf5", custom_objects=custom_objects)
 
     @classmethod
     def from_file(cls, filename: str, **kwargs):
@@ -207,8 +216,9 @@ class KerasMixin:
         instance.load(filename)
         return instance
 
-    def evaluate(self, eval_objs: Union[List, np.ndarray],
-                 eval_targets: Union[List, np.ndarray], is_feature: bool = False) -> np.ndarray:
+    def evaluate(
+        self, eval_objs: Union[List, np.ndarray], eval_targets: Union[List, np.ndarray], is_feature: bool = False
+    ) -> np.ndarray:
         """
         Evaluate objs, targets
 
@@ -219,14 +229,11 @@ class KerasMixin:
             metric (callable): metric for evaluation
         """
 
-        eval_features = eval_objs if is_feature else \
-            self.describer.transform(eval_objs)
-        return self.model.evaluate(to_array(eval_features),  # type: ignore
-                                   to_array(eval_targets))
+        eval_features = eval_objs if is_feature else self.describer.transform(eval_objs)
+        return self.model.evaluate(to_array(eval_features), to_array(eval_targets))  # type: ignore
 
     @staticmethod
-    def get_input_dim(describer: Optional[BaseDescriber] = None,
-                      input_dim: Optional[int] = None) -> Union[int, None]:
+    def get_input_dim(describer: Optional[BaseDescriber] = None, input_dim: Optional[int] = None) -> Union[int, None]:
         """
         Get feature dimension/input_dim from describers or input_dim
 
@@ -244,10 +251,9 @@ class KerasMixin:
 
 
 class SKLModel(BaseModel, SklearnMixin):
-    """MAML models with sklearn models as estimator
-    """
-    def __init__(self, model: Any,
-                 describer: Optional[BaseDescriber] = None, **kwargs):
+    """MAML models with sklearn models as estimator"""
+
+    def __init__(self, model: Any, describer: Optional[BaseDescriber] = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
@@ -257,10 +263,9 @@ class SKLModel(BaseModel, SklearnMixin):
 
 
 class KerasModel(BaseModel, KerasMixin):
-    """MAML models with keras models as estimators
-    """
-    def __init__(self, model: Any,
-                 describer: Optional[BaseDescriber] = None, **kwargs):
+    """MAML models with keras models as estimators"""
+
+    def __init__(self, model: Any, describer: Optional[BaseDescriber] = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
@@ -268,11 +273,14 @@ class KerasModel(BaseModel, KerasMixin):
         """
         super().__init__(model=model, describer=describer, **kwargs)
 
-    def fit(self, features: Union[List, np.ndarray],
-            targets: Optional[Union[List, np.ndarray]] = None,
-            val_features: Optional[Union[List, np.ndarray]] = None,
-            val_targets: Optional[Union[List, np.ndarray]] = None,
-            **kwargs) -> "BaseModel":
+    def fit(
+        self,
+        features: Union[List, np.ndarray],
+        targets: Optional[Union[List, np.ndarray]] = None,
+        val_features: Optional[Union[List, np.ndarray]] = None,
+        val_targets: Optional[Union[List, np.ndarray]] = None,
+        **kwargs,
+    ) -> "BaseModel":
         """
         Args:
             features (list or np.ndarray): Numerical input feature list or
@@ -327,6 +335,7 @@ def is_sklearn_model(model: BaseModel) -> bool:
     Returns: bool
     """
     from sklearn.base import BaseEstimator
+
     return isinstance(model.model, BaseEstimator)
 
 
@@ -338,4 +347,5 @@ def is_keras_model(model: BaseModel) -> bool:
     Returns: bool
     """
     from tensorflow.keras.models import Model
+
     return isinstance(model.model, Model)

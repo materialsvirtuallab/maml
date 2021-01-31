@@ -22,7 +22,7 @@ class BaseSelector:
     number of features
     """
 
-    def __init__(self, coef_thres: float = 1e-6, method: str = 'SLSQP'):
+    def __init__(self, coef_thres: float = 1e-6, method: str = "SLSQP"):
         """
         Base selector
         Args:
@@ -35,8 +35,7 @@ class BaseSelector:
         self.method = method
         self.indices: Optional[np.ndarray] = None
 
-    def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> np.ndarray:
         """
         Select feature indices from x
         Args:
@@ -48,11 +47,15 @@ class BaseSelector:
         """
 
         n_data, n_dim = x.shape
-        options = options or {"maxiter": 1e4, 'ftol': 1e-12}
-        res = minimize(lambda beta: self.construct_loss(x=x, y=y, beta=beta), [0] * n_dim,
-                       jac=self.construct_jac(x=x, y=y),
-                       method=self.method,
-                       constraints=self.construct_constraints(x=x, y=y), options=options)
+        options = options or {"maxiter": 1e4, "ftol": 1e-12}
+        res = minimize(
+            lambda beta: self.construct_loss(x=x, y=y, beta=beta),
+            [0] * n_dim,
+            jac=self.construct_jac(x=x, y=y),
+            method=self.method,
+            constraints=self.construct_constraints(x=x, y=y),
+            options=options,
+        )
         if res.status != 0:
             raise RuntimeError(f"Not converged, status {res.status}")
         self.is_fitted = True
@@ -73,9 +76,9 @@ class BaseSelector:
         """
         raise NotImplementedError
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
-                              beta: Optional[np.ndarray] = None) \
-            -> Optional[Union[Dict, List, NonlinearConstraint]]:
+    def construct_constraints(
+        self, x: np.ndarray, y: np.ndarray, beta: Optional[np.ndarray] = None
+    ) -> Optional[Union[Dict, List, NonlinearConstraint]]:
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
@@ -97,8 +100,7 @@ class BaseSelector:
         """
         return None
 
-    def evaluate(self, x: np.ndarray, y: np.ndarray,
-                 metric: str = 'neg_mean_absolute_error') -> float:
+    def evaluate(self, x: np.ndarray, y: np.ndarray, metric: str = "neg_mean_absolute_error") -> float:
         """
         Evaluate the linear models using x, and y test data
         Args:
@@ -149,20 +151,20 @@ class BaseSelector:
 
     @classmethod
     def _get_param_names(cls):
-        init = getattr(cls.__init__, 'deprecated_original', cls.__init__)
+        init = getattr(cls.__init__, "deprecated_original", cls.__init__)
         if init is object.__init__:
             return []
         init_signature = inspect.signature(init)
-        parameters = [p for p in init_signature.parameters.values()
-                      if p.name != 'self' and p.kind != p.VAR_KEYWORD]
+        parameters = [p for p in init_signature.parameters.values() if p.name != "self" and p.kind != p.VAR_KEYWORD]
         for p in parameters:
             if p.kind == p.VAR_KEYWORD:
-                raise RuntimeError("scikit-learn estimators should always "
-                                   "specify their parameters in the signature"
-                                   " of their __init__ (no varargs)."
-                                   " %s with constructor %s doesn't "
-                                   " follow this convention."
-                                   % (cls, init_signature))
+                raise RuntimeError(
+                    "scikit-learn estimators should always "
+                    "specify their parameters in the signature"
+                    " of their __init__ (no varargs)."
+                    " %s with constructor %s doesn't "
+                    " follow this convention." % (cls, init_signature)
+                )
         return sorted([p.name for p in parameters])
 
     def get_params(self):
@@ -197,12 +199,13 @@ class BaseSelector:
 
         nested_params = defaultdict(dict)  # grouped by prefix
         for key, value in params.items():
-            key, delim, sub_key = key.partition('__')
+            key, delim, sub_key = key.partition("__")
             if key not in valid_params:
-                raise ValueError('Invalid parameter %s for selector %s. '
-                                 'Check the list of available parameters '
-                                 'with `estimator.get_params().keys()`.' %
-                                 (key, self))
+                raise ValueError(
+                    "Invalid parameter %s for selector %s. "
+                    "Check the list of available parameters "
+                    "with `estimator.get_params().keys()`." % (key, self)
+                )
 
             if delim:
                 nested_params[key][sub_key] = value
@@ -256,15 +259,15 @@ class DantzigSelector(BaseSelector):
 
         def _jac(beta):
             sign = np.sign(beta)
-            sign[np.abs(sign) < 0.1] = 1.
+            sign[np.abs(sign) < 0.1] = 1.0
             sign *= 30.0  # multiply the gradients to get better convergence
             return sign
 
         return _jac
 
-    def construct_constraints(self, x: np.ndarray,
-                              y: np.ndarray,
-                              beta: Optional[np.ndarray] = None) -> NonlinearConstraint:
+    def construct_constraints(
+        self, x: np.ndarray, y: np.ndarray, beta: Optional[np.ndarray] = None
+    ) -> NonlinearConstraint:
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
@@ -285,8 +288,7 @@ class DantzigSelector(BaseSelector):
             der[max_ind] = np.sign(vec[max_ind])
             return -x.T.dot(x).dot(der)
 
-        return NonlinearConstraint(_constraint, -np.infty, self.lambd * self.sigma,
-                                   jac=_jac)
+        return NonlinearConstraint(_constraint, -np.infty, self.lambd * self.sigma, jac=_jac)
 
 
 class PenalizedLeastSquares(BaseSelector):
@@ -295,8 +297,7 @@ class PenalizedLeastSquares(BaseSelector):
     it adds an additional penalty to the coefficients
     """
 
-    def construct_loss(self, x: np.ndarray, y: np.ndarray,
-                       beta: np.ndarray) -> float:
+    def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: np.ndarray) -> float:
         """
         Construct the loss function. An extra penalty term is added
         Args:
@@ -306,12 +307,12 @@ class PenalizedLeastSquares(BaseSelector):
         Returns: sum of errors
         """
         n = x.shape[0]
-        se = 1. / (2 * n) * np.sum((y - x.dot(beta)) ** 2) + self.penalty(beta, x=x, y=y)
+        se = 1.0 / (2 * n) * np.sum((y - x.dot(beta)) ** 2) + self.penalty(beta, x=x, y=y)
         return se
 
     def _sse_jac(self, x, y, beta):
         n = x.shape[0]
-        return 1. / n * (y - x.dot(beta)).T.dot(-x)
+        return 1.0 / n * (y - x.dot(beta)).T.dot(-x)
 
     def _penalty_jac(self, x, y, beta):
         return 0.0
@@ -330,8 +331,9 @@ class PenalizedLeastSquares(BaseSelector):
 
         return _jac
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
-                              beta: Optional[np.ndarray] = None) -> List[Optional[Dict]]:
+    def construct_constraints(
+        self, x: np.ndarray, y: np.ndarray, beta: Optional[np.ndarray] = None
+    ) -> List[Optional[Dict]]:
         """
         No constraints
         Args:
@@ -342,8 +344,7 @@ class PenalizedLeastSquares(BaseSelector):
         """
         return []
 
-    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None,
-                y: Optional[np.ndarray] = None) -> float:
+    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None, y: Optional[np.ndarray] = None) -> float:
         """
         Calculate the penalty from input x, output y and coefficient beta
         Args:
@@ -352,7 +353,7 @@ class PenalizedLeastSquares(BaseSelector):
             beta (np.ndarray): N coefficients
         Returns: penalty value
         """
-        return 0.
+        return 0.0
 
 
 class SCAD(PenalizedLeastSquares):
@@ -361,8 +362,7 @@ class SCAD(PenalizedLeastSquares):
     equation 12 and 13 in https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
     """
 
-    def __init__(self, lambd: Union[float, np.ndarray],
-                 a: float = 3.7, **kwargs):
+    def __init__(self, lambd: Union[float, np.ndarray], a: float = 3.7, **kwargs):
         """
         Smoothly clipped absolute deviation.
         Args:
@@ -373,8 +373,7 @@ class SCAD(PenalizedLeastSquares):
         self.a = a
         super().__init__(**kwargs)
 
-    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None,
-                y: Optional[np.ndarray] = None) -> float:
+    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None, y: Optional[np.ndarray] = None) -> float:
         """
         Calculate the SCAD penalty from input x, output y
             and coefficient beta
@@ -385,18 +384,21 @@ class SCAD(PenalizedLeastSquares):
         Returns: penalty value
         """
         beta_abs = np.abs(beta)
-        penalty = self.lambd * beta_abs * (beta_abs <= self.lambd) + \
-            - (beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2) / (2 * (self.a - 1)) * \
-            (beta_abs > self.lambd) * (beta_abs <= self.a * self.lambd) + \
-            (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
+        penalty = (
+            self.lambd * beta_abs * (beta_abs <= self.lambd)
+            + -(beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2)
+            / (2 * (self.a - 1))
+            * (beta_abs > self.lambd)
+            * (beta_abs <= self.a * self.lambd)
+            + (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
+        )
         return np.sum(penalty).item()
 
     def _penalty_jac(self, x, y, beta):
         beta = np.abs(beta)
         z = self.a * self.lambd - beta
         z[z < 0] = 0
-        return self.lambd * (beta <= self.lambd +
-                             z / ((self.a - 1) * self.lambd) * (beta > self.lambd))
+        return self.lambd * (beta <= self.lambd + z / ((self.a - 1) * self.lambd) * (beta > self.lambd))
 
 
 class Lasso(PenalizedLeastSquares):
@@ -414,8 +416,7 @@ class Lasso(PenalizedLeastSquares):
         self.lambd = lambd
         super().__init__(**kwargs)
 
-    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None,
-                y: Optional[np.ndarray] = None) -> float:
+    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None, y: Optional[np.ndarray] = None) -> float:
         """
         Calculate the penalty from input x, output y and coefficient beta
         Args:
@@ -474,11 +475,10 @@ class AdaptiveLasso(PenalizedLeastSquares):
         Returns: coefficients array
         """
         beta_hat = lstsq(x, y)[0]
-        w = 1. / np.abs(beta_hat) ** self.gamma
+        w = 1.0 / np.abs(beta_hat) ** self.gamma
         return w
 
-    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None,
-                y: Optional[np.ndarray] = None) -> float:
+    def penalty(self, beta: np.ndarray, x: Optional[np.ndarray] = None, y: Optional[np.ndarray] = None) -> float:
         """
         Calculate the penalty from input x, output y and coefficient beta
         Args:
@@ -513,8 +513,7 @@ class L0BrutalForce(BaseSelector):
         self.lambd = lambd
         super().__init__(**kwargs)
 
-    def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None, n_job: int = 1) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None, n_job: int = 1) -> np.ndarray:
         """
         L0 combinatorial optimization
         Args:
@@ -529,7 +528,7 @@ class L0BrutalForce(BaseSelector):
         def _lstsq(c):
             x_comb = x[:, c]
             beta = lstsq(x_comb, y)[0]
-            res = 1. / 2 * np.mean((x_comb.dot(beta) - y) ** 2)
+            res = 1.0 / 2 * np.mean((x_comb.dot(beta) - y) ** 2)
             penalty = self.lambd * len(c)
             res += penalty
             return res

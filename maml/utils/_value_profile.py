@@ -49,6 +49,7 @@ class ConstantValue(ValueProfile):
     """
     Return constant value
     """
+
     def __init__(self, value: float, **kwargs):
         """
         Initialize constant profile
@@ -74,8 +75,7 @@ class LinearProfile(ValueProfile):
     [value_start, value_end, max_step] or [value_start, rate]
     """
 
-    def __init__(self, value_start: float, value_end: float = 0.,
-                 max_steps: int = 100, **kwargs):
+    def __init__(self, value_start: float, value_end: float = 0.0, max_steps: int = 100, **kwargs):
 
         """
 
@@ -88,7 +88,7 @@ class LinearProfile(ValueProfile):
         """
 
         self.value_start = value_start
-        rate = kwargs.get('rate', None)
+        rate = kwargs.get("rate", None)
         if rate is None:
             self.rate = (value_end - self.value_start) / max_steps
         else:

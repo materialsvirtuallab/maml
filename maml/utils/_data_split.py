@@ -12,6 +12,7 @@ class DataSplitter(MSONable):
     """
     Data splitter base class
     """
+
     def split(self, mat_ids, **kwargs):
         """
         Split the mat_ids, optionally one can provide
@@ -31,10 +32,8 @@ class ShuffleSplitter(DataSplitter):
     Randomly shuffe the material ids and split the ids
     into given ratios
     """
-    def __init__(self,
-                 ratios: str = '80/10/10',
-                 delim: str = '/',
-                 random_seed: Optional[int] = None):
+
+    def __init__(self, ratios: str = "80/10/10", delim: str = "/", random_seed: Optional[int] = None):
         """
         Random shuffle split of material ids
         Args:
@@ -57,4 +56,4 @@ class ShuffleSplitter(DataSplitter):
         mat_id_copy = shuffle(mat_ids, random_state=self.random_seed)
         n = len(mat_ids)
         end_points = [0] + np.cumsum([int(n * i) for i in self.ratios[:-1]]).tolist() + [n]
-        return tuple(mat_id_copy[i: j] for i, j in zip(end_points[:-1], end_points[1:]))
+        return tuple(mat_id_copy[i:j] for i, j in zip(end_points[:-1], end_points[1:]))

@@ -14,17 +14,18 @@ class TestWrapper(PymatgenTest):
         cls.s_lfp = PymatgenTest.get_structure("LiFePO4")
 
     def test_element_prop(self):
-        ElementProperty = wrap_matminer_describer("ElementProperty", composition.ElementProperty,
-                                                  to_composition, describer_type='composition')
+        ElementProperty = wrap_matminer_describer(
+            "ElementProperty", composition.ElementProperty, to_composition, describer_type="composition"
+        )
         ep = ElementProperty.from_preset("magpie")
-        self.assertArrayAlmostEqual(ep.transform_one(self.s_li2o).values,
-                                    ep.transform_one("Li2O").values)
-        self.assertListEqual(ep._get_param_names(), ['data_source', 'features', 'stats'])
+        self.assertArrayAlmostEqual(ep.transform_one(self.s_li2o).values, ep.transform_one("Li2O").values)
+        self.assertListEqual(ep._get_param_names(), ["data_source", "features", "stats"])
 
     def test_atomic_orbitals(self):
 
-        AtomicOrbitals = wrap_matminer_describer("AtomicOrbitals", composition.AtomicOrbitals,
-                                                 to_composition, describer_type='composition')
+        AtomicOrbitals = wrap_matminer_describer(
+            "AtomicOrbitals", composition.AtomicOrbitals, to_composition, describer_type="composition"
+        )
         ao = AtomicOrbitals()
         for i, j in zip(ao.transform_one("LiFePO4").values, ao.transform_one(self.s_lfp).values):
             for k, l in zip(i, j):

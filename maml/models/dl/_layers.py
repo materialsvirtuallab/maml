@@ -15,6 +15,7 @@ class WeightedAverageLayer(Layer):
     result= \sum{w_i^a * value_i} / \sum{w_i^a}
 
     """
+
     def __init__(self, alpha: float = 1.0, **kwargs):
         """
         Args:
@@ -80,7 +81,7 @@ class WeightedAverageLayer(Layer):
         """
         Get layer configuration
         """
-        config = {'alpha': self.alpha}
+        config = {"alpha": self.alpha}
         base_config = super().get_config()
         config.update(base_config)
         return config  # type: ignore
@@ -93,6 +94,7 @@ class WeightedSet2Set(Set2Set):
     take a weight tensor. The input to the core logic is
     [features, weights, indices]
     """
+
     def build(self, input_shape: Sequence) -> None:
         """
         Build the output shape from input shapes
@@ -117,31 +119,28 @@ class WeightedSet2Set(Set2Set):
         if self.use_bias:
             m += self.m_bias
 
-        self.h = tf.zeros(tf.stack(
-            [tf.shape(input=features)[0], tf.shape(input=count)[0], self.n_hidden]))
-        self.c = tf.zeros(tf.stack(
-            [tf.shape(input=features)[0], tf.shape(input=count)[0], self.n_hidden]))
-        q_star = tf.zeros(tf.stack(
-            [tf.shape(input=features)[0], tf.shape(input=count)[0], 2 * self.n_hidden]))
+        self.h = tf.zeros(tf.stack([tf.shape(input=features)[0], tf.shape(input=count)[0], self.n_hidden]))
+        self.c = tf.zeros(tf.stack([tf.shape(input=features)[0], tf.shape(input=count)[0], self.n_hidden]))
+        q_star = tf.zeros(tf.stack([tf.shape(input=features)[0], tf.shape(input=count)[0], 2 * self.n_hidden]))
         for i in range(self.T):
             self.h, c = self._lstm(q_star, self.c)
-            e_i_t = tf.reduce_sum(
-                input_tensor=m * repeat_with_index(self.h, feature_graph_index), axis=-1)
+            e_i_t = tf.reduce_sum(input_tensor=m * repeat_with_index(self.h, feature_graph_index), axis=-1)
             exp = tf.exp(e_i_t) * weights
             # print('exp shape ', exp.shape)
             seg_sum = tf.transpose(
-                a=tf.math.segment_sum(
-                    tf.transpose(a=exp, perm=[1, 0]),
-                    feature_graph_index),
-                perm=[1, 0])
+                a=tf.math.segment_sum(tf.transpose(a=exp, perm=[1, 0]), feature_graph_index), perm=[1, 0]
+            )
             seg_sum = tf.expand_dims(seg_sum, axis=-1)
             # print('seg_sum shape', seg_sum.shape)
             interm = repeat_with_index(seg_sum, feature_graph_index)
             # print('interm shape', interm.shape)
             a_i_t = exp / interm[..., 0]
             # print(a_i_t.shape)
-            r_t = tf.transpose(a=tf.math.segment_sum(
-                tf.transpose(a=tf.multiply(m, a_i_t[:, :, None]), perm=[1, 0, 2]),
-                feature_graph_index), perm=[1, 0, 2])
+            r_t = tf.transpose(
+                a=tf.math.segment_sum(
+                    tf.transpose(a=tf.multiply(m, a_i_t[:, :, None]), perm=[1, 0, 2]), feature_graph_index
+                ),
+                perm=[1, 0, 2],
+            )
             q_star = kb.concatenate([self.h, r_t], axis=-1)
         return q_star

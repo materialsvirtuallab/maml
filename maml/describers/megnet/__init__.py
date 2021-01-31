@@ -3,7 +3,4 @@ megnet related describers
 """
 from ._megnet import MEGNetSite, MEGNetStructure  # noqa
 
-__all__ = [
-    "MEGNetSite",
-    "MEGNetStructure"
-]
+__all__ = ["MEGNetSite", "MEGNetStructure"]

@@ -6,7 +6,6 @@ from maml.data._url import URLSource, FigshareSource
 
 
 class URLSourceTest(PymatgenTest):
-
     def test_get(self):
         source = URLSource()
         df = source.get("https://ndownloader.figshare.com/files/13007075")
@@ -14,7 +13,6 @@ class URLSourceTest(PymatgenTest):
 
 
 class FigshareSourceTest(PymatgenTest):
-
     def test_get(self):
         source = FigshareSource()
         df = source.get(12978425)

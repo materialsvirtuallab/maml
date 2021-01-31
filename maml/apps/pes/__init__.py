@@ -7,10 +7,14 @@
 from ._base import PotentialMixin, Potential  # noqa
 from ._gap import GAPotential  # noqa
 from ._lammps import (  # noqa
-    LMPStaticCalculator, EnergyForceStress,  # noqa
-    SpectralNeighborAnalysis, ElasticConstant,  # noqa
-    LatticeConstant, NudgedElasticBand, DefectFormation,  # noqa
-    get_default_lmp_exe  # noqa
+    LMPStaticCalculator,
+    EnergyForceStress,  # noqa
+    SpectralNeighborAnalysis,
+    ElasticConstant,  # noqa
+    LatticeConstant,
+    NudgedElasticBand,
+    DefectFormation,  # noqa
+    get_default_lmp_exe,  # noqa
 )
 from ._mtp import MTPotential  # noqa
 from ._nnp import NNPotential  # noqa
@@ -29,5 +33,5 @@ __all__ = [
     "LatticeConstant",
     "NudgedElasticBand",
     "DefectFormation",
-    "get_default_lmp_exe"
+    "get_default_lmp_exe",
 ]

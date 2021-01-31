@@ -10,10 +10,10 @@ from pymatgen.core import Structure, Molecule
 from maml.base import BaseDescriber, describer_type
 from maml.utils import get_full_stats_and_funcs
 
-DEFAULT_MODEL = Path(__file__).parent / '../data/megnet_models/formation_energy.hdf5'
+DEFAULT_MODEL = Path(__file__).parent / "../data/megnet_models/formation_energy.hdf5"
 
 
-@describer_type('site')
+@describer_type("site")
 class MEGNetSite(BaseDescriber):
     """
     Use megnet pre-trained models as featurizer to get
@@ -27,9 +27,8 @@ class MEGNetSite(BaseDescriber):
             journal={Chemistry of Materials}, volume={31}, number={9},
             pages={3564--3572}, year={2019},publisher={ACS Publications}}
     """
-    def __init__(self, name: Optional[Union[str, object]] = None,
-                 level: Optional[int] = None,
-                 **kwargs):
+
+    def __init__(self, name: Optional[Union[str, object]] = None, level: Optional[int] = None, **kwargs):
         """
 
         Args:
@@ -40,6 +39,7 @@ class MEGNetSite(BaseDescriber):
 
         from megnet.utils.models import MODEL_MAPPING, load_model
         from megnet.utils.descriptor import MEGNetDescriptor
+
         self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
         if isinstance(name, str) and name in self.AVAILBLE_MODELS:
             name_or_model = load_model(name)
@@ -52,7 +52,7 @@ class MEGNetSite(BaseDescriber):
         self.describer_model = MEGNetDescriptor(name_or_model)
 
         if level is None:
-            n_layers = sum([i.startswith('meg_net') for i in self.describer_model.valid_names]) // 3
+            n_layers = sum([i.startswith("meg_net") for i in self.describer_model.valid_names]) // 3
             level = n_layers
         self.name = name
         self.level = level
@@ -72,7 +72,7 @@ class MEGNetSite(BaseDescriber):
         return pd.DataFrame(features)
 
 
-@describer_type('structure')
+@describer_type("structure")
 class MEGNetStructure(BaseDescriber):
     """
     Use megnet pre-trained models as featurizer to get
@@ -94,9 +94,14 @@ class MEGNetStructure(BaseDescriber):
             pages={3564--3572}, year={2019},publisher={ACS Publications}}
     """
 
-    def __init__(self, name: Optional[Union[str, object]] = None, mode: str = 'site_stats',
-                 level: Optional[int] = None, stats: Optional[List] = None,
-                 **kwargs):
+    def __init__(
+        self,
+        name: Optional[Union[str, object]] = None,
+        mode: str = "site_stats",
+        level: Optional[int] = None,
+        stats: Optional[List] = None,
+        **kwargs,
+    ):
         """
 
         Args:s
@@ -112,6 +117,7 @@ class MEGNetStructure(BaseDescriber):
         """
         from megnet.utils.models import MODEL_MAPPING, load_model
         from megnet.utils.descriptor import MEGNetDescriptor
+
         self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
         if isinstance(name, str) and name in self.AVAILBLE_MODELS:
             name_or_model = load_model(name)
@@ -123,15 +129,16 @@ class MEGNetStructure(BaseDescriber):
         self.describer_model = MEGNetDescriptor(name_or_model)
 
         if level is None:
-            n_layers = sum([i.startswith('meg_net') or i.startswith('megnet')
-                            for i in self.describer_model.valid_names]) // 3
+            n_layers = (
+                sum([i.startswith("meg_net") or i.startswith("megnet") for i in self.describer_model.valid_names]) // 3
+            )
             level = n_layers
 
         self.name = name
         self.level = level
         self.mode = mode
         if stats is None:
-            stats = ['min', 'max', 'range', 'mean', 'mean_absolute_error', 'mode']
+            stats = ["min", "max", "range", "mean", "mean_absolute_error", "mode"]
         self.stats = stats
         full_stats, stats_func = get_full_stats_and_funcs(stats)
         self.full_stats = full_stats
@@ -147,20 +154,20 @@ class MEGNetStructure(BaseDescriber):
         Returns: pd.DataFrame features
 
         """
-        if self.mode == 'site_stats':
+        if self.mode == "site_stats":
             features = self.describer_model.get_atom_features(obj, level=self.level)
             features_transpose = list(zip(*features))
             column_names = []
             final_features = []
             for i, f in enumerate(features_transpose):
-                column_names.extend(['%d_%s' % (i, n) for n in self.full_stats])
+                column_names.extend(["%d_%s" % (i, n) for n in self.full_stats])
                 final_features.extend([func(f) for func in self.stats_func])
             return pd.DataFrame([final_features], columns=column_names)
 
-        if self.mode == 'site_readout':
-            return pd.DataFrame(self.describer_model.get_set2set(obj, ftype='atom'))
-        if self.mode == 'state':
+        if self.mode == "site_readout":
+            return pd.DataFrame(self.describer_model.get_set2set(obj, ftype="atom"))
+        if self.mode == "state":
             return pd.DataFrame(self.describer_model.get_global_features(obj, level=self.level))
-        if self.mode == 'final':
+        if self.mode == "final":
             return pd.DataFrame(self.describer_model.get_structure_features(obj))
         raise ValueError("Mode not allowed.")

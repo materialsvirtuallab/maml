@@ -18,9 +18,11 @@ def _update_df(df, op, fn1, fn2=None):
         if new_fname not in fnames:
             if op.rep in ["sqrt", "log10"]:
                 if np.any(df[fn1] < 0):
-                    warnings.warn("Data {} Contains negative number, ".format(fn1)
-                                  + "sqrt will return complex number. "
-                                  + "Consider using abssqrt or abslog10")
+                    warnings.warn(
+                        "Data {} Contains negative number, ".format(fn1)
+                        + "sqrt will return complex number. "
+                        + "Consider using abssqrt or abslog10"
+                    )
             df[new_fname] = df[fn1].apply(op)
     elif op.is_binary:
         new_fname = op.gen_name(fn1, fn2)
@@ -96,8 +98,26 @@ class Operator:
     is_unary, is_binary, and is_commutative, and generate name string
     for the output.
     """
-    support_op_rep = ['^2', '^3', 'sqrt', 'abssqrt', 'cbrt', 'exp', 'abs', 'log10', 'abslog10',
-                      '+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']
+
+    support_op_rep = [
+        "^2",
+        "^3",
+        "sqrt",
+        "abssqrt",
+        "cbrt",
+        "exp",
+        "abs",
+        "log10",
+        "abslog10",
+        "+",
+        "-",
+        "*",
+        "/",
+        "|+|",
+        "|-|",
+        "sum_power_2",
+        "sum_exp",
+    ]
 
     def __init__(self, operation: Union[Callable[..., Any]], rep: str, unary: bool, commutative: bool):
         """
@@ -162,9 +182,9 @@ class Operator:
 
         """
         if not self.unary:
-            if self.rep in ['^2', '^3', 'sqrt', 'abssqrt', 'cbrt', 'exp', 'abs', 'log10', 'abslog10']:
+            if self.rep in ["^2", "^3", "sqrt", "abssqrt", "cbrt", "exp", "abs", "log10", "abslog10"]:
                 self.unary = True
-            elif self.rep in ['+', '-', '*', '/', '|+|', '|-|', 'sum_power_2', 'sum_exp']:
+            elif self.rep in ["+", "-", "*", "/", "|+|", "|-|", "sum_power_2", "sum_exp"]:
                 self.unary = False
         return self.unary
 
@@ -185,7 +205,7 @@ class Operator:
         if not self.commutative:
             if self.is_unary:
                 self.commutative = False
-            elif self.rep in ['-', '/']:
+            elif self.rep in ["-", "/"]:
                 self.commutative = False
             else:
                 self.commutative = True
@@ -277,90 +297,66 @@ def _my_sum_exp(x, y):
 
 operation_dict: Dict[str, Any]
 operation_dict = {
-    "^2": {"kwgs": {"operation": partial(_my_power, n=2),
-                    "rep": "^2",
-                    "unary": True,
-                    "commutative": False},
-           "f_format": '({f1})^2'},
-    "^3": {"kwgs": {"operation": partial(_my_power, n=3),
-                    "rep": "^3",
-                    "unary": True,
-                    "commutative": False},
-           "f_format": '({f1})^3'},
-    "abs": {"kwgs": {"operation": abs,
-                     "rep": "abs",
-                     "unary": True,
-                     "commutative": False},
-            "f_format": "abs({f1})"},
-    "sqrt": {"kwgs": {"operation": partial(_my_power, n=1 / 2),
-                      "rep": "sqrt",
-                      "unary": True,
-                      "commutative": False},
-             "f_format": "sqrt({f1})"},
-    "abssqrt": {"kwgs": {"operation": _my_abs_sqrt,
-                         "rep": "abssqrt",
-                         "unary": True,
-                         "commutative": False},
-                "f_format": 'sqrt(|{f1}|)'},
-    "cbrt": {"kwgs": {"operation": partial(_my_power, n=1 / 3),
-                      "rep": "cbrt",
-                      "unary": True,
-                      "commutative": False},
-             "f_format": "cbrt({f1})"},
-    "exp": {"kwgs": {"operation": _my_exp,
-                     "rep": "exp",
-                     "unary": True,
-                     "commutative": False},
-            "f_format": "exp({f1})"},
-    "log10": {"kwgs": {"operation": np.log10,
-                       "rep": "log10",
-                       "unary": True,
-                       "commutative": False},
-              "f_format": "log10({f1})"},
-    "abslog10": {"kwgs": {"operation": _my_abs_log10,
-                          "rep": "abslog10",
-                          "unary": True,
-                          "commutative": False},
-                 "f_format": "log10(|{f1}|)"},
-    "+": {"kwgs": {"operation": _my_sum,
-                   "rep": "+",
-                   "unary": False,
-                   "commutative": True},
-          "f_format": "(({f1}) + ({f2}))"},
-    "|+|": {"kwgs": {"operation": _my_abs_sum,
-                     "rep": "|+|",
-                     "unary": False,
-                     "commutative": True},
-            "f_format": "|({f1}) + ({f2})|"},
-    "-": {"kwgs": {"operation": _my_diff,
-                   "rep": "-",
-                   "unary": False,
-                   "commutative": False},
-          "f_format": "(({f1}) - ({f2}))"},
-    "|-|": {"kwgs": {"operation": _my_abs_diff,
-                     "rep": "|-|",
-                     "unary": False,
-                     "commutative": True},
-            "f_format": "|({f1}) - ({f2})|"},
-    "*": {"kwgs": {"operation": _my_mul,
-                   "rep": "*",
-                   "unary": False,
-                   "commutative": True},
-          "f_format": "(({f1}) * ({f2}))"},
-    "/": {"kwgs": {"operation": _my_div,
-                   "rep": "/",
-                   "unary": False,
-                   "commutative": False},
-          "f_format": "(({f1}) / ({f2}))"},
-    "sum_power_2":
-        {"kwgs": {"operation": _my_sum_power_2,
-                  "rep": "sum_power_2",
-                  "unary": False,
-                  "commutative": True},
-         "f_format": "(({f1}) + ({f2}))^2"},
-    "sum_exp":
-        {"kwgs": {"operation": _my_sum_exp,
-                  "rep": "sum_exp",
-                  "unary": False,
-                  "commutative": True},
-         "f_format": "exp(({f1}) + ({f2}))"}}
+    "^2": {
+        "kwgs": {"operation": partial(_my_power, n=2), "rep": "^2", "unary": True, "commutative": False},
+        "f_format": "({f1})^2",
+    },
+    "^3": {
+        "kwgs": {"operation": partial(_my_power, n=3), "rep": "^3", "unary": True, "commutative": False},
+        "f_format": "({f1})^3",
+    },
+    "abs": {"kwgs": {"operation": abs, "rep": "abs", "unary": True, "commutative": False}, "f_format": "abs({f1})"},
+    "sqrt": {
+        "kwgs": {"operation": partial(_my_power, n=1 / 2), "rep": "sqrt", "unary": True, "commutative": False},
+        "f_format": "sqrt({f1})",
+    },
+    "abssqrt": {
+        "kwgs": {"operation": _my_abs_sqrt, "rep": "abssqrt", "unary": True, "commutative": False},
+        "f_format": "sqrt(|{f1}|)",
+    },
+    "cbrt": {
+        "kwgs": {"operation": partial(_my_power, n=1 / 3), "rep": "cbrt", "unary": True, "commutative": False},
+        "f_format": "cbrt({f1})",
+    },
+    "exp": {"kwgs": {"operation": _my_exp, "rep": "exp", "unary": True, "commutative": False}, "f_format": "exp({f1})"},
+    "log10": {
+        "kwgs": {"operation": np.log10, "rep": "log10", "unary": True, "commutative": False},
+        "f_format": "log10({f1})",
+    },
+    "abslog10": {
+        "kwgs": {"operation": _my_abs_log10, "rep": "abslog10", "unary": True, "commutative": False},
+        "f_format": "log10(|{f1}|)",
+    },
+    "+": {
+        "kwgs": {"operation": _my_sum, "rep": "+", "unary": False, "commutative": True},
+        "f_format": "(({f1}) + ({f2}))",
+    },
+    "|+|": {
+        "kwgs": {"operation": _my_abs_sum, "rep": "|+|", "unary": False, "commutative": True},
+        "f_format": "|({f1}) + ({f2})|",
+    },
+    "-": {
+        "kwgs": {"operation": _my_diff, "rep": "-", "unary": False, "commutative": False},
+        "f_format": "(({f1}) - ({f2}))",
+    },
+    "|-|": {
+        "kwgs": {"operation": _my_abs_diff, "rep": "|-|", "unary": False, "commutative": True},
+        "f_format": "|({f1}) - ({f2})|",
+    },
+    "*": {
+        "kwgs": {"operation": _my_mul, "rep": "*", "unary": False, "commutative": True},
+        "f_format": "(({f1}) * ({f2}))",
+    },
+    "/": {
+        "kwgs": {"operation": _my_div, "rep": "/", "unary": False, "commutative": False},
+        "f_format": "(({f1}) / ({f2}))",
+    },
+    "sum_power_2": {
+        "kwgs": {"operation": _my_sum_power_2, "rep": "sum_power_2", "unary": False, "commutative": True},
+        "f_format": "(({f1}) + ({f2}))^2",
+    },
+    "sum_exp": {
+        "kwgs": {"operation": _my_sum_exp, "rep": "sum_exp", "unary": False, "commutative": True},
+        "f_format": "exp(({f1}) + ({f2}))",
+    },
+}

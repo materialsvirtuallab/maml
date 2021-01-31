@@ -23,8 +23,8 @@ class SNAPotential(Potential):
     This class implements Spectral Neighbor Analysis Potential.
     """
 
-    pair_style = 'pair_style        snap'
-    pair_coeff = 'pair_coeff        * * {coeff_file} {param_file} {elements}'
+    pair_style = "pair_style        snap"
+    pair_coeff = "pair_coeff        * * {coeff_file} {param_file} {elements}"
 
     def __init__(self, model, name=None):
         """
@@ -37,12 +37,13 @@ class SNAPotential(Potential):
                 atomic descriptos as features and properties as targets.
             name (str): Name of force field.
         """
-        self.name = name if name else 'SNAPotential'
+        self.name = name if name else "SNAPotential"
         self.model = model
         self.elements = self.model.describer.elements
 
-    def train(self, train_structures, train_energies, train_forces,
-              train_stresses=None, include_stress=False, **kwargs):
+    def train(
+        self, train_structures, train_energies, train_forces, train_stresses=None, include_stress=False, **kwargs
+    ):
         """
         Training data with models.
 
@@ -59,17 +60,16 @@ class SNAPotential(Potential):
                 structure in structures list.
             include_stress (bool): Whether to include stress components.
         """
-        train_structures, train_forces, train_stresses = \
-            check_structures_forces_stresses(train_structures, train_forces, train_stresses)
-        train_pool = pool_from(train_structures, train_energies, train_forces,
-                               train_stresses)
+        train_structures, train_forces, train_stresses = check_structures_forces_stresses(
+            train_structures, train_forces, train_stresses
+        )
+        train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
         _, df = convert_docs(train_pool, include_stress=include_stress)
-        ytrain = df['y_orig'] / df['n']
+        ytrain = df["y_orig"] / df["n"]
         xtrain = self.model.describer.transform(train_structures)
         self.model.fit(features=xtrain, targets=ytrain, **kwargs)
 
-    def evaluate(self, test_structures, test_energies, test_forces,
-                 test_stresses=None, include_stress=False):
+    def evaluate(self, test_structures, test_energies, test_forces, test_stresses=None, include_stress=False):
         """
         Evaluate energies, forces and stresses of structures with trained
         machinea learning potentials.
@@ -85,14 +85,14 @@ class SNAPotential(Potential):
                 of each structure in structures list.
             include_stress (bool): Whether to include stress components.
         """
-        test_structures, test_forces, test_stresses = \
-            check_structures_forces_stresses(test_structures, test_forces, test_stresses)
-        predict_pool = pool_from(test_structures, test_energies, test_forces,
-                                 test_stresses)
+        test_structures, test_forces, test_stresses = check_structures_forces_stresses(
+            test_structures, test_forces, test_stresses
+        )
+        predict_pool = pool_from(test_structures, test_energies, test_forces, test_stresses)
         _, df_orig = convert_docs(predict_pool, include_stress=include_stress)
         _, df_predict = convert_docs(pool_from(test_structures), include_stress=include_stress)
         outputs = self.model.predict_objs(objs=test_structures)
-        df_predict['y_orig'] = df_predict['n'] * outputs
+        df_predict["y_orig"] = df_predict["n"] * outputs
 
         return df_orig, df_predict
 
@@ -115,8 +115,8 @@ class SNAPotential(Potential):
         Write parameter and coefficient file to perform lammps calculation.
         """
 
-        param_file = '{}.snapparam'.format(self.name)
-        coeff_file = '{}.snapcoeff'.format(self.name)
+        param_file = "{}.snapparam".format(self.name)
+        coeff_file = "{}.snapcoeff".format(self.name)
 
         model = self.model
         describer = self.model.describer
@@ -127,28 +127,26 @@ class SNAPotential(Potential):
             nbc += int((1 + nbc) * nbc / 2)
 
         coeff_lines = []
-        coeff_lines.append('{} {}'.format(ne, nbc + 1))
+        coeff_lines.append("{} {}".format(ne, nbc + 1))
         for element, coeff in zip(self.elements, np.split(model.model.coef_, ne)):
-            coeff_lines.append('{} {} {}'.format(element,
-                                                 profile[element]['r'],
-                                                 profile[element]['w']))
+            coeff_lines.append("{} {} {}".format(element, profile[element]["r"], profile[element]["w"]))
             coeff_lines.extend([str(c) for c in coeff])
-        with open(coeff_file, 'w') as f:
-            f.write('\n'.join(coeff_lines))
+        with open(coeff_file, "w") as f:
+            f.write("\n".join(coeff_lines))
 
         param_lines = []
-        keys = ['rcutfac', 'twojmax']
-        param_lines.extend(['{} {}'.format(k, getattr(describer, k)) for k in keys])
-        param_lines.extend(['rfac0 0.99363', 'rmin0 0'])
-        param_lines.append('quadraticflag {}'.format(int(describer.quadratic)))
-        param_lines.append('bzeroflag 0')
-        with open(param_file, 'w') as f:
-            f.write('\n'.join(param_lines))
+        keys = ["rcutfac", "twojmax"]
+        param_lines.extend(["{} {}".format(k, getattr(describer, k)) for k in keys])
+        param_lines.extend(["rfac0 0.99363", "rmin0 0"])
+        param_lines.append("quadraticflag {}".format(int(describer.quadratic)))
+        param_lines.append("bzeroflag 0")
+        with open(param_file, "w") as f:
+            f.write("\n".join(param_lines))
 
         pair_style = self.pair_style
-        pair_coeff = self.pair_coeff.format(elements=' '.join(self.elements),
-                                            coeff_file=coeff_file,
-                                            param_file=param_file)
+        pair_coeff = self.pair_coeff.format(
+            elements=" ".join(self.elements), coeff_file=coeff_file, param_file=param_file
+        )
         ff_settings = [pair_style, pair_coeff]
         return ff_settings
 
@@ -166,20 +164,20 @@ class SNAPotential(Potential):
         """
         with open(coeff_file) as f:
             coeff_lines = f.readlines()
-        coeff_lines = [line for line in coeff_lines if not line.startswith('#')]
+        coeff_lines = [line for line in coeff_lines if not line.startswith("#")]
         element_profile = {}
         ne, nbc = coeff_lines[0].split()
         ne, nbc = int(ne), int(nbc)
         for n in range(ne):
             specie, r, w = coeff_lines[1 + n * (nbc + 1)].split()
             r, w = float(r), float(w)
-            element_profile[specie] = {'r': r, 'w': w}
+            element_profile[specie] = {"r": r, "w": w}
 
-        rcut_pattern = re.compile(r'rcutfac (.*?)\n', re.S)
-        twojmax_pattern = re.compile(r'twojmax (\d*)\n', re.S)
-        quadratic_pattern = re.compile(r'quadraticflag (.*?)(?=\n|$)', re.S)
+        rcut_pattern = re.compile(r"rcutfac (.*?)\n", re.S)
+        twojmax_pattern = re.compile(r"twojmax (\d*)\n", re.S)
+        quadratic_pattern = re.compile(r"quadraticflag (.*?)(?=\n|$)", re.S)
 
-        with zopen(param_file, 'rt') as f:
+        with zopen(param_file, "rt") as f:
             param_lines = f.read()
 
         rcut = float(rcut_pattern.findall(param_lines)[-1])
@@ -189,14 +187,14 @@ class SNAPotential(Potential):
         else:
             quadratic = False
 
-        describer = BispectrumCoefficients(rcutfac=rcut, twojmax=twojmax,
-                                           element_profile=element_profile,
-                                           quadratic=quadratic, pot_fit=True)
-        model = SKLModel(model=LinearRegression(),
-                         describer=describer, **kwargs)
-        coef = np.array(np.concatenate([coeff_lines[
-                                        (2 + nbc * n + n): (2 + nbc * (n + 1) + n)]
-                                        for n in range(ne)]), dtype=np.float)
+        describer = BispectrumCoefficients(
+            rcutfac=rcut, twojmax=twojmax, element_profile=element_profile, quadratic=quadratic, pot_fit=True
+        )
+        model = SKLModel(model=LinearRegression(), describer=describer, **kwargs)
+        coef = np.array(
+            np.concatenate([coeff_lines[(2 + nbc * n + n) : (2 + nbc * (n + 1) + n)] for n in range(ne)]),
+            dtype=np.float,
+        )
         model.model.coef_ = coef
         model.model.intercept_ = 0
         snap = SNAPotential(model=model)

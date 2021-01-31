@@ -21,7 +21,7 @@ class TestSP(unittest.TestCase):
     def test_fft(self):
         fft_mag = fft_magnitude(TestSP.x)
         self.assertTrue(fft_mag.shape == (100,))
-        fft_mag = get_sp_method('fft_magnitude')(TestSP.x)
+        fft_mag = get_sp_method("fft_magnitude")(TestSP.x)
         self.assertTrue(fft_mag.shape == (100,))
         fft_mag = get_sp_method(fft_magnitude)(TestSP.x)
         self.assertTrue(fft_mag.shape == (100,))
@@ -37,7 +37,7 @@ class TestSP(unittest.TestCase):
         self.assertTrue(spec.shape == (129, 8))
 
     def test_cwt(self):
-        cwt_res = cwt(TestSP.x, np.arange(1, 31), 'ricker')
+        cwt_res = cwt(TestSP.x, np.arange(1, 31), "ricker")
         self.assertTrue(cwt_res.shape == (30, 100))
         cwt_res = cwt(TestSP.x, np.arange(1, 31), signal.ricker)
         self.assertTrue(cwt_res.shape == (30, 100))

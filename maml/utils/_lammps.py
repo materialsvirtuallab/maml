@@ -13,17 +13,19 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 STRESS_FORMAT = {
-    "VASP": ['xx', 'yy', 'zz', 'xy', 'yz', 'xz'],
-    "LAMMPS": ['xx', 'yy', 'zz', 'xy', 'xz', 'yz'],
-    "SNAP": ['xx', 'yy', 'zz', 'yz', 'xz', 'xy']
+    "VASP": ["xx", "yy", "zz", "xy", "yz", "xz"],
+    "LAMMPS": ["xx", "yy", "zz", "xy", "xz", "yz"],
+    "SNAP": ["xx", "yy", "zz", "yz", "xz", "xy"],
 }
 
 
-def check_structures_forces_stresses(structures: List[Structure],
-                                     forces: Optional[List] = None,
-                                     stresses: Optional[List] = None,
-                                     stress_format: str = 'VASP',
-                                     return_none: bool = True):
+def check_structures_forces_stresses(
+    structures: List[Structure],
+    forces: Optional[List] = None,
+    stresses: Optional[List] = None,
+    stress_format: str = "VASP",
+    return_none: bool = True,
+):
     """
     Check structures, forces and stresses. The forces and stress are dependent
     on the lattice orientation. This function will rotate the structures
@@ -68,12 +70,11 @@ def check_structures_forces_stresses(structures: List[Structure],
             continue
 
         logger.info("Structure index %d is rotated." % i)
-        new_latt_matrix, symmop, rot_matrix = \
-            get_lammps_lattice_and_rotation(s, (0, 0, 0))
+        new_latt_matrix, symmop, rot_matrix = get_lammps_lattice_and_rotation(s, (0, 0, 0))
         coords = symmop.operate_multi(s.cart_coords)
-        new_s = Structure(Lattice(new_latt_matrix), s.species, coords,
-                          site_properties=s.site_properties,
-                          coords_are_cartesian=True)
+        new_s = Structure(
+            Lattice(new_latt_matrix), s.species, coords, site_properties=s.site_properties, coords_are_cartesian=True
+        )
         new_structures.append(new_s)
 
         if not no_force:
@@ -103,8 +104,7 @@ def check_structures_forces_stresses(structures: List[Structure],
     return out
 
 
-def stress_matrix_to_list(stress_matrix: np.ndarray,
-                          stress_format: str = "VASP") -> np.ndarray:
+def stress_matrix_to_list(stress_matrix: np.ndarray, stress_format: str = "VASP") -> np.ndarray:
     """
     Stress matrix to list representation
     Args:
@@ -112,13 +112,20 @@ def stress_matrix_to_list(stress_matrix: np.ndarray,
         stress_format (str): stress list format
     Returns: list of float stress vector
     """
-    vasp_format = np.array([stress_matrix[0, 0], stress_matrix[1, 1], stress_matrix[2, 2],
-                            stress_matrix[0, 1], stress_matrix[1, 2], stress_matrix[0, 2]])
+    vasp_format = np.array(
+        [
+            stress_matrix[0, 0],
+            stress_matrix[1, 1],
+            stress_matrix[2, 2],
+            stress_matrix[0, 1],
+            stress_matrix[1, 2],
+            stress_matrix[0, 2],
+        ]
+    )
     return stress_format_change(vasp_format, "VASP", stress_format)
 
 
-def stress_list_to_matrix(stress: List[float], stress_format: str = "VASP") \
-        -> np.ndarray:
+def stress_list_to_matrix(stress: List[float], stress_format: str = "VASP") -> np.ndarray:
     """
     convert a length-6 stress list to stress matrix 3x3
 
@@ -151,8 +158,7 @@ def stress_format_change(stress: List[float], from_format: str, to_format: str) 
     return np.array([stress[0], stress[1], stress[2], *[stress[i] for i in mapping]])
 
 
-def get_lammps_lattice_and_rotation(structure: Structure, origin=(0, 0, 0)) \
-        -> Tuple[np.ndarray, SymmOp, np.ndarray]:
+def get_lammps_lattice_and_rotation(structure: Structure, origin=(0, 0, 0)) -> Tuple[np.ndarray, SymmOp, np.ndarray]:
     """
     Transform structure to lammps compatible structure. The lattice and rotation
     matrix are returned
@@ -176,18 +182,19 @@ def get_lammps_lattice_and_rotation(structure: Structure, origin=(0, 0, 0)) \
     yz = (np.dot(m[1], m[2]) - xy * xz) / (yhi - ylo)
     zhi = np.sqrt(c ** 2 - xz ** 2 - yz ** 2) + zlo
     # tilt = None if lattice.is_orthogonal else [xy, xz, yz]
-    new_matrix = np.array([[xhi - xlo, 0, 0],
-                           [xy, yhi - ylo, 0],
-                           [xz, yz, zhi - zlo]])
+    new_matrix = np.array([[xhi - xlo, 0, 0], [xy, yhi - ylo, 0], [xz, yz, zhi - zlo]])
     rot_matrix = np.linalg.solve(new_matrix, m)
     symmop = SymmOp.from_rotation_and_translation(rot_matrix, origin)
     return new_matrix, symmop, rot_matrix
 
 
-def write_data_from_structure(structure: Structure, filename: str,
-                              ff_elements: Optional[List[str]] = None,
-                              significant_figures: int = 6,
-                              origin: tuple = (0, 0, 0)):
+def write_data_from_structure(
+    structure: Structure,
+    filename: str,
+    ff_elements: Optional[List[str]] = None,
+    significant_figures: int = 6,
+    origin: tuple = (0, 0, 0),
+):
     """
     Write structure to lammps data file, this is to speed up
     pymatgen LammpsData
@@ -199,8 +206,7 @@ def write_data_from_structure(structure: Structure, filename: str,
         significant_figures (int): significant figures of floats in outout
         origin (tuple): origin coordinates
     """
-    new_matrix, symmop, rot_matrix = \
-        get_lammps_lattice_and_rotation(structure=structure, origin=origin)
+    new_matrix, symmop, rot_matrix = get_lammps_lattice_and_rotation(structure=structure, origin=origin)
     lattice = structure.lattice
     xlo, ylo, zlo = origin
     xhi = new_matrix[0, 0] + xlo
@@ -215,8 +221,7 @@ def write_data_from_structure(structure: Structure, filename: str,
 
     lines = ["# Atom data generated by maml package"]
 
-    elements_in_structure = [
-        str(i.specie) for i in structure.sites]
+    elements_in_structure = [str(i.specie) for i in structure.sites]
 
     if ff_elements is None:
         ff_elements = list(set(elements_in_structure))
@@ -228,32 +233,32 @@ def write_data_from_structure(structure: Structure, filename: str,
 
     element_map = {i: j + 1 for j, i in enumerate(ff_elements)}
     # generate atom section
-    lines.append('%d    atoms\n' % len(structure))
-    lines.append('%d    atom types\n' % n_types)
+    lines.append("%d    atoms\n" % len(structure))
+    lines.append("%d    atom types\n" % n_types)
 
     ph = "{:.%df}" % significant_figures
 
-    for bound, d in zip(bounds, 'xyz'):
-        line = ' '.join([ph.format(i) for i in bound] + ['%s%s' % (d, i) for i in ['lo', 'hi']])
+    for bound, d in zip(bounds, "xyz"):
+        line = " ".join([ph.format(i) for i in bound] + ["%s%s" % (d, i) for i in ["lo", "hi"]])
         lines.append(line)
     if tilt is not None:
-        line = ' '.join([ph.format(i) for i in tilt] + ['xy', 'xz', 'yz'])
+        line = " ".join([ph.format(i) for i in tilt] + ["xy", "xz", "yz"])
         lines.append(line)
 
     lines.append("\nMasses\n")
-    masses = [('{} ' + ph).format(j, _get_atomic_mass(i)) for i, j in element_map.items()]
+    masses = [("{} " + ph).format(j, _get_atomic_mass(i)) for i, j in element_map.items()]
     lines.extend(masses)
     lines.append("\nAtoms\n")
 
     new_coords = symmop.operate_multi(structure.cart_coords)
     for i, (site, coords) in enumerate(zip(structure.sites, new_coords)):
         charge = _get_charge(site.specie)
-        line = "{} {} " + ' '.join([ph] * 4)
+        line = "{} {} " + " ".join([ph] * 4)
         index = i + 1
         type = element_map[str(site.specie)]
         line = line.format(index, type, charge, *coords)
         lines.append(line)
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         f.write("\n".join(lines))
 
 

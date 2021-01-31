@@ -13,7 +13,7 @@ def get_full_args(func: Callable) -> List:
         func (callable): function to determine the args
     """
     all_params = list(signature(func).parameters.keys())
-    return [i for i in all_params if i != 'self']
+    return [i for i in all_params if i != "self"]
 
 
 def get_param_types(func):

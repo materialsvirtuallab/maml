@@ -7,12 +7,10 @@ from ._data_conversion import to_array
 from ._inspect import get_param_types
 
 DUMMY_OBJECTS = {
-    'str': 'H2O',
-    'composition': Composition('H2O'),
-    'structure': Structure(Lattice.cubic(3.167),
-                           ['Mo', 'Mo'],
-                           [[0, 0, 0], [0.5, 0.5, 0.5]]),
-    'molecule': Molecule(['C', 'O'], [[0, 0, 0], [1, 0, 0]])
+    "str": "H2O",
+    "composition": Composition("H2O"),
+    "structure": Structure(Lattice.cubic(3.167), ["Mo", "Mo"], [[0, 0, 0], [0.5, 0.5, 0.5]]),
+    "molecule": Molecule(["C", "O"], [[0, 0, 0], [1, 0, 0]]),
 }
 
 
@@ -30,8 +28,8 @@ def get_describer_dummy_obj(instance):
     arg_types = get_param_types(instance.transform_one)
     arg_type = list(arg_types.values())[0]
     str_t = str(arg_type)
-    if '.' in str_t:
-        str_t = str_t.split('.')[-1]
+    if "." in str_t:
+        str_t = str_t.split(".")[-1]
     return DUMMY_OBJECTS[str_t]
 
 

@@ -32,8 +32,7 @@ def _eval(x, y, coeff, metric):
     return metric_func(lr, x, y)
 
 
-def _best_combination(x, y, find_sel, find_sel_new,
-                      metric: str = 'neg_mean_absolute_error'):
+def _best_combination(x, y, find_sel, find_sel_new, metric: str = "neg_mean_absolute_error"):
     if len(find_sel_new) == 1:
         comb_best = np.append(find_sel, find_sel_new)
         coeff_best = _get_coeff(x[:, comb_best], y)
@@ -63,8 +62,7 @@ class SIS:
 
     """
 
-    def __init__(self, gamma=0.1, selector: Optional[BaseSelector] = None,
-                 verbose: bool = True):
+    def __init__(self, gamma=0.1, selector: Optional[BaseSelector] = None, verbose: bool = True):
         """
         Sure independence screening
 
@@ -182,8 +180,7 @@ class SIS:
 class ISIS:
     """Iterative SIS"""
 
-    def __init__(self,
-                 sis: SIS = SIS(gamma=0.1, selector=DantzigSelector(0.1)), l0_regulate: bool = True):
+    def __init__(self, sis: SIS = SIS(gamma=0.1, selector=DantzigSelector(0.1)), l0_regulate: bool = True):
         """
 
         Args:
@@ -196,10 +193,15 @@ class ISIS:
         self.coeff = []  # type: ignore
         self.find_sel = []  # type: ignore
 
-    def run(self, x, y, max_p: int = 10,
-            metric: str = 'neg_mean_absolute_error',
-            options: Optional[Dict] = None,
-            step: float = 0.5):
+    def run(
+        self,
+        x,
+        y,
+        max_p: int = 10,
+        metric: str = "neg_mean_absolute_error",
+        options: Optional[Dict] = None,
+        step: float = 0.5,
+    ):
         """
         Run the ISIS
         Args:
@@ -235,8 +237,7 @@ class ISIS:
                     self.sis.update_gamma(step)
                     find_sel_new = self.sis.run(new_x, new_y)
             if self.l0_regulate:
-                find_sel, _, _ = _best_combination(x, y, find_sel,
-                                                   new_findex[find_sel_new], metric)
+                find_sel, _, _ = _best_combination(x, y, find_sel, new_findex[find_sel_new], metric)
             else:
                 find_sel = np.append(find_sel, new_findex[find_sel_new])
             new_findex = np.array(list(set(findex) - set(find_sel)))
@@ -246,8 +247,7 @@ class ISIS:
         self.find_sel = find_sel
         return find_sel
 
-    def evaluate(self, x: np.ndarray, y: np.ndarray,
-                 metric: str = 'neg_mean_absolute_error') -> float:
+    def evaluate(self, x: np.ndarray, y: np.ndarray, metric: str = "neg_mean_absolute_error") -> float:
         """
         Evaluate the linear models using x, and y test data
         Args:

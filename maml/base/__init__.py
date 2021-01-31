@@ -15,16 +15,16 @@ from ._mixin import TargetScalerMixin
 
 
 __all__ = [
-    'BaseDataSource',
-    'BaseDescriber',
-    'SequentialDescriber',
-    'DummyDescriber',
-    'BaseModel',
-    'KerasModel',
-    'SKLModel',
-    'get_feature_batch',
-    'describer_type',
+    "BaseDataSource",
+    "BaseDescriber",
+    "SequentialDescriber",
+    "DummyDescriber",
+    "BaseModel",
+    "KerasModel",
+    "SKLModel",
+    "get_feature_batch",
+    "describer_type",
     "is_keras_model",
     "is_sklearn_model",
-    "TargetScalerMixin"
+    "TargetScalerMixin",
 ]

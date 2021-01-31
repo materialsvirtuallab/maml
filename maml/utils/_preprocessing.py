@@ -17,6 +17,7 @@ class Scaler(MSONable):
     of atom as the second parameter in addition to
     the target property
     """
+
     def transform(self, target: float, n: int = 1) -> float:
         """
         Transform the target values into new target values
@@ -28,8 +29,7 @@ class Scaler(MSONable):
         """
         raise NotImplementedError
 
-    def inverse_transform(self, transformed_target: float,
-                          n: int = 1) -> float:
+    def inverse_transform(self, transformed_target: float, n: int = 1) -> float:
         """
         Inverse transform of the target
         Args:
@@ -52,8 +52,7 @@ class StandardScaler(Scaler):
         transform(self, target, n=1): standard scaling the target and
     """
 
-    def __init__(self, mean: float = 0.0, std: float = 1.0,
-                 is_intensive: bool = True):
+    def __init__(self, mean: float = 0.0, std: float = 1.0, is_intensive: bool = True):
         """
         Args:
             mean (float): mean value of target
@@ -80,8 +79,7 @@ class StandardScaler(Scaler):
             n = 1
         return (target / n - self.mean) / self.std
 
-    def inverse_transform(self, transformed_target: float,
-                          n: int = 1) -> float:
+    def inverse_transform(self, transformed_target: float, n: int = 1) -> float:
         """
         Inverse transform of the target
         Args:
@@ -95,9 +93,9 @@ class StandardScaler(Scaler):
         return n * (transformed_target * self.std + self.mean)
 
     @classmethod
-    def from_training_data(cls, structures: List[StructureOrMolecule],
-                           targets: VectorLike, is_intensive: bool = True) \
-            -> 'StandardScaler':
+    def from_training_data(
+        cls, structures: List[StructureOrMolecule], targets: VectorLike, is_intensive: bool = True
+    ) -> "StandardScaler":
         """
         Generate a target scaler from a list of input structures/molecules,
         a target value vector and an indicator for intensiveness of the
@@ -117,8 +115,7 @@ class StandardScaler(Scaler):
         return cls(mean, std, is_intensive)
 
     def __str__(self):
-        return "StandardScaler(mean=%.3f, std=%.3f, is_intensive=%d)" % \
-               (self.mean, self.std, self.is_intensive)
+        return "StandardScaler(mean=%.3f, std=%.3f, is_intensive=%d)" % (self.mean, self.std, self.is_intensive)
 
     def __repr__(self):
         return str(self)
@@ -128,6 +125,7 @@ class DummyScaler(MSONable):
     """
     Dummy scaler does nothing
     """
+
     @staticmethod
     def transform(target: float, n: int = 1) -> float:
         """
@@ -140,8 +138,7 @@ class DummyScaler(MSONable):
         return target
 
     @staticmethod
-    def inverse_transform(transformed_target: float,
-                          n: int = 1) -> float:
+    def inverse_transform(transformed_target: float, n: int = 1) -> float:
         """
         return as it is
         Args:
@@ -153,9 +150,7 @@ class DummyScaler(MSONable):
         return transformed_target
 
     @classmethod
-    def from_training_data(cls, structures: List[StructureOrMolecule],
-                           targets: VectorLike,
-                           is_intensive: bool = True):
+    def from_training_data(cls, structures: List[StructureOrMolecule], targets: VectorLike, is_intensive: bool = True):
         """
         Args:
             structures (list): list of structures/molecules

@@ -16,9 +16,8 @@ class TestSIS(PymatgenTest):
     def setUpClass(cls):
         np.random.seed(42)
         df = pd.read_csv(os.path.join(CWD, "sis_test.csv"), index_col=[0])
-        cls.x = df[['x0', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', \
-                    'x7', 'x8', 'x9', 'x', 'pow2', 'exp']]
-        cls.y = df['y']
+        cls.x = df[["x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x", "pow2", "exp"]]
+        cls.y = df["y"]
 
     def test_sis(self):
         sis = SIS(gamma=0.5, selector=L0BrutalForce(1e-4))
@@ -35,9 +34,8 @@ class testISIS(PymatgenTest):
     def setUpClass(cls):
         np.random.seed(42)
         df = pd.read_csv(os.path.join(CWD, "sis_test.csv"), index_col=[0])
-        cls.x = df[['x0', 'x1', 'x2', 'x3', 'x4', 'x5', 'x6', \
-                    'x7', 'x8', 'x9', 'x', 'pow2', 'exp']]
-        cls.y = df['y']
+        cls.x = df[["x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9", "x", "pow2", "exp"]]
+        cls.y = df["y"]
 
     def test_coeff(self):
         isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)))
@@ -53,9 +51,9 @@ class testISIS(PymatgenTest):
     def test_best_combination(self):
         isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)), l0_regulate=False)
         _ = isis.run(self.x.values, self.y, max_p=4)
-        comb_best, coeff_best, score_best = _best_combination(self.x.values, self.y,
-                                                                   np.array([10, 11]),
-                                                                   np.array([12, 0]))
+        comb_best, coeff_best, score_best = _best_combination(
+            self.x.values, self.y, np.array([10, 11]), np.array([12, 0])
+        )
         self.assertArrayEqual(comb_best, [10, 11, 12])
         self.assertArrayAlmostEqual(coeff_best, [1, 1, 1])
         self.assertAlmostEqual(score_best, 0)
@@ -71,7 +69,7 @@ class testISIS(PymatgenTest):
         selected = isis.run(self.x.values, self.y, max_p=5)
         self.assertAlmostEqual(isis.sis.gamma, 0.15)
         #     # np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
-        np.testing.assert_equal(selected, [10, 11, 12,  5, 0])
+        np.testing.assert_equal(selected, [10, 11, 12, 5, 0])
 
 
 if __name__ == "__main__":
