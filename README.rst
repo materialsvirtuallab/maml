@@ -85,7 +85,7 @@ Citing
 :: 
 
     @misc{maml,
-        author = {C. Chen, Y. Zuo, W. Ye and S.P. Ong},
+        author = {Chi Chen, Yunxing Zuo, Weike Ye and Shyue Ping Ong},
         title = {{Maml - materials machine learning package}},
         year = {2020},
         publisher = {GitHub},
