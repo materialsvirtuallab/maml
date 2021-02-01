@@ -12,10 +12,7 @@ try:
     from maml.apps.symbolic._selectors_cvxpy import cp, DantzigSelectorCP, LassoCP, AdaptiveLassoCP
 
 except ImportError:
-    cp = None
-    DantzigSelectorCP = None
-    LassoCP = None
-    AdaptiveLassoCP = None
+    cp = None  # noqa
 
 from maml.apps.symbolic._selectors import DantzigSelector, Lasso, AdaptiveLasso, SCAD, L0BrutalForce
 
