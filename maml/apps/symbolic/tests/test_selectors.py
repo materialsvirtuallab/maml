@@ -1,3 +1,5 @@
+# flake8: noqa 
+
 import unittest
 import os
 
@@ -5,8 +7,17 @@ import numpy as np
 import json
 from pymatgen.util.testing import PymatgenTest
 
+try:
+    import cvxpy as cp
+    from maml.apps.symbolic._selectors_cvxpy import cp, DantzigSelectorCP, LassoCP, AdaptiveLassoCP
+
+except ImportError:
+    cp = None
+    DantzigSelectorCP = None
+    LassoCP = None
+    AdaptiveLassoCP = None
+
 from maml.apps.symbolic._selectors import DantzigSelector, Lasso, AdaptiveLasso, SCAD, L0BrutalForce
-from maml.apps.symbolic._selectors_cvxpy import cp, DantzigSelectorCP, LassoCP, AdaptiveLassoCP
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
