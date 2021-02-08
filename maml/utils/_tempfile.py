@@ -30,11 +30,17 @@ class MultiScratchDir:
     5. Change back to original directory.
     6. Delete temp dir.
     """
+
     SCR_LINK = "scratch_link"
 
-    def __init__(self, rootpath: Union[str, Path], n_dirs: int = 1, create_symbolic_link: bool = False,
-                 copy_from_current_on_enter: bool = False,
-                 copy_to_current_on_exit: bool = False):
+    def __init__(
+        self,
+        rootpath: Union[str, Path],
+        n_dirs: int = 1,
+        create_symbolic_link: bool = False,
+        copy_from_current_on_enter: bool = False,
+        copy_to_current_on_exit: bool = False,
+    ):
         """
         Initializes scratch directory given a **root** path. There is no need
         to try to create unique directory names. The code will generate a
@@ -64,8 +70,7 @@ class MultiScratchDir:
         if Path is not None and isinstance(rootpath, Path):
             rootpath = str(rootpath)
 
-        self.rootpath = os.path.abspath(rootpath) if rootpath is not None \
-            else None
+        self.rootpath = os.path.abspath(rootpath) if rootpath is not None else None
         self.n_dirs = n_dirs
         self.cwd = os.getcwd()
         self.create_symbolic_link = create_symbolic_link
@@ -76,14 +81,12 @@ class MultiScratchDir:
     def __enter__(self):
         tempdirs = [self.cwd] * self.n_dirs
         if self.rootpath is not None and os.path.exists(self.rootpath):
-            tempdirs = [tempfile.mkdtemp(dir=self.rootpath)
-                        for _ in range(self.n_dirs)]
+            tempdirs = [tempfile.mkdtemp(dir=self.rootpath) for _ in range(self.n_dirs)]
             self.tempdirs = [os.path.abspath(tempdir) for tempdir in tempdirs]
             if self.start_copy:
                 [copy_r(".", tempdir) for tempdir in tempdirs]
             if self.create_symbolic_link:
-                [os.symlink(tempdir, '%s_%d' % (MultiScratchDir.SCR_LINK, i)) for
-                 i, tempdir in enumerate(tempdirs)]
+                [os.symlink(tempdir, "%s_%d" % (MultiScratchDir.SCR_LINK, i)) for i, tempdir in enumerate(tempdirs)]
         return tempdirs
 
     def __exit__(self, exc_type: str, exc_val: str, exc_tb: str):
@@ -91,8 +94,7 @@ class MultiScratchDir:
             if self.end_copy:
 
                 # First copy files over
-                [_copy_r_with_suffix(tempdir, self.cwd, i) for i, tempdir
-                 in enumerate(self.tempdirs)]
+                [_copy_r_with_suffix(tempdir, self.cwd, i) for i, tempdir in enumerate(self.tempdirs)]
 
             os.chdir(self.cwd)
             [remove(tempdir) for tempdir in self.tempdirs]
@@ -120,7 +122,7 @@ def _copy_r_with_suffix(src: str, dst: str, suffix: Optional[Any] = None):
         fpath = os.path.join(abssrc, f)
         if os.path.isfile(fpath):
             if suffix is not None:
-                new_path = '%s_%s' % (fpath, str(suffix))
+                new_path = "%s_%s" % (fpath, str(suffix))
                 shutil.copy(fpath, new_path)
                 fpath = new_path
             shutil.copy(fpath, absdst)

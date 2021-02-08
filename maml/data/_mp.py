@@ -21,8 +21,7 @@ class MaterialsProject(BaseDataSource):
         """
         self.mpr = MPRester(api_key=api_key)
 
-    def get(self, criteria: Union[str, Dict],  # type: ignore
-            properties: List[str]) -> pd.DataFrame:
+    def get(self, criteria: Union[str, Dict], properties: List[str]) -> pd.DataFrame:  # type: ignore
         """
         Args:
             criteria (str or dict): Criteria for query

@@ -16,8 +16,7 @@ class PotentialMixin:
     """
 
     @abc.abstractmethod
-    def train(self, train_structures, train_energies, train_forces, train_stresses,
-              **kwargs):
+    def train(self, train_structures, train_energies, train_forces, train_stresses, **kwargs):
         """
         Train interatomic potentials with energies, forces ann stresses corresponding
             to structures.
@@ -86,4 +85,5 @@ class Potential(PotentialMixin, BaseModel):  # type: ignore
     Potential models that can be used to fit struccture-[energy, force, stress]
     pairs
     """
+
     pass

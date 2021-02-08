@@ -37,8 +37,7 @@ class BaseSelectorCP(BaseSelector):
         super().__init__(coef_thres=coef_thres, method=method)
 
     # pylint: disable=E1128
-    def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> np.ndarray:
         """
         Select feature indices from x
         Args:
@@ -59,9 +58,9 @@ class BaseSelectorCP(BaseSelector):
         self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0
         return self.indices
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
-                              beta: Optional[cp.Variable] = None) \
-            -> Optional[List[Expression]]:  # type: ignore
+    def construct_constraints(
+        self, x: np.ndarray, y: np.ndarray, beta: Optional[cp.Variable] = None
+    ) -> Optional[List[Expression]]:  # type: ignore
         """
         Get constraints dictionary from data, e.g.,
         {"func": lambda beta: fun(x, y, beta), "type": "ineq"}
@@ -73,8 +72,7 @@ class BaseSelectorCP(BaseSelector):
         """
         return None
 
-    def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) \
-            -> Expression:  # type: ignore
+    def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) -> Expression:  # type: ignore
         """
         Get loss function from data and tentative coefficients beta
         Args:
@@ -105,8 +103,7 @@ class DantzigSelectorCP(BaseSelectorCP):
         self.sigma = sigma
         super().__init__(**kwargs)
 
-    def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) \
-            -> Expression:  # type: ignore
+    def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) -> Expression:  # type: ignore
         """
         L1 loss
         Args:
@@ -117,8 +114,9 @@ class DantzigSelectorCP(BaseSelectorCP):
         """
         return cp.norm1(beta)
 
-    def construct_constraints(self, x: np.ndarray, y: np.ndarray,
-                              beta: Optional[cp.Variable] = None) -> Optional[List[Expression]]:  # type: ignore
+    def construct_constraints(
+        self, x: np.ndarray, y: np.ndarray, beta: Optional[cp.Variable] = None
+    ) -> Optional[List[Expression]]:  # type: ignore
         """
         Dantzig selector constraints
         Args:
@@ -136,8 +134,7 @@ class PenalizedLeastSquaresCP(BaseSelectorCP):
     it adds an additional penalty to the coefficients
     """
 
-    def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) \
-            -> Expression:  # type: ignore
+    def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: cp.Variable) -> Expression:  # type: ignore
         """
         L1 loss
         Args:
@@ -147,11 +144,12 @@ class PenalizedLeastSquaresCP(BaseSelectorCP):
         Returns: loss expression
         """
         n = x.shape[0]
-        se = 1. / (2 * n) * cp.sum_squares(y - x @ beta) + self.penalty(beta, x=x, y=y)
+        se = 1.0 / (2 * n) * cp.sum_squares(y - x @ beta) + self.penalty(beta, x=x, y=y)
         return se
 
-    def penalty(self, beta: cp.Variable, x: Optional[np.ndarray] = None,
-                y: Optional[np.ndarray] = None) -> Union[Expression, float]:  # type: ignore
+    def penalty(
+        self, beta: cp.Variable, x: Optional[np.ndarray] = None, y: Optional[np.ndarray] = None
+    ) -> Union[Expression, float]:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
         Args:
@@ -160,7 +158,7 @@ class PenalizedLeastSquaresCP(BaseSelectorCP):
             beta (np.ndarray): N coefficients
         Returns: penalty value
         """
-        return 0.
+        return 0.0
 
 
 class LassoCP(PenalizedLeastSquaresCP):
@@ -179,8 +177,9 @@ class LassoCP(PenalizedLeastSquaresCP):
         self.lambd = lambd
         super().__init__(**kwargs)
 
-    def penalty(self, beta: cp.Variable, x: Optional[np.ndarray] = None,
-                y: Optional[np.ndarray] = None) -> Union[Expression, float]:  # type: ignore
+    def penalty(
+        self, beta: cp.Variable, x: Optional[np.ndarray] = None, y: Optional[np.ndarray] = None
+    ) -> Union[Expression, float]:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
         Args:
@@ -213,8 +212,7 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
         self.w = 1
         super().__init__(**kwargs)
 
-    def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> np.ndarray:
         """
         Select feature indices from x
         Args:
@@ -235,11 +233,12 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
         Returns: coefficients array
         """
         beta_hat = lstsq(x, y)[0]
-        w = 1. / np.abs(beta_hat) ** self.gamma
+        w = 1.0 / np.abs(beta_hat) ** self.gamma
         return w
 
-    def penalty(self, beta: cp.Variable, x: Optional[np.ndarray] = None,
-                y: Optional[np.ndarray] = None) -> Union[Expression, float]:  # type: ignore
+    def penalty(
+        self, beta: cp.Variable, x: Optional[np.ndarray] = None, y: Optional[np.ndarray] = None
+    ) -> Union[Expression, float]:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
         Args:

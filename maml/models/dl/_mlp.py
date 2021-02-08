@@ -6,14 +6,16 @@ from typing import Optional
 from maml.base import KerasModel, BaseDescriber
 
 
-def construct_mlp(input_dim: int,
-                  n_neurons: tuple = (64, 64),
-                  activation: str = 'relu',
-                  n_targets: int = 1,
-                  is_classification: bool = False,
-                  optimizer: str = 'adam',
-                  loss: str = 'mse',
-                  compile_metrics: tuple = ()):
+def construct_mlp(
+    input_dim: int,
+    n_neurons: tuple = (64, 64),
+    activation: str = "relu",
+    n_targets: int = 1,
+    is_classification: bool = False,
+    optimizer: str = "adam",
+    loss: str = "mse",
+    compile_metrics: tuple = (),
+):
     """
     Constructor for multi-layer perceptron models
 
@@ -29,13 +31,14 @@ def construct_mlp(input_dim: int,
     """
     from tensorflow.keras.layers import Input, Dense
     from tensorflow.keras.models import Model
-    inp = Input(shape=(input_dim, ))
+
+    inp = Input(shape=(input_dim,))
     out_ = inp
     for n_neuron in n_neurons:
         out_ = Dense(n_neuron, activation=activation)(out_)
 
     if is_classification:
-        final_act: Optional[str] = 'sigmoid'
+        final_act: Optional[str] = "sigmoid"
     else:
         final_act = None
     out = Dense(n_targets, activation=final_act)(out_)
@@ -49,17 +52,20 @@ class MLP(KerasModel):
     """
     This class implements the multi-layer perceptron models
     """
-    def __init__(self,
-                 input_dim: Optional[int] = None,
-                 describer: Optional[BaseDescriber] = None,
-                 n_neurons: tuple = (64, 64),
-                 activation: str = 'relu',
-                 n_targets: int = 1,
-                 is_classification: bool = False,
-                 optimizer: str = 'adam',
-                 loss: str = 'mse',
-                 compile_metrics: tuple = (),
-                 **kwargs):
+
+    def __init__(
+        self,
+        input_dim: Optional[int] = None,
+        describer: Optional[BaseDescriber] = None,
+        n_neurons: tuple = (64, 64),
+        activation: str = "relu",
+        n_targets: int = 1,
+        is_classification: bool = False,
+        optimizer: str = "adam",
+        loss: str = "mse",
+        compile_metrics: tuple = (),
+        **kwargs,
+    ):
         """
         Constructor for multi-layer perceptron models
 
@@ -75,12 +81,14 @@ class MLP(KerasModel):
         input_dim = self.get_input_dim(describer, input_dim)
         if input_dim is None:
             raise ValueError("input_dim is not known and cannot be infered")
-        model = construct_mlp(input_dim=input_dim,
-                              n_neurons=n_neurons,
-                              activation=activation,
-                              n_targets=n_targets,
-                              is_classification=is_classification,
-                              optimizer=optimizer,
-                              loss=loss,
-                              compile_metrics=compile_metrics)
+        model = construct_mlp(
+            input_dim=input_dim,
+            n_neurons=n_neurons,
+            activation=activation,
+            n_targets=n_targets,
+            is_classification=is_classification,
+            optimizer=optimizer,
+            loss=loss,
+            compile_metrics=compile_metrics,
+        )
         super().__init__(describer=describer, model=model, **kwargs)

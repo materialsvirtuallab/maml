@@ -19,8 +19,13 @@ from maml.base import BaseDescriber, describer_type
 from maml.utils import pool_from, to_composition
 from maml.describers.megnet import MEGNetSite
 
-__all__ = ['MEGNetSite', 'BispectrumCoefficients', 'SmoothOverlapAtomicPosition',
-           'BPSymmetryFunctions', 'SiteElementProperty']
+__all__ = [
+    "MEGNetSite",
+    "BispectrumCoefficients",
+    "SmoothOverlapAtomicPosition",
+    "BPSymmetryFunctions",
+    "SiteElementProperty",
+]
 
 
 logging.basicConfig()
@@ -28,7 +33,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-@describer_type('site')
+@describer_type("site")
 class BispectrumCoefficients(BaseDescriber):
     r"""
     Bispectrum coefficients to describe the local environment of each atom.
@@ -43,23 +48,28 @@ class BispectrumCoefficients(BaseDescriber):
              journal={Physical review letters},
              volume={104}, number={13}, pages={136403}, year={2010}, publisher={APS}}
     """
-    def __init__(self,
-                 cutoff: float,
-                 twojmax: int,
-                 element_profile: Dict,
-                 quadratic: bool = False,
-                 pot_fit: bool = False,
-                 include_stress: bool = False,
-                 feature_batch: str = "pandas_concat",
-                 **kwargs):
+
+    def __init__(
+        self,
+        rcutfac: float,
+        twojmax: int,
+        element_profile: Dict,
+        quadratic: bool = False,
+        pot_fit: bool = False,
+        include_stress: bool = False,
+        feature_batch: str = "pandas_concat",
+        **kwargs,
+    ):
         """
         Args:
-            cutoff (float): The cutoff distance.
+            rcutfac (float): The rcutfac used in computing the cutoff between
+                elements. true cutoff between i, j = rcutfac * (Ri + Rj),
+                where Ri and Rj are cutoff for elements i and j
             twojmax (int): Band limit for bispectrum components.
-            element_profile (dict): Parameters (cutoff factor 'r' and weight 'w')
+            element_profile (dict): Parameters (cutoff radius 'r' and weight 'w')
                 related to each element, e.g.,
-                {'Na': {'r': 0.3, 'w': 0.9},
-                 'Cl': {'r': 0.7, 'w': 3.0}}
+                {'Na': {'r': 4.5, 'w': 0.9},
+                 'Cl': {'r': 5.0, 'w': 3.0}}
             quadratic (bool): Whether including quadratic terms.
                 Default to False.
             pot_fit (bool): Whether combine the dataframe for potential fitting.
@@ -68,11 +78,11 @@ class BispectrumCoefficients(BaseDescriber):
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         from maml.apps.pes import SpectralNeighborAnalysis
-        self.calculator = SpectralNeighborAnalysis(rcut=cutoff,
-                                                   twojmax=twojmax,
-                                                   element_profile=element_profile,
-                                                   quadratic=quadratic)
-        self.rcutfac = cutoff
+
+        self.calculator = SpectralNeighborAnalysis(
+            rcutfac=rcutfac, twojmax=twojmax, element_profile=element_profile, quadratic=quadratic
+        )
+        self.rcutfac = rcutfac
         self.twojmax = twojmax
         self.elements = sorted(element_profile.keys(), key=lambda x: Element(x))
         self.element_profile = element_profile
@@ -94,10 +104,14 @@ class BispectrumCoefficients(BaseDescriber):
         Args:
             structure (Structure): Pymatgen Structure object.
         """
-        columns = list(map(lambda s: '-'.join(['%d' % i for i in s]), self.subscripts))
+        columns = list(map(lambda s: "-".join(["%d" % i for i in s]), self.subscripts))
         if self.quadratic:
-            columns += list(map(lambda s: '-'.join(['%d%d%d' % (i, j, k) for i, j, k in s]),
-                                itertools.combinations_with_replacement(self.subscripts, 2)))
+            columns += list(
+                map(
+                    lambda s: "-".join(["%d%d%d" % (i, j, k) for i, j, k in s]),
+                    itertools.combinations_with_replacement(self.subscripts, 2),
+                )
+            )
 
         raw_data = self.calculator.calculate([structure])
 
@@ -105,31 +119,30 @@ class BispectrumCoefficients(BaseDescriber):
             b, db, vb, e = output
             df = pd.DataFrame(b, columns=columns)
             if combine:
-                df_add = pd.DataFrame({'element': e, 'n': np.ones(len(e))})
+                df_add = pd.DataFrame({"element": e, "n": np.ones(len(e))})
                 df_b = df_add.join(df)
                 n_atoms = df_b.shape[0]
-                b_by_el = [df_b[df_b['element'] == e] for e in self.elements]
+                b_by_el = [df_b[df_b["element"] == e] for e in self.elements]
                 sum_b = [df[df.columns[1:]].sum(axis=0) for df in b_by_el]
                 hstack_b = pd.concat(sum_b, keys=self.elements)
                 hstack_b = hstack_b.to_frame().T / n_atoms
                 hstack_b.fillna(0, inplace=True)
                 dbs = np.split(db, len(self.elements), axis=1)
-                dbs = np.hstack([np.insert(d.reshape(-1, len(columns)), 0, 0, axis=1)
-                                 for d in dbs])
-                db_index = ['%d_%s' % (i, d) for i in df_b.index for d in 'xyz']
+                dbs = np.hstack([np.insert(d.reshape(-1, len(columns)), 0, 0, axis=1) for d in dbs])
+                db_index = ["%d_%s" % (i, d) for i in df_b.index for d in "xyz"]
                 df_db = pd.DataFrame(dbs, index=db_index, columns=hstack_b.columns)
                 if self.include_stress:
                     vbs = np.split(vb.sum(axis=0), len(self.elements))
-                    vbs = np.hstack([np.insert(v.reshape(-1, len(columns)),
-                                               0, 0, axis=1) for v in vbs])
+                    vbs = np.hstack([np.insert(v.reshape(-1, len(columns)), 0, 0, axis=1) for v in vbs])
                     volume = structure.volume
                     vbs = vbs / volume * 160.21766208  # from eV to GPa
-                    vb_index = ['xx', 'yy', 'zz', 'yz', 'xz', 'xy']
+                    vb_index = ["xx", "yy", "zz", "yz", "xz", "xy"]
                     df_vb = pd.DataFrame(vbs, index=vb_index, columns=hstack_b.columns)
                     df = pd.concat([hstack_b, df_db, df_vb])
                 else:
                     df = pd.concat([hstack_b, df_db])
             return df
+
         return process(raw_data[0], self.pot_fit)
 
     @property
@@ -150,7 +163,7 @@ class BispectrumCoefficients(BaseDescriber):
         return n
 
 
-@describer_type('site')
+@describer_type("site")
 class SmoothOverlapAtomicPosition(BaseDescriber):
     r"""
     Smooth overlap of atomic positions (SOAP) to describe the local environment
@@ -163,13 +176,16 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
              journal={Physical Review B},
              volume={87}, number={18}, pages={184115}, year={2013}, publisher={APS}}
     """
-    def __init__(self,
-                 cutoff: float,
-                 l_max: int = 8,
-                 n_max: int = 8,
-                 atom_sigma: float = 0.5,
-                 feature_batch: str = 'pandas_concat',
-                 **kwargs):
+
+    def __init__(
+        self,
+        cutoff: float,
+        l_max: int = 8,
+        n_max: int = 8,
+        atom_sigma: float = 0.5,
+        feature_batch: str = "pandas_concat",
+        **kwargs,
+    ):
         """
 
         Args:
@@ -182,6 +198,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
             **kwargs: keyword args to specify memory, verbose, and n_jobs
         """
         from maml.apps.pes import GAPotential
+
         self.operator = GAPotential()
         self.cutoff = cutoff
         self.l_max = l_max
@@ -194,64 +211,60 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         Args:
             structure (Structure): Pymatgen Structure object.
         """
-        if not which('quip'):
-            raise RuntimeError("quip has not been found.\n",
-                               "Please refer to https://github.com/libAtoms/QUIP for ",
-                               "further detail.")
+        if not which("quip"):
+            raise RuntimeError(
+                "quip has not been found.\n", "Please refer to https://github.com/libAtoms/QUIP for ", "further detail."
+            )
 
-        atoms_filename = 'structure.xyz'
+        atoms_filename = "structure.xyz"
 
-        exe_command = ['quip']
-        exe_command.append('atoms_filename={}'.format(atoms_filename))
+        exe_command = ["quip"]
+        exe_command.append("atoms_filename={}".format(atoms_filename))
 
-        descriptor_command = ['soap']
-        descriptor_command.append("cutoff" + '=' + '{}'.format(self.cutoff))
-        descriptor_command.append("l_max" + '=' + '{}'.format(self.l_max))
-        descriptor_command.append("n_max" + '=' + '{}'.format(self.n_max))
-        descriptor_command.append("atom_sigma" + '=' + '{}'.format(self.atom_sigma))
+        descriptor_command = ["soap"]
+        descriptor_command.append("cutoff" + "=" + "{}".format(self.cutoff))
+        descriptor_command.append("l_max" + "=" + "{}".format(self.l_max))
+        descriptor_command.append("n_max" + "=" + "{}".format(self.n_max))
+        descriptor_command.append("atom_sigma" + "=" + "{}".format(self.atom_sigma))
 
         atomic_numbers = [str(element.number) for element in sorted(np.unique(structure.species))]
         n_Z = len(atomic_numbers)
         n_species = len(atomic_numbers)
-        Z = '{' + '{}'.format(' '.join(atomic_numbers)) + '}'
-        species_Z = '{' + '{}'.format(' '.join(atomic_numbers)) + '}'
-        descriptor_command.append("n_Z" + '=' + str(n_Z))
-        descriptor_command.append("Z" + '=' + Z)
-        descriptor_command.append("n_species" + '=' + str(n_species))
-        descriptor_command.append("species_Z" + '=' + species_Z)
+        Z = "{" + "{}".format(" ".join(atomic_numbers)) + "}"
+        species_Z = "{" + "{}".format(" ".join(atomic_numbers)) + "}"
+        descriptor_command.append("n_Z" + "=" + str(n_Z))
+        descriptor_command.append("Z" + "=" + Z)
+        descriptor_command.append("n_species" + "=" + str(n_species))
+        descriptor_command.append("species_Z" + "=" + species_Z)
 
-        exe_command.append("descriptor_str=" + "{" +
-                           "{}".format(' '.join(descriptor_command)) + "}")
+        exe_command.append("descriptor_str=" + "{" + "{}".format(" ".join(descriptor_command)) + "}")
 
-        with ScratchDir('.'):
-            _ = self.operator.write_cfgs(filename=atoms_filename,
-                                         cfg_pool=pool_from([structure]))
-            descriptor_output = 'output'
-            p = subprocess.Popen(exe_command, stdout=open(descriptor_output, 'w'))
+        with ScratchDir("."):
+            _ = self.operator.write_cfgs(filename=atoms_filename, cfg_pool=pool_from([structure]))
+            descriptor_output = "output"
+            p = subprocess.Popen(exe_command, stdout=open(descriptor_output, "w"))
             stdout = p.communicate()[0]
             rc = p.returncode
             if rc != 0:
-                error_msg = 'quip/soap exited with return code %d' % rc
-                msg = stdout.decode("utf-8").split('\n')[:-1]
+                error_msg = "quip/soap exited with return code %d" % rc
+                msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg)
-                                  if m.startswith('ERROR')][0]
-                    error_msg += ', '.join(msg[error_line:])
+                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                    error_msg += ", ".join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
-            with zopen(descriptor_output, 'rt') as f:
+            with zopen(descriptor_output, "rt") as f:
                 lines = f.read()
 
-            descriptor_pattern = re.compile('DESC(.*?)\n', re.S)
-            descriptors = pd.DataFrame([np.array(c.split(), dtype=np.float)
-                                        for c in descriptor_pattern.findall(lines)])
+            descriptor_pattern = re.compile("DESC(.*?)\n", re.S)
+            descriptors = pd.DataFrame([np.array(c.split(), dtype=np.float) for c in descriptor_pattern.findall(lines)])
 
         return descriptors
 
 
-@describer_type('site')
+@describer_type("site")
 class BPSymmetryFunctions(BaseDescriber):
     r"""
     Behler-Parrinello symmetry function to describe the local environment
@@ -269,15 +282,18 @@ class BPSymmetryFunctions(BaseDescriber):
             year={2007},
             publisher={APS}}
     """
-    def __init__(self,
-                 cutoff: float,
-                 r_etas: np.ndarray,
-                 r_shift: np.ndarray,
-                 a_etas: np.ndarray,
-                 zetas: np.ndarray,
-                 lambdas: np.ndarray,
-                 feature_batch: str = "pandas_concat",
-                 **kwargs):
+
+    def __init__(
+        self,
+        cutoff: float,
+        r_etas: np.ndarray,
+        r_shift: np.ndarray,
+        a_etas: np.ndarray,
+        zetas: np.ndarray,
+        lambdas: np.ndarray,
+        feature_batch: str = "pandas_concat",
+        **kwargs,
+    ):
         """
         Args:
             cutoff (float): The cutoff distance.
@@ -310,23 +326,24 @@ class BPSymmetryFunctions(BaseDescriber):
             center = structure[atom_idx].coords
             site_symmfuncs: List[np.ndarray] = []
             sorted_neighbors = sorted(neighbors, key=lambda neighbor: neighbor.species_string)
-            temp_dict = {element: [(neighbor.coords, neighbor.nn_distance) for neighbor in group]
-                         for element, group in itertools.groupby(sorted_neighbors,
-                                                                 key=lambda neighbor:
-                                                                 neighbor.species_string)}
+            temp_dict = {
+                element: [(neighbor.coords, neighbor.nn_distance) for neighbor in group]
+                for element, group in itertools.groupby(sorted_neighbors, key=lambda neighbor: neighbor.species_string)
+            }
             for specie in elements:
-                distances = np.array([nn_distance for _, nn_distance
-                                      in temp_dict[specie]])[:, None, None]
-                g2 = np.sum(np.exp(-self.r_etas * (distances - self.r_shift) ** 2)
-                            * self._fc(distances), axis=0)
+                distances = np.array([nn_distance for _, nn_distance in temp_dict[specie]])[:, None, None]
+                g2 = np.sum(np.exp(-self.r_etas * (distances - self.r_shift) ** 2) * self._fc(distances), axis=0)
                 site_symmfuncs.extend(g2.ravel().tolist())
 
             for specie1, specie2 in itertools.combinations_with_replacement(elements, 2):
 
                 group1, group2 = temp_dict[specie1], temp_dict[specie2]
 
-                c = itertools.combinations(range(len(group1)), 2) if specie1 == specie2 \
+                c = (
+                    itertools.combinations(range(len(group1)), 2)
+                    if specie1 == specie2
                     else itertools.product(range(len(group1)), range(len(group2)))
+                )
                 index_combination = np.array(list(c)).T.tolist()
 
                 coords_group1 = np.array([coords for coords, _ in group1])
@@ -345,9 +362,13 @@ class BPSymmetryFunctions(BaseDescriber):
                 cutoffs = np.prod(self._fc(distances), axis=0)
                 cutoffs = np.atleast_1d(cutoffs)[:, None, None, None]
                 powers = np.sum(distances ** 2, axis=0)[:, None, None, None]
-                g4 = np.sum((1 + self.lambdas * cosines) ** self.zetas *
-                            np.exp(-self.a_etas * powers) * cutoffs *
-                            2.0 ** (1 - self.zetas), axis=0)
+                g4 = np.sum(
+                    (1 + self.lambdas * cosines) ** self.zetas
+                    * np.exp(-self.a_etas * powers)
+                    * cutoffs
+                    * 2.0 ** (1 - self.zetas),
+                    axis=0,
+                )
                 site_symmfuncs.extend(g4.ravel().tolist())
 
             data.append(site_symmfuncs)
@@ -365,14 +386,14 @@ class BPSymmetryFunctions(BaseDescriber):
         return decay
 
 
-@describer_type('site')
+@describer_type("site")
 class SiteElementProperty(BaseDescriber):
     """
     Site specie property describers. For a structure or composition, return
     an unordered set of site specie properties
     """
-    def __init__(self, feature_dict: Optional[dict] = None, output_weights: bool = False,
-                 **kwargs):
+
+    def __init__(self, feature_dict: Optional[dict] = None, output_weights: bool = False, **kwargs):
         """
         Args:
             element_features (dict): mapping from atomic number of feature vectors
@@ -391,8 +412,7 @@ class SiteElementProperty(BaseDescriber):
         weights: List[float] = [d[i] for i in elements]
         return z_values, weights
 
-    def transform_one(self, obj: Union[str, Composition, Structure,
-                                       Molecule]) -> Union[List[np.ndarray], np.ndarray]:
+    def transform_one(self, obj: Union[str, Composition, Structure, Molecule]) -> Union[List[np.ndarray], np.ndarray]:
         """
         Transform one object to features
 
@@ -420,15 +440,17 @@ class SiteElementProperty(BaseDescriber):
         else:
             features = keys
         features = np.reshape(features, (n, -1))
-        weights = np.reshape(weights, (n, ))
+        weights = np.reshape(weights, (n,))
         if self.output_weights:
             return [features, weights]
 
         int_weights = weights.astype(int)  # type: ignore
         if not np.allclose(int_weights, weights):
-            raise ValueError("Number of atoms are not integers and the describer"
-                             " cannot output single feature matrix. Try set "
-                             "output_weights = True")
+            raise ValueError(
+                "Number of atoms are not integers and the describer"
+                " cannot output single feature matrix. Try set "
+                "output_weights = True"
+            )
         return np.repeat(features, int_weights, axis=0)
 
     @property

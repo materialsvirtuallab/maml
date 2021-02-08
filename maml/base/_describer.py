@@ -19,10 +19,9 @@ from monty.json import MSONable
 from maml.utils import feature_dim_from_test_system
 from ._feature_batch import get_feature_batch
 
-_ALLOWED_DATA = ('number', 'structure', 'molecule', 'spectrum')
+_ALLOWED_DATA = ("number", "structure", "molecule", "spectrum")
 
-_DESCRIBER_TYPES = ["composition", "site", "structure",
-                    "general", "band_structure", "spectrum"]
+_DESCRIBER_TYPES = ["composition", "site", "structure", "general", "band_structure", "spectrum"]
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -37,8 +36,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     a list of DataFrame/numpy.ndarray.
     """
 
-    def __init__(self,
-                 **kwargs):
+    def __init__(self, **kwargs):
         """
         Base estimator with the following allowed keyword args
 
@@ -54,7 +52,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             **kwargs: keyword args that contain possibly memory (str/joblib.Memory),
                 verbose (bool), n_jobs (int)
         """
-        allowed_kwargs = ['memory', 'verbose', 'n_jobs', "feature_batch"]
+        allowed_kwargs = ["memory", "verbose", "n_jobs", "feature_batch"]
 
         for k, v in kwargs.items():
             if k not in allowed_kwargs:
@@ -113,14 +111,12 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         if self.n_jobs == 0:
             features = [cached_transform_one(self, obj) for obj in objs]
         else:
-            features = Parallel(n_jobs=self.n_jobs)(
-                delayed(cached_transform_one)(self, obj) for obj in objs)
+            features = Parallel(n_jobs=self.n_jobs)(delayed(cached_transform_one)(self, obj) for obj in objs)
 
         multi_output = self._is_multi_output()
         if not multi_output:
             features = [features]
-        batched_features = [self.feature_batch(i) for i in  # type: ignore
-                            list(*zip(features))]
+        batched_features = [self.feature_batch(i) for i in list(*zip(features))]  # type: ignore
         return batched_features if multi_output else batched_features[0]
 
     def _is_multi_output(self) -> bool:
@@ -161,6 +157,7 @@ class DummyDescriber(BaseDescriber):
     """
     Dummy Describer that does nothing
     """
+
     def transform_one(self, obj: Any):
         """
         Does nothing but return the original features
@@ -178,6 +175,7 @@ class SequentialDescriber(Pipeline):
     """
     A thin wrapper of sklearn Pipeline
     """
+
     def __init__(self, describers: List, **kwargs):
         """
         Put a list of describers into one pipeline
@@ -200,7 +198,9 @@ def describer_type(dtype: str):
     Return:
         wrapped class
     """
+
     def wrapped_describer(klass):
         klass.describer_type = dtype
         return klass
+
     return wrapped_describer

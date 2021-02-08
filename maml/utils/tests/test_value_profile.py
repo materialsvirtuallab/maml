@@ -4,7 +4,6 @@ from maml.utils import ConstantValue, LinearProfile
 
 
 class TestValueProfile(unittest.TestCase):
-
     def test_constant(self):
         constant_profile = ConstantValue(0.1)
         constant_profile.increment_step()

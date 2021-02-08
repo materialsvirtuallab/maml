@@ -5,7 +5,6 @@ from maml.models.dl import WeightedAverageLayer, WeightedSet2Set
 
 
 class TestLayer(unittest.TestCase):
-
     def test_weighted_average(self):
         alpha = 0.4
         wal = WeightedAverageLayer(alpha=alpha)
@@ -16,10 +15,10 @@ class TestLayer(unittest.TestCase):
 
         x = x[0, :3, :]
         weights = weights[0, :3]
-        exp_weights = weights**alpha
+        exp_weights = weights ** alpha
         out_np = np.sum(x * exp_weights[:, None], axis=0) / np.sum(exp_weights)
         np.testing.assert_array_almost_equal(out.numpy()[0][0], out_np)
-        self.assertTrue(wal.get_config().get('alpha') == alpha)
+        self.assertTrue(wal.get_config().get("alpha") == alpha)
         self.assertTrue(wal.compute_output_shape([[1, 5, 2], [1, 5], [1, 5]]) == (1, None, 2))
 
     def test_weighted_set2set(self):

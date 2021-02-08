@@ -1,14 +1,13 @@
 import unittest
 
-from maml.base import SKLModel, KerasModel, \
-    is_sklearn_model, is_keras_model
+from maml.base import SKLModel, KerasModel, is_sklearn_model, is_keras_model
 from monty.tempfile import ScratchDir
 
 
 class TestBaseModel(unittest.TestCase):
-
     def test_sklmodel(self):
         from sklearn.linear_model import LinearRegression
+
         model = SKLModel(model=LinearRegression())
         x = [[1, 2], [3, 4]]
         y = [3, 7]
@@ -30,6 +29,7 @@ class TestBaseModel(unittest.TestCase):
     def test_keras_model(self):
         import tensorflow as tf
         import numpy as np
+
         model = KerasModel(model=tf.keras.Sequential([tf.keras.layers.Dense(1, input_dim=2)]))
         model.model.compile("adam", "mse")
 
@@ -37,7 +37,7 @@ class TestBaseModel(unittest.TestCase):
         y = np.array([3, 7]).reshape((-1, 1))
         model.fit(x, y)
         model.train(x, y)
-        model.model.set_weights([np.array([[1.], [1.]]), np.array([0])])
+        model.model.set_weights([np.array([[1.0], [1.0]]), np.array([0])])
         self.assertAlmostEqual(model.predict_objs([[4, 5]])[0], 9)
 
         with ScratchDir("."):

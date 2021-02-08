@@ -8,9 +8,7 @@ from maml.base._feature_batch import stack_first_dim
 
 class TestFeatureBatch(unittest.TestCase):
     def test_get_feature_batch(self):
-        x = [np.random.normal(size=(10, 20)),
-             np.random.normal(size=(10, 20)),
-             np.random.normal(size=(10, 20))]
+        x = [np.random.normal(size=(10, 20)), np.random.normal(size=(10, 20)), np.random.normal(size=(10, 20))]
         y = get_feature_batch("stack_first_dim")(x)
         self.assertTrue(y.shape == (3, 10, 20))
         y = get_feature_batch(stack_first_dim)(x)

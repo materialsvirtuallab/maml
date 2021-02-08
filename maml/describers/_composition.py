@@ -18,19 +18,22 @@ from maml.describers.matminer_wrapper import wrap_matminer_describer
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
-DATA_MAPPING = {'megnet_1': 'data/elemental_embedding_1MEGNet_layer.json',
-                'megnet_3': 'data/elemental_embedding_3MEGNet_layer.json'}
+DATA_MAPPING = {
+    "megnet_1": "data/elemental_embedding_1MEGNet_layer.json",
+    "megnet_3": "data/elemental_embedding_3MEGNet_layer.json",
+}
 
 for length in [2, 3, 4, 8, 16, 32]:
-    DATA_MAPPING['megnet_l%d' % length] = 'data/elemental_embedding_1MEGNet_layer_length_%d.json' % length
-    DATA_MAPPING['megnet_ion_l%d' % length] = 'data/ion_embedding_1MEGNet_layer_length_%d.json' % length
+    DATA_MAPPING["megnet_l%d" % length] = "data/elemental_embedding_1MEGNet_layer_length_%d.json" % length
+    DATA_MAPPING["megnet_ion_l%d" % length] = "data/ion_embedding_1MEGNet_layer_length_%d.json" % length
 
 
-ElementProperty = wrap_matminer_describer("ElementProperty", MatminerElementProperty,
-                                          to_composition, describer_type='composition')
+ElementProperty = wrap_matminer_describer(
+    "ElementProperty", MatminerElementProperty, to_composition, describer_type="composition"
+)
 
 
-@describer_type('composition')
+@describer_type("composition")
 class ElementStats(BaseDescriber):
     """
     Element statistics. The allowed stats are accessed via ALLOWED_STATS class
@@ -41,9 +44,14 @@ class ElementStats(BaseDescriber):
     ALLOWED_STATS = getattr(Stats, "allowed_stats")  # type: ignore
     AVAILABLE_DATA = list(DATA_MAPPING.keys())
 
-    def __init__(self, element_properties: Dict, stats: Optional[List[str]] = None,
-                 property_names: Optional[List[str]] = None,
-                 feature_batch: str = "pandas_concat", **kwargs):
+    def __init__(
+        self,
+        element_properties: Dict,
+        stats: Optional[List[str]] = None,
+        property_names: Optional[List[str]] = None,
+        feature_batch: str = "pandas_concat",
+        **kwargs,
+    ):
         """
         Elemental stats for composition/str/structure
 
@@ -65,13 +73,17 @@ class ElementStats(BaseDescriber):
                 reduction_params (dict): kwargs for dimensional reduction algorithm
         """
 
-        num_dim = kwargs.pop('num_dim', None)
-        reduction_algo = kwargs.pop('reduction_algo', 'pca')
-        reduction_params = kwargs.pop('reduction_params', {})
+        num_dim = kwargs.pop("num_dim", None)
+        reduction_algo = kwargs.pop("reduction_algo", "pca")
+        reduction_params = kwargs.pop("reduction_params", {})
 
         element_properties, property_names = self._reduce_dimension(
-            element_properties=element_properties, property_names=property_names,
-            num_dim=num_dim, reduction_algo=reduction_algo, reduction_params=reduction_params)
+            element_properties=element_properties,
+            property_names=property_names,
+            num_dim=num_dim,
+            reduction_algo=reduction_algo,
+            reduction_params=reduction_params,
+        )
 
         self.element_properties = element_properties
         properties = list(self.element_properties.values())
@@ -82,7 +94,7 @@ class ElementStats(BaseDescriber):
         n_single_property = n_property[0]
 
         if property_names is None:
-            property_names = ['p%d' % i for i in range(n_single_property)]
+            property_names = ["p%d" % i for i in range(n_single_property)]
 
         if len(property_names) != n_single_property:
             raise ValueError("Property name length is not consistent")
@@ -90,11 +102,11 @@ class ElementStats(BaseDescriber):
         all_property_names = []
 
         if stats is None:
-            stats = ['mean', 'max', 'min', 'range', 'std', 'mode']
+            stats = ["mean", "max", "min", "range", "std", "mode"]
 
         full_stats, stats_func = get_full_stats_and_funcs(stats)
         for stat in full_stats:
-            all_property_names.extend(['%s_%s' % (p, stat) for p in property_names])
+            all_property_names.extend(["%s_%s" % (p, stat) for p in property_names])
         self.stats = full_stats
         self.element_properties = element_properties
         self.property_names = property_names
@@ -133,8 +145,7 @@ class ElementStats(BaseDescriber):
         return pd.DataFrame([features], columns=self.all_property_names)
 
     @classmethod
-    def from_file(cls, filename: str,
-                  stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+    def from_file(cls, filename: str, stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
         """
         ElementStats from a json file of element property dictionary.
         The keys required are:
@@ -164,15 +175,13 @@ class ElementStats(BaseDescriber):
         if not is_element:
             raise ValueError("File is not in correct format")
 
-        if 'stats' in d:
-            stats = d.get('stats')
+        if "stats" in d:
+            stats = d.get("stats")
 
-        return cls(element_properties=element_properties,
-                   property_names=property_names, stats=stats, **kwargs)
+        return cls(element_properties=element_properties, property_names=property_names, stats=stats, **kwargs)
 
     @classmethod
-    def from_data(cls, data_name: Union[List[str], str],
-                  stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+    def from_data(cls, data_name: Union[List[str], str], stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
         """
         ElementalStats from existing data file.
 
@@ -216,17 +225,18 @@ class ElementStats(BaseDescriber):
             for k in common_keys:
                 element_properties[k].extend(instance.element_properties[k])
 
-            property_names.extend(['%d_%s' % (index, i) for i in instance.property_names])
+            property_names.extend(["%d_%s" % (index, i) for i in instance.property_names])
 
-        return cls(element_properties=element_properties,
-                   property_names=property_names,
-                   stats=stats,
-                   **kwargs)
+        return cls(element_properties=element_properties, property_names=property_names, stats=stats, **kwargs)
 
     @staticmethod
-    def _reduce_dimension(element_properties, property_names, num_dim: Optional[int] = None,
-                          reduction_algo: Optional[str] = 'pca',
-                          reduction_params: Optional[Dict] = None) -> Tuple[Dict, List[str]]:
+    def _reduce_dimension(
+        element_properties,
+        property_names,
+        num_dim: Optional[int] = None,
+        reduction_algo: Optional[str] = "pca",
+        reduction_params: Optional[Dict] = None,
+    ) -> Tuple[Dict, List[str]]:
         """
         Reduce the feature dimension by reduction_algo
 
@@ -251,15 +261,15 @@ class ElementStats(BaseDescriber):
             p_keys.append(i)
         value_np_array = np.array(value_array)
 
-        if reduction_algo == 'pca':
+        if reduction_algo == "pca":
 
             m = PCA(n_components=num_dim, **reduction_params)
-            property_names = ['pca_%d' % i for i in range(num_dim)]
-        elif reduction_algo == 'kpca':
+            property_names = ["pca_%d" % i for i in range(num_dim)]
+        elif reduction_algo == "kpca":
             m = KernelPCA(n_components=num_dim, **reduction_params)
-            property_names = ['kpca_%d' % i for i in range(num_dim)]
+            property_names = ["kpca_%d" % i for i in range(num_dim)]
         else:
-            raise ValueError('Reduction algorithm not available')
+            raise ValueError("Reduction algorithm not available")
 
         transformed_values = m.fit_transform(value_np_array)
 
@@ -278,7 +288,7 @@ def _keys_are_elements(dic: Dict) -> bool:
 
 
 def _is_element_or_specie(s: str) -> bool:
-    if s in ['D', 'D+', 'D-', 'T']:
+    if s in ["D", "D+", "D-", "T"]:
         return True
     try:
         _ = Element(s)

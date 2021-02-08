@@ -15,9 +15,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
-                            obj_conversion: Callable,
-                            describer_type: Optional[Any] = None):
+def wrap_matminer_describer(
+    cls_name: str, wrapped_class: Any, obj_conversion: Callable, describer_type: Optional[Any] = None
+):
     """
     Wrapper of matminer_wrapper describers.
     Args:
@@ -29,6 +29,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
 
     Returns: maml describers class
     """
+
     def constructor(self, *args, **kwargs):
         """
         Wrapped __init__ constructor
@@ -39,8 +40,7 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
         feature_batch = kwargs.pop("feature_concat", "pandas_concat")
         wrapped_class.__init__(self, *args, **kwargs)
         logger.info(f"Using matminer_wrapper {wrapped_class.__name__} class")
-        base_kwargs = dict(n_jobs=n_jobs, memory=memory,
-                           verbose=verbose, feature_batch=feature_batch)
+        base_kwargs = dict(n_jobs=n_jobs, memory=memory, verbose=verbose, feature_batch=feature_batch)
         BaseDescriber.__init__(self, **base_kwargs)
 
     @classmethod  # type: ignore
@@ -74,19 +74,23 @@ def wrap_matminer_describer(cls_name: str, wrapped_class: Any,
         instance_new.__dict__.update(instance.__dict__)
         return instance_new
 
-    new_klass = type(cls_name, (BaseDescriber, ),
-                     {'__doc__': wrapped_class.__doc__,
-                      '__init__': constructor,
-                      '__str__': wrapped_class.__str__,
-                      '__repr__': wrapped_class.__repr__,
-                      '__getstate__': wrapped_class.__getstate__,
-                      '__setstate__': wrapped_class.__setstate__,
-                      '_get_param_names': _get_param_names,
-                      'transform_one': transform_one,
-                      'from_preset': from_preset,
-                      'get_params': get_params,
-                      '__module__': 'maml.describers',
-                      'describer_type': describer_type
-                      })
+    new_klass = type(
+        cls_name,
+        (BaseDescriber,),
+        {
+            "__doc__": wrapped_class.__doc__,
+            "__init__": constructor,
+            "__str__": wrapped_class.__str__,
+            "__repr__": wrapped_class.__repr__,
+            "__getstate__": wrapped_class.__getstate__,
+            "__setstate__": wrapped_class.__setstate__,
+            "_get_param_names": _get_param_names,
+            "transform_one": transform_one,
+            "from_preset": from_preset,
+            "get_params": get_params,
+            "__module__": "maml.describers",
+            "describer_type": describer_type,
+        },
+    )
 
     return new_klass

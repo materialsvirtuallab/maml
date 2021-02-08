@@ -7,6 +7,7 @@ from typing import Callable
 try:
     from numba import njit  # type: ignore
 except ModuleNotFoundError:
+
     def njit(func: Callable) -> Callable:
         """
         Dummy decorator, returns the original function

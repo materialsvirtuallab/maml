@@ -7,19 +7,22 @@ import numpy as np
 from pymatgen import Structure, Element, Lattice
 from pymatgen.util.testing import PymatgenTest
 
-from maml.describers._structure import DistinctSiteProperty, CoulombMatrix, \
-    SortedCoulombMatrix, RandomizedCoulombMatrix, CoulombEigenSpectrum
+from maml.describers._structure import (
+    DistinctSiteProperty,
+    CoulombMatrix,
+    SortedCoulombMatrix,
+    RandomizedCoulombMatrix,
+    CoulombEigenSpectrum,
+)
 
 
 class DistinctSitePropertyTest(PymatgenTest):
-
     @classmethod
     def setUpClass(cls):
         cls.li2o = cls.get_structure("Li2O")
         cls.na2o = cls.li2o.copy()
         cls.na2o["Li+"] = "Na+"
-        cls.describer = DistinctSiteProperty(wyckoffs=['2c', '1a'],
-                                             properties=["Z", "atomic_radius"])
+        cls.describer = DistinctSiteProperty(wyckoffs=["2c", "1a"], properties=["Z", "atomic_radius"])
 
     def test_describe(self):
         descriptor = self.describer.transform_one(self.li2o)
@@ -42,62 +45,80 @@ class DistinctSitePropertyTest(PymatgenTest):
 
 
 class CoulomMatrixTest(unittest.TestCase):
-
     def setUp(self):
 
-        self.s1 = Structure.from_spacegroup(225,
-                                            Lattice.cubic(5.69169),
-                                            ["Na", "Cl"],
-                                            [[0, 0, 0], [0, 0, 0.5]])
-        self.s2 = Structure.from_dict({'@class': 'Structure',
-                                       '@module': 'pymatgen.core.structure',
-                                       'charge': None,
-                                       'lattice': {'a': 5.488739045730133,
-                                                   'alpha': 60.0000000484055,
-                                                   'b': 5.488739048031658,
-                                                   'beta': 60.00000003453459,
-                                                   'c': 5.48873905,
-                                                   'gamma': 60.000000071689925,
-                                                   'matrix': [[4.75338745, 0.0, 2.74436952],
-                                                              [1.58446248, 4.48153667, 2.74436952],
-                                                              [0.0, 0.0, 5.48873905]],
-                                                   'volume': 116.92375473740876},
-                                       'sites': [{'abc': [0.5, 0.5, 0.5],
-                                                  'label': 'Al',
-                                                  'properties': {'coordination_no': 10, 'forces': [0.0, 0.0, 0.0]},
-                                                  'species': [{'element': 'Al', 'occu': 1}],
-                                                  'xyz': [3.168924965, 2.240768335, 5.488739045]},
-                                                 {'abc': [0.5, 0.5, 0.0],
-                                                  'label': 'Al',
-                                                  'properties': {'coordination_no': 10, 'forces': [0.0, 0.0, 0.0]},
-                                                  'species': [{'element': 'Al', 'occu': 1}],
-                                                  'xyz': [3.168924965, 2.240768335, 2.74436952]},
-                                                 {'abc': [0.0, 0.5, 0.5],
-                                                  'label': 'Al',
-                                                  'properties': {'coordination_no': 10, 'forces': [0.0, 0.0, 0.0]},
-                                                  'species': [{'element': 'Al', 'occu': 1}],
-                                                  'xyz': [0.79223124, 2.240768335, 4.116554285]},
-                                                 {'abc': [0.5, 0.0, 0.5],
-                                                  'label': 'Al',
-                                                  'properties': {'coordination_no': 10, 'forces': [0.0, 0.0, 0.0]},
-                                                  'species': [{'element': 'Al', 'occu': 1}],
-                                                  'xyz': [2.376693725, 0.0, 4.116554285]},
-                                                 {'abc': [0.875, 0.875, 0.875],
-                                                  'label': 'Lu',
-                                                  'properties': {'coordination_no': 16, 'forces': [0.0, 0.0, 0.0]},
-                                                  'species': [{'element': 'Lu', 'occu': 1}],
-                                                  'xyz': [5.54561868875, 3.9213445862499996, 9.60529332875]},
-                                                 {'abc': [0.125, 0.125, 0.125],
-                                                  'label': 'Lu',
-                                                  'properties': {'coordination_no': 16, 'forces': [0.0, 0.0, 0.0]},
-                                                  'species': [{'element': 'Lu', 'occu': 1}],
-                                                  'xyz': [0.79223124125, 0.56019208375, 1.37218476125]}]})
+        self.s1 = Structure.from_spacegroup(225, Lattice.cubic(5.69169), ["Na", "Cl"], [[0, 0, 0], [0, 0, 0.5]])
+        self.s2 = Structure.from_dict(
+            {
+                "@class": "Structure",
+                "@module": "pymatgen.core.structure",
+                "charge": None,
+                "lattice": {
+                    "a": 5.488739045730133,
+                    "alpha": 60.0000000484055,
+                    "b": 5.488739048031658,
+                    "beta": 60.00000003453459,
+                    "c": 5.48873905,
+                    "gamma": 60.000000071689925,
+                    "matrix": [
+                        [4.75338745, 0.0, 2.74436952],
+                        [1.58446248, 4.48153667, 2.74436952],
+                        [0.0, 0.0, 5.48873905],
+                    ],
+                    "volume": 116.92375473740876,
+                },
+                "sites": [
+                    {
+                        "abc": [0.5, 0.5, 0.5],
+                        "label": "Al",
+                        "properties": {"coordination_no": 10, "forces": [0.0, 0.0, 0.0]},
+                        "species": [{"element": "Al", "occu": 1}],
+                        "xyz": [3.168924965, 2.240768335, 5.488739045],
+                    },
+                    {
+                        "abc": [0.5, 0.5, 0.0],
+                        "label": "Al",
+                        "properties": {"coordination_no": 10, "forces": [0.0, 0.0, 0.0]},
+                        "species": [{"element": "Al", "occu": 1}],
+                        "xyz": [3.168924965, 2.240768335, 2.74436952],
+                    },
+                    {
+                        "abc": [0.0, 0.5, 0.5],
+                        "label": "Al",
+                        "properties": {"coordination_no": 10, "forces": [0.0, 0.0, 0.0]},
+                        "species": [{"element": "Al", "occu": 1}],
+                        "xyz": [0.79223124, 2.240768335, 4.116554285],
+                    },
+                    {
+                        "abc": [0.5, 0.0, 0.5],
+                        "label": "Al",
+                        "properties": {"coordination_no": 10, "forces": [0.0, 0.0, 0.0]},
+                        "species": [{"element": "Al", "occu": 1}],
+                        "xyz": [2.376693725, 0.0, 4.116554285],
+                    },
+                    {
+                        "abc": [0.875, 0.875, 0.875],
+                        "label": "Lu",
+                        "properties": {"coordination_no": 16, "forces": [0.0, 0.0, 0.0]},
+                        "species": [{"element": "Lu", "occu": 1}],
+                        "xyz": [5.54561868875, 3.9213445862499996, 9.60529332875],
+                    },
+                    {
+                        "abc": [0.125, 0.125, 0.125],
+                        "label": "Lu",
+                        "properties": {"coordination_no": 16, "forces": [0.0, 0.0, 0.0]},
+                        "species": [{"element": "Lu", "occu": 1}],
+                        "xyz": [0.79223124125, 0.56019208375, 1.37218476125],
+                    },
+                ],
+            }
+        )
 
     def test_coulomb_mat(self):
         cm = CoulombMatrix()
         cmat = cm.transform_one(self.s1).values.reshape(self.s1.num_sites, self.s1.num_sites)
-        na = Element('Na')
-        cl = Element('Cl')
+        na = Element("Na")
+        cl = Element("Cl")
         dist = self.s1.distance_matrix
         self.assertEqual(cmat[0][0], (na.Z ** 2.4) * 0.5)
         self.assertEqual(cmat[4][4], (cl.Z ** 2.4) * 0.5)
@@ -126,15 +147,15 @@ class CoulomMatrixTest(unittest.TestCase):
         c = cm.transform([self.s1, self.s2])
         c1 = cm.transform_one(self.s1)
         c2 = cm.transform_one(self.s2)
-        self.assertTrue(np.allclose(c.xs(0, level='input_index'), c1))
-        self.assertTrue(np.allclose(c.xs(1, level='input_index'), c2))
+        self.assertTrue(np.allclose(c.xs(0, level="input_index"), c1))
+        self.assertTrue(np.allclose(c.xs(1, level="input_index"), c2))
 
     def test_eigenspectrum(self):
         ces = CoulombEigenSpectrum()
         f = ces.transform_one(self.s1)
 
         f2 = ces.transform([self.s1, self.s2])
-        self.assertTrue(f.shape == (8, ))
+        self.assertTrue(f.shape == (8,))
         self.assertTrue(f2.shape == (2, 8))
 
         ces = CoulombEigenSpectrum(max_atoms=9)

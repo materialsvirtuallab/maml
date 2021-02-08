@@ -1,3 +1,5 @@
+# flake8: noqa 
+
 import unittest
 import os
 
@@ -5,21 +7,26 @@ import numpy as np
 import json
 from pymatgen.util.testing import PymatgenTest
 
+try:
+    import cvxpy as cp
+    from maml.apps.symbolic._selectors_cvxpy import cp, DantzigSelectorCP, LassoCP, AdaptiveLassoCP
+
+except ImportError:
+    cp = None  # noqa
+
 from maml.apps.symbolic._selectors import DantzigSelector, Lasso, AdaptiveLasso, SCAD, L0BrutalForce
-from maml.apps.symbolic._selectors_cvxpy import cp, DantzigSelectorCP, LassoCP, AdaptiveLassoCP
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
 
 class TestSelectors(PymatgenTest):
-
     @classmethod
     def setUpClass(cls):
         np.random.seed(42)
-        with open(os.path.join(CWD, 'test_data.json'), 'r') as f:
+        with open(os.path.join(CWD, "test_data.json"), "r") as f:
             djson = json.load(f)
-        cls.x = np.array(djson['x'])
-        cls.beta = np.array(djson['beta'])
+        cls.x = np.array(djson["x"])
+        cls.beta = np.array(djson["beta"])
         cls.y = cls.x.dot(cls.beta)
         cls.lasso_alpha = 0.1
 
@@ -28,17 +35,16 @@ class TestSelectors(PymatgenTest):
         selected = dt.select(self.x, self.y)
         # selected only [4, 5, 6]
         np.testing.assert_allclose(selected, [4, 5, 6])
-        self.assertAlmostEqual(-dt.evaluate(self.x, self.y),
-                               0.40040170)
+        self.assertAlmostEqual(-dt.evaluate(self.x, self.y), 0.40040170)
         np.testing.assert_almost_equal(dt.get_coef(), dt.coef_)
 
         np.testing.assert_almost_equal(dt.get_feature_indices(), selected)
         self.assertTrue(dt.compute_residual(self.x, self.y).shape == self.y.shape)
 
         self.assertArrayEqual(dt._get_param_names(), ["lambd", "sigma"])
-        self.assertArrayEqual(dt.get_params(), {'lambd': 1, 'sigma': 1.0})
+        self.assertArrayEqual(dt.get_params(), {"lambd": 1, "sigma": 1.0})
         dt.set_params(**{"lambd": 0.1})
-        self.assertArrayEqual(dt.get_params(), {'lambd': 0.1, 'sigma': 1.0})
+        self.assertArrayEqual(dt.get_params(), {"lambd": 0.1, "sigma": 1.0})
 
     @unittest.skipIf(cp is None, "cvxpy not installed")
     def test_dantzigcp(self):
@@ -48,7 +54,7 @@ class TestSelectors(PymatgenTest):
 
     def test_lasso(self):
         lasso = Lasso(self.lasso_alpha)
-        selected = lasso.select(self.x, self.y, options={'maxiter': 1e5, 'ftol': 1e-15})
+        selected = lasso.select(self.x, self.y, options={"maxiter": 1e5, "ftol": 1e-15})
         np.testing.assert_allclose(selected, [4, 5, 6, 9])
 
     @unittest.skipIf(cp is None, "cvxpy not installed")
@@ -58,14 +64,14 @@ class TestSelectors(PymatgenTest):
         np.testing.assert_allclose(selected, [4, 5, 6, 9])
 
         from sklearn.linear_model import Lasso
+
         lasso = Lasso(self.lasso_alpha, fit_intercept=False)
         lasso.fit(self.x, self.y)
-        np.testing.assert_allclose(np.where(np.abs(lasso.coef_) > 1e-10)[0],
-                                   [4, 5, 6, 9])
+        np.testing.assert_allclose(np.where(np.abs(lasso.coef_) > 1e-10)[0], [4, 5, 6, 9])
 
     def test_adaptive_lasso(self):
         lasso = AdaptiveLasso(self.lasso_alpha, gamma=0.1)
-        selected = lasso.select(self.x, self.y, options={'maxiter': 1e4, 'ftol': 1e-12})
+        selected = lasso.select(self.x, self.y, options={"maxiter": 1e4, "ftol": 1e-12})
 
         np.testing.assert_allclose(selected, [4, 5, 6, 9])
 

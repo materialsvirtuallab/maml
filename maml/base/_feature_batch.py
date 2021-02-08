@@ -16,9 +16,7 @@ def pandas_concat(features: List[pd.DataFrame]) -> pd.DataFrame:
     Returns: concatenated pandas dataframe
 
     """
-    concatenated = pd.concat(features,
-                             keys=range(len(features)),
-                             names=['input_index', None])
+    concatenated = pd.concat(features, keys=range(len(features)), names=["input_index", None])
     return concatenated
 
 
@@ -69,12 +67,11 @@ AVAILABLE_FB_METHODS = {
     "pandas_concat": pandas_concat,
     "stack_first_dim": stack_first_dim,
     "stack_padded": stack_padded,
-    "no_action": no_action
+    "no_action": no_action,
 }
 
 
-def get_feature_batch(fb_name: Optional[Union[str, Callable]] = None) \
-        -> Callable:
+def get_feature_batch(fb_name: Optional[Union[str, Callable]] = None) -> Callable:
     """
     Providing a feature batch name, returning the function callable
     Args:
@@ -88,7 +85,8 @@ def get_feature_batch(fb_name: Optional[Union[str, Callable]] = None) \
         try:
             return AVAILABLE_FB_METHODS[fb_name]
         except KeyError:
-            raise KeyError("Feature batch method not supported!"
-                           "Available ones are %s" % str(AVAILABLE_FB_METHODS.keys()))
+            raise KeyError(
+                "Feature batch method not supported!" "Available ones are %s" % str(AVAILABLE_FB_METHODS.keys())
+            )
     else:
         return fb_name

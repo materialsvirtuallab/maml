@@ -26,11 +26,8 @@ def doc_from(structure, energy=None, force=None, stress=None):
     energy = energy if energy is not None else 0
     force = force if force is not None else np.zeros((len(structure), 3))
     stress = stress if stress is not None else np.zeros(6)
-    outputs = dict(energy=energy, forces=force,
-                   virial_stress=stress)
-    doc = dict(structure=structure.as_dict(),
-               num_atoms=len(structure),
-               outputs=outputs)
+    outputs = dict(energy=energy, forces=force, virial_stress=stress)
+    doc = dict(structure=structure.as_dict(), num_atoms=len(structure), outputs=outputs)
     return doc
 
 
@@ -55,9 +52,10 @@ def pool_from(structures, energies=None, forces=None, stresses=None):
     energies = energies if energies is not None else [None] * len(structures)
     forces = forces if forces is not None else [None] * len(structures)
     stresses = stresses if stresses is not None else [None] * len(structures)
-    datapool = [doc_from(structure, energy, force, stress)
-                for structure, energy, force, stress
-                in zip(structures, energies, forces, stresses)]
+    datapool = [
+        doc_from(structure, energy, force, stress)
+        for structure, energy, force, stress in zip(structures, energies, forces, stresses)
+    ]
     return datapool
 
 
@@ -80,28 +78,26 @@ def convert_docs(docs, include_stress=False, **kwargs):
     """
     structures, y_orig, n, dtype = [], [], [], []
     for d in docs:
-        if isinstance(d['structure'], dict):
-            structure = Structure.from_dict(d['structure'])
+        if isinstance(d["structure"], dict):
+            structure = Structure.from_dict(d["structure"])
         else:
-            structure = d['structure']
-        outputs = d['outputs']
-        force_arr = np.array(outputs['forces'])
-        assert force_arr.shape == (len(structure), 3), \
-            'Wrong force array not matching structure'
+            structure = d["structure"]
+        outputs = d["outputs"]
+        force_arr = np.array(outputs["forces"])
+        assert force_arr.shape == (len(structure), 3), "Wrong force array not matching structure"
         force_arr = force_arr.ravel()
         if include_stress:
-            virial_stress = outputs['virial_stress']
-            y = np.concatenate(([outputs['energy']], force_arr, virial_stress))
-            dtype.extend(['energy'] + ['force'] * len(force_arr) + ['stress'] * len(virial_stress))
+            virial_stress = outputs["virial_stress"]
+            y = np.concatenate(([outputs["energy"]], force_arr, virial_stress))
+            dtype.extend(["energy"] + ["force"] * len(force_arr) + ["stress"] * len(virial_stress))
         else:
-            y = np.concatenate(([outputs['energy']], force_arr))
-            dtype.extend(['energy'] + ['force'] * len(force_arr))
+            y = np.concatenate(([outputs["energy"]], force_arr))
+            dtype.extend(["energy"] + ["force"] * len(force_arr))
         y_orig.append(y)
-        n.append(np.insert(np.ones(len(y) - 1), 0, d['num_atoms']))
+        n.append(np.insert(np.ones(len(y) - 1), 0, d["num_atoms"]))
 
         structures.append(structure)
-    df = pd.DataFrame(dict(y_orig=np.concatenate(y_orig), n=np.concatenate(n),
-                           dtype=dtype))
+    df = pd.DataFrame(dict(y_orig=np.concatenate(y_orig), n=np.concatenate(n), dtype=dtype))
     for k, v in kwargs.items():
         df[k] = v
     return structures, df
