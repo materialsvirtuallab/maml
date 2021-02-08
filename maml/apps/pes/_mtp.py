@@ -106,7 +106,7 @@ class MTPotential(Potential):
         if "Stress" in inputs:
             format_str = "{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
             format_float = "{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}"
-            lines.append(format_str.format("Stress:  xx", "yy", "zz", "yz", "xz", "xy"))
+            lines.append(format_str.format("PlusStress:  xx", "yy", "zz", "yz", "xz", "xy"))
             lines.append(format_float.format(*np.array(virial_stress) / 1.228445))
 
         lines.append("END_CFG")
@@ -458,14 +458,14 @@ class MTPotential(Potential):
         train_structures,
         train_energies,
         train_forces,
-        train_stresses=None,
-        unfitted_mtp=None,
+        train_stresses,
+        unfitted_mtp="08g.mtp",
         max_dist=5,
         radial_basis_size=8,
         max_iter=500,
         energy_weight=1,
         force_weight=1e-2,
-        stress_weight=0,
+        stress_weight=1e-3,
     ):
         """
         Training data with moment tensor method.
@@ -493,7 +493,7 @@ class MTPotential(Potential):
         if not which("mlp"):
             raise RuntimeError(
                 "mlp has not been found.\n",
-                "Please refer to http://gitlab.skoltech.ru/shapeev/mlip ",
+                "Please refer to https://mlip.skoltech.ru",
                 "for further detail.",
             )
         train_structures, train_forces, train_stresses = check_structures_forces_stresses(
@@ -543,7 +543,6 @@ class MTPotential(Potential):
                     "--force-weight={}".format(force_weight),
                     "--stress-weight={}".format(stress_weight),
                     "--init-params=same",
-                    "--auto-min-dist",
                 ],
                 stdout=subprocess.PIPE,
             )
@@ -637,7 +636,7 @@ class MTPotential(Potential):
             _, df_orig = self.read_cfgs(original_file)
 
             p = subprocess.Popen(
-                ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)], stdout=subprocess.PIPE
+                ["mlp", "calc-efs", "mlip.ini", "--filename={}".format(original_file)], stdout=subprocess.PIPE
             )
             stdout = p.communicate()[0]
             rc = p.returncode
