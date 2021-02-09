@@ -636,7 +636,7 @@ class MTPotential(Potential):
             _, df_orig = self.read_cfgs(original_file)
 
             p = subprocess.Popen(
-                ["mlp", "calc-efs", "mlip.ini", "--filename={}".format(original_file)], stdout=subprocess.PIPE
+                ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)], stdout=subprocess.PIPE
             )
             stdout = p.communicate()[0]
             rc = p.returncode
