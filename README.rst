@@ -69,7 +69,7 @@ For all the requirements above::
 Usage
 -----
 
-Many Jupyter notebooks are available on usage. See `notebooks </notebooks>`_.
+Many Jupyter notebooks are available on usage. See `notebooks </notebooks>`_. We also have established a tool and a tutorial lecture at nanoHUB `https://nanohub.org/resources/maml <https://nanohub.org/resources/maml>`_.
 
 API documentation
 -----------------
