@@ -1,6 +1,6 @@
 numpy==1.20.1
 scipy==1.6.0
-pymatgen==2021.2.8.1
+pymatgen==2021.2.14
 monty==4.0.2
 pandas==1.2.2
 scikit-learn==0.23.2
