@@ -105,7 +105,7 @@ class MTPotential(Potential):
             lines.append("{:>24.12f}".format(inputs["Energy"]))
         if "Stress" in inputs:
             format_str = "{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
-            format_float = "{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}"
+            format_float = "{:>16f}{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}"
             lines.append(format_str.format("PlusStress:  xx", "yy", "zz", "yz", "xz", "xy"))
             lines.append(format_float.format(*np.array(virial_stress) / 1.228445))
 
