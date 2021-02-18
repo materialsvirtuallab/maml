@@ -488,7 +488,7 @@ class MTPotential(Potential):
             max_iter (int): The number of maximum iteration.
             energy_weight (float): The weight of energy.
             force_weight (float): The weight of forces.
-            stress_weight (float): The weight of stresses.
+            stress_weight (float): The weight of stresses. Zero-weight can be assigned.
         """
         if not which("mlp"):
             raise RuntimeError(
