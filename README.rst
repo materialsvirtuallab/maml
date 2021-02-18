@@ -69,7 +69,7 @@ For all the requirements above::
 Usage
 -----
 
-Many Jupyter notebooks are available on usage. See `notebooks </notebooks>`_.
+Many Jupyter notebooks are available on usage. See `notebooks </notebooks>`_. We also have established a tool and a tutorial lecture at nanoHUB `https://nanohub.org/resources/maml <https://nanohub.org/resources/maml>`_.
 
 API documentation
 -----------------
@@ -85,7 +85,7 @@ Citing
 :: 
 
     @misc{maml,
-        author = {Chi Chen, Yunxing Zuo, Weike Ye and Shyue Ping Ong},
+        author = {Chen, Chi and Zuo, Yunxing and Ye, Weike and Ong, Shyue Ping},
         title = {{Maml - materials machine learning package}},
         year = {2020},
         publisher = {GitHub},
