@@ -382,17 +382,17 @@ def _download_models(url, file_path=EXTRA_MODELS, dest="ext_models"):
     """
 
     logger.info("Fetching {} from {} to {}".format(os.path.basename(file_path), url, file_path))
-
-    r = requests.get(url, stream=True)
-    total_size = int(r.headers.get("content-length", 0))
-    block_size = 1024 * 1024  # 1 Mbyte
-    t = tqdm(total=total_size, unit="iB", unit_scale=True)
-    with open(file_path, "wb") as file_out:
-        for chunk in r.iter_content(chunk_size=block_size):
-            t.update(len(chunk))
-            file_out.write(chunk)
-    t.close()
-    r.close()
+    if not os.path.isfile(file_path):
+        r = requests.get(url, stream=True)
+        total_size = int(r.headers.get("content-length", 0))
+        block_size = 1024 * 1024  # 1 Mbyte
+        t = tqdm(total=total_size, unit="iB", unit_scale=True)
+        with open(file_path, "wb") as file_out:
+            for chunk in r.iter_content(chunk_size=block_size):
+                t.update(len(chunk))
+                file_out.write(chunk)
+        t.close()
+        r.close()
     logger.info("Start extracting models to %s ..." % dest)
     with ZipFile(file_path, "r") as zip_obj:
         zip_obj.extractall(dest)
