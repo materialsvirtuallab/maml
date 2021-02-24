@@ -20,14 +20,14 @@ from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core import units
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from maml.apps.pes._base import Potential
+from ._lammps import LammpsPotential
 
 
 module_dir = os.path.dirname(__file__)
 NNinput_params = loadfn(os.path.join(module_dir, "params", "NNinput.json"))
 
 
-class NNPotential(Potential):
+class NNPotential(LammpsPotential):
     """
     This class implements Neural Network Potential.
     """

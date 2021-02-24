@@ -14,10 +14,10 @@ from monty.io import zopen
 from maml import SKLModel
 from maml.describers import BispectrumCoefficients
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from maml.apps.pes._base import Potential
+from ._lammps import LammpsPotential
 
 
-class SNAPotential(Potential):
+class SNAPotential(LammpsPotential):
     """
     This class implements Spectral Neighbor Analysis Potential.
     """

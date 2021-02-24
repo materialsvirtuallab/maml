@@ -20,8 +20,7 @@ from monty.tempfile import ScratchDir
 from pymatgen.core import Structure, Lattice
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from maml.apps.pes._base import Potential
-
+from ._lammps import LammpsPotential
 
 module_dir = os.path.dirname(__file__)
 MTini_params = loadfn(os.path.join(module_dir, "params", "MTini.json"))
@@ -41,7 +40,7 @@ def feed(attribute, kwargs, dictionary, tab="\t"):
     return tab + dictionary.get(attribute).get("name"), str(tmp), dictionary.get(attribute).get("comment")
 
 
-class MTPotential(Potential):
+class MTPotential(LammpsPotential):
     """
     This class implements moment tensor potentials.
     """

@@ -20,13 +20,14 @@ from pymatgen.core import Structure, Lattice, Element
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from maml.apps.pes._base import Potential
+from ._lammps import LammpsPotential
+
 
 module_dir = os.path.dirname(__file__)
 soap_params = loadfn(os.path.join(module_dir, "params", "GAP.json"))
 
 
-class GAPotential(Potential):
+class GAPotential(LammpsPotential):
     """
     This class implements Smooth Overlap of Atomic Position potentials.
     """
