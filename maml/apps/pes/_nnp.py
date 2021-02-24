@@ -21,7 +21,7 @@ from pymatgen.core import units
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 from maml.apps.pes._base import Potential
-from maml.apps.pes._lammps import EnergyForceStress
+
 
 module_dir = os.path.dirname(__file__)
 NNinput_params = loadfn(os.path.join(module_dir, "params", "NNinput.json"))
@@ -842,20 +842,6 @@ class NNPotential(Potential):
             df_predict = pd.concat(dfs, ignore_index=True)
 
         return df_orig, df_predict
-
-    def predict_efs(self, structure):
-        """
-        Predict energy, forces and stresses of the structure.
-
-        Args:
-            structure (Structure): Pymatgen Structure object.
-
-        Returns:
-            energy, forces, stress
-        """
-        calculator = EnergyForceStress(self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
 
     @staticmethod
     def from_config(input_filename, scaling_filename, weights_filenames):

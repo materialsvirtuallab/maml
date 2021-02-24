@@ -15,7 +15,6 @@ from maml import SKLModel
 from maml.describers import BispectrumCoefficients
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 from maml.apps.pes._base import Potential
-from maml.apps.pes._lammps import EnergyForceStress
 
 
 class SNAPotential(Potential):
@@ -96,28 +95,12 @@ class SNAPotential(Potential):
 
         return df_orig, df_predict
 
-    def predict_efs(self, structure):
-        """
-        Predict energy, forces and stresses of the structure.
-
-        Args:
-            structure (Structure): Pymatgen Structure object.
-
-        Returns:
-            energy, forces, stress
-        """
-        calculator = EnergyForceStress(self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
-
     def write_param(self):
         """
         Write parameter and coefficient file to perform lammps calculation.
         """
-
         param_file = "{}.snapparam".format(self.name)
         coeff_file = "{}.snapcoeff".format(self.name)
-
         model = self.model
         describer = self.model.describer
         profile = describer.element_profile
