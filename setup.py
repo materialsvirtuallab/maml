@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 setup(
     name="maml",
     packages=find_packages(),
-    version='0.0.3',
+    version='0.0.4',
     install_requires=["numpy", "scipy", "monty",
                       "scikit-learn", "pandas", "pymatgen", "tqdm"],
     extras_requires={"maml.apps.symbolic._selectors_cvxpy": ["cvxpy"],
