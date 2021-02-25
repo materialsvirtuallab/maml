@@ -765,7 +765,7 @@ class NNPotential(LammpsPotential):
                 error_lines = f.read()
 
             energy_rmse_pattern = re.compile(r"ENERGY\s*\S*\s*(\S*)\s*(\S*).*?\n")
-            forces_rmse_pattern = re.compile(r"FORCES\s*\S*\s*(\S*)\s*(\S*).*?\n")
+            forces_rmse_pattern = re.compile(r"FORCE\s*\S*\s*(\S*)\s*(\S*).*?\n")
             errors = np.array(energy_rmse_pattern.findall(error_lines), dtype=np.float).T.tolist()
             self.train_energy_rmse = errors[0]
             self.validation_energy_rmse = errors[1]
