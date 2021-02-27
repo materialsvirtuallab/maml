@@ -150,7 +150,7 @@ class MTPotential(LammpsPotential):
 
         return filename
 
-    def write_ini(self, mtp_filename="fitted.mtp", select=False, Abinitio=0, MLIP="MPT.mpt", Driver=0, **kwargs):
+    def write_ini(self, mtp_filename="fitted.mtp", select=False, **kwargs):
         """
         Write mlip.ini file for mlip packages of version mlip-2 or mlip-dev.
         Supported keyword arguments are parallel with options stated in the mlip manuals.
@@ -341,6 +341,9 @@ class MTPotential(LammpsPotential):
 
         elif self.version == "mlip-dev":
             format_str = "{:<48s}{:<20s}{}"
+            Abinitio = kwargs.get("Abinitio") if kwargs.get("Abinitio") else 0
+            MLIP = kwargs.get("MLIP") if kwargs.get("MLIP") else "MPT.mpt"
+            Driver = kwargs.get("Driver") if kwargs.get("Driver") else 0
             PARAMS = {
                 "Abinitio": {
                     0: [],
