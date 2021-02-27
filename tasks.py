@@ -28,7 +28,7 @@ def make_doc(ctx):
     :param ctx:
     """
 
-    ctx.run("cp README.rst api-docs-source/index.rst")
+    # ctx.run("cp README.rst api-docs-source/index.rst")
     ctx.run("cp CHANGES.rst api-docs-source/changelog.rst")
 
     with cd("api-docs-source"):

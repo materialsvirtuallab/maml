@@ -17,10 +17,7 @@ packages such as scikit-learn and tensorflow for implementations of ML algorithm
 packages such as `pymatgen <http://pymatgen.org>`_ and `matminer <http://hackingmaterials.lbl.gov/matminer/>`_ for
 crystal/molecule manipulation and feature generation.
 
-Change log
-----------
-
-:doc:`Latest changes </changelog>`.
+Official documentation at http://maml.ai/
 
 Features
 --------

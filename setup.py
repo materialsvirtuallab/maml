@@ -18,7 +18,7 @@ setup(
     author_email="ongsp@eng.ucsd.edu",
     maintainer="Shyue Ping Ong",
     maintainer_email="ongsp@eng.ucsd.edu",
-    url="http://www.materialsvirtuallab.org",
+    url="http://maml.ai/",
     license="BSD",
     description="maml is a machine learning library for materials science.",
     long_description="""Maml, acronym for MAterials Machine Learning and pronounced mammal, is a machine learning
