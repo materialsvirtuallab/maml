@@ -31,4 +31,6 @@ jobs:
       env:
         PMG_MAPI_KEY: ${{ secrets.PMG_MAPI_KEY }}
       run: |
-        pytest maml --color=yes
+        pytest maml --color=yes --cov=maml
+    - name: Coveralls Python
+      uses: AndreMiras/coveralls-python-action@v20201129
