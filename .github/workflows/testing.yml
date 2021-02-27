@@ -33,4 +33,5 @@ jobs:
       run: |
         pytest maml --color=yes --cov=maml
     - name: Coveralls Python
+      if: matrix.os == 'ubuntu-latest'
       uses: AndreMiras/coveralls-python-action@v20201129
