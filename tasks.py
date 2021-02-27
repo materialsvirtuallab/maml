@@ -117,18 +117,22 @@ def release(ctx, notest=True):
         ctx.run("pytest maml")
     with open("CHANGES.rst") as f:
         contents = f.read()
-    toks = re.split(r"\#+", contents)
+    toks = re.split(r"\-+", contents)
     desc = toks[1].strip()
+    toks = desc.split("\n")
+    desc = "\n".join(toks[:-1]).strip()
     payload = {
         "tag_name": "v" + NEW_VER,
         "target_commitish": "master",
         "name": "v" + NEW_VER,
         "body": desc,
         "draft": False,
-        "prerelease": False
+        "prerelease": False,
     }
     response = requests.post(
-        "https://api.github.com/repos/materialsvirtuallab/maml/releases",
+        "https://api.github.com/repos/materialsproject/pymatgen/releases",
         data=json.dumps(payload),
-        headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]})
+        headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]},
+    )
     print(response.text)
+
