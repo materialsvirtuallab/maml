@@ -109,9 +109,11 @@ def set_ver(ctx):
     with open("setup.py", "wt") as f:
         f.write("\n".join(lines))
 
-
 @task
-def release_github(ctx):
+def release(ctx, notest=False):
+    ctx.run("rm -r dist build maml.egg-info", warn=True)
+    if not notest:
+        ctx.run("pytest maml")
     with open("CHANGES.rst") as f:
         contents = f.read()
     toks = re.split(r"\#+", contents)
@@ -129,12 +131,3 @@ def release_github(ctx):
         data=json.dumps(payload),
         headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]})
     print(response.text)
-
-
-@task
-def release(ctx, notest=False):
-    ctx.run("rm -r dist build maml.egg-info", warn=True)
-    if not notest:
-        ctx.run("pytest maml")
-    publish(ctx)
-    release_github(ctx)
