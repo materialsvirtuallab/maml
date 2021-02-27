@@ -20,8 +20,7 @@ from monty.tempfile import ScratchDir
 from pymatgen.core import Structure, Lattice
 
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
-from maml.apps.pes._base import Potential
-from maml.apps.pes._lammps import EnergyForceStress
+from ._lammps import LammpsPotential
 
 module_dir = os.path.dirname(__file__)
 MTini_params = loadfn(os.path.join(module_dir, "params", "MTini.json"))
@@ -41,7 +40,7 @@ def feed(attribute, kwargs, dictionary, tab="\t"):
     return tab + dictionary.get(attribute).get("name"), str(tmp), dictionary.get(attribute).get("comment")
 
 
-class MTPotential(Potential):
+class MTPotential(LammpsPotential):
     """
     This class implements moment tensor potentials.
     """
@@ -104,9 +103,9 @@ class MTPotential(Potential):
             lines.append(" Energy")
             lines.append("{:>24.12f}".format(inputs["Energy"]))
         if "Stress" in inputs:
-            format_str = "{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
+            format_str = "{:>16s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
             format_float = "{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}"
-            lines.append(format_str.format("Stress:  xx", "yy", "zz", "yz", "xz", "xy"))
+            lines.append(format_str.format("PlusStress:  xx", "yy", "zz", "yz", "xz", "xy"))
             lines.append(format_float.format(*np.array(virial_stress) / 1.228445))
 
         lines.append("END_CFG")
@@ -458,14 +457,14 @@ class MTPotential(Potential):
         train_structures,
         train_energies,
         train_forces,
-        train_stresses=None,
-        unfitted_mtp=None,
+        train_stresses,
+        unfitted_mtp="08g.mtp",
         max_dist=5,
         radial_basis_size=8,
         max_iter=500,
         energy_weight=1,
         force_weight=1e-2,
-        stress_weight=0,
+        stress_weight=1e-3,
     ):
         """
         Training data with moment tensor method.
@@ -488,12 +487,12 @@ class MTPotential(Potential):
             max_iter (int): The number of maximum iteration.
             energy_weight (float): The weight of energy.
             force_weight (float): The weight of forces.
-            stress_weight (float): The weight of stresses.
+            stress_weight (float): The weight of stresses. Zero-weight can be assigned.
         """
         if not which("mlp"):
             raise RuntimeError(
                 "mlp has not been found.\n",
-                "Please refer to http://gitlab.skoltech.ru/shapeev/mlip ",
+                "Please refer to https://mlip.skoltech.ru",
                 "for further detail.",
             )
         train_structures, train_forces, train_stresses = check_structures_forces_stresses(
@@ -543,7 +542,6 @@ class MTPotential(Potential):
                     "--force-weight={}".format(force_weight),
                     "--stress-weight={}".format(stress_weight),
                     "--init-params=same",
-                    "--auto-min-dist",
                 ],
                 stdout=subprocess.PIPE,
             )
@@ -654,20 +652,6 @@ class MTPotential(Potential):
                 predict_file = "_".join([predict_file, "0"])
             _, df_predict = self.read_cfgs(predict_file)
         return df_orig, df_predict
-
-    def predict_efs(self, structure):
-        """
-        Predict energy, forces and stresses of the structure.
-
-        Args:
-            structure (Structure): Pymatgen Structure object.
-
-        Returns:
-            energy, forces, stress
-        """
-        calculator = EnergyForceStress(self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
 
     @staticmethod
     def from_config(filename, elements):

@@ -1,3 +1,8 @@
+# v0.0.4
+* bug fix
+* compatibility with new n2p2 and mlip software
+* upgrade rfxas
+
 # v0.0.3
 * bug fix
 * add atomsets models

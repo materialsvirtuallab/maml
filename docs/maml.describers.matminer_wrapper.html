@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>maml.describers.matminer_wrapper package &#8212; maml 0.01 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -38,8 +37,26 @@
 <div class="toctree-wrapper compound">
 </div>
 </div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-maml.describers.matminer_wrapper">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.describers.matminer_wrapper" title="Permalink to this headline">¶</a></h2>
+<p>Matminer related classes</p>
+<dl class="py function">
+<dt id="maml.describers.matminer_wrapper.wrap_matminer_describer">
+<code class="sig-prename descclassname">maml.describers.matminer_wrapper.</code><code class="sig-name descname">wrap_matminer_describer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">wrapped_class</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">obj_conversion</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">describer_type</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.matminer_wrapper.wrap_matminer_describer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper of matminer_wrapper describers.
+Args:</p>
+<blockquote>
+<div><p>cls_name (str): new class name
+wrapped_class (class object): matminer_wrapper BaseFeaturizer
+obj_conversion (callable): function to convert objects into desired</p>
+<blockquote>
+<div><p>object type within transform_one</p>
+</div></blockquote>
+<p>describer_type (object): object type</p>
+</div></blockquote>
+<p>Returns: maml describers class</p>
+</dd></dl>
+
 </div>
 </div>
 
@@ -94,7 +111,7 @@
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

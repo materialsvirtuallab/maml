@@ -79,8 +79,8 @@ def update_doc(ctx):
 
     :param ctx:
     """
-    ctx.run("cp README.rst docs_rst/conf-normal.py docs_rst/conf.py")
-    ctx.run("cp docs_rst/conf-normal.py docs_rst/conf.py")
+    ctx.run("cp README.rst docs/")
+    ctx.run("cp api-docs-source/conf.py docs/conf.py")
     make_doc(ctx)
     ctx.run("git add .")
     ctx.run("git commit -a -m \"Update docs\"")

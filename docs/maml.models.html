@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>maml.models package &#8212; maml 0.01 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -41,14 +40,203 @@
 <li class="toctree-l2"><a class="reference internal" href="maml.models.dl.html#submodules">Submodules</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="maml.models.dl.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maml.models.dl.html#module-maml.models.dl">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-maml.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.models" title="Permalink to this headline">¶</a></h2>
+<p>MAML models</p>
+<dl class="py class">
+<dt id="maml.models.AtomSets">
+<em class="property">class </em><code class="sig-prename descclassname">maml.models.</code><code class="sig-name descname">AtomSets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.base._describer.BaseDescriber<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input_dim</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">is_embedding</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">n_neurons</span><span class="p">:</span> <span class="n">Sequence<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(64, 64)</span></em>, <em class="sig-param"><span class="n">n_neurons_final</span><span class="p">:</span> <span class="n">Sequence<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(64, 64)</span></em>, <em class="sig-param"><span class="n">n_targets</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">activation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'relu'</span></em>, <em class="sig-param"><span class="n">embedding_vcal</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">95</span></em>, <em class="sig-param"><span class="n">embedding_dim</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">32</span></em>, <em class="sig-param"><span class="n">symmetry_func</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'adam'</span></em>, <em class="sig-param"><span class="n">loss</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mse'</span></em>, <em class="sig-param"><span class="n">compile_metrics</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">()</span></em>, <em class="sig-param"><span class="n">is_classification</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">symmetry_func_kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.AtomSets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasModel</span></code></p>
+<p>This class implements the DeepSets models</p>
+<dl class="py method">
+<dt id="maml.models.AtomSets._get_data_generator">
+<code class="sig-name descname">_get_data_generator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span></em>, <em class="sig-param"><span class="n">targets</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">is_shuffle</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.AtomSets._get_data_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.AtomSets._predict">
+<code class="sig-name descname">_predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.models.AtomSets._predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the values given a set of inputs based on fitted models.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>features (np.ndarray): array-like input features.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List of output objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.AtomSets.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eval_objs</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">eval_targets</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">is_feature</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.AtomSets.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate objs, targets</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>eval_objs (list): objs for evaluation
+eval_targets (list): target list for the corresponding objects
+is_feature (bool): whether x is feature matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.AtomSets.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_features</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.models.AtomSets.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>features (list or np.ndarray): Numerical input feature list or</dt><dd><p>numpy array with dim (m, n) where m is the number of data and
+n is the feature dimension.</p>
+</dd>
+<dt>targets (list or np.ndarray): Numerical output target list, or</dt><dd><p>numpy array with dim (m, ).</p>
+</dd>
+</dl>
+<p>val_features (list or np.ndarray): validation features
+val_targets (list or np.ndarray): validation targets</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.models.KerasModel">
+<em class="property">class </em><code class="sig-prename descclassname">maml.models.</code><code class="sig-name descname">KerasModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.base._describer.BaseDescriber<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.KerasModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></p>
+<p>MAML models with keras models as estimators</p>
+<dl class="py method">
+<dt id="maml.models.KerasModel._get_validation_data">
+<em class="property">static </em><code class="sig-name descname">_get_validation_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val_features</span></em>, <em class="sig-param"><span class="n">val_targets</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">val_kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.KerasModel._get_validation_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>construct validation data, the default is just returning a list of
+val_features and val_targets</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.KerasModel.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_features</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.models.KerasModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>features (list or np.ndarray): Numerical input feature list or</dt><dd><p>numpy array with dim (m, n) where m is the number of data and
+n is the feature dimension.</p>
+</dd>
+<dt>targets (list or np.ndarray): Numerical output target list, or</dt><dd><p>numpy array with dim (m, ).</p>
+</dd>
+</dl>
+<p>val_features (list or np.ndarray): validation features
+val_targets (list or np.ndarray): validation targets</p>
+</dd>
+<dt>Returns:</dt><dd><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.models.MLP">
+<em class="property">class </em><code class="sig-prename descclassname">maml.models.</code><code class="sig-name descname">MLP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_dim</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.base._describer.BaseDescriber<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_neurons</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">(64, 64)</span></em>, <em class="sig-param"><span class="n">activation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'relu'</span></em>, <em class="sig-param"><span class="n">n_targets</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">is_classification</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'adam'</span></em>, <em class="sig-param"><span class="n">loss</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mse'</span></em>, <em class="sig-param"><span class="n">compile_metrics</span><span class="p">:</span> <span class="n">tuple</span> <span class="o">=</span> <span class="default_value">()</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.MLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasModel</span></code></p>
+<p>This class implements the multi-layer perceptron models</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.models.SKLModel">
+<em class="property">class </em><code class="sig-prename descclassname">maml.models.</code><code class="sig-name descname">SKLModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">describer</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>maml.base._describer.BaseDescriber<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.SKLModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></p>
+<p>MAML models with sklearn models as estimator</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.models.WeightedAverageLayer">
+<em class="property">class </em><code class="sig-prename descclassname">maml.models.</code><code class="sig-name descname">WeightedAverageLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.WeightedAverageLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.engine.base_layer.Layer</span></code></p>
+<p>Weight average the features using weights</p>
+<p>result= sum{w_i^a * value_i} / sum{w_i^a}</p>
+<dl class="py method">
+<dt id="maml.models.WeightedAverageLayer.build">
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span><span class="p">:</span> <span class="n">Sequence</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#maml.models.WeightedAverageLayer.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the layer</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>input_shape (tuple): input shape tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.WeightedAverageLayer.call">
+<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">Sequence</span></em>, <em class="sig-param"><span class="n">mask</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>tensorflow.python.framework.ops.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; tensorflow.python.framework.ops.Tensor<a class="headerlink" href="#maml.models.WeightedAverageLayer.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Core logic of the layer</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>inputs (tuple): input tuple of length 3
+mask (tf.Tensor): not used here</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.WeightedAverageLayer.compute_output_shape">
+<em class="property">static </em><code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span><span class="p">:</span> <span class="n">Sequence</span></em><span class="sig-paren">)</span> &#x2192; tuple<a class="headerlink" href="#maml.models.WeightedAverageLayer.compute_output_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute output shape from input shape
+Args:</p>
+<blockquote>
+<div><p>input_shape (tuple/list): input shape list</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.WeightedAverageLayer.get_config">
+<code class="sig-name descname">get_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#maml.models.WeightedAverageLayer.get_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get layer configuration</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.WeightedAverageLayer.reduce_sum">
+<em class="property">static </em><code class="sig-name descname">reduce_sum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prop</span><span class="p">:</span> <span class="n">tensorflow.python.framework.ops.Tensor</span></em>, <em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">tensorflow.python.framework.ops.Tensor</span></em>, <em class="sig-param"><span class="n">perm</span><span class="p">:</span> <span class="n">Sequence</span></em><span class="sig-paren">)</span> &#x2192; tensorflow.python.framework.ops.Tensor<a class="headerlink" href="#maml.models.WeightedAverageLayer.reduce_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce sum the tensors using index</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>prop (tf.Tensor): tensor with shape [1, n, …]
+index (tf.Tensor): integer tensor with shape [1, n]
+perm (list): permutation for transpose.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="maml.models.WeightedSet2Set">
+<em class="property">class </em><code class="sig-prename descclassname">maml.models.</code><code class="sig-name descname">WeightedSet2Set</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.WeightedSet2Set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">megnet.layers.readout.set2set.Set2Set</span></code></p>
+<p>This is a modified version from megnet.layers.readout.Set2Set.
+Here, in addition to taking features and indices as inputs, we also
+take a weight tensor. The input to the core logic is
+[features, weights, indices]</p>
+<dl class="py method">
+<dt id="maml.models.WeightedSet2Set.build">
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span><span class="p">:</span> <span class="n">Sequence</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#maml.models.WeightedSet2Set.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the output shape from input shapes
+Args:</p>
+<blockquote>
+<div><p>input_shape (tuple/list): input shape list</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.models.WeightedSet2Set.call">
+<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.models.WeightedSet2Set.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Core logic of the layer</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>inputs (tuple): input tuple of length 3
+mask (tf.Tensor): not used here</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -103,7 +291,7 @@
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

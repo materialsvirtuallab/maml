@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>maml.base package &#8212; maml 0.01 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -87,7 +86,7 @@ the feature dimension, e.g., MLP models.</p>
 
 <dl class="py method">
 <dt id="maml.base.BaseDescriber.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; maml.base._describer.BaseDescriber<a class="headerlink" href="#maml.base.BaseDescriber.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; maml.base._describer.BaseDescriber<a class="headerlink" href="#maml.base.BaseDescriber.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Place holder for fit API</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>x: Any inputs
@@ -133,18 +132,6 @@ transparent conversion of arbitrary input and outputs.</p>
 <dt>Args:</dt><dd><p>features (np.ndarray): array-like input features.</p>
 </dd>
 <dt>Returns:</dt><dd><p>List of output objects.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="maml.base.BaseModel.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eval_objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">eval_targets</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">is_feature</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base.BaseModel.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate objs, targets</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>eval_objs (list): objs for evaluation
-eval_targets (list): target list for the corresponding objects
-is_feature (bool): whether the input x is feature matrix</p>
 </dd>
 </dl>
 </dd></dl>
@@ -274,6 +261,37 @@ val_targets (list or np.ndarray): validation targets</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt id="maml.base.TargetScalerMixin">
+<em class="property">class </em><code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">TargetScalerMixin</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.TargetScalerMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mixin class for models with target scaler</p>
+<dl class="py method">
+<dt id="maml.base.TargetScalerMixin.predict_objs">
+<code class="sig-name descname">predict_objs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="headerlink" href="#maml.base.TargetScalerMixin.predict_objs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Predict the values given a set of objects. Usually Pymatgen</dt><dd><p>Structure objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="maml.base.TargetScalerMixin.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">objs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_objs</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">val_targets</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>List<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; maml.base._model.BaseModel<a class="headerlink" href="#maml.base.TargetScalerMixin.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the models from object, target pairs</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>objs (list of objects): List of objects
+targets (list): list of float or np.ndarray
+val_objs (list of objects): list of validation objects
+val_targets (list): list of validation targets
+<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs:</p>
+</dd>
+</dl>
+<p>Returns: self</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt id="maml.base.describer_type">
 <code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">describer_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dtype</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.describer_type" title="Permalink to this definition">¶</a></dt>
@@ -295,6 +313,28 @@ Args:</p>
 <div><p>fb_name (str): name of the feature batch function</p>
 </div></blockquote>
 <p>Returns: callable feature batch function</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.base.is_keras_model">
+<code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">is_keras_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">maml.base._model.BaseModel</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#maml.base.is_keras_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the model is keras
+Args:</p>
+<blockquote>
+<div><p>model (BaseModel): model</p>
+</div></blockquote>
+<p>Returns: bool</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="maml.base.is_sklearn_model">
+<code class="sig-prename descclassname">maml.base.</code><code class="sig-name descname">is_sklearn_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">maml.base._model.BaseModel</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#maml.base.is_sklearn_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the model is sklearn
+Args:</p>
+<blockquote>
+<div><p>model (BaseModel): model</p>
+</div></blockquote>
+<p>Returns: bool</p>
 </dd></dl>
 
 </div>
@@ -351,7 +391,7 @@ Args:</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
