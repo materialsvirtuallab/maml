@@ -648,7 +648,9 @@ class NNPotential(LammpsPotential):
         for block in block_pattern.findall(lines):
             d = {"outputs": {}}
             lattice_str = lattice_pattern.findall(block)
-            lattice = Lattice(np.array([latt.split() for latt in lattice_str], dtype=np.float64) * self.bohr_to_angstrom)
+            lattice = Lattice(
+                np.array([latt.split() for latt in lattice_str], dtype=np.float64) * self.bohr_to_angstrom
+            )
             position_str = position_pattern.findall(block)
             positions = pd.DataFrame([pos.split() for pos in position_str])
             positions.columns = ["x", "y", "z", "specie", "charge", "atomic_energy", "fx", "fy", "fz"]
