@@ -42,7 +42,7 @@
 <p>MAML XAS app</p>
 <dl class="py class">
 <dt id="maml.apps.rfxas.CenvPrediction">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">CenvPrediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xanes_spectrum</span><span class="p">:</span> <span class="n">maml.apps.rfxas._core.XANES</span></em>, <em class="sig-param"><span class="n">energy_reference</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">energy_range</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">edge_energy</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">spectrum_interpolation</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'rf'</span></em>, <em class="sig-param"><span class="n">model_dir</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">extra_model_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/Users/chichen/repos/maml/maml/apps/rfxas/ex_models/Model_share'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.apps.rfxas.</span></code><code class="sig-name descname"><span class="pre">CenvPrediction</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xanes_spectrum</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">maml.apps.rfxas._core.XANES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_reference</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_range</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_energy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectrum_interpolation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'rf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_model_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'/Users/shyue/repos/maml/maml/apps/rfxas/ex_models/Model_share'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="simple">
 <dt>Coordination environment predictor. Supported models are</dt><dd><p>RandomForest (rf)
@@ -54,32 +54,32 @@ Convolutional Neural Network (cnn)</p>
 </dl>
 <dl class="py attribute">
 <dt id="maml.apps.rfxas.CenvPrediction._available_models">
-<code class="sig-name descname">_available_models</code><em class="property"> = ['rf', 'knn', 'svc', 'mlp', 'cnn']</em><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._available_models" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_available_models</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['rf',</span> <span class="pre">'knn',</span> <span class="pre">'svc',</span> <span class="pre">'mlp',</span> <span class="pre">'cnn']</span></em><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._available_models" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.apps.rfxas.CenvPrediction._cmotif_prediction">
-<code class="sig-name descname">_cmotif_prediction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._cmotif_prediction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_cmotif_prediction</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._cmotif_prediction" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.apps.rfxas.CenvPrediction._cnum_prediction">
-<code class="sig-name descname">_cnum_prediction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._cnum_prediction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_cnum_prediction</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._cnum_prediction" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.apps.rfxas.CenvPrediction._energy_interp">
-<code class="sig-name descname">_energy_interp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._energy_interp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_energy_interp</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._energy_interp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.apps.rfxas.CenvPrediction._parameter_validation">
-<code class="sig-name descname">_parameter_validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._parameter_validation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_parameter_validation</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction._parameter_validation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.apps.rfxas.CenvPrediction.cenv_prediction">
-<code class="sig-name descname">cenv_prediction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction.cenv_prediction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">cenv_prediction</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.CenvPrediction.cenv_prediction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function used for coordination environment prediction</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>Two new attributes of CenvPrediction object. The attribute ‘pred_cnum_ranklist’ is the predicted
@@ -93,22 +93,22 @@ environment ranklists.</p>
 
 <dl class="py class">
 <dt id="maml.apps.rfxas.XANES">
-<em class="property">class </em><code class="sig-prename descclassname">maml.apps.rfxas.</code><code class="sig-name descname">XANES</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">absorption_specie</span></em>, <em class="sig-param"><span class="n">edge</span></em>, <em class="sig-param"><span class="n">structure</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">e0</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.apps.rfxas.</span></code><code class="sig-name descname"><span class="pre">XANES</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absorption_specie</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymatgen.core.spectrum.Spectrum</span></code></p>
 <p>Basic XANES object</p>
 <dl class="py attribute">
 <dt id="maml.apps.rfxas.XANES.XLABEL">
-<code class="sig-name descname">XLABEL</code><em class="property"> = 'Energy'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.XLABEL" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">XLABEL</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'Energy'</span></em><a class="headerlink" href="#maml.apps.rfxas.XANES.XLABEL" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="maml.apps.rfxas.XANES.YLABEL">
-<code class="sig-name descname">YLABEL</code><em class="property"> = 'Intensity'</em><a class="headerlink" href="#maml.apps.rfxas.XANES.YLABEL" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">YLABEL</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'Intensity'</span></em><a class="headerlink" href="#maml.apps.rfxas.XANES.YLABEL" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.apps.rfxas.XANES.from_K_XANES_MP_tsv">
-<em class="property">static </em><code class="sig-name descname">from_K_XANES_MP_tsv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsv_file</span></em>, <em class="sig-param"><span class="n">header</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">absorption_specie</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES.from_K_XANES_MP_tsv" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_K_XANES_MP_tsv</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tsv_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absorption_specie</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.rfxas.XANES.from_K_XANES_MP_tsv" title="Permalink to this definition">¶</a></dt>
 <dd><dl>
 <dt>Args:</dt><dd><p>tsv_file: tsv file contains spectrum infor. downloaded from the Materials Project website
 header: number of header row to skip, default to 3
@@ -179,7 +179,7 @@ absorption_specie (str): Specie associated with the XANES. If not given, will be
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

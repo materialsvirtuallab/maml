@@ -27,19 +27,9 @@ def make_doc(ctx):
 
     :param ctx:
     """
-    # with open("CHANGES.rst") as f:
-    #     contents = f.read()
-    #
-    # toks = re.split(r"\-{3,}", contents)
-    # n = len(toks[0].split()[-1])
-    # changes = [toks[0]]
-    # changes.append("\n" + "\n".join(toks[1].strip().split("\n")[0:-1]))
-    # changes = ("-" * n).join(changes)
-
-    # with open("docs_rst/latest_changes.rst", "w") as f:
-    #     f.write(changes)
 
     ctx.run("cp README.rst api-docs-source/index.rst")
+    ctx.run("cp CHANGES.rst api-docs-source/changelog.rst")
 
     with cd("api-docs-source"):
         ctx.run("rm maml.*.rst", warn=True)
@@ -122,7 +112,7 @@ def set_ver(ctx):
 
 @task
 def release_github(ctx):
-    with open("CHANGES.md") as f:
+    with open("CHANGES.rst") as f:
         contents = f.read()
     toks = re.split(r"\#+", contents)
     desc = toks[1].strip()

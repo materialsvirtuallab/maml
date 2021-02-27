@@ -1,13 +1,20 @@
-# v0.0.4
+v2021.2.27
+----------
+* maml is now compatible with both mlip-2 and mlip-dev
+
+v0.0.4
+------
 * bug fix
 * compatibility with new n2p2 and mlip software
 * upgrade rfxas
 
-# v0.0.3
+v0.0.3
+------
 * bug fix
 * add atomsets models
 
-# v0.0.2
+v0.0.2
+------
 * major refactor 
 * move mlearn potential energy surfaces to apps
 * fix potential problem of rotated structure in lammps
@@ -15,5 +22,6 @@
 * add initial symbolic regression app
 * add megnet-based describers
 
-# v0.0.1
+v0.0.1
+------
 * initial release
