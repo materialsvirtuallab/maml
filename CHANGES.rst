@@ -1,3 +1,6 @@
+Change log
+==========
+
 v2021.2.27
 ----------
 * maml is now compatible with both mlip-2 and mlip-dev
