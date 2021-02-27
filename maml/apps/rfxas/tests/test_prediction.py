@@ -105,8 +105,7 @@ class RfxasXANESTest(unittest.TestCase):
         )
 
     def test_interpolation(self):
-        self.xanes_obj_no_interp = CenvPrediction(self.xanes_obj, "lowest",
-                                                  45, None, False, model_dir=model_dir)
+        self.xanes_obj_no_interp = CenvPrediction(self.xanes_obj, "lowest", 45, None, False, model_dir=model_dir)
         self.assertTrue(
             np.allclose(
                 pearsonr(self.xanes_obj_no_interp.interp_spectrum, self.xanes_obj_no_interp.xanes_spectrum.y)[0],
@@ -148,8 +147,7 @@ class RfxasXANESTest(unittest.TestCase):
         )
         self.Al2O3_cenv_pred_origin.cenv_prediction()
         self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cnum_ranklist, "CN_6")
-        self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cenv[0],
-                         "CN_6 coord. motif undetermined")
+        self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cenv[0], "CN_6 coord. motif undetermined")
 
     def test_cenv_prediction_cnn(self):
         self.Al2O3_origin_obj = XANES(
@@ -170,8 +168,7 @@ class RfxasXANESTest(unittest.TestCase):
             model="cnn",
         )
         self.Al2O3_cenv_pred_origin.cenv_prediction()
-        self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cnum_ranklist,
-                         "CN_4-CN_3-CN_6")
+        self.assertEqual(self.Al2O3_cenv_pred_origin.pred_cnum_ranklist, "CN_4-CN_3-CN_6")
         self.assertEqual(
             self.Al2O3_cenv_pred_origin.pred_cenv[0],
             "CN_4-tetrahedral-trigonal pyramidal-see-saw-like-square co-planar",
