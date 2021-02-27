@@ -46,7 +46,7 @@ jobs:
       env:
         PMG_MAPI_KEY: ${{ secrets.PMG_MAPI_KEY }}
       run: |
-        pytest maml --color=yes --cov=maml
+        pytest maml --cov=maml
     - name: Coveralls Python
       if: matrix.os == 'ubuntu-latest'
       uses: AndreMiras/coveralls-python-action@v20201129
