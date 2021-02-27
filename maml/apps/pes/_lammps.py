@@ -31,7 +31,7 @@ def get_default_lmp_exe():
     Returns: Lammps executable name
     """
 
-    for lmp_exe in ["lmp_serial", "lmp_mpi"]:
+    for lmp_exe in ["lmp_serial", "lmp_mpi", "lmp_g++_serial", "lmp_g++_mpich", "lmp_intel_cpu_intelmpi"]:
         if which(lmp_exe) is not None:
             logger.info("Setting Lammps executable to %s" % lmp_exe)
             return lmp_exe
