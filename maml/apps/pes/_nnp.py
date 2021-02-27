@@ -565,7 +565,7 @@ class NNPotential(LammpsPotential):
         ).tolist()
         param.update({"a_etas": a_etas})
         lambdas = np.sort(
-            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][6]), dtype=np.int)
+            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][6]), dtype=np.int64)
         ).tolist()
         param.update({"lambdas": lambdas})
         zetas = np.sort(

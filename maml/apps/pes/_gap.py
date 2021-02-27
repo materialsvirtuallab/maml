@@ -140,7 +140,7 @@ class GAPotential(LammpsPotential):
         Args:
             filename (str): The configuration file to be read.
         """
-        type_convert = {"R": np.float32, "I": np.int, "S": np.str}
+        type_convert = {"R": np.float32, "I": np.int64, "S": np.str_}
         data_pool = []
         with zopen(filename, "rt") as f:
             lines = f.read()
