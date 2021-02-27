@@ -887,3 +887,24 @@ class DefectFormation(LMPStaticCalculator):
         force = _read_dump("force.dump")
         stress = np.loadtxt("stress.txt")
         return energy, force, stress
+
+
+class LammpsPotential(Potential, abc.ABC):  # type: ignore
+    """
+    Lammps compatible potentials that call lammps executable for
+    energy/force/stress calculations
+    """
+
+    def predict_efs(self, structure):
+        """
+        Predict energy, forces and stresses of the structure.
+
+        Args:
+            structure (Structure): Pymatgen Structure object.
+
+        Returns:
+            energy, forces, stress
+        """
+        calculator = EnergyForceStress(self)
+        energy, forces, stress = calculator.calculate(structures=[structure])[0]
+        return energy, forces, stress

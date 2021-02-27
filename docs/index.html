@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Features &#8212; maml 0.01 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -85,14 +84,42 @@
 </pre></div>
 </div>
 <p>The SNAP potential comes with this lammps installation. The GAP package for GAP and MLIP package for MTP are needed to run the corresponding potentials. For fitting NNP potential, the <cite>n2p2</cite> package is needed.</p>
+<dl class="simple">
+<dt>Install all the libraries from requirement.txt file::</dt><dd><p>pip install -r requirements.txt</p>
+</dd>
+</dl>
+<p>(If doesn’t works provide the path of requirement.txt file)</p>
+<dl>
+<dt>For all the requirements above::</dt><dd><p>pip install -r requirements-ci.txt
+pip install -r requirements-optional.txt
+pip install -r requirements-tf.txt
+pip install -r requirements.txt</p>
+<p>(If doesn’t works provide the path of requirements.txt file)</p>
+</dd>
+</dl>
 </div>
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<p>Many Jupyter notebooks are available on usage. See <a class="reference external" href="/notebooks">notebooks</a>.</p>
+<p>Many Jupyter notebooks are available on usage. See <a class="reference external" href="/notebooks">notebooks</a>. We also have established a tool and a tutorial lecture at nanoHUB <a class="reference external" href="https://nanohub.org/resources/maml">https://nanohub.org/resources/maml</a>.</p>
 </div>
 <div class="section" id="api-documentation">
 <h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
 <p>See <a class="reference external" href="https://guide.materialsvirtuallab.org/maml/modules.html">API docs</a>.</p>
+<p>Machine learning (ML) is the study of computer algorithms that improve automatically through experience.[1][2] It is seen as a subset of artificial intelligence. Machine learning algorithms build a mathematical model based on sample data, known as “training data”, in order to make predictions or decisions without being explicitly programmed to do so.[3] Machine learning algorithms are used in a wide variety of applications, such as email filtering and computer vision, where it is difficult or infeasible to develop conventional algorithms to perform the needed tasks.</p>
+<p>Machine learning is closely related to computational statistics, which focuses on making predictions using computers. The study of mathematical optimization delivers methods, theory and application domains to the field of machine learning. Data mining is a related field of study, focusing on exploratory data analysis through unsupervised learning.[5][6] In its application across business problems, machine learning is also referred to as predictive analytics.</p>
+</div>
+<div class="section" id="citing">
+<h1>Citing<a class="headerlink" href="#citing" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@misc</span><span class="p">{</span><span class="n">maml</span><span class="p">,</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="p">{</span><span class="n">Chen</span><span class="p">,</span> <span class="n">Chi</span> <span class="ow">and</span> <span class="n">Zuo</span><span class="p">,</span> <span class="n">Yunxing</span> <span class="ow">and</span> <span class="n">Ye</span><span class="p">,</span> <span class="n">Weike</span> <span class="ow">and</span> <span class="n">Ong</span><span class="p">,</span> <span class="n">Shyue</span> <span class="n">Ping</span><span class="p">},</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="p">{{</span><span class="n">Maml</span> <span class="o">-</span> <span class="n">materials</span> <span class="n">machine</span> <span class="n">learning</span> <span class="n">package</span><span class="p">}},</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2020</span><span class="p">},</span>
+    <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">GitHub</span><span class="p">},</span>
+    <span class="n">journal</span> <span class="o">=</span> <span class="p">{</span><span class="n">GitHub</span> <span class="n">repository</span><span class="p">},</span>
+    <span class="n">howpublished</span> <span class="o">=</span> <span class="p">{</span>\<span class="n">url</span><span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">materialsvirtuallab</span><span class="o">/</span><span class="n">maml</span><span class="p">}},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </div>
 
 
@@ -146,7 +173,7 @@
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
