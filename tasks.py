@@ -109,8 +109,9 @@ def set_ver(ctx):
     with open("setup.py", "wt") as f:
         f.write("\n".join(lines))
 
+
 @task
-def release(ctx, notest=False):
+def release(ctx, notest=True):
     ctx.run("rm -r dist build maml.egg-info", warn=True)
     if not notest:
         ctx.run("pytest maml")
