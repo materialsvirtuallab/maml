@@ -320,16 +320,22 @@ class MTPotential(LammpsPotential):
                 lines.append(format_str.format("select", "FALSE"))
             elif select is True:
                 lines.append(format_str.format("select", "TRUE"))
-                select_identifiers = ["select:save-selected",
-                                      "select:threshold",
-                                      "select:threshold-break",
-                                      "select:load-state",
-                                      "select:log"]
-                for i, option in enumerate(["select_save_selected",
-                                            "select_threshold",
-                                            "select_threshold_break",
-                                            "select_load_state",
-                                            "select_log"]):
+                select_identifiers = [
+                    "select:save-selected",
+                    "select:threshold",
+                    "select:threshold-break",
+                    "select:load-state",
+                    "select:log",
+                ]
+                for i, option in enumerate(
+                    [
+                        "select_save_selected",
+                        "select_threshold",
+                        "select_threshold_break",
+                        "select_load_state",
+                        "select_log",
+                    ]
+                ):
                     if kwargs.get(option):
                         lines.append(format_str.format("\t" + select_identifiers[i], kwargs.get(option)))
 
@@ -390,8 +396,9 @@ class MTPotential(LammpsPotential):
             if Abinitio:
                 lines.append(
                     format_str.format(
-                        MTini_params.get("Abinitio").get("name"), str(Abinitio),
-                        MTini_params.get("Abinitio").get("comment")
+                        MTini_params.get("Abinitio").get("name"),
+                        str(Abinitio),
+                        MTini_params.get("Abinitio").get("comment"),
                     )
                 )
                 abinitio = MTini_params.get("Abinitio").get(str(Abinitio))
@@ -401,15 +408,17 @@ class MTPotential(LammpsPotential):
 
             if MLIP:
                 lines.append(
-                    format_str.format(MTini_params.get("MLIP").get("name"), "mtpr",
-                                      MTini_params.get("MLIP").get("comment"))
+                    format_str.format(
+                        MTini_params.get("MLIP").get("name"), "mtpr", MTini_params.get("MLIP").get("comment")
+                    )
                 )
                 mlip = MTini_params.get("MLIP")
                 if kwargs.get("load_from"):
                     load_from = mlip.get("load_from")
                     lines.append(
-                        format_str.format("\t" + load_from.get("name"),
-                                          kwargs.get("load_from"), load_from.get("comment"))
+                        format_str.format(
+                            "\t" + load_from.get("name"), kwargs.get("load_from"), load_from.get("comment")
+                        )
                     )
                 if kwargs.get("Calculate_EFS"):
                     calc_efs = mlip.get("Calculate_EFS")
