@@ -176,7 +176,7 @@ class SNAPotential(LammpsPotential):
         model = SKLModel(model=LinearRegression(), describer=describer, **kwargs)
         coef = np.array(
             np.concatenate([coeff_lines[(2 + nbc * n + n) : (2 + nbc * (n + 1) + n)] for n in range(ne)]),
-            dtype=np.float,
+            dtype=np.float64,
         )
         model.model.coef_ = coef
         model.model.intercept_ = 0

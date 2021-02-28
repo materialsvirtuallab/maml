@@ -42,7 +42,7 @@
 <p>megnet related describers</p>
 <dl class="py class">
 <dt id="maml.describers.megnet.MEGNetSite">
-<em class="property">class </em><code class="sig-prename descclassname">maml.describers.megnet.</code><code class="sig-name descname">MEGNetSite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>object<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">level</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetSite" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.describers.megnet.</span></code><code class="sig-name descname"><span class="pre">MEGNetSite</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetSite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Use megnet pre-trained models as featurizer to get
 atomic features</p>
@@ -61,17 +61,17 @@ pages={3564–3572}, year={2019},publisher={ACS Publications}}</p>
 </div></blockquote>
 <dl class="py attribute">
 <dt id="maml.describers.megnet.MEGNetSite._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describers.megnet.MEGNetSite._abc_impl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.describers.megnet.MEGNetSite._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="maml.describers.megnet.MEGNetSite.describer_type">
-<code class="sig-name descname">describer_type</code><em class="property"> = 'site'</em><a class="headerlink" href="#maml.describers.megnet.MEGNetSite.describer_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">describer_type</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'site'</span></em><a class="headerlink" href="#maml.describers.megnet.MEGNetSite.describer_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.describers.megnet.MEGNetSite.transform_one">
-<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pymatgen.core.structure.Structure<span class="p">, </span>pymatgen.core.structure.Molecule<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetSite.transform_one" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform_one</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pymatgen.core.structure.Structure</span><span class="p"><span class="pre">,</span> </span><span class="pre">pymatgen.core.structure.Molecule</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetSite.transform_one" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get megnet site features from structure object</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>obj (structure or molecule): pymatgen structure or molecules</p>
@@ -84,7 +84,7 @@ pages={3564–3572}, year={2019},publisher={ACS Publications}}</p>
 
 <dl class="py class">
 <dt id="maml.describers.megnet.MEGNetStructure">
-<em class="property">class </em><code class="sig-prename descclassname">maml.describers.megnet.</code><code class="sig-name descname">MEGNetStructure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>str<span class="p">, </span>object<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'site_stats'</span></em>, <em class="sig-param"><span class="n">level</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stats</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.describers.megnet.</span></code><code class="sig-name descname"><span class="pre">MEGNetStructure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'site_stats'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
 <p>Use megnet pre-trained models as featurizer to get
 structural features. There are two methods to get structural descriptors from
@@ -113,17 +113,17 @@ pages={3564–3572}, year={2019},publisher={ACS Publications}}</p>
 </div></blockquote>
 <dl class="py attribute">
 <dt id="maml.describers.megnet.MEGNetStructure._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure._abc_impl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="maml.describers.megnet.MEGNetStructure.describer_type">
-<code class="sig-name descname">describer_type</code><em class="property"> = 'structure'</em><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure.describer_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">describer_type</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'structure'</span></em><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure.describer_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="maml.describers.megnet.MEGNetStructure.transform_one">
-<code class="sig-name descname">transform_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pymatgen.core.structure.Structure<span class="p">, </span>pymatgen.core.structure.Molecule<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure.transform_one" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform_one</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pymatgen.core.structure.Structure</span><span class="p"><span class="pre">,</span> </span><span class="pre">pymatgen.core.structure.Molecule</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.describers.megnet.MEGNetStructure.transform_one" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform structure/molecule objects into features
 Args:</p>
 <blockquote>
@@ -188,7 +188,7 @@ Args:</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

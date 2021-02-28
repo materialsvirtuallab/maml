@@ -495,7 +495,7 @@ class MTPotential(LammpsPotential):
             lattice = Lattice(np.array(list(map(formatify, lattice_str.split("\n")))))
             position_str = position_pattern.findall(block)[0]
             position = np.array(list(map(formatify, position_str.split("\n"))))
-            species = np.array(self.elements)[position[:, 1].astype(np.int)]
+            species = np.array(self.elements)[position[:, 1].astype(np.int64)]
             forces = position[:, 5:8].tolist()
             position = position[:, 2:5]
             energy_str = energy_pattern.findall(block)[0]

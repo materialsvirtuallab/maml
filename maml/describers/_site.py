@@ -259,7 +259,9 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
                 lines = f.read()
 
             descriptor_pattern = re.compile("DESC(.*?)\n", re.S)
-            descriptors = pd.DataFrame([np.array(c.split(), dtype=np.float) for c in descriptor_pattern.findall(lines)])
+            descriptors = pd.DataFrame(
+                [np.array(c.split(), dtype=np.float64) for c in descriptor_pattern.findall(lines)]
+            )
 
         return descriptors
 
