@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v2021.3.2
+---------
+* Set up namespace package architecture for maml.apps. The RFXAS package is now available as a separate package
+  `maml-apps.rfxas`. Usage remains similar.
+
 v2021.2.27
 ----------
 * maml is now compatible with both mlip-2 and mlip-dev
