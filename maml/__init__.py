@@ -2,7 +2,7 @@
 maml - materials machine learning
 """
 
-__version__ = "2021.2.27"
+__version__ = "2021.3.2"
 
 from .base import BaseDataSource  # noqa
 from .base import BaseDescriber  # noqa
