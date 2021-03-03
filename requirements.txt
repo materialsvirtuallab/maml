@@ -4,7 +4,7 @@ pymatgen==2021.2.16
 monty==4.0.2
 pandas==1.2.3
 scikit-learn==0.24.1
-h5py==3.1.0
+h5py==3.2.0
 joblib==1.0.1
 tqdm==4.58.0
 pymongo==3.11.3
