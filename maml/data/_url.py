@@ -7,7 +7,7 @@ import requests
 
 import pandas as pd
 
-from maml import BaseDataSource
+from maml.base import BaseDataSource
 
 
 class URLSource(BaseDataSource):

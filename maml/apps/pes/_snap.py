@@ -11,7 +11,7 @@ from sklearn.linear_model import LinearRegression
 
 from monty.io import zopen
 
-from maml import SKLModel
+from maml.base import SKLModel
 from maml.describers import BispectrumCoefficients
 from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
 from ._lammps import LammpsPotential

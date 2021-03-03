@@ -15,7 +15,7 @@ from monty.os.path import which
 from pymatgen import Structure, Lattice
 from sklearn.linear_model import LinearRegression
 
-from maml import SKLModel
+from maml.base import SKLModel
 from maml.apps.pes import SNAPotential
 from maml.describers import BispectrumCoefficients
 from maml.apps.pes import (

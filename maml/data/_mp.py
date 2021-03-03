@@ -6,7 +6,7 @@ from typing import Dict, List, Union
 import pandas as pd
 from pymatgen.ext.matproj import MPRester
 
-from maml import BaseDataSource
+from maml.base import BaseDataSource
 
 
 class MaterialsProject(BaseDataSource):
