@@ -582,8 +582,8 @@ class MTPotential(LammpsPotential):
             shutil.copyfile(MTP_file_path, os.path.join(os.getcwd(), unfitted_mtp))
 
             with open("min_dist", "w") as f:
-                p = subprocess.Popen(["mlp", "mindist", atoms_filename], stdout=f)
-            stdout = p.communicate()[0]
+                with subprocess.Popen(["mlp", "mindist", atoms_filename], stdout=f) as p:
+                    p.communicate()[0]
 
             with open("min_dist") as f:
                 lines = f.readlines()
@@ -598,7 +598,7 @@ class MTPotential(LammpsPotential):
 
             save_fitted_mtp = ".".join([unfitted_mtp.split(".")[0] + "_fitted", unfitted_mtp.split(".")[1]])
 
-            p = subprocess.Popen(
+            with subprocess.Popen(
                 [
                     "mlp",
                     "train",
@@ -613,9 +613,9 @@ class MTPotential(LammpsPotential):
                     "--init-params=same",
                 ],
                 stdout=subprocess.PIPE,
-            )
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            ) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "MLP exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -704,15 +704,12 @@ class MTPotential(LammpsPotential):
             _, df_orig = self.read_cfgs(original_file)
 
             if self.version == "mlip-2":
-                p = subprocess.Popen(
-                    ["mlp", "calc-efs", fitted_mtp, original_file, predict_file], stdout=subprocess.PIPE
-                )
+                cmd = ["mlp", "calc-efs", fitted_mtp, original_file, predict_file]
             elif self.version == "mlip-dev":
-                p = subprocess.Popen(
-                    ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)], stdout=subprocess.PIPE
-                )
-            stdout = p.communicate()[0]
-            rc = p.returncode
+                cmd = ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)]
+            with subprocess.Popen(cmd, stdout=subprocess.PIPE) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "mlp exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]

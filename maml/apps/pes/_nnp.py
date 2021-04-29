@@ -735,9 +735,9 @@ class NNPotential(LammpsPotential):
             output = "training_output"
 
             self.write_input(**kwargs)
-            p_scaling = subprocess.Popen(["nnp-scaling", "100"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = p_scaling.communicate()
-            rc = p_scaling.returncode
+            with subprocess.Popen(["nnp-scaling", "100"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p_scaling:
+                stdout, stderr = p_scaling.communicate()
+                rc = p_scaling.returncode
             if rc != 0:
                 error_msg = "n2p2 exited with return code %d" % rc
                 msg = stderr.decode("utf-8").split("\n")[:-1]
@@ -749,9 +749,9 @@ class NNPotential(LammpsPotential):
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
-            p_train = subprocess.Popen(["nnp-train"], stdout=open(output, "w"), stderr=subprocess.PIPE)
-            stdout, stderr = p_train.communicate()
-            rc = p_train.returncode
+            with subprocess.Popen(["nnp-train"], stdout=open(output, "w"), stderr=subprocess.PIPE) as p_train:
+                stdout, stderr = p_train.communicate()
+                rc = p_train.returncode
             if rc != 0:
                 error_msg = "n2p2 exited with return code %d" % rc
                 msg = stderr.decode("utf-8").split("\n")[:-1]
@@ -822,12 +822,11 @@ class NNPotential(LammpsPotential):
             dfs = []
             for data in predict_pool:
                 _ = self.write_cfgs(original_file, cfg_pool=[data])
-                p_evaluation = subprocess.Popen(
+                with subprocess.Popen(
                     ["nnp-predict", input_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-                )
-                stdout, stderr = p_evaluation.communicate()
-
-                rc = p_evaluation.returncode
+                ) as p_evaluation:
+                    stdout, stderr = p_evaluation.communicate()
+                    rc = p_evaluation.returncode
                 if rc != 0:
                     error_msg = "n2p2 exited with return code %d" % rc
                     msg = stderr.decode("utf-8").split("\n")[:-1]

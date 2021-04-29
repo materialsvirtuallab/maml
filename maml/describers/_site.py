@@ -242,9 +242,9 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         with ScratchDir("."):
             _ = self.operator.write_cfgs(filename=atoms_filename, cfg_pool=pool_from([structure]))
             descriptor_output = "output"
-            p = subprocess.Popen(exe_command, stdout=open(descriptor_output, "w"))
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            with subprocess.Popen(exe_command, stdout=open(descriptor_output, "w")) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "quip/soap exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]
