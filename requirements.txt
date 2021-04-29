@@ -3,7 +3,7 @@ scipy==1.6.3
 pymatgen==2021.2.16
 monty==2021.3.3
 pandas==1.2.4
-scikit-learn==0.24.1
+scikit-learn==0.24.2
 h5py==3.2.1
 joblib==1.0.1
 tqdm==4.59.0
