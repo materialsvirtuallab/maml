@@ -125,6 +125,9 @@ class WeightedSet2Set(Set2Set):
         for i in range(self.T):
             self.h, c = self._lstm(q_star, self.c)
             e_i_t = tf.reduce_sum(input_tensor=m * repeat_with_index(self.h, feature_graph_index), axis=-1)
+            maxes = tf.math.segment_max(e_i_t[0], feature_graph_index)
+            maxes = tf.repeat(maxes, repeats=count)
+            e_i_t -= tf.expand_dims(maxes, axis=0)
             exp = tf.exp(e_i_t) * weights
             # print('exp shape ', exp.shape)
             seg_sum = tf.transpose(
