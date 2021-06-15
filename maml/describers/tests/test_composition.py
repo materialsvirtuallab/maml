@@ -5,7 +5,7 @@ import os
 
 import numpy as np
 from pymatgen.util.testing import PymatgenTest
-from pymatgen import Composition, Molecule
+from pymatgen.core import Composition, Molecule
 
 from maml.describers import ElementProperty, ElementStats
 
