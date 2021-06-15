@@ -4,7 +4,7 @@ MAML describers base classes
 import abc
 import logging
 import tempfile
-from typing import Any, List
+from typing import Any, List, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -86,7 +86,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         return self
 
-    def transform_one(self, obj: Any) -> np.ndarray:
+    def transform_one(self, obj: Any) -> Union[List[np.ndarray], np.ndarray]:
         """
         Transform an object.
         """
@@ -140,7 +140,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         return feature_dim_from_test_system(self)
 
 
-def _transform_one(describer: BaseDescriber, obj: Any) -> np.ndarray:
+def _transform_one(describer: BaseDescriber, obj: Any) -> Union[List[np.ndarray], np.ndarray]:
     """
     A wrapper to make a pure function.
 

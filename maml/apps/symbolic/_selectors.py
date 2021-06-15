@@ -513,8 +513,9 @@ class L0BrutalForce(BaseSelector):
         self.lambd = lambd
         super().__init__(**kwargs)
 
-    def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None, n_job: int = 1) -> Optional[np.ndarray]:
+    def select(
+        self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None, n_job: int = 1
+    ) -> Optional[np.ndarray]:
         """
         L0 combinatorial optimization
         Args:

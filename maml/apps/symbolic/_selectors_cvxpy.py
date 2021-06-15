@@ -37,8 +37,7 @@ class BaseSelectorCP(BaseSelector):
         super().__init__(coef_thres=coef_thres, method=method)
 
     # pylint: disable=E1128
-    def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None) -> Optional[np.ndarray]:
+    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> Optional[np.ndarray]:
         """
         Select feature indices from x
         Args:
@@ -213,8 +212,7 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
         self.w = 1
         super().__init__(**kwargs)
 
-    def select(self, x: np.ndarray, y: np.ndarray,
-               options: Optional[Dict] = None) -> Optional[np.ndarray]:
+    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> Optional[np.ndarray]:
         """
         Select feature indices from x
         Args:

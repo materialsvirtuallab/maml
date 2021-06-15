@@ -414,9 +414,9 @@ class SiteElementProperty(BaseDescriber):
         weights: List[float] = [d[i] for i in elements]
         return z_values, weights
 
-    def transform_one(self,  # type: ignore
-                      obj: Union[str, Composition, Structure, Molecule]
-                      ) -> Union[List[np.ndarray], np.ndarray]:
+    def transform_one(
+        self, obj: Union[str, Composition, Structure, Molecule]  # type: ignore
+    ) -> Union[List[np.ndarray], np.ndarray]:
         """
         Transform one object to features
 
