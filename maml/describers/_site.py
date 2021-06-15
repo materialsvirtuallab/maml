@@ -414,7 +414,9 @@ class SiteElementProperty(BaseDescriber):
         weights: List[float] = [d[i] for i in elements]
         return z_values, weights
 
-    def transform_one(self, obj: Union[str, Composition, Structure, Molecule]) -> Union[List[np.ndarray], np.ndarray]:
+    def transform_one(self,  # type: ignore
+                      obj: Union[str, Composition, Structure, Molecule]
+                      ) -> Union[List[np.ndarray], np.ndarray]:
         """
         Transform one object to features
 
@@ -440,11 +442,11 @@ class SiteElementProperty(BaseDescriber):
         if self.feature_dict is not None:
             features = [self.feature_dict[i] for i in keys]
         else:
-            features = keys
-        features = np.reshape(features, (n, -1))
-        weights = np.reshape(weights, (n,))
+            features = keys  # type: ignore
+        features = np.reshape(features, (n, -1))  # type: ignore
+        weights = np.reshape(weights, (n,))  # type: ignore
         if self.output_weights:
-            return [features, weights]
+            return [features, weights]  # type: ignore
 
         int_weights = weights.astype(int)  # type: ignore
         if not np.allclose(int_weights, weights):

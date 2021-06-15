@@ -37,7 +37,8 @@ class BaseSelectorCP(BaseSelector):
         super().__init__(coef_thres=coef_thres, method=method)
 
     # pylint: disable=E1128
-    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray,
+               options: Optional[Dict] = None) -> Optional[np.ndarray]:
         """
         Select feature indices from x
         Args:
@@ -55,7 +56,7 @@ class BaseSelectorCP(BaseSelector):
         prob.solve(solver=self.method, **options)
         self.coef_ = beta.value
         self.indices = np.where(np.abs(beta.value) > self.coef_thres)[0]
-        self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0
+        self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0  # type: ignore
         return self.indices
 
     def construct_constraints(
@@ -212,7 +213,8 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
         self.w = 1
         super().__init__(**kwargs)
 
-    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray,
+               options: Optional[Dict] = None) -> Optional[np.ndarray]:
         """
         Select feature indices from x
         Args:

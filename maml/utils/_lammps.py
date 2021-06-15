@@ -125,7 +125,8 @@ def stress_matrix_to_list(stress_matrix: np.ndarray, stress_format: str = "VASP"
     return stress_format_change(vasp_format, "VASP", stress_format)
 
 
-def stress_list_to_matrix(stress: List[float], stress_format: str = "VASP") -> np.ndarray:
+def stress_list_to_matrix(stress: Union[np.ndarray, List[float]],
+                          stress_format: str = "VASP") -> np.ndarray:
     """
     convert a length-6 stress list to stress matrix 3x3
 
@@ -142,7 +143,8 @@ def stress_list_to_matrix(stress: List[float], stress_format: str = "VASP") -> n
     return np.array([[xx, xy, xz], [xy, yy, yz], [xz, yz, zz]])
 
 
-def stress_format_change(stress: List[float], from_format: str, to_format: str) -> np.ndarray:
+def stress_format_change(stress: Union[np.ndarray, List[float]], from_format: str,
+                         to_format: str) -> np.ndarray:
     """
     Convert stress format from from_format to to_format
     Args:
@@ -262,7 +264,7 @@ def write_data_from_structure(
         f.write("\n".join(lines))
 
 
-def _get_atomic_mass(element_or_specie: str) -> float:
+def _get_atomic_mass(element_or_specie: str) -> float:   # type: ignore
     """
     Get atomic mass from element or specie string
 
@@ -273,12 +275,13 @@ def _get_atomic_mass(element_or_specie: str) -> float:
 
     """
     try:
-        return Element(element_or_specie).atomic_mass
+        return Element(element_or_specie).atomic_mass  # type: ignore
     except Exception:
-        return Species.from_string(element_or_specie).element.atomic_mass
+        return Species.from_string(
+            element_or_specie).element.atomic_mass
 
 
-def _get_charge(element_or_specie: Union[str, Element, Species]) -> float:
+def _get_charge(element_or_specie: Union[str, Element, Species]) -> float:  # type: ignore
     """
     Get charge from element or specie
 
@@ -290,10 +293,10 @@ def _get_charge(element_or_specie: Union[str, Element, Species]) -> float:
     """
 
     if isinstance(element_or_specie, Species):
-        return element_or_specie.oxi_state
+        return element_or_specie.oxi_state   # type: ignore
     if isinstance(element_or_specie, str):
         try:
-            return Species.from_string(element_or_specie).oxi_state
+            return Species.from_string(element_or_specie).oxi_state   # type: ignore
         except Exception:
             return 0.0
     return 0.0

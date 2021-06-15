@@ -35,7 +35,7 @@ class BaseSelector:
         self.method = method
         self.indices: Optional[np.ndarray] = None
 
-    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None) -> Optional[np.ndarray]:
         """
         Select feature indices from x
         Args:
@@ -61,8 +61,8 @@ class BaseSelector:
         self.is_fitted = True
         self.coef_ = res.x
         # output coefficient indices that are above certain thresholds
-        self.indices = np.where(np.abs(self.coef_) > self.coef_thres)[0]
-        self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0
+        self.indices = np.where(np.abs(self.coef_) > self.coef_thres)[0]  # type: ignore
+        self.coef_[np.where(np.abs(self.coef_) <= self.coef_thres)[0]] = 0.0  # type: ignore
         return self.indices
 
     def construct_loss(self, x: np.ndarray, y: np.ndarray, beta: np.ndarray) -> float:
@@ -116,14 +116,14 @@ class BaseSelector:
         lr.intercept_ = 0
         return metric_func(lr, x[:, self.indices], y)
 
-    def get_coef(self) -> np.ndarray:
+    def get_coef(self) -> Optional[np.ndarray]:
         """
         Get coefficients
         Returns: the coefficients array
         """
         return self.coef_
 
-    def get_feature_indices(self) -> np.ndarray:
+    def get_feature_indices(self) -> Optional[np.ndarray]:
         """
         Get selected feature indices
         Returns:
@@ -453,7 +453,7 @@ class AdaptiveLasso(PenalizedLeastSquares):
         self.w = 1
         super().__init__(**kwargs)
 
-    def select(self, x, y, options=None) -> np.ndarray:
+    def select(self, x, y, options=None) -> Optional[np.ndarray]:
         """
         Select feature indices from x
         Args:
@@ -513,13 +513,15 @@ class L0BrutalForce(BaseSelector):
         self.lambd = lambd
         super().__init__(**kwargs)
 
-    def select(self, x: np.ndarray, y: np.ndarray, options: Optional[Dict] = None, n_job: int = 1) -> np.ndarray:
+    def select(self, x: np.ndarray, y: np.ndarray,
+               options: Optional[Dict] = None, n_job: int = 1) -> Optional[np.ndarray]:
         """
         L0 combinatorial optimization
         Args:
             x (np.ndarray): design matrix
             y (np.ndarray): target vector
             options:
+            n_job (int): number of cpu
         Returns:
         """
         n, p = x.shape
@@ -542,5 +544,5 @@ class L0BrutalForce(BaseSelector):
         self.indices = np.array(indices[argmin])
         x_temp = x[:, self.indices]
         self.coef_ = np.zeros_like(x[0, :])
-        self.coef_[self.indices] = lstsq(x_temp, y)[0]
+        self.coef_[self.indices] = lstsq(x_temp, y)[0]  # type: ignore
         return self.indices
