@@ -44,6 +44,8 @@ Features
 
  b) `rfxas` for random forest models in predicting atomic local environments from X-ray absorption spectroscopy.
 
+ c) `bowsr` for rapid structural relaxation with bayesian optimization and surrogate energy model.
+
 Installation
 ------------
 
@@ -110,3 +112,7 @@ For the ML-IAP package (`maml.pes`), please cite::
     Wood, M. A.; Ong, S. P. Performance and Cost Assessment of Machine Learning Interatomic Potentials.
     J. Phys. Chem. A 2020, 124 (4), 731–745. https://doi.org/10.1021/acs.jpca.9b08723.
 
+For the BOWSR package (`maml.bowsr`), please cite::
+
+    Zuo, Y.; Qin, M.; Chen, C.; Ye, W., Li, X.; Luo, J., Ong, S. P. Accelerating Materials Discovery with 
+    Bayesian Optimization and Graph Deep Learning. arXiv:2104.10242 https://arxiv.org/abs/2104.10242
