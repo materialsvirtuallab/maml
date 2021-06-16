@@ -4,7 +4,7 @@ Tests for preprocessing
 
 import unittest
 from maml.utils import StandardScaler, DummyScaler
-from pymatgen import Structure, Lattice
+from pymatgen.core import Structure, Lattice
 
 
 class TestPreprocessing(unittest.TestCase):

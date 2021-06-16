@@ -12,7 +12,7 @@ import shutil
 
 import numpy as np
 from monty.os.path import which
-from pymatgen import Structure, Lattice
+from pymatgen.core import Structure, Lattice
 from sklearn.linear_model import LinearRegression
 
 from maml.base import SKLModel

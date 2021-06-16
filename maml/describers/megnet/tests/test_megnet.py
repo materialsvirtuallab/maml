@@ -2,7 +2,7 @@
 
 import unittest
 
-from pymatgen import Lattice, Structure
+from pymatgen.core import Lattice, Structure
 from megnet.models import MEGNetModel
 
 from maml.describers.megnet import MEGNetSite, MEGNetStructure

@@ -8,7 +8,7 @@ import unittest
 import tempfile
 
 import numpy as np
-from pymatgen import Structure
+from pymatgen.core import Structure
 from monty.os.path import which
 from monty.serialization import loadfn
 from maml.apps.pes import GAPotential
