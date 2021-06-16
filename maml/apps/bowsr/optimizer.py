@@ -1,0 +1,506 @@
+"""
+Module implemets the BayesianOptimizer.
+"""
+
+import warnings
+from copy import copy
+from typing import Dict, List, Tuple
+import numpy as np
+
+
+from pymatgen.core.structure import Structure, Lattice
+from pymatgen.core.operations import SymmOp
+from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import RationalQuadratic
+
+from maml.apps.bowsr.target_space import TargetSpace
+from maml.apps.bowsr.model import EnergyModel
+from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+from maml.apps.bowsr.acquisition import ensure_rng, propose_query_point, AcquisitionFunction
+from maml.apps.bowsr.perturbation import WyckoffPerturbation, LatticePerturbation, \
+    get_standardized_structure
+
+
+def struct2perturbation(structure: Structure, use_symmetry: bool = True, **kwargs) \
+        -> Tuple[List[WyckoffPerturbation], List[int], Dict, LatticePerturbation]:
+    """
+    Get the symmetry-driven perturbation of the structure.
+
+    Args:
+        structure (Structure): Pymatgen Structure object.
+        use_symmetry (bool): Whether to use constraint of symmetry to reduce
+            parameters space.
+
+    Return:
+        wps (list): WyckoffPerturbations for derivation of symmetrically
+            unique sites. Used to derive the coordinates of the sites.
+        indices (list): Indices of symmetrically unique sites.
+        mapping (dict): A mapping dictionary that maps equivalent atoms
+            onto each other.
+        lp (LatticePerturbation): LatticePerturbation for derivation of lattice
+            of the structure.
+    """
+    wyc_tol = 0.3*1e-3 if not kwargs.get("wyc_tol") else kwargs.get("wyc_tol")
+    abc_tol = 1e-3 if not kwargs.get("abc_tol") else kwargs.get("abc_tol")
+    angle_tol = 2e-1 if not kwargs.get("angle_tol") else kwargs.get("angle_tol")
+    symprec = 1e-2 if not kwargs.get("symprec") else kwargs.get("symprec")
+
+    sa = SpacegroupAnalyzer(structure, symprec=symprec)
+    sd = sa.get_symmetry_dataset()
+    spg_int_number = sd['number']
+    wyckoffs = sd['wyckoffs']
+    symm_ops = [SymmOp.from_rotation_and_translation(rotation, translation, tol=0.1)
+                for rotation, translation in zip(sd['rotations'], sd['translations'])]
+
+    if use_symmetry:
+        equivalent_atoms = sd['equivalent_atoms']
+        mapping = dict(zip(range(structure.num_sites), equivalent_atoms))
+        symmetrically_distinct_indices = np.unique(equivalent_atoms)
+        indices = [idx for idx in symmetrically_distinct_indices]
+    else:
+        indices = [idx for idx in range(structure.num_sites)]
+        mapping = dict(zip(indices, indices))
+
+    wps = []
+    for i in indices:
+        wyckoff_symbol = wyckoffs[i]
+        wp = WyckoffPerturbation(spg_int_number, wyckoff_symbol,
+                                 symmetry_ops=symm_ops, use_symmetry=use_symmetry)
+        wp.sanity_check(structure[i], wyc_tol=wyc_tol)
+        wps.append(wp)
+
+    lp = LatticePerturbation(spg_int_number, use_symmetry=use_symmetry)
+    lp.sanity_check(structure.lattice, abc_tol=abc_tol, angle_tol=angle_tol)
+
+    return tuple((wps, indices, mapping, lp))
+
+
+def atoms_crowded(structure: Structure, radius: float = 1.1) -> bool:
+    """
+    Identify whether structure is unreasonable because the atoms are "too close".
+
+    Args:
+        structure (Structure): Pymatgen Structure object.
+        radius (float): Radius cutoff.
+    """
+    distance_matrix = copy(structure.distance_matrix)
+    distance_matrix[distance_matrix == 0] = np.inf
+    return np.min(distance_matrix) < radius
+
+
+class BayesianOptimizer:
+    """
+    Bayesian optimizer used to optimize the structure.
+    """
+    def __init__(self,
+                 model: EnergyModel,
+                 structure: Structure,
+                 relax_coords: bool = True,
+                 relax_lattice: bool = True,
+                 use_symmetry: bool = True,
+                 use_scaler: bool = True,
+                 noisy: bool = True,
+                 seed: int = None, **kwargs):
+        """
+        Args:
+            model (EnergyModel): energy model exposes `predict_energy` method.
+            structure (Structure): Pymatgen Structure object.
+            relax_coords (bool): Whether to relax symmetrical coordinates.
+            relax_lattice (bool): Whether to relax lattice.
+            use_symmetry (bool): Whether to use constraint of symmetry to reduce
+                parameters space.
+            use_scaler (bool): Whether to use scaler for Gaussian process regression.
+            noisy (bool): Whether to perform noise-based bayesian optimization
+                (predictive noisy test data) or noise-free bayesian optimization
+                (predictive GP posterior).
+            seed (int): Seeded rng for random numbe generator. None
+                for an unseeded rng.
+        """
+        random_state = ensure_rng(seed)
+        self.model = model
+        self.noisy = noisy
+        self.use_symmetry = use_symmetry
+        self.scaler = StandardScaler() if use_scaler else DummyScaler()
+
+        structure.remove_oxidation_states()
+        standardized_structure = get_standardized_structure(structure)
+        wps, _, _, lp = struct2perturbation(standardized_structure, **kwargs)
+
+        u = 0
+        while not (all([wp.fit_site for wp in wps]) and lp.fit_lattice) and u < 3:
+            standardized_structure = get_standardized_structure(standardized_structure)
+            wps, _, _, lp = struct2perturbation(standardized_structure, **kwargs)
+            u += 1
+        if not (all([wp.fit_site for wp in wps]) and lp.fit_lattice):
+            raise ValueError("Standard structures can not be obtained.")
+
+        self.structure = standardized_structure
+
+        wps, indices, mapping, lp = struct2perturbation(self.structure, use_symmetry, **kwargs)
+        wyckoff_dims = [wp.dim for wp in wps]
+        abc_dim, angles_dim = lp.dims
+        self._space = TargetSpace(target_func=self.get_formation_energy,
+                                  wps=wps, abc_dim=abc_dim, angles_dim=angles_dim,
+                                  relax_coords=relax_coords,
+                                  relax_lattice=relax_lattice,
+                                  scaler=self.scaler,
+                                  random_state=random_state)
+        self.wps = wps
+        self.indices = indices
+        self.mapping = mapping
+        self.lp = lp
+        self.relax_coords = relax_coords
+        self.relax_lattice = relax_lattice
+        self.wyckoff_dims = wyckoff_dims
+        self.abc_dim = abc_dim
+        self.angles_dim = angles_dim
+
+        # Initialize internal GaussianProcessRegressor
+        self._gpr = GaussianProcessRegressor(kernel=RationalQuadratic(length_scale=1.0),
+                                             alpha=0.028 ** 2)
+
+    def get_derived_structure(self, x: np.ndarray) -> Structure:
+        """
+        Get the derived structure.
+
+        Args:
+            x (ndarray): The input of getting perturbated structure.
+        """
+
+        struct = self.structure.copy()
+        lattice = struct.lattice
+        species = [dict(site.species.as_dict()) for site in struct]
+        frac_coords = struct.frac_coords
+
+        if self.relax_coords:
+            x_wyckoff = np.concatenate([self.wps[i].perturbation_mode(x[sum(self.wyckoff_dims[:i])
+                : sum(self.wyckoff_dims[:i]) + num]) for i, num in enumerate(self.wyckoff_dims)])
+
+            for i, (idx, wp) in enumerate(zip(self.indices, self.wps)):
+                p = wp.standardize(frac_coords[idx]) + x_wyckoff[i * 3: (i + 1) * 3]
+                orbit = wp.get_orbit(p)
+
+                assert len(orbit) == len([k for k, v in self.mapping.items() if v == idx])
+
+                frac_coords[[k for k, v in self.mapping.items() if v == idx]] = orbit
+
+        x_lattice = self.lp.perturbation_mode(x[-(self.abc_dim + self.angles_dim):]) \
+            if self.relax_lattice else np.zeros(6)
+        abc = lattice.abc
+        angles = lattice.angles
+        lattice_parameters = np.array(abc + angles) + x_lattice
+        lattice = Lattice.from_parameters(*lattice_parameters)
+
+        derived_struct = Structure(lattice=lattice, species=species, coords=frac_coords)
+
+        return derived_struct
+
+    def get_formation_energy(self, x: np.ndarray) -> float:
+        """
+        Calculate the formation energy of the perturbated structure. Absolute value
+        is calculated on practical purpose of maximization of target function in
+        bayesian optimization.
+
+        Args:
+            x (ndarray): The input of formation energy calculation.
+        """
+        derived_struct = self.get_derived_structure(x)
+        return -self.model.predict_energy(derived_struct)
+
+    def add_query(self, x: np.ndarray) -> float:
+        """
+        Add query point into the TargetSpace.
+
+        Args:
+            x (ndarray): Query point.
+        """
+        try:
+            target = self.space.probe(x)
+        except:
+            target = 0
+        return target
+
+    def propose(self,
+                acquisitionfunction: AcquisitionFunction,
+                n_warmup: int,
+                sampler: str) -> np.ndarray:
+        """
+        Suggest the next most promising point.
+
+        Args:
+            acquisitionfunction (AcquisitionFunction): AcquisitionFunction.
+            n_warmup (int): Number of randomly sampled points to select the initial
+                point for minimization.
+            sampler (str): Sampler. Options are Latin Hyperparameter Sampling and uniform sampling.
+        """
+
+        # Sklearn's GaussianProcessRegressor throws a large number of warnings at times
+        # which are unnecessary to be seen.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            self.gpr.fit(self.space.params, self.space.target)
+
+        if self.noisy:
+            y_max = np.max(self.gpr.predict(self.space.params))
+            noise = 0.028
+        else:
+            y_max = np.max(self.space.target)
+            noise = 0.0
+
+        # Find the next point that maximize the acquisition function.
+        x_next = propose_query_point(acquisition=acquisitionfunction.calculate,
+                                     scaler=self.scaler,
+                                     gpr=self.gpr,
+                                     y_max=y_max,
+                                     noise=noise,
+                                     bounds=self.space.bounds,
+                                     random_state=self.space.random_state,
+                                     sampler=sampler,
+                                     n_warmup=n_warmup)
+        return x_next
+
+    def optimize(self,
+                 n_init: int,
+                 n_iter: int,
+                 acq_type: str = 'ei',
+                 kappa: float = 2.576,
+                 xi: float = 0.0,
+                 n_warmup: int = 1000,
+                 sampler: str = 'lhs', **gpr_params) -> None:
+        """
+        Optimize the coordinates and/or lattice of the structure by minimizing the
+        model predicted formation energy of the structure. Model prediction error
+        can be considered as a constant white noise.
+
+        Args:
+            n_init (int): The number of initial points.
+            n_iter (int): The number of iteration steps.
+            acq_type (str): The type of acquisition function. Three choices are given,
+                ucb: Upper confidence bound,
+                ei: Expected improvement,
+                poi: Probability of improvement.
+            kappa (float): Tradeoff parameter used in upper confidence bound formulism.
+            xi (float): Tradeoff parameter between exploitation and exploration.
+            n_warmup (int): Number of randomly sampled points to select the initial
+                point for minimization.
+            sampler (str): Sampler generating initial points. "uniform" or "lhs".
+        """
+        self.set_gpr_params(**gpr_params)
+
+        acq = AcquisitionFunction(acq_type=acq_type, kappa=kappa, xi=xi)
+
+        # Add the initial structure into known data
+        if n_init != 0:
+            if sampler == 'lhs':
+                params = np.concatenate([np.zeros((1, self.space.dim)),
+                                         self.space.lhs_sample(n_init)])
+            else:
+                params = np.concatenate(([np.zeros(self.space.dim)],
+                                         [self.space.uniform_sample() for _ in range(n_init)]))
+            self.scaler.fit(params)
+
+            for x in params:
+                self.add_query(x)
+
+        iteration = 0
+        while iteration < n_iter:
+            x_next = self.propose(acquisitionfunction=acq, n_warmup=n_warmup, sampler=sampler)
+            self.add_query(x_next)
+            iteration += 1
+
+    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> Tuple[Structure, float]:
+        """
+        Args:
+            radius (float): Radius cutoff to identify reasonable structures.
+                When the radius is 0, any structures will be considered reasonable.
+        """
+        optimized_structure = self.structure.copy()
+        idx = 0
+        for idx in np.argsort(self.space.target)[::-1]:
+            optimized_structure \
+                = self.get_derived_structure(self.scaler.inverse_transform(self.space.params[idx]))
+            if not atoms_crowded(optimized_structure, radius=radius):
+                break
+        return tuple((optimized_structure, -self.space.target[idx]))
+
+    def set_space_empty(self) -> None:
+        """
+        Empty the target space.
+        """
+        self.space.set_empty()
+
+    def set_bounds(self, **bounds_parameter) -> None:
+        """
+        Set the bound value of wyckoff perturbation and lattice perturbation.
+        """
+        if bounds_parameter.get('abc_bound') is not None:
+            abc_bound = bounds_parameter.get('abc_bound')
+            bounds_parameter.pop('abc_bound')
+        elif bounds_parameter.get('abc_ratio') is not None:
+            abc_ratio = bounds_parameter.get('abc_ratio')
+            bounds_parameter.pop('abc_ratio')
+            abc_bound = np.array(self.lp.abc)[:, np.newaxis] * abc_ratio
+        else:
+            abc_bound = np.array(self.lp.abc)[:, np.newaxis] * 0.2
+        self.space.set_bounds(abc_bound=abc_bound, **bounds_parameter)
+
+    def set_gpr_params(self, **gpr_params) -> None:
+        """
+        Set the parameters of internal GaussianProcessRegressor.
+        """
+        self._gpr.set_params(**gpr_params)
+
+    @property
+    def space(self):
+        """
+        Returns the target space.
+        """
+        return self._space
+
+    @property
+    def gpr(self):
+        """
+        Returns the Gaussian Process regressor.
+        """
+        return self._gpr
+
+    def __repr__(self):
+        return "{0}(relax_coords={1}, relax_lattice={2}, use_symmetry={3}" \
+               "\n\t\twyckoff_dims={4}, abc_dim={5}, " \
+               "\n\t\tangles_dim={6}, kernel={7}, scaler={8}, noisy={9})".format(
+                self.__class__.__name__, self.relax_coords, self.relax_lattice,
+                self.use_symmetry, self.wyckoff_dims, self.abc_dim, self.angles_dim,
+                repr(self.gpr.kernel), self.scaler.__class__.__name__, self.noisy)
+
+    def as_dict(self):
+        """
+        Dict representation of BayesianOptimizer.
+        """
+        serialize = lambda t: tuple([int(num) for num in item]
+                                    if isinstance(item, np.ndarray) else item for item in t)
+
+        def gpr_as_dict(gpr):
+            """
+            Serialize the GaussianProcessRegressor.
+            """
+            gpr_dict = gpr.get_params()
+            gpr_dict["X_train_"] = gpr.X_train_.tolist()
+            gpr_dict["alpha_"] = gpr.alpha_.tolist()
+            gpr_dict["_y_train_mean"] = gpr._y_train_mean.tolist()
+            gpr_dict["_K_inv"] = gpr._K_inv.tolist()
+            gpr_kernel = gpr_dict["kernel"]
+            kernel_name = gpr_kernel.__class__.__name__
+            kernel_params = gpr_kernel.get_params()
+            kernel_opt_params = gpr.kernel_.get_params()
+
+            gpr_dict["kernel"] = {"name": kernel_name, "params": kernel_params,
+                                      "opt_params": kernel_opt_params}
+
+            return gpr_dict
+
+        d = {"@module": self.__class__.__module__,
+             "@class": self.__class__.__name__,
+             "structure": self.structure.as_dict(),
+             "relax_coords": self.relax_coords,
+             "relax_lattice": self.relax_lattice,
+             "use_symmetry": self.use_symmetry,
+             "space": {"params": self.space.params.tolist(),
+                       "target": self.space.target.tolist(),
+                       "bounds": self.space.bounds.tolist(),
+                       "random_state": serialize(self.space.random_state.get_state())},
+             "gpr": gpr_as_dict(self.gpr),
+             "model": self.model.__class__.__name__,
+             "scaler": self.scaler.as_dict(),
+             "noisy": self.noisy}
+
+        return d
+
+    @classmethod
+    def from_dict(cls, d):
+        """
+        Reconstitute a BayesianOptimizer object from a dict representation of
+        BayesianOptimizer created using as_dict().
+
+        Args
+            d (dict): Dict representation of BayesianOptimizer.
+        """
+
+        def gpr_from_dict(gpr_d):
+            """
+            Instantiate GaussianProcessRegressor from serialization.
+            """
+            import sklearn.gaussian_process.kernels as sk_kernels
+            d = gpr_d.copy()
+            X_train_ = d.pop("X_train_")
+            alpha_ = d.pop("alpha_")
+            _y_train_mean = d.pop("_y_train_mean")
+            _K_inv = d.pop("_K_inv")
+            kernel_d = d["kernel"]
+            kernel = getattr(sk_kernels, kernel_d["name"])(**kernel_d["params"])
+            kernel_ = getattr(sk_kernels, kernel_d["name"])(**kernel_d["opt_params"])
+            d["kernel"] = kernel
+
+            gpr = GaussianProcessRegressor()
+            gpr.kernel = kernel
+            gpr.kernel_ = kernel_
+            gpr.set_params(**d)
+            gpr.X_train_ = X_train_
+            gpr.alpha_ = alpha_
+            gpr._y_train_mean = _y_train_mean
+            gpr._K_inv = _K_inv
+
+            return gpr
+
+        if d["model"] == "MEGNet":
+            import bowsr.model.megnet as energy_model
+            model = getattr(energy_model, d["model"])()
+        elif d["model"] == "CGCNN":
+            import bowsr.model.cgcnn as energy_model
+            model = getattr(energy_model, d["model"])()
+        elif d["model"] == "DFT":
+            import bowsr.model.dft as energy_model
+            model = getattr(energy_model, d["model"])()
+        else:
+            raise AttributeError("model {} is not supported.".format(d["model"]))
+
+        structure = Structure.from_dict(d["structure"])
+        use_symmetry = d["use_symmetry"]
+        wps, indices, mapping, lp = struct2perturbation(structure, use_symmetry)
+        wyckoff_dims = [wp.dim for wp in wps]
+        abc_dim, angles_dim = lp.dims
+        relax_coords = d['relax_coords']
+        relax_lattice = d["relax_lattice"]
+        noisy = d["noisy"]
+        optimizer = BayesianOptimizer(model=model, structure=structure, relax_coords=relax_coords,
+                                      relax_lattice=relax_lattice, use_symmetry=use_symmetry,
+                                      noisy=noisy)
+        optimizer.structure = structure
+        optimizer.wps = wps
+        optimizer.indices = indices
+        optimizer.mapping = mapping
+        optimizer.lp = lp
+        optimizer.wyckoff_dims = wyckoff_dims
+        optimizer.abc_dim = abc_dim
+        optimizer.angles_dim = angles_dim
+        gpr = gpr_from_dict(d["gpr"])
+        optimizer._gpr = gpr
+
+        space_d = d["space"]
+        space_params = np.array(space_d["params"])
+        space_target = np.array(space_d["target"])
+        space_bounds = np.array(space_d["bounds"])
+        space_random_state = np.random.RandomState()
+        space_random_state.set_state(space_d["random_state"])
+        import bowsr.preprocessing as preprocessing
+        scaler = getattr(preprocessing, d["scaler"]["@class"])(**d["scaler"]["params"])
+        optimizer.scaler = scaler
+        optimizer._space.scaler = scaler
+        for x, target in zip(space_params, space_target):
+            optimizer._space._params = np.concatenate([optimizer._space._params, x.reshape(1, -1)])
+            optimizer._space._target = np.concatenate([optimizer._space._target, [target]])
+        optimizer._space._bounds = space_bounds
+        optimizer._space.random_state = space_random_state
+
+        return optimizer
