@@ -140,7 +140,7 @@ class GAPotential(LammpsPotential):
         Args:
             filename (str): The configuration file to be read.
         """
-        type_convert = {"R": np.float32, "I": np.int, "S": np.str}
+        type_convert = {"R": np.float32, "I": np.int64, "S": np.str_}
         data_pool = []
         with zopen(filename, "rt") as f:
             lines = f.read()
@@ -333,9 +333,9 @@ class GAPotential(LammpsPotential):
         with ScratchDir("."):
             self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)
 
-            p = subprocess.Popen(exe_command, stdout=subprocess.PIPE)
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            with subprocess.Popen(exe_command, stdout=subprocess.PIPE) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "gap_fit exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -453,8 +453,8 @@ class GAPotential(LammpsPotential):
             if predict_stress:
                 exe_command.append("virial=T")
 
-            p = subprocess.Popen(exe_command, stdout=open(predict_file, "w"))
-            p.communicate()[0]
+            with subprocess.Popen(exe_command, stdout=open(predict_file, "w")) as p:
+                p.communicate()[0]
 
             _, df_predict = self.read_cfgs(predict_file, predict=True)
 

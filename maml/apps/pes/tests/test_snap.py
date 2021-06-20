@@ -12,7 +12,7 @@ from monty.serialization import loadfn
 from sklearn.linear_model import LinearRegression
 
 from maml.apps.pes import SNAPotential
-from maml import SKLModel
+from maml.base import SKLModel
 from maml.describers import BispectrumCoefficients
 
 CWD = os.getcwd()

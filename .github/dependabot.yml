@@ -1,0 +1,29 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "13:00"
+  open-pull-requests-limit: 10
+  reviewers:
+  - chc273
+  - shyuep
+  ignore:
+  - dependency-name: black
+    versions:
+    - 21.4b0
+  - dependency-name: pylint
+    versions:
+    - 2.7.0
+    - 2.8.1
+  - dependency-name: pymatgen
+    versions:
+    - 2021.3.3
+    - 2021.3.4
+    - 2022.0.3
+    - 2022.0.4
+    - 2022.0.5
+  - dependency-name: numpy
+    versions:
+    - 1.20.0

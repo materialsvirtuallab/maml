@@ -27,19 +27,9 @@ def make_doc(ctx):
 
     :param ctx:
     """
-    # with open("CHANGES.rst") as f:
-    #     contents = f.read()
-    #
-    # toks = re.split(r"\-{3,}", contents)
-    # n = len(toks[0].split()[-1])
-    # changes = [toks[0]]
-    # changes.append("\n" + "\n".join(toks[1].strip().split("\n")[0:-1]))
-    # changes = ("-" * n).join(changes)
 
-    # with open("docs_rst/latest_changes.rst", "w") as f:
-    #     f.write(changes)
-
-    ctx.run("cp README.rst api-docs-source/index.rst")
+    # ctx.run("cp README.rst api-docs-source/index.rst")
+    ctx.run("cp CHANGES.rst api-docs-source/changelog.rst")
 
     with cd("api-docs-source"):
         ctx.run("rm maml.*.rst", warn=True)
@@ -109,7 +99,7 @@ def set_ver(ctx):
             else:
                 lines.append(l.rstrip())
     with open("maml/__init__.py", "wt") as f:
-        f.write("\n".join(lines))
+        f.write("\n".join(lines) + "\n")
 
     lines = []
     with open("setup.py", "rt") as f:
@@ -117,34 +107,33 @@ def set_ver(ctx):
             lines.append(re.sub(r'version=([^,]+),', 'version="%s",' % NEW_VER,
                                 l.rstrip()))
     with open("setup.py", "wt") as f:
-        f.write("\n".join(lines))
+        f.write("\n".join(lines) + "\n")
 
 
 @task
-def release_github(ctx):
-    with open("CHANGES.md") as f:
+def release(ctx, notest=True):
+    set_ver(ctx)
+    ctx.run("rm -r dist build maml.egg-info", warn=True)
+    if not notest:
+        ctx.run("pytest maml")
+    with open("CHANGES.rst") as f:
         contents = f.read()
-    toks = re.split(r"\#+", contents)
+    toks = re.split(r"\-+", contents)
     desc = toks[1].strip()
+    toks = desc.split("\n")
+    desc = "\n".join(toks[:-1]).strip()
     payload = {
         "tag_name": "v" + NEW_VER,
         "target_commitish": "master",
         "name": "v" + NEW_VER,
         "body": desc,
         "draft": False,
-        "prerelease": False
+        "prerelease": False,
     }
     response = requests.post(
         "https://api.github.com/repos/materialsvirtuallab/maml/releases",
         data=json.dumps(payload),
-        headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]})
+        headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]},
+    )
     print(response.text)
 
-
-@task
-def release(ctx, notest=False):
-    ctx.run("rm -r dist build maml.egg-info", warn=True)
-    if not notest:
-        ctx.run("pytest maml")
-    publish(ctx)
-    release_github(ctx)

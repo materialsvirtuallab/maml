@@ -79,7 +79,7 @@ class BaseModel:
         if (val_objs is None) and (val_targets is not None):
             raise ValueError("training objects are none, but the targets are not")
         if val_objs is not None:
-            val_features = to_array(self.describer.transform(val_objs))
+            val_features = to_array(self.describer.transform(val_objs))  # type: ignore
             val_targets = to_array(val_targets)
         else:
             val_features = None
@@ -105,7 +105,7 @@ class BaseModel:
         Predict the values given a set of objects. Usually Pymatgen
             Structure objects.
         """
-        return self._predict(self.describer.transform(objs))
+        return self._predict(self.describer.transform(objs))  # type: ignore
 
 
 class SklearnMixin:

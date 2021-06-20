@@ -31,7 +31,7 @@ def get_default_lmp_exe():
     Returns: Lammps executable name
     """
 
-    for lmp_exe in ["lmp_serial", "lmp_mpi"]:
+    for lmp_exe in ["lmp_serial", "lmp_mpi", "lmp_g++_serial", "lmp_g++_mpich", "lmp_intel_cpu_intelmpi"]:
         if which(lmp_exe) is not None:
             logger.info("Setting Lammps executable to %s" % lmp_exe)
             return lmp_exe
@@ -140,9 +140,9 @@ class LMPStaticCalculator:
             for struct in structures:
                 ld = LammpsData.from_structure(struct, ff_elements)
                 ld.write_file("data.static")
-                p = subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE)
-                stdout = p.communicate()[0]
-                rc = p.returncode
+                with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
+                    stdout = p.communicate()[0]
+                    rc = p.returncode
                 if rc != 0:
                     error_msg = "LAMMPS exited with return code %d" % rc
                     msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -471,9 +471,9 @@ class ElasticConstant(LMPStaticCalculator):
         """
         with ScratchDir("."):
             input_file = self._setup()
-            p = subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE)
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "LAMMPS exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -642,10 +642,9 @@ class NudgedElasticBand(LMPStaticCalculator):
                 )
             )
 
-        p = subprocess.Popen([self.LMP_EXE, "-in", "in.relax"], stdout=subprocess.PIPE)
-        stdout = p.communicate()[0]
-
-        rc = p.returncode
+        with subprocess.Popen([self.LMP_EXE, "-in", "in.relax"], stdout=subprocess.PIPE) as p:
+            stdout = p.communicate()[0]
+            rc = p.returncode
         if rc != 0:
             error_msg = "LAMMPS exited with return code %d" % rc
             msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -668,10 +667,9 @@ class NudgedElasticBand(LMPStaticCalculator):
                 )
             )
 
-        p = subprocess.Popen([self.LMP_EXE, "-in", "in.relax"], stdout=subprocess.PIPE)
-        stdout = p.communicate()[0]
-
-        rc = p.returncode
+        with subprocess.Popen([self.LMP_EXE, "-in", "in.relax"], stdout=subprocess.PIPE) as p:
+            stdout = p.communicate()[0]
+            rc = p.returncode
         if rc != 0:
             error_msg = "LAMMPS exited with return code %d" % rc
             msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -717,7 +715,7 @@ class NudgedElasticBand(LMPStaticCalculator):
         """
         with ScratchDir("."):
             input_file = self._setup()
-            p = subprocess.Popen(
+            with subprocess.Popen(
                 [
                     "mpirun",
                     "--oversubscribe",
@@ -730,9 +728,9 @@ class NudgedElasticBand(LMPStaticCalculator):
                     input_file,
                 ],
                 stdout=subprocess.PIPE,
-            )
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            ) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "LAMMPS exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -861,10 +859,9 @@ class DefectFormation(LMPStaticCalculator):
         """
         with ScratchDir("."):
             input_file, energy_per_atom, num_atoms = self._setup()
-            p = subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE)
-            stdout = p.communicate()[0]
-
-            rc = p.returncode
+            with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "LAMMPS exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]

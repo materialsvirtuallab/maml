@@ -548,28 +548,28 @@ class NNPotential(LammpsPotential):
             value = str_formatify(np.array(df[df[0] == tag])[0][1])
             param.update({tag: value})
 
-        r_cut = np.sort(np.array(df[(df[0] == "symfunction_short") & (df[2] == "2")][6], dtype=np.float))[0]
+        r_cut = np.sort(np.array(df[(df[0] == "symfunction_short") & (df[2] == "2")][6], dtype=np.float64))[0]
         r_cut = float("{:.1f}".format(r_cut * units.bohr_to_angstrom))
         param.update({"r_cut": r_cut})
         r_etas = np.sort(
-            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "2")][4]), dtype=np.float)
+            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "2")][4]), dtype=np.float64)
         ).tolist()
         param.update({"r_etas": r_etas})
         r_shift = np.sort(
-            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "2")][5]), dtype=np.float)
+            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "2")][5]), dtype=np.float64)
         ).tolist()
         r_shift = [float("{:.1f}".format(r * units.bohr_to_angstrom)) for r in r_shift]
         param.update({"r_shift": r_shift})
         a_etas = np.sort(
-            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][5]), dtype=np.float)
+            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][5]), dtype=np.float64)
         ).tolist()
         param.update({"a_etas": a_etas})
         lambdas = np.sort(
-            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][6]), dtype=np.int)
+            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][6]), dtype=np.int64)
         ).tolist()
         param.update({"lambdas": lambdas})
         zetas = np.sort(
-            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][7]), dtype=np.float)
+            np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][7]), dtype=np.float64)
         ).tolist()
         param.update({"zetas": zetas})
         self.num_symm_functions = sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + sum(
@@ -606,13 +606,13 @@ class NNPotential(LammpsPotential):
             ]
 
             weights = np.reshape(
-                np.array(weights_group["value"], dtype=np.float),
+                np.array(weights_group["value"], dtype=np.float64),
                 (self.layer_sizes[layer_index - 1], self.layer_sizes[layer_index]),
             )
             self.weights[specie].append(weights)
 
             bs_group = weight_param[(weight_param["type"] == "b") & (weight_param["start_layer"] == str(layer_index))]
-            bs = np.array(bs_group["value"], dtype=np.float)
+            bs = np.array(bs_group["value"], dtype=np.float64)
             self.bs[specie].append(bs)
 
         self.weight_param[specie] = weight_param
@@ -648,14 +648,16 @@ class NNPotential(LammpsPotential):
         for block in block_pattern.findall(lines):
             d = {"outputs": {}}
             lattice_str = lattice_pattern.findall(block)
-            lattice = Lattice(np.array([latt.split() for latt in lattice_str], dtype=np.float) * self.bohr_to_angstrom)
+            lattice = Lattice(
+                np.array([latt.split() for latt in lattice_str], dtype=np.float64) * self.bohr_to_angstrom
+            )
             position_str = position_pattern.findall(block)
             positions = pd.DataFrame([pos.split() for pos in position_str])
             positions.columns = ["x", "y", "z", "specie", "charge", "atomic_energy", "fx", "fy", "fz"]
-            coords = np.array(positions.loc[:, ["x", "y", "z"]], dtype=np.float)
+            coords = np.array(positions.loc[:, ["x", "y", "z"]], dtype=np.float64)
             coords = coords * self.bohr_to_angstrom
             species = np.array(positions["specie"])
-            forces = np.array(positions.loc[:, ["fx", "fy", "fz"]], dtype=np.float)
+            forces = np.array(positions.loc[:, ["fx", "fy", "fz"]], dtype=np.float64)
             forces = forces / self.eV_to_Ha / self.bohr_to_angstrom
             energy_str = energy_pattern.findall(block)[0]
             energy = float(energy_str.lstrip()) / self.eV_to_Ha
@@ -733,9 +735,9 @@ class NNPotential(LammpsPotential):
             output = "training_output"
 
             self.write_input(**kwargs)
-            p_scaling = subprocess.Popen(["nnp-scaling", "100"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = p_scaling.communicate()
-            rc = p_scaling.returncode
+            with subprocess.Popen(["nnp-scaling", "100"], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p_scaling:
+                stdout, stderr = p_scaling.communicate()
+                rc = p_scaling.returncode
             if rc != 0:
                 error_msg = "n2p2 exited with return code %d" % rc
                 msg = stderr.decode("utf-8").split("\n")[:-1]
@@ -747,9 +749,9 @@ class NNPotential(LammpsPotential):
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
-            p_train = subprocess.Popen(["nnp-train"], stdout=open(output, "w"), stderr=subprocess.PIPE)
-            stdout, stderr = p_train.communicate()
-            rc = p_train.returncode
+            with subprocess.Popen(["nnp-train"], stdout=open(output, "w"), stderr=subprocess.PIPE) as p_train:
+                stdout, stderr = p_train.communicate()
+                rc = p_train.returncode
             if rc != 0:
                 error_msg = "n2p2 exited with return code %d" % rc
                 msg = stderr.decode("utf-8").split("\n")[:-1]
@@ -766,11 +768,11 @@ class NNPotential(LammpsPotential):
 
             energy_rmse_pattern = re.compile(r"ENERGY\s*\S*\s*(\S*)\s*(\S*).*?\n")
             forces_rmse_pattern = re.compile(r"FORCE\s*\S*\s*(\S*)\s*(\S*).*?\n")
-            errors = np.array(energy_rmse_pattern.findall(error_lines), dtype=np.float).T.tolist()
+            errors = np.array(energy_rmse_pattern.findall(error_lines), dtype=np.float64).T.tolist()
             self.train_energy_rmse = errors[0]
             self.validation_energy_rmse = errors[1]
 
-            errors = np.array(forces_rmse_pattern.findall(error_lines), dtype=np.float).T.tolist()
+            errors = np.array(forces_rmse_pattern.findall(error_lines), dtype=np.float64).T.tolist()
             self.train_forces_rmse = errors[0]
             self.validation_forces_rmse = errors[1]
 
@@ -820,12 +822,11 @@ class NNPotential(LammpsPotential):
             dfs = []
             for data in predict_pool:
                 _ = self.write_cfgs(original_file, cfg_pool=[data])
-                p_evaluation = subprocess.Popen(
+                with subprocess.Popen(
                     ["nnp-predict", input_filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-                )
-                stdout, stderr = p_evaluation.communicate()
-
-                rc = p_evaluation.returncode
+                ) as p_evaluation:
+                    stdout, stderr = p_evaluation.communicate()
+                    rc = p_evaluation.returncode
                 if rc != 0:
                     error_msg = "n2p2 exited with return code %d" % rc
                     msg = stderr.decode("utf-8").split("\n")[:-1]

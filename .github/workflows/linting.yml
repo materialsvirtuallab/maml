@@ -25,14 +25,18 @@ jobs:
     - name: mypy
       run: |
         mypy maml
-    - name: flake8
-      run: |
-        flake8 --count --show-source --statistics maml
-        # exit-zero treats all errors as warnings.
-        flake8 --count --exit-zero --max-complexity=20 --statistics maml
     - name: pydocstyle
       run: |
         pydocstyle --count maml
     - name: pylint
       run: |
         pylint maml
+    - name: black
+      run: |
+        black --version
+        black --check --diff --color maml
+    - name: flake8
+      run: |
+        flake8 --count --show-source --statistics maml
+        # exit-zero treats all errors as warnings.
+        flake8 --count --exit-zero --max-complexity=20 --statistics maml

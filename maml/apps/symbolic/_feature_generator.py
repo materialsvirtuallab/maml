@@ -64,7 +64,7 @@ def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
 
 
 class FeatureGenerator:
-    """FeatureGenerator class for feature augmentation before selection """
+    """FeatureGenerator class for feature augmentation before selection"""
 
     def __init__(self, feature_df: pd.DataFrame, operators: list):
         """

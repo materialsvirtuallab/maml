@@ -43,23 +43,27 @@ def feed(attribute, kwargs, dictionary, tab="\t"):
 class MTPotential(LammpsPotential):
     """
     This class implements moment tensor potentials.
+    Installation of the mlip package is needed.
+    Please refer to https://mlip.skoltech.ru
     """
 
     pair_style = "pair_style        mlip {}"
     pair_coeff = "pair_coeff        * *"
 
-    def __init__(self, name=None, param=None):
+    def __init__(self, name=None, param=None, version=None):
         """
 
         Args:
             name (str): Name of force field.
             param (dict): The parameter configuration of potentials.
+            version (str): The version of mlip package. Default is "mlip-2". "mlip-dev" is also supported.
         """
         self.name = name if name else "MTPotential"
         self.mtp_stress_order = ["xx", "yy", "zz", "yz", "xz", "xy"]
         self.vasp_stress_order = ["xx", "yy", "zz", "xy", "yz", "xz"]
         self.param = param if param else None
         self.elements = None
+        self.version = version if version else "mlip-2"
 
     def _line_up(self, structure, energy, forces, virial_stress):
         """
@@ -103,9 +107,13 @@ class MTPotential(LammpsPotential):
             lines.append(" Energy")
             lines.append("{:>24.12f}".format(inputs["Energy"]))
         if "Stress" in inputs:
-            format_str = "{:>16s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
+            if self.version == "mlip-2":
+                format_str = "{:>16s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
+                lines.append(format_str.format("PlusStress:  xx", "yy", "zz", "yz", "xz", "xy"))
+            if self.version == "mlip-dev":
+                format_str = "{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
+                lines.append(format_str.format("Stress:  xx", "yy", "zz", "yz", "xz", "xy"))
             format_float = "{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}"
-            lines.append(format_str.format("PlusStress:  xx", "yy", "zz", "yz", "xz", "xy"))
             lines.append(format_float.format(*np.array(virial_stress) / 1.228445))
 
         lines.append("END_CFG")
@@ -142,251 +150,312 @@ class MTPotential(LammpsPotential):
 
         return filename
 
-    @staticmethod
-    def write_ini(Abinitio=0, MLIP="MPT.mpt", Driver=0, **kwargs):
+    def write_ini(self, mtp_filename="fitted.mtp", select=False, **kwargs):
         """
-        Write initial file for mlip package.
+        Write mlip.ini file for mlip packages of version mlip-2 or mlip-dev.
+        Supported keyword arguments are parallel with options stated in the mlip manuals.
+        mlip-2 is recommended, as it is the only officially supported version by mlip.
+        Please refer to https://mlip.skoltech.ru
 
         Args:
-            Abinitio (int): Defines Ab-initio models. Default to 1.
+            mlip-2:
+                mtp_filename (str): Name of file with MTP to be loaded.
+                write_cfgs (str): Name of file for mlp processed configurations to be written to.
+                write_cfgs_skip (int): Skipped number of processed configurations before writing.
+                select (bool): activates or deactivates calculation of extrapolation grades and
+                    optionally writing configurations with high extrapolation grades. False is
+                    recommended for large-scale MD run.
+                select_save_selected (str): Name of file for saving configurations with grade
+                    exceeding select_threshold.
+                select_threshold (float): Configurations with extrapolation grade exceeding ths
+                    value will be saved to the specified file.
+                select_threshold_break (float): The mlip executation will be interrupted if the
+                    extrapolation grade exceeds this value.
+                select_load_state (str): Name of file for loading the active learning state,
+                    typically created by the mlp calc-grade command.
+                select_log (str): Name of file (or standard output stream stdout/stderr) for
+                    writing a log of the configuration selection process.
 
-                0: If Ab-initio models is not required.
-                1: Used if driver provides EFS data with configurations.
-                2: Use embedded Lennard-Jones pair potentials.
+            mlip-dev:
+                Abinitio (int): Defines Ab-initio models. Default to 1.
 
-                    r_min (float): Distance to minimum of pair function (in Angstroms).
-                        Default to 2.0.
-                    scale (float): Value of pair function in minimum (in eV).
-                        Default to 1.0.
-                    cutoff (float): Cutoff radius (in Angstroms). Default to 5.0.
+                    0: If Ab-initio models is not required.
+                    1: Used if driver provides EFS data with configurations.
+                    2: Use embedded Lennard-Jones pair potentials.
 
-                3: Use DFT models by VASP. Linking via files exchange.
+                        r_min (float): Distance to minimum of pair function (in Angstroms).
+                            Default to 2.0.
+                        scale (float): Value of pair function in minimum (in eV).
+                            Default to 1.0.
+                        cutoff (float): Cutoff radius (in Angstroms). Default to 5.0.
 
-                    POSCAR (str): Relative path of POSCAR file.
-                    OUTCAR (str): Relative path of OUTCAR file.
-                    Start_command (str): Relative path of command file.
+                    3: Use DFT models by VASP. Linking via files exchange.
 
-                4: Use potentials calculating by LAMMPS. Linking via files exchange.
+                        POSCAR (str): Relative path of POSCAR file.
+                        OUTCAR (str): Relative path of OUTCAR file.
+                        Start_command (str): Relative path of command file.
 
-                    Input_file (str): File with configuration to be read by lammps.
-                    Output_file (str): File with configuration and EFS data to be read by MLIP.
-                    Start_command (str): Relative path of command file.
+                    4: Use potentials calculating by LAMMPS. Linking via files exchange.
 
-                5: Use MTP as Ab-initio potentials.
+                        Input_file (str): File with configuration to be read by lammps.
+                        Output_file (str): File with configuration and EFS data to be read by MLIP.
+                        Start_command (str): Relative path of command file.
 
-                    MTP_filename (str): MTP file name.
+                    5: Use MTP as Ab-initio potentials.
 
-            mlip (str): MTP.
+                        MTP_filename (str): MTP file name.
 
-                load_from (str): Potential filename.
-                Cacluate_EFS (bool): Whether to perform EFS calculation by MTP.
-                Fit (bool): Whether to perform MTP learning.
+                MLIP (str): MTP.
 
-                    Save (str): Output MTP file name (for trained MTP).
-                    Energy_equation_weight (float): Weight for energy equation in
-                        fitting procedure. Default to 1.0.
-                    Forces_equation_weight (float): Weight for forces equations in
-                        fitting procedure. Default to 0.001.
-                    Stress_equation_weight (float): Weight for stresses equations in
-                        fitting procedure.  Default to 0.1.
-                    Relative_forces_weight (float): If greater than zero, large forces
-                        will be fitted less accurate than small. Default to 0.0.
-                    Fit_log (str): File to write fitting log. No logging if not specified.
+                    load_from (str): Potential filename.
+                    Cacluate_EFS (bool): Whether to perform EFS calculation by MTP.
+                    Fit (bool): Whether to perform MTP learning.
+
+                        Save (str): Output MTP file name (for trained MTP).
+                        Energy_equation_weight (float): Weight for energy equation in
+                            fitting procedure. Default to 1.0.
+                        Forces_equation_weight (float): Weight for forces equations in
+                            fitting procedure. Default to 0.001.
+                        Stress_equation_weight (float): Weight for stresses equations in
+                            fitting procedure.  Default to 0.1.
+                        Relative_forces_weight (float): If greater than zero, large forces
+                            will be fitted less accurate than small. Default to 0.0.
+                        Fit_log (str): File to write fitting log. No logging if not specified.
+                            Default to None.
+
+                    Select (bool): Whether to activate active learning. Default to False.
+
+                        Site_E_weight (float): Weight for site energy equations in
+                            selection procedure. Default to 1.0.
+                        Energy_weight (float): Weight for energy equation in
+                            selection procedure. Default to 0.0.
+                        Forces_weight (float): Weight for forces equations in
+                            selection procedure. Default to 0.0.
+                        Stress_weight (float): Weight for stresses equations in
+                            selection procedure. Default to 0.0.
+                        Threshold_slct (float): Selection threshold - maximum
+                            allowed extrapolation level. Default to 0.1.
+                        Save_TS (str): Filename where selected configurations
+                            will be saved. No configuration saving if not specified.
+                            Default to None.
+                        Save_state (str): Filename where state of the selection
+                            will be saved. No saving if not specified. Default to None.
+                        Load_state (str): Filename where state of the selection
+                            will be loaded. No saving if not specified. Default to None.
+                        Select_log (str): File to write fitting log. No logging
+                            if not specified. Default to None.
+
+                    LOFT (bool): Whether to perform learning on the fly. Default to False
+
+                        EFSviaMTP (bool): Works only on LOFT regime. If True,
+                            only MTP-calculated EFS will be passed to driver, else
+                            pass to driver ab-initio EFS while LOTF when learning occurs.
+                        Log (str): Filename to write log of learning on the fly process.
+                            No logging if not specified. Default to None.
+
+                    Check_errors (bool): If True, comparison and accumulation of
+                        error statistics for EFS calculated by ab-initio models and MTP.
+                        Default to False.
+
+                        Log (str): Filename to write log of learning on the fly process.
+                            No logging if not specified. Default to None.
+
+                    Write_cfgs (bool): File for writing all processed configurations.
+                        No confuguration recording if not specified. Default to None.
+
+                        Skip_N (int): The number of configurations to skip while writing.
+                            Default to 0.
+
+                    Log (str): Filename to write MLIP log. No logging if not specified.
                         Default to None.
 
-                Select (bool): Whether to activate active learning. Default to False.
+                Driver (int): Defines the configuration driver. Default to 1.
 
-                    Site_E_weight (float): Weight for site energy equations in
-                        selection procedure. Default to 1.0.
-                    Energy_weight (float): Weight for energy equation in
-                        selection procedure. Default to 0.0.
-                    Forces_weight (float): Weight for forces equations in
-                        selection procedure. Default to 0.0.
-                    Stress_weight (float): Weight for stresses equations in
-                        selection procedure. Default to 0.0.
-                    Threshold_slct (float): Selection threshold - maximum
-                        allowed extrapolation level. Default to 0.1.
-                    Save_TS (str): Filename where selected configurations
-                        will be saved. No configuration saving if not specified.
-                        Default to None.
-                    Save_state (str): Filename where state of the selection
-                        will be saved. No saving if not specified. Default to None.
-                    Load_state (str): Filename where state of the selection
-                        will be loaded. No saving if not specified. Default to None.
-                    Select_log (str): File to write fitting log. No logging
-                        if not specified. Default to None.
+                    0: No driver or external MD driver.
+                    1: Read configurations from database file.
 
-                LOFT (bool): Whether to perform learning on the fly. Default to False
+                        Database_filename (str): Configuration file name.
+                        Max_count (int): Maximal number of configurations to read.
+                        Log (str): Filename to write reading log. No logging
+                            if not specified. Default to None.
 
-                    EFSviaMTP (bool): Works only on LOFT regime. If True,
-                        only MTP-calculated EFS will be passed to driver, else
-                        pass to driver ab-initio EFS while LOTF when learning occurs.
-                    Log (str): Filename to write log of learning on the fly process.
-                        No logging if not specified. Default to None.
+                    2: Embedded algorithm for relaxation.
 
-                Check_errors (bool): If True, comparison and accumulation of
-                    error statistics for EFS calculated by ab-initio models and MTP.
-                    Default to False.
-
-                    Log (str): Filename to write log of learning on the fly process.
-                        No logging if not specified. Default to None.
-
-                Write_cfgs (bool): File for writing all processed configurations.
-                    No confuguration recording if not specified. Default to None.
-
-                    Skip_N (int): The number of configurations to skip while writing.
-                        Default to 0.
-
-                Log (str): Filename to write MLIP log. No logging if not specified.
-                    Default to None.
-
-            Driver (int): Defines the configuration driver. Default to 1.
-
-                0: No driver or external MD driver.
-                1: Read configurations from database file.
-
-                    Database_filename (str): Configuration file name.
-                    Max_count (int): Maximal number of configurations to read.
-                    Log (str): Filename to write reading log. No logging
-                        if not specified. Default to None.
-
-                2: Embedded algorithm for relaxation.
-
-                    Pressure (float): External pressure (in GPa).
-                        If not zero enthalpy is minimized. Default to 0.0.
-                    Iteration_limit (int): Maximal number of iteration of
-                        the relaxation process. Default to 500.
-                    Min_dist (float): Minimal interatomic distance constraint
-                        (in Angstroms). Default to 1.0.
-                    Forces_tolerance (float): Forces on atoms in relaxed
-                        configuration should be smaller than this value
-                        (in eV/Angstroms). Default to 0.0001.
-                    Stress_tolerance (float): Stresses in relaxed configuration
-                        should be smaller than this value (in GPa). Default to 0.001.
-                    Max_step (float): Maximal allowed displacement of atoms and
-                        lattice vectors in Cartesian coordinates (in Angstroms).
-                        Default to 0.5.
-                    Min_step (float): Minimal displacement of atoms and
-                        lattice vectors in Cartesian coordinates (in Angstroms).
-                        Default to 1.0e-8.
-                    BFGS_Wolfe_C1 (float): Wolfe condition constant on the function
-                        decrease (linesearch stopping criterea). Default to 1.0e-3.
-                    BFGS_Wolfe_C2 (float): Wolfe condition constant on the gradient
-                        decrease (linesearch stopping criterea). Default to 0.7.
-                    Save_relaxed (str): Filename for output results of relxation.
-                        No configuration will be saved if not specified.
-                        Default to None.
-                    Log (str): Filename to write relaxation log. No logging
-                        if not specified. Default to None.
+                        Pressure (float): External pressure (in GPa).
+                            If not zero enthalpy is minimized. Default to 0.0.
+                        Iteration_limit (int): Maximal number of iteration of
+                            the relaxation process. Default to 500.
+                        Min_dist (float): Minimal interatomic distance constraint
+                            (in Angstroms). Default to 1.0.
+                        Forces_tolerance (float): Forces on atoms in relaxed
+                            configuration should be smaller than this value
+                            (in eV/Angstroms). Default to 0.0001.
+                        Stress_tolerance (float): Stresses in relaxed configuration
+                            should be smaller than this value (in GPa). Default to 0.001.
+                        Max_step (float): Maximal allowed displacement of atoms and
+                            lattice vectors in Cartesian coordinates (in Angstroms).
+                            Default to 0.5.
+                        Min_step (float): Minimal displacement of atoms and
+                            lattice vectors in Cartesian coordinates (in Angstroms).
+                            Default to 1.0e-8.
+                        BFGS_Wolfe_C1 (float): Wolfe condition constant on the function
+                            decrease (linesearch stopping criterea). Default to 1.0e-3.
+                        BFGS_Wolfe_C2 (float): Wolfe condition constant on the gradient
+                            decrease (linesearch stopping criterea). Default to 0.7.
+                        Save_relaxed (str): Filename for output results of relxation.
+                            No configuration will be saved if not specified.
+                            Default to None.
+                        Log (str): Filename to write relaxation log. No logging
+                            if not specified. Default to None.
         """
         lines = []
-        format_str = "{:<48s}{:<20s}{}"
-        PARAMS = {
-            "Abinitio": {
-                0: [],
-                1: [],
-                2: ["r_min", "scale", "cutoff"],
-                3: ["POSCAR", "OUTCAR", "Start_command"],
-                4: ["Input_file", "Output_file", "Start_command"],
-                5: ["MTP_filename"],
-            },
-            "MLIP": {
-                "Calculate_EFS": [],
-                "Fit": [
-                    "Save",
-                    "Energy_equation_weight",
-                    "Forces_equation_weight",
-                    "Stress_equation_weight",
-                    "Relative_forces_weight",
-                    "Fit_log",
-                ],
-                "Select": [
-                    "Site_E_weight",
-                    "Energy_weight",
-                    "Forces_weight",
-                    "Stress_weight",
-                    "Threshold_slct",
-                    "Save_TS",
-                    "Save_state",
-                    "Load_state",
-                    "Select_log",
-                ],
-                "Write_cfgs": [],
-                "Log": [],
-            },
-            "Driver": {
-                0: [],
-                1: ["Database_filename", "Database_log"],
-                2: [
-                    "Pressure",
-                    "Iteration_limit",
-                    "Min_dist",
-                    "Forces_tolerance",
-                    "Stress_tolerance",
-                    "Max_step",
-                    "Min_step",
-                    "BFGS_Wolfe_C1",
-                    "BFGS_Wolfe_C2",
-                    "Save_relaxed",
-                    "Relaxation_log",
-                ],
-            },
-        }
+        if self.version == "mlip-2":
+            format_str = "{:<48s}{:<20s}"
+            lines.append(format_str.format("mtp-filename", mtp_filename))
+            if kwargs.get("write_cfgs"):
+                lines.append(format_str.format("write-cfgs", kwargs.get("write_cfgs")))
+            if kwargs.get("write_cfgs_skip"):
+                lines.append(format_str.format("write-cfgs:skip", kwargs.get("write_cfgs_skip")))
+            if select is False:
+                lines.append(format_str.format("select", "FALSE"))
+            elif select is True:
+                lines.append(format_str.format("select", "TRUE"))
+                select_identifiers = [
+                    "select:save-selected",
+                    "select:threshold",
+                    "select:threshold-break",
+                    "select:load-state",
+                    "select:log",
+                ]
+                for i, option in enumerate(
+                    [
+                        "select_save_selected",
+                        "select_threshold",
+                        "select_threshold_break",
+                        "select_load_state",
+                        "select_log",
+                    ]
+                ):
+                    if kwargs.get(option):
+                        lines.append(format_str.format("\t" + select_identifiers[i], kwargs.get(option)))
 
-        if Abinitio:
-            lines.append(
-                format_str.format(
-                    MTini_params.get("Abinitio").get("name"), str(Abinitio), MTini_params.get("Abinitio").get("comment")
-                )
-            )
-            abinitio = MTini_params.get("Abinitio").get(str(Abinitio))
-            lines.append(format_str.format(abinitio.get("name"), "", abinitio.get("comment")))
-            for attribute in PARAMS["Abinitio"][Abinitio]:
-                lines.append(format_str.format(*feed(attribute, kwargs, abinitio)))
+        elif self.version == "mlip-dev":
+            format_str = "{:<48s}{:<20s}{}"
+            Abinitio = kwargs.get("Abinitio") if kwargs.get("Abinitio") else 0
+            MLIP = kwargs.get("MLIP") if kwargs.get("MLIP") else "MPT.mpt"
+            Driver = kwargs.get("Driver") if kwargs.get("Driver") else 0
+            PARAMS = {
+                "Abinitio": {
+                    0: [],
+                    1: [],
+                    2: ["r_min", "scale", "cutoff"],
+                    3: ["POSCAR", "OUTCAR", "Start_command"],
+                    4: ["Input_file", "Output_file", "Start_command"],
+                    5: ["MTP_filename"],
+                },
+                "MLIP": {
+                    "Calculate_EFS": [],
+                    "Fit": [
+                        "Save",
+                        "Energy_equation_weight",
+                        "Forces_equation_weight",
+                        "Stress_equation_weight",
+                        "Relative_forces_weight",
+                        "Fit_log",
+                    ],
+                    "Select": [
+                        "Site_E_weight",
+                        "Energy_weight",
+                        "Forces_weight",
+                        "Stress_weight",
+                        "Threshold_slct",
+                        "Save_TS",
+                        "Save_state",
+                        "Load_state",
+                        "Select_log",
+                    ],
+                    "Write_cfgs": [],
+                    "Log": [],
+                },
+                "Driver": {
+                    0: [],
+                    1: ["Database_filename", "Database_log"],
+                    2: [
+                        "Pressure",
+                        "Iteration_limit",
+                        "Min_dist",
+                        "Forces_tolerance",
+                        "Stress_tolerance",
+                        "Max_step",
+                        "Min_step",
+                        "BFGS_Wolfe_C1",
+                        "BFGS_Wolfe_C2",
+                        "Save_relaxed",
+                        "Relaxation_log",
+                    ],
+                },
+            }
 
-        if MLIP:
-            lines.append(
-                format_str.format(MTini_params.get("MLIP").get("name"), "mtpr", MTini_params.get("MLIP").get("comment"))
-            )
-            mlip = MTini_params.get("MLIP")
-            if kwargs.get("load_from"):
-                load_from = mlip.get("load_from")
-                lines.append(
-                    format_str.format("\t" + load_from.get("name"), kwargs.get("load_from"), load_from.get("comment"))
-                )
-            if kwargs.get("Calculate_EFS"):
-                calc_efs = mlip.get("Calculate_EFS")
-                lines.append(format_str.format("\t" + calc_efs.get("name"), "TRUE", calc_efs.get("comment")))
-            if kwargs.get("Fit"):
-                fit = mlip.get("Fit")
-                lines.append(format_str.format("\t" + fit.get("name"), "true", fit.get("comment")))
-                for attribute in PARAMS["MLIP"]["Fit"]:
-                    lines.append(format_str.format(*feed(attribute, kwargs, fit, tab="\t\t")))
-
-            if kwargs.get("Select"):
-                select = mlip.get("Select")
-                lines.append(format_str.format("\t" + select.get("name"), "true", select.get("comment")))
-                for attribute in PARAMS["MLIP"]["Select"]:
-                    lines.append(format_str.format(*feed(attribute, kwargs, select, tab="\t\t")))
-
-            if kwargs.get("Write_cfgs"):
-                write_cfgs = mlip.get("Write_cfgs")
+            if Abinitio:
                 lines.append(
                     format_str.format(
-                        "\t" + write_cfgs.get("name"), kwargs.get("Write_cfgs"), write_cfgs.get("comment")
+                        MTini_params.get("Abinitio").get("name"),
+                        str(Abinitio),
+                        MTini_params.get("Abinitio").get("comment"),
                     )
                 )
+                abinitio = MTini_params.get("Abinitio").get(str(Abinitio))
+                lines.append(format_str.format(abinitio.get("name"), "", abinitio.get("comment")))
+                for attribute in PARAMS["Abinitio"][Abinitio]:
+                    lines.append(format_str.format(*feed(attribute, kwargs, abinitio)))
 
-        if Driver:
-            lines.append(
-                format_str.format(
-                    MTini_params.get("Driver").get("name"), str(Driver), MTini_params.get("Driver").get("comment")
+            if MLIP:
+                lines.append(
+                    format_str.format(
+                        MTini_params.get("MLIP").get("name"), "mtpr", MTini_params.get("MLIP").get("comment")
+                    )
                 )
-            )
-            driver = MTini_params.get("Driver").get(str(Driver))
-            lines.append(format_str.format(driver.get("name"), "", driver.get("comment")))
-            for attribute in PARAMS["Driver"][Driver]:
-                lines.append(format_str.format(*feed(attribute, kwargs, driver, tab="\t\t")))
+                mlip = MTini_params.get("MLIP")
+                if kwargs.get("load_from"):
+                    load_from = mlip.get("load_from")
+                    lines.append(
+                        format_str.format(
+                            "\t" + load_from.get("name"), kwargs.get("load_from"), load_from.get("comment")
+                        )
+                    )
+                if kwargs.get("Calculate_EFS"):
+                    calc_efs = mlip.get("Calculate_EFS")
+                    lines.append(format_str.format("\t" + calc_efs.get("name"), "TRUE", calc_efs.get("comment")))
+                if kwargs.get("Fit"):
+                    fit = mlip.get("Fit")
+                    lines.append(format_str.format("\t" + fit.get("name"), "true", fit.get("comment")))
+                    for attribute in PARAMS["MLIP"]["Fit"]:
+                        lines.append(format_str.format(*feed(attribute, kwargs, fit, tab="\t\t")))
+
+                if kwargs.get("Select"):
+                    select = mlip.get("Select")
+                    lines.append(format_str.format("\t" + select.get("name"), "true", select.get("comment")))
+                    for attribute in PARAMS["MLIP"]["Select"]:
+                        lines.append(format_str.format(*feed(attribute, kwargs, select, tab="\t\t")))
+
+                if kwargs.get("Write_cfgs"):
+                    write_cfgs = mlip.get("Write_cfgs")
+                    lines.append(
+                        format_str.format(
+                            "\t" + write_cfgs.get("name"), kwargs.get("Write_cfgs"), write_cfgs.get("comment")
+                        )
+                    )
+
+            if Driver:
+                lines.append(
+                    format_str.format(
+                        MTini_params.get("Driver").get("name"), str(Driver), MTini_params.get("Driver").get("comment")
+                    )
+                )
+                driver = MTini_params.get("Driver").get(str(Driver))
+                lines.append(format_str.format(driver.get("name"), "", driver.get("comment")))
+                for attribute in PARAMS["Driver"][Driver]:
+                    lines.append(format_str.format(*feed(attribute, kwargs, driver, tab="\t\t")))
 
         filename = "mlip.ini"
         with open(filename, "w") as f:
@@ -426,7 +495,7 @@ class MTPotential(LammpsPotential):
             lattice = Lattice(np.array(list(map(formatify, lattice_str.split("\n")))))
             position_str = position_pattern.findall(block)[0]
             position = np.array(list(map(formatify, position_str.split("\n"))))
-            species = np.array(self.elements)[position[:, 1].astype(np.int)]
+            species = np.array(self.elements)[position[:, 1].astype(np.int64)]
             forces = position[:, 5:8].tolist()
             position = position[:, 2:5]
             energy_str = energy_pattern.findall(block)[0]
@@ -513,8 +582,8 @@ class MTPotential(LammpsPotential):
             shutil.copyfile(MTP_file_path, os.path.join(os.getcwd(), unfitted_mtp))
 
             with open("min_dist", "w") as f:
-                p = subprocess.Popen(["mlp", "mindist", atoms_filename], stdout=f)
-            stdout = p.communicate()[0]
+                with subprocess.Popen(["mlp", "mindist", atoms_filename], stdout=f) as p:
+                    p.communicate()[0]
 
             with open("min_dist") as f:
                 lines = f.readlines()
@@ -529,7 +598,7 @@ class MTPotential(LammpsPotential):
 
             save_fitted_mtp = ".".join([unfitted_mtp.split(".")[0] + "_fitted", unfitted_mtp.split(".")[1]])
 
-            p = subprocess.Popen(
+            with subprocess.Popen(
                 [
                     "mlp",
                     "train",
@@ -544,9 +613,9 @@ class MTPotential(LammpsPotential):
                     "--init-params=same",
                 ],
                 stdout=subprocess.PIPE,
-            )
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            ) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "MLP exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -611,7 +680,7 @@ class MTPotential(LammpsPotential):
         if not which("mlp"):
             raise RuntimeError(
                 "mlp has not been found.\n",
-                "Please refer to http://gitlab.skoltech.ru/shapeev/mlip ",
+                "Please refer to https://mlip.skoltech.ru ",
                 "for further detail.",
             )
         fitted_mtp = "fitted.mtp"
@@ -634,11 +703,13 @@ class MTPotential(LammpsPotential):
             original_file = self.write_cfg(original_file, cfg_pool=predict_pool)
             _, df_orig = self.read_cfgs(original_file)
 
-            p = subprocess.Popen(
-                ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)], stdout=subprocess.PIPE
-            )
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            if self.version == "mlip-2":
+                cmd = ["mlp", "calc-efs", fitted_mtp, original_file, predict_file]
+            elif self.version == "mlip-dev":
+                cmd = ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)]
+            with subprocess.Popen(cmd, stdout=subprocess.PIPE) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "mlp exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]

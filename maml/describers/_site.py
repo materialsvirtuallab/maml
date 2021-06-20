@@ -242,9 +242,9 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         with ScratchDir("."):
             _ = self.operator.write_cfgs(filename=atoms_filename, cfg_pool=pool_from([structure]))
             descriptor_output = "output"
-            p = subprocess.Popen(exe_command, stdout=open(descriptor_output, "w"))
-            stdout = p.communicate()[0]
-            rc = p.returncode
+            with subprocess.Popen(exe_command, stdout=open(descriptor_output, "w")) as p:
+                stdout = p.communicate()[0]
+                rc = p.returncode
             if rc != 0:
                 error_msg = "quip/soap exited with return code %d" % rc
                 msg = stdout.decode("utf-8").split("\n")[:-1]
@@ -259,7 +259,9 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
                 lines = f.read()
 
             descriptor_pattern = re.compile("DESC(.*?)\n", re.S)
-            descriptors = pd.DataFrame([np.array(c.split(), dtype=np.float) for c in descriptor_pattern.findall(lines)])
+            descriptors = pd.DataFrame(
+                [np.array(c.split(), dtype=np.float64) for c in descriptor_pattern.findall(lines)]
+            )
 
         return descriptors
 
@@ -412,7 +414,9 @@ class SiteElementProperty(BaseDescriber):
         weights: List[float] = [d[i] for i in elements]
         return z_values, weights
 
-    def transform_one(self, obj: Union[str, Composition, Structure, Molecule]) -> Union[List[np.ndarray], np.ndarray]:
+    def transform_one(
+        self, obj: Union[str, Composition, Structure, Molecule]  # type: ignore
+    ) -> Union[List[np.ndarray], np.ndarray]:
         """
         Transform one object to features
 
@@ -438,11 +442,11 @@ class SiteElementProperty(BaseDescriber):
         if self.feature_dict is not None:
             features = [self.feature_dict[i] for i in keys]
         else:
-            features = keys
-        features = np.reshape(features, (n, -1))
-        weights = np.reshape(weights, (n,))
+            features = keys  # type: ignore
+        features = np.reshape(features, (n, -1))  # type: ignore
+        weights = np.reshape(weights, (n,))  # type: ignore
         if self.output_weights:
-            return [features, weights]
+            return [features, weights]  # type: ignore
 
         int_weights = weights.astype(int)  # type: ignore
         if not np.allclose(int_weights, weights):
