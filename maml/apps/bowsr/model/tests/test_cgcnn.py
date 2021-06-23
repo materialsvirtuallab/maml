@@ -5,7 +5,7 @@ import numpy as np
 from pymatgen.util.testing import PymatgenTest
 from pymatgen.core import Structure
 
-from cyborgmat.model.cgcnn import CGCNN
+from maml.apps.bowsr.model.cgcnn import CGCNN
 
 module_dir = os.path.dirname(__file__)
 pjoin = os.path.join
