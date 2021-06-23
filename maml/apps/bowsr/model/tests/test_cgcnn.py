@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 from pymatgen.util.testing import PymatgenTest
-from pymatgen import Structure
+from pymatgen.core import Structure
 
 from cyborgmat.model.cgcnn import CGCNN
 
