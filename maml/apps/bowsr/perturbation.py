@@ -84,7 +84,7 @@ class WyckoffPerturbation:
             p (list/numpy.array): Fractional coordinated point.
             tol (float): Tolerance for determining if sites are the same.
         """
-        orbit = []
+        orbit: List[np.ndarray(3)] =  []
         for symm_op in self.symmetry_ops:
             pp = symm_op.operate(p)
             pp[(pp + np.ones(3) * tol) % 1.0 < tol] = 0.0
