@@ -94,7 +94,7 @@ class WyckoffPerturbation:
 
         return orbit
 
-    def sanity_check(self, site: Union[Site, PeriodicSite], wyc_tol: float = 0.3 * 1e-3) -> None:
+    def sanity_check(self, site: Union[Site, PeriodicSite], wyc_tol: Union[float, None] = 0.3 * 1e-3) -> None:
         """
         Check whether the perturbation mode exists.
 
@@ -218,7 +218,7 @@ class LatticePerturbation(object):
         self.use_symmetry = use_symmetry
         self.crys_system = crystal_system(spg_int_symbol)
 
-    def sanity_check(self, lattice: Lattice, abc_tol: float = 1e-3, angle_tol: float = 3e-1) -> None:
+    def sanity_check(self, lattice: Lattice, abc_tol: Union[float, None] = 1e-3, angle_tol: Union[float, None] = 3e-1) -> None:
         """
         Check whether the perturbation mode exists.
 

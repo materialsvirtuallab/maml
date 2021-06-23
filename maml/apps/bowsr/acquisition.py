@@ -2,7 +2,7 @@
 Module implements the new candidate proposal.
 """
 
-from typing import Union, List, Sequence, Tuple, TypeVar
+from typing import Union, List, Sequence, Tuple, TypeVar, Any
 
 import numpy as np
 from numpy.random import RandomState
@@ -25,7 +25,7 @@ def ensure_rng(seed: int = None) -> RandomState:
 
 def predict_mean_std(
     x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float
-) -> Tuple[np.ndarray, TypeVar("T")]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Speed up the gpr.predict method by manually computing the kernel operations.
 
@@ -61,7 +61,8 @@ def lhs_sample(n_intervals: int, bounds: Sequence[Sequence[float]], random_state
     """
     bounds = np.array(bounds)
     dim = len(bounds)
-    linspace = np.round(np.linspace(bounds[:, 0], bounds[:, 1], n_intervals + 1), decimals=3)
+    linspace = np.linspace(bounds[:, 0], bounds[:, 1], n_intervals + 1)
+    linspace = np.round(linspace, decimals=3)
     lower = linspace[:n_intervals, :]
     upper = linspace[1 : n_intervals + 1, :]
     _center = (lower + upper) / 2

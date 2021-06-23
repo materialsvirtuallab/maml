@@ -4,7 +4,7 @@ Module implemets the BayesianOptimizer.
 
 import warnings
 from copy import copy
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any
 import numpy as np
 
 
@@ -24,7 +24,7 @@ from maml.apps.bowsr.perturbation import WyckoffPerturbation, LatticePerturbatio
 
 def struct2perturbation(
     structure: Structure, use_symmetry: bool = True, **kwargs
-) -> Tuple[List[WyckoffPerturbation], List[int], Dict, LatticePerturbation]:
+) -> Tuple[object, List[int], Dict, LatticePerturbation]:
     """
     Get the symmetry-driven perturbation of the structure.
 
@@ -127,7 +127,11 @@ class BayesianOptimizer:
         self.model = model
         self.noisy = noisy
         self.use_symmetry = use_symmetry
-        self.scaler = StandardScaler() if use_scaler else DummyScaler()
+        if use_scaler:
+            scaler = StandardScaler()
+        else:
+            scaler = DummyScaler()
+        self.scaler = scaler
 
         structure.remove_oxidation_states()
         standardized_structure = get_standardized_structure(structure)
@@ -153,7 +157,7 @@ class BayesianOptimizer:
             angles_dim=angles_dim,
             relax_coords=relax_coords,
             relax_lattice=relax_lattice,
-            scaler=self.scaler,
+            scaler=scaler,
             random_state=random_state,
         )
         self.wps = wps
@@ -325,7 +329,7 @@ class BayesianOptimizer:
             self.add_query(x_next)
             iteration += 1
 
-    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> Tuple[Structure, float]:
+    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> Tuple[Structure, Any]:
         """
         Args:
             radius (float): Radius cutoff to identify reasonable structures.

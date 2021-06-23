@@ -2,7 +2,7 @@
 import argparse
 import os
 import warnings
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any
 import numpy as np
 
 from pymatgen.core import Structure
@@ -115,7 +115,7 @@ class CGCNNInput:
 
     def generate_input(
         self, structure: Structure, cif_id: int = None
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.LongTensor]:
+    ) -> Tuple[Any, ...]:
 
         """
         Generate cgcnn inputs for given structure.
@@ -152,7 +152,7 @@ class CGCNNInput:
 
         """
         if not cif_ids:
-            cif_ids = range(len(structures))
+            cif_ids = list(range(len(structures)))
         return [self.generate_input(s, id) for s, id in zip(structures, cif_ids)]
 
 

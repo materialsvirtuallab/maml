@@ -2,7 +2,7 @@
 Module implemets the target space.
 """
 
-from typing import Union, Dict, List, Callable
+from typing import Union, Dict, List, Callable, Any
 
 import numpy as np
 from numpy.random import RandomState
@@ -199,7 +199,7 @@ class TargetSpace:
         self._params = np.empty(shape=(0, self.dim))
         self._target = np.empty(shape=(0))
 
-        self._cache = {}
+        self._cache: Dict[Any, Any] == {}
 
     def __repr__(self):
         return "{0}(relax_coords={1}, relax_lattice={2}, dim={3}, length={4})".format(
