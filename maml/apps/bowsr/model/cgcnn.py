@@ -12,8 +12,8 @@ try:
     import torch
     from cgcnn.model import CrystalGraphConvNet
     from cgcnn.data import GaussianDistance, AtomCustomJSONInitializer
-except ImportError:
-    print("Please refer to https://github.com/txie-93/cgcnn.git to download package of cgcnn")
+except Exception as e:
+    raise ImportError("Please refer to https://github.com/txie-93/cgcnn.git to download package of cgcnn")
 
 pjoin = os.path.join
 module_dir = os.path.dirname(__file__)
