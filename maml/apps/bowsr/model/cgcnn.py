@@ -5,8 +5,8 @@ import warnings
 from typing import Dict, List, Tuple
 import numpy as np
 
-from pymatgen import Structure
-from bowsr.model.base import EnergyModel
+from pymatgen.core import Structure
+from maml.apps.bowsr.model.base import EnergyModel
 
 try:
     import torch
