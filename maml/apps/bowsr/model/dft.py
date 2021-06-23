@@ -9,7 +9,7 @@ from pymatgen.io.vasp.outputs import Vasprun
 from pymatgen.io.vasp.sets import MPStaticSet
 from pymatgen.entries.compatibility import MaterialsProjectCompatibility
 
-from bowsr.model import EnergyModel
+from maml.apps.bowsr.model.base import EnergyModel
 
 module_dir = os.path.dirname(__file__)
 elements_filename = os.path.join(module_dir, "..", "regularization", "elements.json")

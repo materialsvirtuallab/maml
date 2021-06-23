@@ -12,7 +12,7 @@ except Exception as e:
 
 import os
 from pymatgen.core.structure import Structure
-from bowsr.model.base import EnergyModel
+from maml.apps.bowsr.model.base import EnergyModel
 
 module_dir = os.path.dirname(__file__)
 model_filename = os.path.join(module_dir, "model_files", "megnet","formation_energy.hdf5")
