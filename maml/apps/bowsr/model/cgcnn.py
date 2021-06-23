@@ -143,7 +143,7 @@ class CGCNNInput:
 
     def generate_inputs(
         self, structures: List[Structure], cif_ids: List[int] = None
-    ) -> List[Tuple[torch.Tensor, torch.Tensor, torch.LongTensor]]:
+    ) -> List[Tuple[Any, ...]]:
         """
         Generate cgcnn inputs for given list of structures
         Args:

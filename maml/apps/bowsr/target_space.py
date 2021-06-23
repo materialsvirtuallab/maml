@@ -76,9 +76,6 @@ class TargetSpace:
         self._params = np.empty(shape=(0, self.dim))
         self._target = np.empty(shape=(0))
 
-    def __contains__(self, x):
-        return _hashable(x) in self._cache
-
     def __len__(self):
         assert len(self._params) == len(self._target)
         return len(self._target)
@@ -194,12 +191,10 @@ class TargetSpace:
 
     def set_empty(self) -> None:
         """
-        Empty the cache, param, target of the space.
+        Empty the param, target of the space.
         """
         self._params = np.empty(shape=(0, self.dim))
         self._target = np.empty(shape=(0))
-
-        self._cache: Dict[Any, Any] == {}
 
     def __repr__(self):
         return "{0}(relax_coords={1}, relax_lattice={2}, dim={3}, length={4})".format(

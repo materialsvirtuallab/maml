@@ -23,8 +23,9 @@ from maml.apps.bowsr.perturbation import WyckoffPerturbation, LatticePerturbatio
 
 
 def struct2perturbation(
-    structure: Structure, use_symmetry: bool = True, **kwargs
-) -> Tuple[object, List[int], Dict, LatticePerturbation]:
+    structure: Structure, use_symmetry: bool = True, 
+    wyc_tol: float = 0.3 * 1e-3, abc_tol: float = 1e-3, angle_tol: float = 2e-1, symprec: float = 1e-2
+) -> Tuple[List[WyckoffPerturbation], List[int], Dict, LatticePerturbation]:
     """
     Get the symmetry-driven perturbation of the structure.
 
@@ -32,6 +33,10 @@ def struct2perturbation(
         structure (Structure): Pymatgen Structure object.
         use_symmetry (bool): Whether to use constraint of symmetry to reduce
             parameters space.
+        wyc_tol (float): Tolerance for wyckoff symbol determined coordinates.
+        abc_tol (float): Tolerance for lattice lengths determined by crystal system.
+        angle_tol (float): Tolerance for lattice angles determined by crystal system.
+        symprec (float): Tolerance for symmetry finding.
 
     Return:
         wps (list): WyckoffPerturbations for derivation of symmetrically
@@ -42,10 +47,6 @@ def struct2perturbation(
         lp (LatticePerturbation): LatticePerturbation for derivation of lattice
             of the structure.
     """
-    wyc_tol = 0.3 * 1e-3 if not kwargs.get("wyc_tol") else kwargs.get("wyc_tol")
-    abc_tol = 1e-3 if not kwargs.get("abc_tol") else kwargs.get("abc_tol")
-    angle_tol = 2e-1 if not kwargs.get("angle_tol") else kwargs.get("angle_tol")
-    symprec = 1e-2 if not kwargs.get("symprec") else kwargs.get("symprec")
 
     sa = SpacegroupAnalyzer(structure, symprec=symprec)
     sd = sa.get_symmetry_dataset()
@@ -71,6 +72,7 @@ def struct2perturbation(
         wp = WyckoffPerturbation(spg_int_number, wyckoff_symbol, symmetry_ops=symm_ops, use_symmetry=use_symmetry)
         wp.sanity_check(structure[i], wyc_tol=wyc_tol)
         wps.append(wp)
+    wps = list(wps)
 
     lp = LatticePerturbation(spg_int_number, use_symmetry=use_symmetry)
     lp.sanity_check(structure.lattice, abc_tol=abc_tol, angle_tol=angle_tol)
@@ -140,7 +142,7 @@ class BayesianOptimizer:
         u = 0
         while not (all([wp.fit_site for wp in wps]) and lp.fit_lattice) and u < 3:
             standardized_structure = get_standardized_structure(standardized_structure)
-            wps, _, _, lp = struct2perturbation(standardized_structure, **kwargs)
+            wps, _, _, lp = struct2perturbation(standardized_structure, use_symmetry, **kwargs)
             u += 1
         if not (all([wp.fit_site for wp in wps]) and lp.fit_lattice):
             raise ValueError("Standard structures can not be obtained.")
@@ -329,7 +331,7 @@ class BayesianOptimizer:
             self.add_query(x_next)
             iteration += 1
 
-    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> Tuple[Structure, Any]:
+    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> Tuple[Any, ...]:
         """
         Args:
             radius (float): Radius cutoff to identify reasonable structures.
