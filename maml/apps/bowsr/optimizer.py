@@ -72,7 +72,7 @@ def struct2perturbation(
         wp = WyckoffPerturbation(spg_int_number, wyckoff_symbol, symmetry_ops=symm_ops, use_symmetry=use_symmetry)
         wp.sanity_check(structure[i], wyc_tol=wyc_tol)
         wps.append(wp)
-    wps = list(wps)
+    wps = [wp for wp in wps]
 
     lp = LatticePerturbation(spg_int_number, use_symmetry=use_symmetry)
     lp.sanity_check(structure.lattice, abc_tol=abc_tol, angle_tol=angle_tol)

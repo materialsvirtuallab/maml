@@ -50,7 +50,7 @@ def predict_mean_std(
     return tuple((y_mean, np.sqrt(y_var)))
 
 
-def lhs_sample(n_intervals: int, bounds: Sequence[Sequence[float]], random_state: RandomState) -> np.ndarray:
+def lhs_sample(n_intervals: int, bounds: np.ndarray, random_state: RandomState) -> np.ndarray:
     """
     Latin hypercube sampling.
 
@@ -61,7 +61,7 @@ def lhs_sample(n_intervals: int, bounds: Sequence[Sequence[float]], random_state
     """
     bounds = np.array(bounds)
     dim = len(bounds)
-    linspace = np.linspace(bounds.T[0], bounds.T[1], n_intervals + 1)
+    linspace = np.linspace(bounds[:, 0], bounds[:, 1], n_intervals + 1)
     linspace = np.round(linspace, decimals=3)
     lower = linspace[:n_intervals, :]
     upper = linspace[1 : n_intervals + 1, :]
