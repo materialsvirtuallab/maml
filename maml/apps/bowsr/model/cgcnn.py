@@ -5,7 +5,7 @@ import warnings
 from typing import Dict, List, Tuple, Any
 import numpy as np
 
-from pymatgen.core import Structure
+from pymatgen.core.structure import Structure
 from maml.apps.bowsr.model.base import EnergyModel
 
 try:
