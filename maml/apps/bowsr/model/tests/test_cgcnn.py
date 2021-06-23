@@ -19,5 +19,5 @@ class TestCGCNN(PymatgenTest):
         self.assertAlmostEqual(output.astype(np.float64), -3.0786154)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

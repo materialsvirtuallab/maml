@@ -23,9 +23,9 @@ def ensure_rng(seed: int = None) -> RandomState:
         return np.random.RandomState(seed)
 
 
-def predict_mean_std(x: Union[List, np.ndarray],
-                     gpr: GaussianProcessRegressor,
-                     noise: float) -> Tuple[np.ndarray, TypeVar('T')]:
+def predict_mean_std(
+    x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float
+) -> Tuple[np.ndarray, TypeVar("T")]:
     """
     Speed up the gpr.predict method by manually computing the kernel operations.
 
@@ -50,9 +50,7 @@ def predict_mean_std(x: Union[List, np.ndarray],
     return tuple((y_mean, np.sqrt(y_var)))
 
 
-def lhs_sample(n_intervals: int,
-               bounds: Sequence[Sequence[float]],
-               random_state: RandomState) -> np.ndarray:
+def lhs_sample(n_intervals: int, bounds: Sequence[Sequence[float]], random_state: RandomState) -> np.ndarray:
     """
     Latin hypercube sampling.
 
@@ -65,15 +63,15 @@ def lhs_sample(n_intervals: int,
     dim = len(bounds)
     linspace = np.round(np.linspace(bounds[:, 0], bounds[:, 1], n_intervals + 1), decimals=3)
     lower = linspace[:n_intervals, :]
-    upper = linspace[1:n_intervals + 1, :]
+    upper = linspace[1 : n_intervals + 1, :]
     _center = (lower + upper) / 2
     params = np.stack([random_state.permutation(_center[:, i]) for i in range(dim)]).T
     return params
 
 
-def propose_query_point(acquisition, scaler, gpr, y_max, noise,
-                        bounds, random_state, sampler,
-                        n_warmup=10000) -> np.ndarray:
+def propose_query_point(
+    acquisition, scaler, gpr, y_max, noise, bounds, random_state, sampler, n_warmup=10000
+) -> np.ndarray:
     """
     Strategy used to find the maximum of the acquisition function.
     It uses a combination of random sampling (cheap) and the 'L-BFGS-B'
@@ -95,11 +93,10 @@ def propose_query_point(acquisition, scaler, gpr, y_max, noise,
             point for minimization.
     """
     dim = bounds.shape[0]
-    if sampler == 'lhs':
+    if sampler == "lhs":
         x_warmup = lhs_sample(n_warmup, bounds, random_state)
     else:
-        x_warmup = np.round(random_state.uniform(bounds[:, 0], bounds[:, 1],
-                                                 size=(n_warmup, dim)), decimals=3)
+        x_warmup = np.round(random_state.uniform(bounds[:, 0], bounds[:, 1], size=(n_warmup, dim)), decimals=3)
     x_warmup = scaler.transform(x_warmup)
     acq_warmup = acquisition(x_warmup, gpr=gpr, y_max=y_max, noise=noise)
     x_max = x_warmup[acq_warmup.argmax()]
@@ -123,6 +120,7 @@ class AcquisitionFunction:
     """
     An object to compute the acquisition functions.
     """
+
     def __init__(self, acq_type: str, kappa: float, xi: float):
         """
         Args:
@@ -136,18 +134,18 @@ class AcquisitionFunction:
         self.kappa = kappa
         self.xi = xi
 
-        if acq_type not in ['ucb', 'ei', 'poi', 'gp-ucb']:
-            err_msg = "The utility function {} has not been implemented, " \
-                  "please choose one of ucb, ei, or poi.".format(acq_type)
+        if acq_type not in ["ucb", "ei", "poi", "gp-ucb"]:
+            err_msg = (
+                "The utility function {} has not been implemented, "
+                "please choose one of ucb, ei, or poi.".format(acq_type)
+            )
             raise NotImplementedError(err_msg)
         else:
             self.acq_type = acq_type
 
-    def calculate(self,
-                  x: Union[List, np.ndarray],
-                  gpr: GaussianProcessRegressor,
-                  y_max: float,
-                  noise: float) -> np.ndarray:
+    def calculate(
+        self, x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, noise: float
+    ) -> np.ndarray:
         """
         Calculate the value of acquisition function.
 
@@ -159,29 +157,24 @@ class AcquisitionFunction:
             noise (float): Noise added to acquisition function if noisy-based bayesian
                 optimization is performed, 0 otherwise.
         """
-        if self.acq_type == 'ucb':
+        if self.acq_type == "ucb":
             return self._ucb(x, gpr, self.kappa, noise)
-        if self.acq_type == 'ei':
+        if self.acq_type == "ei":
             return self._ei(x, gpr, y_max, self.xi, noise)
-        if self.acq_type == 'poi':
+        if self.acq_type == "poi":
             return self._poi(x, gpr, y_max, self.xi, noise)
-        if self.acq_type == 'gp-ucb':
+        if self.acq_type == "gp-ucb":
             return self._gpucb(x, gpr, noise)
 
     @staticmethod
-    def _ucb(x: Union[List, np.ndarray],
-             gpr: GaussianProcessRegressor,
-             kappa: float,
-             noise: float) -> np.ndarray:
+    def _ucb(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, kappa: float, noise: float) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
         return mean + kappa * std
 
     @staticmethod
-    def _ei(x: Union[List, np.ndarray],
-            gpr: GaussianProcessRegressor,
-            y_max: float,
-            xi: float,
-            noise: float) -> np.ndarray:
+    def _ei(
+        x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float
+    ) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
 
         imp = mean - y_max - xi
@@ -191,11 +184,9 @@ class AcquisitionFunction:
         return imp * cdf + std * pdf
 
     @staticmethod
-    def _poi(x: Union[List, np.ndarray],
-             gpr: GaussianProcessRegressor,
-             y_max: float,
-             xi: float,
-             noise: float) -> np.ndarray:
+    def _poi(
+        x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float
+    ) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
 
         z = (mean - y_max - xi) / std
@@ -203,10 +194,8 @@ class AcquisitionFunction:
         return cdf
 
     @staticmethod
-    def _gpucb(x: Union[List, np.ndarray],
-               gpr: GaussianProcessRegressor,
-               noise: float) -> np.ndarray:
-        if not hasattr(gpr, 'X_train_'):
+    def _gpucb(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float) -> np.ndarray:
+        if not hasattr(gpr, "X_train_"):
             raise AttributeError("GP-UCB acquisition function can not be applued.")
         T = gpr.X_train_.shape[0]
         D = gpr.X_train_.shape[1]

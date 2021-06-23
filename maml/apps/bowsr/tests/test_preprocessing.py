@@ -4,7 +4,6 @@ from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
 
 
 class ScalerTest(unittest.TestCase):
-
     def setUp(self):
         self.target = np.random.random((12, 6))
         self.scaler1 = StandardScaler()
@@ -28,8 +27,7 @@ class ScalerTest(unittest.TestCase):
 
         transformed_target1 = self.scaler1.transform(self.target)
         self.assertTrue(transformed_target1.shape == self.target.shape)
-        transformed_target2 = (self.target - np.mean(self.target, axis=0)) \
-                              / np.std(self.target, axis=0)
+        transformed_target2 = (self.target - np.mean(self.target, axis=0)) / np.std(self.target, axis=0)
         self.assertTrue(np.all(abs(transformed_target1 - transformed_target2) < 1e-5))
 
         transformed_target3 = self.scaler2.transform(self.target)
@@ -51,10 +49,8 @@ class ScalerTest(unittest.TestCase):
         self.scaler1.fit(self.target)
         scaler1_dict = self.scaler1.as_dict()
         self.assertEqual(scaler1_dict["@class"], "StandardScaler")
-        self.assertTrue(np.all(abs(scaler1_dict["params"]["mean"]
-                               - np.mean(self.target, axis=0)) < 1e-4))
-        self.assertTrue(np.all(abs(scaler1_dict["params"]["std"]
-                               - np.std(self.target, axis=0)) < 1e-4))
+        self.assertTrue(np.all(abs(scaler1_dict["params"]["mean"] - np.mean(self.target, axis=0)) < 1e-4))
+        self.assertTrue(np.all(abs(scaler1_dict["params"]["std"] - np.std(self.target, axis=0)) < 1e-4))
 
         scaler2_dict = self.scaler2.as_dict()
         self.assertEqual(scaler2_dict["@class"], "DummyScaler")
@@ -74,5 +70,5 @@ class ScalerTest(unittest.TestCase):
         self.assertTrue(np.all(abs(target2 - self.target) < 1e-4))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

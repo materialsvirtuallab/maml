@@ -13,9 +13,8 @@ class StandardScaler(MSONable):
     StandardScaler follows the sklean manner with addition of
     dictionary representation.
     """
-    def __init__(self,
-                 mean: Union[List, np.ndarray] = None,
-                 std: Union[List, np.ndarray] = None):
+
+    def __init__(self, mean: Union[List, np.ndarray] = None, std: Union[List, np.ndarray] = None):
         self.mean = mean
         self.std = std
 
@@ -57,17 +56,17 @@ class StandardScaler(MSONable):
         return transformed_target * self.std + self.mean
 
     def __repr__(self):
-        return "{0}(mean={1}, std={2})".format(self.__class__.__name__,
-                                               self.mean, self.std)
+        return "{0}(mean={1}, std={2})".format(self.__class__.__name__, self.mean, self.std)
 
     def as_dict(self):
         """
         Dict representation of StandardScaler.
         """
-        d = {"@module": self.__class__.__module__,
-             "@class": self.__class__.__name__,
-             "params": {"mean": self.mean.tolist(),
-                        "std": self.std.tolist()}}
+        d = {
+            "@module": self.__class__.__module__,
+            "@class": self.__class__.__name__,
+            "params": {"mean": self.mean.tolist(), "std": self.std.tolist()},
+        }
 
         return d
 
@@ -87,6 +86,7 @@ class DummyScaler(MSONable):
     """
     Dummy scaler does nothing.
     """
+
     def fit(self, target: Union[List, np.ndarray]) -> None:
         """
         Fit the DummyScaler to the target.
@@ -122,9 +122,7 @@ class DummyScaler(MSONable):
 
     def as_dict(self):
 
-        d = {"@module": self.__class__.__module__,
-             "@class": self.__class__.__name__,
-             "params": {}}
+        d = {"@module": self.__class__.__module__, "@class": self.__class__.__name__, "params": {}}
 
         return d
 

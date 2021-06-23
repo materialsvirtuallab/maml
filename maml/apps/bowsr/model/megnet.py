@@ -15,13 +15,14 @@ from pymatgen.core.structure import Structure
 from maml.apps.bowsr.model.base import EnergyModel
 
 module_dir = os.path.dirname(__file__)
-model_filename = os.path.join(module_dir, "model_files", "megnet","formation_energy.hdf5")
+model_filename = os.path.join(module_dir, "model_files", "megnet", "formation_energy.hdf5")
 
 
 class MEGNet(EnergyModel):
     """
     MEGNetModel wrapper.
     """
+
     def __init__(self, model=MEGNetModel.from_file(model_filename), reconstruct=False, **kwargs):
         gaussian_cutoff = kwargs.get("gaussian_cutoff", 6)
         radius_cutoff = kwargs.get("radius_cutoff", 5)
@@ -30,8 +31,9 @@ class MEGNet(EnergyModel):
         weights = model.get_weights()
         self.embedding = weights[0]
         if reconstruct:
-            cg = CrystalGraph(bond_converter=GaussianDistance(np.linspace(0, gaussian_cutoff, 100),
-                              0.5), cutoff=radius_cutoff)
+            cg = CrystalGraph(
+                bond_converter=GaussianDistance(np.linspace(0, gaussian_cutoff, 100), 0.5), cutoff=radius_cutoff
+            )
             model_new = MEGNetModel(100, 2, 16, npass=npass, graph_converter=cg)
             model_new.set_weights(weights[1:])
             self.model = model_new
@@ -47,13 +49,12 @@ class MEGNet(EnergyModel):
         Returns: float
         """
         if not structure.is_ordered and not self.reconstruct:
-            raise ValueError("To predict properties of disordered structure, "
-                             "please set reconstruct=True")
+            raise ValueError("To predict properties of disordered structure, " "please set reconstruct=True")
 
         if self.reconstruct:
             species = [dict(site.species.as_dict()) for site in structure]
             structure_copy = structure.copy()
-            structure_copy[:] = '' #dummy variable
+            structure_copy[:] = ""  # dummy variable
             graph = self.model.graph_converter.convert(structure_copy)
 
             atom = []
@@ -62,7 +63,7 @@ class MEGNet(EnergyModel):
                 for el, amt in d.items():
                     f += self.embedding[Element(el).number] * amt
                 atom.append(f)
-            graph['atom'] = atom
+            graph["atom"] = atom
 
             energy = self.model.predict_graph(graph)[0]
         else:

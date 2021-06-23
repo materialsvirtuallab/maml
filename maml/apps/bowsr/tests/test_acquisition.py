@@ -2,112 +2,180 @@ import unittest
 import numpy as np
 from scipy.stats import norm
 from scipy.special import erfc
-from maml.apps.bowsr.acquisition import ensure_rng, propose_query_point, \
-        AcquisitionFunction, predict_mean_std
+from maml.apps.bowsr.acquisition import ensure_rng, propose_query_point, AcquisitionFunction, predict_mean_std
 from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
 from sklearn.gaussian_process.kernels import Matern, RationalQuadratic
 from sklearn.gaussian_process import GaussianProcessRegressor
 
-class AcquisitionFunctionTest(unittest.TestCase):
 
+class AcquisitionFunctionTest(unittest.TestCase):
     def setUp(self):
-        self.acq_ucb = AcquisitionFunction(acq_type='ucb', kappa=1.0, xi=0.)
-        self.acq_ei = AcquisitionFunction(acq_type='ei', kappa=1.0, xi=0.1)
-        self.acq_poi = AcquisitionFunction(acq_type='poi', kappa=1.0, xi=0.1)
-        self.acq_gpucb = AcquisitionFunction(acq_type='gp-ucb', kappa=1.0, xi=0.1)
+        self.acq_ucb = AcquisitionFunction(acq_type="ucb", kappa=1.0, xi=0.0)
+        self.acq_ei = AcquisitionFunction(acq_type="ei", kappa=1.0, xi=0.1)
+        self.acq_poi = AcquisitionFunction(acq_type="poi", kappa=1.0, xi=0.1)
+        self.acq_gpucb = AcquisitionFunction(acq_type="gp-ucb", kappa=1.0, xi=0.1)
         self.standardscaler = StandardScaler()
         self.dummyscaler = DummyScaler()
 
-        self.X = np.array([[-0.99, -0.99], [-0.65, -0.99], [-0.30, -0.99],
-                           [0.00, -0.99], [0.35, -0.65], [0.65, -0.65],
-                           [0.99, -0.65], [0.65, -0.35], [0.99, -0.35],
-                           [0.35, 0.00], [0.65, 0.00], [0.99, 0.35],
-                           [0.35, 0.65], [0.65, 0.65], [0.99, 0.65], [0.99, 0.99]])
-        self.test_func = lambda x: -(x[:, 0] - 0.6) ** 3 - (x[:, 1] + 0.3) ** 2
+        self.X = np.array(
+            [
+                [-0.99, -0.99],
+                [-0.65, -0.99],
+                [-0.30, -0.99],
+                [0.00, -0.99],
+                [0.35, -0.65],
+                [0.65, -0.65],
+                [0.99, -0.65],
+                [0.65, -0.35],
+                [0.99, -0.35],
+                [0.35, 0.00],
+                [0.65, 0.00],
+                [0.99, 0.35],
+                [0.35, 0.65],
+                [0.65, 0.65],
+                [0.99, 0.65],
+                [0.99, 0.99],
+            ]
+        )
+        self.test_func = lambda x: -((x[:, 0] - 0.6) ** 3) - (x[:, 1] + 0.3) ** 2
         self.y_max = np.max(self.test_func(self.X))
         self.matern_gpr = GaussianProcessRegressor(kernel=Matern(length_scale=1.0))
         self.rq_gpr = GaussianProcessRegressor(kernel=RationalQuadratic(length_scale=1.0))
 
     def test_attributes(self):
-        self.assertRaises(NotImplementedError, AcquisitionFunction,
-                          acq_type='other', kappa=1.0, xi=0.1)
-        self.assertTrue(self.acq_ucb.acq_type == 'ucb')
+        self.assertRaises(NotImplementedError, AcquisitionFunction, acq_type="other", kappa=1.0, xi=0.1)
+        self.assertTrue(self.acq_ucb.acq_type == "ucb")
         self.assertTrue(self.acq_ucb.kappa == 1.0)
-        self.assertTrue(self.acq_ucb.xi == 0.)
-        self.assertTrue(self.acq_ei.acq_type == 'ei')
+        self.assertTrue(self.acq_ucb.xi == 0.0)
+        self.assertTrue(self.acq_ei.acq_type == "ei")
         self.assertTrue(self.acq_ei.kappa == 1.0)
         self.assertTrue(self.acq_ei.xi == 0.1)
-        self.assertTrue(self.acq_poi.acq_type == 'poi')
+        self.assertTrue(self.acq_poi.acq_type == "poi")
         self.assertTrue(self.acq_poi.kappa == 1.0)
         self.assertTrue(self.acq_poi.xi == 0.1)
-        self.assertTrue(self.acq_gpucb.acq_type == 'gp-ucb')
+        self.assertTrue(self.acq_gpucb.acq_type == "gp-ucb")
         self.assertTrue(self.acq_gpucb.kappa == 1.0)
         self.assertTrue(self.acq_gpucb.xi == 0.1)
 
     def test_propose(self):
         self.matern_gpr.fit(self.X, self.test_func(self.X))
-        propose_ucb = propose_query_point(acquisition=self.acq_ucb.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=self.y_max, noise=0.0,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_ucb = propose_query_point(
+            acquisition=self.acq_ucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(-1 <= propose_ucb[0] <= 1 and -1 <= propose_ucb[1] <= 1)
 
-        propose_ucb = propose_query_point(acquisition=self.acq_gpucb.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=self.y_max, noise=0.0,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_ucb = propose_query_point(
+            acquisition=self.acq_gpucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(-1 <= propose_ucb[0] <= 1 and -1 <= propose_ucb[1] <= 1)
 
-        propose_ei = propose_query_point(acquisition=self.acq_ei.calculate, scaler=self.dummyscaler,
-                                         gpr=self.matern_gpr, y_max=self.y_max, noise=0.0,
-                                         bounds=np.array([[0, 2], [0, 2]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            acquisition=self.acq_ei.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[0, 2], [0, 2]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(0 <= propose_ei[0] <= 2 and 0 <= propose_ei[1] <= 2)
 
-        propose_poi = propose_query_point(acquisition=self.acq_poi.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=self.y_max, noise=0.0,
-                                          bounds=np.array([[-2, 0], [-2, 0]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_poi = propose_query_point(
+            acquisition=self.acq_poi.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-2, 0], [-2, 0]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(-2 <= propose_poi[0] <= 0 and -2 <= propose_poi[1] <= 0)
 
         self.standardscaler.fit(self.X)
         self.rq_gpr.fit(self.standardscaler.transform(self.X), self.test_func(self.X))
-        propose_ei = propose_query_point(acquisition=self.acq_ei.calculate, scaler=self.standardscaler,
-                                         gpr=self.rq_gpr, y_max=self.y_max, noise=0.0,
-                                         bounds=np.array([[0, 2], [0, 2]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            acquisition=self.acq_ei.calculate,
+            scaler=self.standardscaler,
+            gpr=self.rq_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[0, 2], [0, 2]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(0 <= propose_ei[0] <= 2 and 0 <= propose_ei[1] <= 2)
 
         noise = 0.02
-        self.matern_gpr.fit(self.X, self.test_func(self.X)
-                            + np.random.uniform(-1, 1, len(self.X)) * noise)
+        self.matern_gpr.fit(self.X, self.test_func(self.X) + np.random.uniform(-1, 1, len(self.X)) * noise)
         y_max = np.max(self.matern_gpr.predict(self.X))
-        propose_ucb = propose_query_point(acquisition=self.acq_ucb.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=y_max, noise=noise,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_ucb = propose_query_point(
+            acquisition=self.acq_ucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(-1 <= propose_ucb[0] <= 1 and -1 <= propose_ucb[1] <= 1)
 
-        propose_ei = propose_query_point(acquisition=self.acq_ei.calculate, scaler=self.dummyscaler,
-                                         gpr=self.matern_gpr, y_max=y_max, noise=noise,
-                                         bounds=np.array([[0, 2], [0, 2]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            acquisition=self.acq_ei.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=y_max,
+            noise=noise,
+            bounds=np.array([[0, 2], [0, 2]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(0 <= propose_ei[0] <= 2 and 0 <= propose_ei[1] <= 2)
 
-        propose_poi = propose_query_point(acquisition=self.acq_poi.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=y_max, noise=noise,
-                                          bounds=np.array([[-2, 0], [-2, 0]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_poi = propose_query_point(
+            acquisition=self.acq_poi.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=y_max,
+            noise=noise,
+            bounds=np.array([[-2, 0], [-2, 0]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(-2 <= propose_poi[0] <= 0 and -2 <= propose_poi[1] <= 0)
 
         self.standardscaler.fit(self.X)
-        self.rq_gpr.fit(self.standardscaler.transform(self.X), self.test_func(self.X)
-                        + np.random.uniform(-1, 1, len(self.X)) * noise)
+        self.rq_gpr.fit(
+            self.standardscaler.transform(self.X),
+            self.test_func(self.X) + np.random.uniform(-1, 1, len(self.X)) * noise,
+        )
         y_max = np.max(self.rq_gpr.predict(self.X))
-        propose_ei = propose_query_point(acquisition=self.acq_ei.calculate, scaler=self.standardscaler,
-                                         gpr=self.rq_gpr, y_max=y_max, noise=noise,
-                                         bounds=np.array([[0, 2], [0, 2]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            acquisition=self.acq_ei.calculate,
+            scaler=self.standardscaler,
+            gpr=self.rq_gpr,
+            y_max=y_max,
+            noise=noise,
+            bounds=np.array([[0, 2], [0, 2]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(0 <= propose_ei[0] <= 2 and 0 <= propose_ei[1] <= 2)
 
     def test_predict_mean_std(self):
@@ -133,123 +201,196 @@ class AcquisitionFunctionTest(unittest.TestCase):
         epislon = 1e-2
         self.matern_gpr.fit(self.X, self.test_func(self.X))
         self.rq_gpr.fit(self.X, self.test_func(self.X))
-        mesh = np.dstack(np.meshgrid(np.arange(-1, 1, 0.01),
-                                     np.arange(-1, 1, 0.01))).reshape(-1, 2)
+        mesh = np.dstack(np.meshgrid(np.arange(-1, 1, 0.01), np.arange(-1, 1, 0.01))).reshape(-1, 2)
 
         y_mesh_ucb = self.acq_ucb.calculate(mesh, gpr=self.matern_gpr, y_max=self.y_max, noise=0.0)
         calc_ucb = mesh[np.argmax(y_mesh_ucb)]
-        propose_ucb = propose_query_point(self.acq_ucb.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=self.y_max, noise=0.0,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_ucb = propose_query_point(
+            self.acq_ucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ucb - propose_ucb) < epislon))
 
         y_mesh_ei = self.acq_ei.calculate(mesh, gpr=self.matern_gpr, y_max=self.y_max, noise=0.0)
         calc_ei = mesh[np.argmax(y_mesh_ei)]
-        propose_ei = propose_query_point(self.acq_ei.calculate, scaler=self.dummyscaler,
-                                         gpr=self.matern_gpr, y_max=self.y_max, noise=0.0,
-                                         bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            self.acq_ei.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ei - propose_ei) < epislon))
 
         y_mesh_poi = self.acq_poi.calculate(mesh, gpr=self.matern_gpr, y_max=self.y_max, noise=0.0)
         calc_poi = mesh[np.argmax(y_mesh_poi)]
-        propose_poi = propose_query_point(self.acq_poi.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=self.y_max, noise=0.0,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_poi = propose_query_point(
+            self.acq_poi.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_poi - propose_poi) < epislon))
 
         y_mesh_ucb = self.acq_ucb.calculate(mesh, gpr=self.rq_gpr, y_max=self.y_max, noise=0.0)
         calc_ucb = mesh[np.argmax(y_mesh_ucb)]
-        propose_ucb = propose_query_point(self.acq_ucb.calculate, scaler=self.dummyscaler,
-                                          gpr=self.rq_gpr, y_max=self.y_max, noise=0.0,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_ucb = propose_query_point(
+            self.acq_ucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.rq_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ucb - propose_ucb) < epislon))
 
         y_mesh_ei = self.acq_ei.calculate(mesh, gpr=self.rq_gpr, y_max=self.y_max, noise=0.0)
         calc_ei = mesh[np.argmax(y_mesh_ei)]
-        propose_ei = propose_query_point(self.acq_ei.calculate, scaler=self.dummyscaler,
-                                         gpr=self.rq_gpr, y_max=self.y_max, noise=0.0,
-                                         bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            self.acq_ei.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.rq_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ei - propose_ei) < epislon))
 
         y_mesh_poi = self.acq_poi.calculate(mesh, gpr=self.rq_gpr, y_max=self.y_max, noise=0.0)
         calc_poi = mesh[np.argmax(y_mesh_poi)]
-        propose_poi = propose_query_point(self.acq_poi.calculate, scaler=self.dummyscaler,
-                                          gpr=self.rq_gpr, y_max=self.y_max, noise=0.0,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_poi = propose_query_point(
+            self.acq_poi.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.rq_gpr,
+            y_max=self.y_max,
+            noise=0.0,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_poi - propose_poi) < epislon))
 
         noise = 0.02
-        self.matern_gpr.fit(self.X, self.test_func(self.X)
-                            + np.random.uniform(-1, 1, len(self.X)) * noise)
-        self.rq_gpr.fit(self.X, self.test_func(self.X)
-                            + np.random.uniform(-1, 1, len(self.X)) * noise)
+        self.matern_gpr.fit(self.X, self.test_func(self.X) + np.random.uniform(-1, 1, len(self.X)) * noise)
+        self.rq_gpr.fit(self.X, self.test_func(self.X) + np.random.uniform(-1, 1, len(self.X)) * noise)
         matern_y_max = np.max(self.matern_gpr.predict(self.X))
         rq_y_max = np.max(self.rq_gpr.predict(self.X))
 
-        y_mesh_ucb = self.acq_ucb.calculate(mesh, gpr=self.matern_gpr, y_max=matern_y_max,
-                                            noise=noise)
+        y_mesh_ucb = self.acq_ucb.calculate(mesh, gpr=self.matern_gpr, y_max=matern_y_max, noise=noise)
         calc_ucb = mesh[np.argmax(y_mesh_ucb)]
-        propose_ucb = propose_query_point(self.acq_ucb.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=matern_y_max, noise=noise,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_ucb = propose_query_point(
+            self.acq_ucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=matern_y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ucb - propose_ucb) < epislon))
 
-        y_mesh_ei = self.acq_ei.calculate(mesh, gpr=self.matern_gpr, y_max=matern_y_max,
-                                          noise=noise)
+        y_mesh_ei = self.acq_ei.calculate(mesh, gpr=self.matern_gpr, y_max=matern_y_max, noise=noise)
         calc_ei = mesh[np.argmax(y_mesh_ei)]
-        propose_ei = propose_query_point(self.acq_ei.calculate, scaler=self.dummyscaler,
-                                         gpr=self.matern_gpr, y_max=matern_y_max, noise=noise,
-                                         bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            self.acq_ei.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=matern_y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ei - propose_ei) < epislon))
 
-        y_mesh_poi = self.acq_poi.calculate(mesh, gpr=self.matern_gpr, y_max=matern_y_max,
-                                            noise=noise)
+        y_mesh_poi = self.acq_poi.calculate(mesh, gpr=self.matern_gpr, y_max=matern_y_max, noise=noise)
         calc_poi = mesh[np.argmax(y_mesh_poi)]
-        propose_poi = propose_query_point(self.acq_poi.calculate, scaler=self.dummyscaler,
-                                          gpr=self.matern_gpr, y_max=matern_y_max, noise=noise,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_poi = propose_query_point(
+            self.acq_poi.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.matern_gpr,
+            y_max=matern_y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_poi - propose_poi) < epislon))
 
         y_mesh_ucb = self.acq_ucb.calculate(mesh, gpr=self.rq_gpr, y_max=rq_y_max, noise=noise)
         calc_ucb = mesh[np.argmax(y_mesh_ucb)]
-        propose_ucb = propose_query_point(self.acq_ucb.calculate, scaler=self.dummyscaler,
-                                          gpr=self.rq_gpr, y_max=rq_y_max, noise=noise,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_ucb = propose_query_point(
+            self.acq_ucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.rq_gpr,
+            y_max=rq_y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ucb - propose_ucb) < epislon))
 
         y_mesh_ei = self.acq_ei.calculate(mesh, gpr=self.rq_gpr, y_max=rq_y_max, noise=noise)
         calc_ei = mesh[np.argmax(y_mesh_ei)]
-        propose_ei = propose_query_point(self.acq_ei.calculate, scaler=self.dummyscaler,
-                                         gpr=self.rq_gpr, y_max=rq_y_max, noise=noise,
-                                         bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                         random_state=ensure_rng(0))
+        propose_ei = propose_query_point(
+            self.acq_ei.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.rq_gpr,
+            y_max=rq_y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_ei - propose_ei) < epislon))
 
         y_mesh_poi = self.acq_poi.calculate(mesh, gpr=self.rq_gpr, y_max=rq_y_max, noise=noise)
         calc_poi = mesh[np.argmax(y_mesh_poi)]
-        propose_poi = propose_query_point(self.acq_poi.calculate, scaler=self.dummyscaler,
-                                          gpr=self.rq_gpr, y_max=rq_y_max, noise=noise,
-                                          bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                          random_state=ensure_rng(0))
+        propose_poi = propose_query_point(
+            self.acq_poi.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.rq_gpr,
+            y_max=rq_y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_poi - propose_poi) < epislon))
 
         y_mesh_gpucb = self.acq_gpucb.calculate(mesh, gpr=self.rq_gpr, y_max=rq_y_max, noise=noise)
         calc_gpucb = mesh[np.argmax(y_mesh_gpucb)]
-        propose_gpucb = propose_query_point(self.acq_gpucb.calculate, scaler=self.dummyscaler,
-                                            gpr=self.rq_gpr, y_max=rq_y_max, noise=noise,
-                                            bounds=np.array([[-1, 1], [-1, 1]]), sampler="lhs",
-                                            random_state=ensure_rng(0))
+        propose_gpucb = propose_query_point(
+            self.acq_gpucb.calculate,
+            scaler=self.dummyscaler,
+            gpr=self.rq_gpr,
+            y_max=rq_y_max,
+            noise=noise,
+            bounds=np.array([[-1, 1], [-1, 1]]),
+            sampler="lhs",
+            random_state=ensure_rng(0),
+        )
         self.assertTrue(all(abs(calc_gpucb - propose_gpucb) < epislon))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -20,13 +20,13 @@ class DFT(EnergyModel):
     """
     DFT static calculation wrapped as energy model.
     """
-    def __init__(self,
-                 exe_path: str = None):
+
+    def __init__(self, exe_path: str = None):
         if not exe_path:
-            if not which('vasp_std'):
+            if not which("vasp_std"):
                 raise RuntimeError("Vasp executable can not be found.")
             else:
-                self.vasp_exe = which('vasp_std')
+                self.vasp_exe = which("vasp_std")
         else:
             self.vasp_exe = exe_path
 
@@ -41,26 +41,27 @@ class DFT(EnergyModel):
         el_amt_dict = structure.composition.get_el_amt_dict()
 
         static = MPStaticSet(structure)
-        with ScratchDir('.'):
-            static.write_input('.')
+        with ScratchDir("."):
+            static.write_input(".")
             p_exe = subprocess.Popen([self.vasp_exe], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stdout, stderr = p_exe.communicate()
             rc = p_exe.returncode
             if rc != 0:
-                error_msg = 'vasp exited with return code %d' % rc
-                msg = stderr.decode("utf-8").split('\n')[:-1]
+                error_msg = "vasp exited with return code %d" % rc
+                msg = stderr.decode("utf-8").split("\n")[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg) if m.startswith('ERROR')][0]
-                    error_msg += ', '.join(msg[error_line:])
+                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                    error_msg += ", ".join(msg[error_line:])
                 except Exception:
-                    error_msg += ', '
+                    error_msg += ", "
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
             compat = MaterialsProjectCompatibility()
-            vrun = Vasprun('vasprun.xml')
+            vrun = Vasprun("vasprun.xml")
             entry = compat.process_entry(vrun.get_computed_entry())
-            energy = (entry.energy - sum(elements[el]['energy_per_atom'] * amt
-                                            for el, amt in el_amt_dict.items())) / len(structure)
+            energy = (
+                entry.energy - sum(elements[el]["energy_per_atom"] * amt for el, amt in el_amt_dict.items())
+            ) / len(structure)
 
         return energy
