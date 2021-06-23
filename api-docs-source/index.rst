@@ -68,7 +68,7 @@ For all the requirements above::
 
     pip install -r requirements-ci.txt
     pip install -r requirements-optional.txt
-    pip install -r requirements-tf.txt
+    pip install -r requirements-dl.txt
     pip install -r requirements.txt
 
 Usage
