@@ -10,3 +10,4 @@ tqdm==4.61.1
 pymongo==3.11.4
 matminer==0.7.2
 megnet==1.2.8
+monty==2021.3.3
