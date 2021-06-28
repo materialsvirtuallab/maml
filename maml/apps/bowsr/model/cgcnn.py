@@ -69,7 +69,7 @@ class CGCNN(EnergyModel):
         output = self.model(*inp)
         return self.normalizer.denorm(output).data.cpu().numpy()[0][0]
 
-
+@requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")
 class CGCNNInput:
     """Wrapper to generate input for cgcnn from pymatgen structure."""
 
@@ -158,7 +158,7 @@ class CGCNNInput:
             cif_ids = list(range(len(structures)))
         return [self.generate_input(s, id) for s, id in zip(structures, cif_ids)]
 
-
+@requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")
 class CGCNNNormalizer(object):
 
     """Normalize a Tensor and restore it later."""
