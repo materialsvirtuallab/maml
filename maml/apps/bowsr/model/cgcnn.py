@@ -5,21 +5,24 @@ import warnings
 from typing import Dict, List, Tuple, Any
 import numpy as np
 
+from monty.dev import requires
 from pymatgen.core.structure import Structure
 from maml.apps.bowsr.model.base import EnergyModel
 
 try:
     import torch
+    import cgcnn
     from cgcnn.model import CrystalGraphConvNet
     from cgcnn.data import GaussianDistance, AtomCustomJSONInitializer
 except Exception as e:
-    raise ImportError("Please refer to https://github.com/txie-93/cgcnn.git to download package of cgcnn")
+    torch = None
+    cgcnn = None
 
 pjoin = os.path.join
 module_dir = os.path.dirname(__file__)
 model_dir = pjoin(module_dir, "model_files", "cgcnn", "formation-energy-per-atom.pth.tar")
 
-
+@requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")
 class CGCNN(EnergyModel):
     """Wrapper to generate cgcnn energy prediction model."""
 
