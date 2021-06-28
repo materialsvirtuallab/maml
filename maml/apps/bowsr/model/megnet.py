@@ -1,17 +1,22 @@
+"""
+megnet model wrapper implementation
+"""
 try:
     import megnet
-    import numpy as np
-    from pymatgen.core.periodic_table import Element
     from megnet.models import MEGNetModel
     from megnet.data.crystal import CrystalGraph
     from megnet.data.graph import GaussianDistance
-except Exception as e:
+except Exception as error:
     megnet = None
     MEGNetModel = None
     raise ImportError("megnet module should be installed to use this model type!")
 
 import os
+
+import numpy as np
 from pymatgen.core.structure import Structure
+from pymatgen.core.periodic_table import Element
+
 from maml.apps.bowsr.model.base import EnergyModel
 
 module_dir = os.path.dirname(__file__)
@@ -24,6 +29,14 @@ class MEGNet(EnergyModel):
     """
 
     def __init__(self, model=MEGNetModel.from_file(model_filename), reconstruct=False, **kwargs):
+        """
+
+        Args:
+            model:  MEGNet energy model
+            reconstruct: Whether to reconstruct the model (used in
+                disordered model)
+            **kwargs:
+        """
         gaussian_cutoff = kwargs.get("gaussian_cutoff", 6)
         radius_cutoff = kwargs.get("radius_cutoff", 5)
         npass = kwargs.get("npass", 2)

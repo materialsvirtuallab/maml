@@ -12,6 +12,7 @@ from pymatgen.core.structure import Structure, Lattice
 from pymatgen.core.operations import SymmOp
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
+from sklearn.base import clone
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RationalQuadratic
 
@@ -23,8 +24,12 @@ from maml.apps.bowsr.perturbation import WyckoffPerturbation, LatticePerturbatio
 
 
 def struct2perturbation(
-    structure: Structure, use_symmetry: bool = True, 
-    wyc_tol: float = 0.3 * 1e-3, abc_tol: float = 1e-3, angle_tol: float = 2e-1, symprec: float = 1e-2
+    structure: Structure,
+    use_symmetry: bool = True,
+    wyc_tol: float = 0.3 * 1e-3,
+    abc_tol: float = 1e-3,
+    angle_tol: float = 2e-1,
+    symprec: float = 1e-2,
 ) -> Tuple[List[WyckoffPerturbation], List[int], Dict, LatticePerturbation]:
     """
     Get the symmetry-driven perturbation of the structure.
@@ -61,9 +66,9 @@ def struct2perturbation(
         equivalent_atoms = sd["equivalent_atoms"]
         mapping = dict(zip(range(structure.num_sites), equivalent_atoms))
         symmetrically_distinct_indices = np.unique(equivalent_atoms)
-        indices = [idx for idx in symmetrically_distinct_indices]
+        indices = symmetrically_distinct_indices.tolist()
     else:
-        indices = [idx for idx in range(structure.num_sites)]
+        indices = list(range(structure.num_sites))
         mapping = dict(zip(indices, indices))
 
     wps = []
@@ -72,12 +77,12 @@ def struct2perturbation(
         wp = WyckoffPerturbation(spg_int_number, wyckoff_symbol, symmetry_ops=symm_ops, use_symmetry=use_symmetry)
         wp.sanity_check(structure[i], wyc_tol=wyc_tol)
         wps.append(wp)
-    wps = [wp for wp in wps]
+    # wps = [wp for wp in wps]
 
     lp = LatticePerturbation(spg_int_number, use_symmetry=use_symmetry)
     lp.sanity_check(structure.lattice, abc_tol=abc_tol, angle_tol=angle_tol)
 
-    return tuple((wps, indices, mapping, lp))
+    return tuple((wps, indices, mapping, lp))  # type: ignore
 
 
 def atoms_crowded(structure: Structure, radius: float = 1.1) -> bool:
@@ -140,11 +145,11 @@ class BayesianOptimizer:
         wps, _, _, lp = struct2perturbation(standardized_structure, **kwargs)
 
         u = 0
-        while not (all([wp.fit_site for wp in wps]) and lp.fit_lattice) and u < 3:
+        while not (all(wp.fit_site for wp in wps) and lp.fit_lattice) and u < 3:
             standardized_structure = get_standardized_structure(standardized_structure)
             wps, _, _, lp = struct2perturbation(standardized_structure, use_symmetry, **kwargs)
             u += 1
-        if not (all([wp.fit_site for wp in wps]) and lp.fit_lattice):
+        if not (all(wp.fit_site for wp in wps) and lp.fit_lattice):
             raise ValueError("Standard structures can not be obtained.")
 
         self.structure = standardized_structure
@@ -237,7 +242,7 @@ class BayesianOptimizer:
         """
         try:
             target = self.space.probe(x)
-        except:
+        except:  # noqa
             target = 0
         return target
 
@@ -287,6 +292,7 @@ class BayesianOptimizer:
         kappa: float = 2.576,
         xi: float = 0.0,
         n_warmup: int = 1000,
+        is_continue: bool = False,
         sampler: str = "lhs",
         **gpr_params,
     ) -> None:
@@ -306,10 +312,13 @@ class BayesianOptimizer:
             xi (float): Tradeoff parameter between exploitation and exploration.
             n_warmup (int): Number of randomly sampled points to select the initial
                 point for minimization.
+            is_continue (bool): whether to continue previous run without resetting GPR
             sampler (str): Sampler generating initial points. "uniform" or "lhs".
         """
+        # print('Optimize begins!')
         self.set_gpr_params(**gpr_params)
-
+        if not is_continue:
+            self._gpr = clone(self._gpr)
         acq = AcquisitionFunction(acq_type=acq_type, kappa=kappa, xi=xi)
 
         # Add the initial structure into known data
@@ -408,7 +417,16 @@ class BayesianOptimizer:
         """
         Dict representation of BayesianOptimizer.
         """
-        serialize = lambda t: tuple([int(num) for num in item] if isinstance(item, np.ndarray) else item for item in t)
+
+        def serialize(t) -> tuple:
+            """
+            serialize the object
+            Args:
+                t:
+            Returns:
+
+            """
+            return tuple([int(num) for num in item] if isinstance(item, np.ndarray) else item for item in t)
 
         def gpr_as_dict(gpr):
             """
@@ -487,15 +505,15 @@ class BayesianOptimizer:
             return gpr
 
         if d["model"] == "MEGNet":
-            import bowsr.model.megnet as energy_model
+            import maml.apps.bowsr.model.megnet as energy_model
 
             model = getattr(energy_model, d["model"])()
         elif d["model"] == "CGCNN":
-            import bowsr.model.cgcnn as energy_model
+            import maml.apps.bowsr.model.cgcnn as energy_model
 
             model = getattr(energy_model, d["model"])()
         elif d["model"] == "DFT":
-            import bowsr.model.dft as energy_model
+            import maml.apps.bowsr.model.dft as energy_model
 
             model = getattr(energy_model, d["model"])()
         else:
@@ -534,7 +552,7 @@ class BayesianOptimizer:
         space_bounds = np.array(space_d["bounds"])
         space_random_state = np.random.RandomState()
         space_random_state.set_state(space_d["random_state"])
-        import bowsr.preprocessing as preprocessing
+        import maml.apps.bowsr.preprocessing as preprocessing
 
         scaler = getattr(preprocessing, d["scaler"]["@class"])(**d["scaler"]["params"])
         optimizer.scaler = scaler

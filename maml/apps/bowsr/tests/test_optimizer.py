@@ -2,7 +2,7 @@ import os
 import unittest
 import numpy as np
 
-from pymatgen import Structure, Lattice
+from pymatgen.core import Structure, Lattice
 from pymatgen.analysis.structure_matcher import StructureMatcher
 from sklearn.gaussian_process.kernels import Matern, RationalQuadratic
 

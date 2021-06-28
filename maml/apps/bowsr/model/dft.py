@@ -1,3 +1,6 @@
+"""
+DFT wrapper
+"""
 import os
 import subprocess
 from monty.os.path import which
@@ -22,11 +25,15 @@ class DFT(EnergyModel):
     """
 
     def __init__(self, exe_path: str = None):
+        """
+        DFT wrapper
+        Args:
+            exe_path: VASP executable path
+        """
         if not exe_path:
             if not which("vasp_std"):
                 raise RuntimeError("Vasp executable can not be found.")
-            else:
-                self.vasp_exe = which("vasp_std")
+            self.vasp_exe = which("vasp_std")
         else:
             self.vasp_exe = exe_path
 

@@ -1,10 +1,11 @@
+"""
+magpie model wrapper
+"""
 try:
     import pickle
-    import xgboost
     import numpy as np
     from matminer.featurizers.composition import ElementProperty
-    from mlstabilitytest.training.MatminerModel import MatminerModel
-except Exception as e:
+except Exception as error:
     raise ImportError("magpie module is not installed!")
 
 import os
@@ -21,6 +22,9 @@ class Magpie(EnergyModel):
     """
 
     def __init__(self):
+        """
+        Magpie constructor
+        """
         with open(module_filename, "rb") as f:
             model = pickle.load(f)
         self.model = model

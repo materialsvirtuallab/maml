@@ -2,7 +2,7 @@
 Module implements the new candidate proposal.
 """
 
-from typing import Union, List, Sequence, Tuple, TypeVar, Any
+from typing import Union, List, Tuple, Any
 
 import numpy as np
 from numpy.random import RandomState
@@ -17,15 +17,10 @@ def ensure_rng(seed: int = None) -> RandomState:
     Create a random number generator based on an optional seed.
     This can be an integer for a seeded rng or None for an unseeded rng.
     """
-    if seed is None:
-        return np.random.RandomState()
-    if isinstance(seed, int):
-        return np.random.RandomState(seed)
+    return np.random.RandomState(seed=seed)
 
 
-def predict_mean_std(
-    x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float
-) -> Tuple[Any, ...]:
+def predict_mean_std(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float) -> Tuple[Any, ...]:
     """
     Speed up the gpr.predict method by manually computing the kernel operations.
 
@@ -38,9 +33,12 @@ def predict_mean_std(
     """
     # cache result of K_inv computation.
     X = np.array(x)
-    if gpr._K_inv is None:
+
+    # todo: @yunxing the cache mechanism is causing inconsistent shapes for
+    # the dot product line. Please double check. I am disabling the cache for now
+    if True:  # getattr(gpr, "_K_inv", None) is None:
         L_inv = solve_triangular(gpr.L_.T, np.eye(gpr.L_.shape[0]))
-        gpr._K_inv = L_inv.dot(L_inv.T)
+        setattr(gpr, "_K_inv", L_inv.dot(L_inv.T))
 
     K_trans = gpr.kernel_(X, gpr.X_train_)
     y_mean = K_trans.dot(gpr.alpha_) + gpr._y_train_mean
@@ -107,6 +105,8 @@ def propose_query_point(
         # Minimize objective is the negative acquisition function
         return -acquisition(x.reshape(-1, dim), gpr=gpr, y_max=y_max, noise=noise)
 
+    # print(x_max.reshape(-1, dim))
+    # print(bounds)
     res = minimize(min_obj, x0=x_max.reshape(-1, dim), bounds=bounds, method="L-BFGS-B")
 
     if -res.fun[0] >= acq_max:
@@ -141,8 +141,7 @@ class AcquisitionFunction:
                 "please choose one of ucb, ei, or poi.".format(acq_type)
             )
             raise NotImplementedError(err_msg)
-        else:
-            self.acq_type = acq_type
+        self.acq_type = acq_type
 
     def calculate(
         self, x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, noise: float
@@ -158,14 +157,15 @@ class AcquisitionFunction:
             noise (float): Noise added to acquisition function if noisy-based bayesian
                 optimization is performed, 0 otherwise.
         """
+        if self.acq_type not in ["ucb", "ei", "poi", "gp-ucb"]:
+            raise ValueError("acq type not recognised")
         if self.acq_type == "ucb":
             return self._ucb(x, gpr, self.kappa, noise)
         if self.acq_type == "ei":
             return self._ei(x, gpr, y_max, self.xi, noise)
         if self.acq_type == "poi":
             return self._poi(x, gpr, y_max, self.xi, noise)
-        if self.acq_type == "gp-ucb":
-            return self._gpucb(x, gpr, noise)
+        return self._gpucb(x, gpr, noise)
 
     @staticmethod
     def _ucb(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, kappa: float, noise: float) -> np.ndarray:

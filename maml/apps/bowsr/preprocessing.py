@@ -15,6 +15,11 @@ class StandardScaler(MSONable):
     """
 
     def __init__(self, mean: Union[List, np.ndarray] = None, std: Union[List, np.ndarray] = None):
+        """
+        Args:
+            mean: np.ndarray, mean values
+            std: np.ndnarray, standard deviations
+        """
         self.mean = mean
         self.std = std
 
@@ -97,7 +102,7 @@ class DummyScaler(MSONable):
         """
         return
 
-    def transform(self, target: Union[List, np.ndarray]) -> np.ndarray:
+    def transform(self, target: Union[List, np.ndarray]) -> Union[List, np.ndarray]:
         """
         Transform target.
 
@@ -107,7 +112,7 @@ class DummyScaler(MSONable):
         """
         return target
 
-    def inverse_transform(self, transformed_target: Union[List, np.ndarray]) -> np.ndarray:
+    def inverse_transform(self, transformed_target: Union[List, np.ndarray]) -> Union[List, np.ndarray]:
         """
         Inversely transform the target.
 
@@ -121,12 +126,22 @@ class DummyScaler(MSONable):
         return "{0}".format(self.__class__.__name__)
 
     def as_dict(self):
-
+        """
+        Serialize the instance into dictionary
+        Returns:
+        """
         d = {"@module": self.__class__.__module__, "@class": self.__class__.__name__, "params": {}}
 
         return d
 
     @classmethod
     def from_dict(cls, d):
+        """
+        Deserialize from a dictionary
+        Args:
+            d: Dict, dictionary contain class initialization parameters
 
+        Returns:
+
+        """
         return cls()

@@ -2,7 +2,7 @@
 Module implemets the target space.
 """
 
-from typing import Union, Dict, List, Callable, Any
+from typing import Union, Dict, List, Callable
 
 import numpy as np
 from numpy.random import RandomState
@@ -65,7 +65,8 @@ class TargetSpace:
                 "No degrees of freedom for relaxation are given. "
                 "Please check the relax_coords and relax_lattice arguments."
             )
-        elif all([relax_coords, relax_lattice]):
+
+        if all([relax_coords, relax_lattice]):
             self.dim = sum(wyckoff_dims) + abc_dim + angles_dim
         elif relax_coords:
             self.dim = sum(wyckoff_dims)
@@ -182,7 +183,7 @@ class TargetSpace:
                 "No degrees of freedom for relaxation are given. "
                 "Please check the relax_coords and relax_lattice arguments."
             )
-        elif all([self.relax_coords, self.relax_lattice]):
+        if all([self.relax_coords, self.relax_lattice]):
             self._bounds = np.concatenate((wyckoff_bounds, abc_bounds, angles_bounds))
         elif self.relax_coords:
             self._bounds = wyckoff_bounds

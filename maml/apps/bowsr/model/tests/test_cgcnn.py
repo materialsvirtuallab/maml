@@ -7,6 +7,13 @@ from pymatgen.core import Structure
 
 from maml.apps.bowsr.model.cgcnn import CGCNN, torch
 
+
+try:
+    import cgcnn
+except ImportError as e:
+    cgcnn = None
+
+
 module_dir = os.path.dirname(__file__)
 pjoin = os.path.join
 
