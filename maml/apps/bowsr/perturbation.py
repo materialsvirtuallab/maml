@@ -318,7 +318,7 @@ class LatticePerturbation:
             self.dims = (3, 0)
             self.perturbation_mode = lambda x: np.concatenate((x, np.zeros(3)))
             self._lattice = lattice  # type: ignore
-            self._abc = abc.tolist()  # type: ignore
+            self._abc = list(abc)  # type: ignore
             self._fit_lattice = True
             return
         if self.crys_system == "monoclinic":
@@ -332,14 +332,14 @@ class LatticePerturbation:
                     )
                 )
                 self._lattice = lattice  # type: ignore
-                self._abc = abc.tolist()  # type: ignore
+                self._abc = list(abc)  # type: ignore
                 self._fit_lattice = True
                 return
             if check(angles, [90, 90, 90], angle_tol):
                 self.dims = (3, 0)
                 self.perturbation_mode = lambda x: np.concatenate((x, np.zeros(3)))
                 self._lattice = lattice  # type: ignore
-                self._abc = abc.tolist()  # type: ignore
+                self._abc = list(abc)  # type: ignore
                 self._fit_lattice = True
                 return
             self._fit_lattice = False
@@ -347,7 +347,7 @@ class LatticePerturbation:
         self.dims = (3, 3)
         self.perturbation_mode = lambda x: x
         self._lattice = lattice  # type: ignore
-        self._abc = abc.tolist()  # type: ignore
+        self._abc = list(abc)  # type: ignore
         self._fit_lattice = True
         return
 
