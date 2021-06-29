@@ -50,9 +50,9 @@ class DFT(EnergyModel):
         static = MPStaticSet(structure)
         with ScratchDir("."):
             static.write_input(".")
-            p_exe = subprocess.Popen([self.vasp_exe], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = p_exe.communicate()
-            rc = p_exe.returncode
+            with subprocess.Popen([self.vasp_exe], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p_exe:
+                stdout, stderr = p_exe.communicate()
+                rc = p_exe.returncode
             if rc != 0:
                 error_msg = "vasp exited with return code %d" % rc
                 msg = stderr.decode("utf-8").split("\n")[:-1]
