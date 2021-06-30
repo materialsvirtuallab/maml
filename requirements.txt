@@ -8,5 +8,5 @@ h5py==3.2.1
 joblib==1.0.1
 tqdm==4.61.1
 pymongo==3.11.4
-matminer==0.7.2
+matminer==0.7.3
 megnet==1.2.8
