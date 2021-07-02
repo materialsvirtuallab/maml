@@ -749,9 +749,11 @@ class NNPotential(LammpsPotential):
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
-            with subprocess.Popen(["nnp-train"], stdout=open(output, "w"), stderr=subprocess.PIPE) as p_train:
-                stdout, stderr = p_train.communicate()
-                rc = p_train.returncode
+            with open(output, "w") as f:
+                with subprocess.Popen(["nnp-train"], stdout=f, stderr=subprocess.PIPE) as p_train:
+                    stdout, stderr = p_train.communicate()
+                    rc = p_train.returncode
+
             if rc != 0:
                 error_msg = "n2p2 exited with return code %d" % rc
                 msg = stderr.decode("utf-8").split("\n")[:-1]
