@@ -6,7 +6,7 @@ pandas==1.2.5
 scikit-learn==0.24.2
 h5py==3.3.0
 joblib==1.0.1
-tqdm==4.61.1
+tqdm==4.61.2
 pymongo==3.11.4
 matminer==0.7.3
 megnet==1.2.8
