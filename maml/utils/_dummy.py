@@ -29,7 +29,7 @@ def get_describer_dummy_obj(instance):
     arg_type = list(arg_types.values())[0]
     str_t = str(arg_type)
     if "." in str_t:
-        str_t = str_t.split(".")[-1]
+        str_t = str_t.rsplit(".", maxsplit=1)[-1]
     return DUMMY_OBJECTS[str_t]
 
 

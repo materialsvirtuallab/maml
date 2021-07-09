@@ -552,7 +552,7 @@ class BayesianOptimizer:
         space_bounds = np.array(space_d["bounds"])
         space_random_state = np.random.RandomState()
         space_random_state.set_state(space_d["random_state"])
-        import maml.apps.bowsr.preprocessing as preprocessing
+        from maml.apps.bowsr import preprocessing
 
         scaler = getattr(preprocessing, d["scaler"]["@class"])(**d["scaler"]["params"])
         optimizer.scaler = scaler
