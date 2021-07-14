@@ -1,16 +1,14 @@
 """
 Module implements the perturbation class for atomic and lattice relaxation.
 """
-
 import os
 from typing import Union, List
 
 import numpy as np
 from monty.serialization import loadfn
-
-from pymatgen.core.structure import Structure, Lattice
 from pymatgen.core.operations import SymmOp
 from pymatgen.core.sites import Site, PeriodicSite
+from pymatgen.core.structure import Structure, Lattice
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.symmetry.groups import SpaceGroup, in_array_list
 
@@ -30,7 +28,6 @@ perturbation_modes = loadfn(os.path.join(module_dir, "symmetry_rules", "perturba
 perturbation_modes = {int(k): v for k, v in perturbation_modes.items()}
 
 small_addup = np.array([1e-4] * 3)
-
 
 perturbation_mapping = lambda x, fixed_indices: np.array(
     [
@@ -227,8 +224,8 @@ class LatticePerturbation:
             abc_tol (float): Tolerance for lattice lengths determined by crystal system.
             angle_tol (float): Tolerance for lattice angles determined by crystal system.
         """
-        abc = lattice.abc
-        angles = lattice.angles
+        abc = list(lattice.abc)
+        angles = list(lattice.angles)
 
         def check(param, ref, tolerance):
             return all(abs(i - j) < tolerance for i, j in zip(param, ref) if j is not None)
@@ -263,7 +260,10 @@ class LatticePerturbation:
             indices = [int((sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2)) for i in np.arange(3)]
             self.perturbation_mode = lambda x: np.concatenate((x[indices], np.zeros(3)))
             self._lattice = lattice  # type: ignore
-            self._abc = [abc[indices.index(0)], abc[indices.index(1)]]  # type: ignore
+            self._abc = [
+                abc[indices.index(0)],  # type: ignore
+                abc[indices.index(1)],
+            ]  # type: ignore
             self._fit_lattice = True
             return
         if self.crys_system == "rhombohedral":
@@ -285,7 +285,10 @@ class LatticePerturbation:
                 indices = [int((sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2)) for i in np.arange(3)]
                 self.perturbation_mode = lambda x: np.concatenate((x[indices], np.zeros(3)))
                 self._lattice = lattice  # type: ignore
-                self._abc = [abc[indices.index(0)], abc[indices.index(1)]]  # type: ignore
+                self._abc = [
+                    abc[indices.index(0)],  # type: ignore
+                    abc[indices.index(1)],
+                ]  # type: ignore
                 self._fit_lattice = True
                 return
             self._fit_lattice = False
@@ -299,7 +302,10 @@ class LatticePerturbation:
                 indices = [int((sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2)) for i in np.arange(3)]
                 self.perturbation_mode = lambda x: np.concatenate((x[indices], np.zeros(3)))
                 self._lattice = lattice  # type: ignore
-                self._abc = [abc[indices.index(0)], abc[indices.index(1)]]  # type: ignore
+                self._abc = [
+                    abc[indices.index(0)],  # type: ignore
+                    abc[indices.index(1)],
+                ]  # type: ignore
                 self._fit_lattice = True
                 return
             if np.all([(sum(abs(np.array(abc) - abc[i]) < abc_tol) == 3) for i in np.arange(3)]):

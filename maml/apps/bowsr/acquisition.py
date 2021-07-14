@@ -1,14 +1,13 @@
 """
 Module implements the new candidate proposal.
 """
-
 from typing import Union, List, Tuple, Any
 
 import numpy as np
 from numpy.random import RandomState
-from scipy.special import erfc
-from scipy.optimize import minimize
 from scipy.linalg import solve_triangular
+from scipy.optimize import minimize
+from scipy.special import erfc
 from sklearn.gaussian_process import GaussianProcessRegressor
 
 

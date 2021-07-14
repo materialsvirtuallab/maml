@@ -1,7 +1,6 @@
 """
 Module implements the scaler.
 """
-
 from typing import Union, List
 
 import numpy as np

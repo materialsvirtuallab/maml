@@ -1,6 +1,16 @@
 """
 megnet model wrapper implementation
 """
+import os
+import warnings
+
+import numpy as np
+from monty.dev import requires
+from pymatgen.core.periodic_table import Element
+from pymatgen.core.structure import Structure
+
+from maml.apps.bowsr.model.base import EnergyModel
+
 try:
     import megnet
     from megnet.models import MEGNetModel
@@ -9,26 +19,21 @@ try:
 except Exception as error:
     megnet = None
     MEGNetModel = None
-    raise ImportError("megnet module should be installed to use this model type!")
-
-import os
-
-import numpy as np
-from pymatgen.core.structure import Structure
-from pymatgen.core.periodic_table import Element
-
-from maml.apps.bowsr.model.base import EnergyModel
+    CrystalGraph = None
+    GaussianDistance = None
+    warnings.warn("megnet module should be installed to use this model type!")
 
 module_dir = os.path.dirname(__file__)
 model_filename = os.path.join(module_dir, "model_files", "megnet", "formation_energy.hdf5")
 
 
+@requires(megnet is not None, "megnet package needs to be installed to use " "this module")
 class MEGNet(EnergyModel):
     """
     MEGNetModel wrapper.
     """
 
-    def __init__(self, model=MEGNetModel.from_file(model_filename), reconstruct=False, **kwargs):
+    def __init__(self, model=None, reconstruct=False, **kwargs):
         """
 
         Args:
@@ -37,6 +42,7 @@ class MEGNet(EnergyModel):
                 disordered model)
             **kwargs:
         """
+        model = model or MEGNetModel.from_file(model_filename)
         gaussian_cutoff = kwargs.get("gaussian_cutoff", 6)
         radius_cutoff = kwargs.get("radius_cutoff", 5)
         npass = kwargs.get("npass", 2)

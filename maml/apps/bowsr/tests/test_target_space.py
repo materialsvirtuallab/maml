@@ -1,12 +1,13 @@
+import numpy as np
 import os
 import unittest
-import numpy as np
 from pymatgen.core.structure import Structure
+
 from maml.apps.bowsr.acquisition import ensure_rng
-from maml.apps.bowsr.target_space import TargetSpace
 from maml.apps.bowsr.optimizer import struct2perturbation
-from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
 from maml.apps.bowsr.perturbation import WyckoffPerturbation
+from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+from maml.apps.bowsr.target_space import TargetSpace
 
 test_lfpo = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_structures", "test_lfpo.cif"))
 

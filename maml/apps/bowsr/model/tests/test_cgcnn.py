@@ -1,18 +1,15 @@
-import unittest
-import os
 import numpy as np
-
-from pymatgen.util.testing import PymatgenTest
+import os
+import unittest
 from pymatgen.core import Structure
+from pymatgen.util.testing import PymatgenTest
 
 from maml.apps.bowsr.model.cgcnn import CGCNN, torch
-
 
 try:
     import cgcnn
 except ImportError as e:
     cgcnn = None
-
 
 module_dir = os.path.dirname(__file__)
 pjoin = os.path.join

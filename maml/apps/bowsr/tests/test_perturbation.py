@@ -1,9 +1,10 @@
+import numpy as np
 import os
 import unittest
-import numpy as np
-from pymatgen.core.structure import Structure
 from pymatgen.core.operations import SymmOp
+from pymatgen.core.structure import Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+
 from maml.apps.bowsr.perturbation import (
     get_standardized_structure,
     WyckoffPerturbation,

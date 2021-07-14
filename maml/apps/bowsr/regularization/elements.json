@@ -1,1 +1,334 @@
-{"Cu": {"mp_id": "mp-30", "energy_per_atom": -4.09929227}, "Os": {"mp_id": "mp-49", "energy_per_atom": -11.219782735}, "Bi": {"mp_id": "mp-23152", "energy_per_atom": -3.898244935}, "Pd": {"mp_id": "mp-2", "energy_per_atom": -5.18261814}, "Sm": {"mp_id": "mp-69", "energy_per_atom": -4.7163491075}, "In": {"mp_id": "mp-1184502", "energy_per_atom": -2.7518583366666665}, "Tm": {"mp_id": "mp-143", "energy_per_atom": -4.47817827}, "Se": {"mp_id": "mp-570481", "energy_per_atom": -3.48949941140625}, "Ba": {"mp_id": "mp-122", "energy_per_atom": -1.92459366}, "Dy": {"mp_id": "mp-1184067", "energy_per_atom": -4.6054439}, "W": {"mp_id": "mp-91", "energy_per_atom": -12.95962612}, "Li": {"mp_id": "mp-135", "energy_per_atom": -1.90797265}, "Sc": {"mp_id": "mp-67", "energy_per_atom": -6.33519936}, "Nb": {"mp_id": "mp-75", "energy_per_atom": -10.11313917}, "As": {"mp_id": "mp-11", "energy_per_atom": -4.658070555}, "Rb": {"mp_id": "mp-1186899", "energy_per_atom": -1.0165324696551723}, "Pr": {"mp_id": "mp-1059256", "energy_per_atom": -4.78410449}, "C": {"mp_id": "mp-568286", "energy_per_atom": -9.22547358125}, "Gd": {"mp_id": "mp-155", "energy_per_atom": -14.09632375}, "Tb": {"mp_id": "mp-11698", "energy_per_atom": -4.629697466666666}, "Sb": {"mp_id": "mp-104", "energy_per_atom": -4.127761275}, "Ir": {"mp_id": "mp-101", "energy_per_atom": -8.86382689}, "Y": {"mp_id": "mp-112", "energy_per_atom": -6.46738415}, "Re": {"mp_id": "mp-1186901", "energy_per_atom": -12.4438572025}, "Si": {"mp_id": "mp-149", "energy_per_atom": -5.42536649}, "Na": {"mp_id": "mp-1186055", "energy_per_atom": -1.3384015255}, "Er": {"mp_id": "mp-99", "energy_per_atom": -4.567411195}, "Yb": {"mp_id": "mp-162", "energy_per_atom": -1.52883786}, "Ac": {"mp_id": "mp-1183069", "energy_per_atom": -4.1276203533333335}, "Th": {"mp_id": "mp-37", "energy_per_atom": -7.41110202}, "Pu": {"mp_id": "mp-613989", "energy_per_atom": -14.331771153125}, "V": {"mp_id": "mp-146", "energy_per_atom": -9.0866256}, "Tl": {"mp_id": "mp-82", "energy_per_atom": -2.367207755}, "La": {"mp_id": "mp-156", "energy_per_atom": -4.94788566}, "Au": {"mp_id": "mp-81", "energy_per_atom": -3.27381448}, "K": {"mp_id": "mp-1184905", "energy_per_atom": -1.110334322}, "Pa": {"mp_id": "mp-62", "energy_per_atom": -9.51729469}, "Ni": {"mp_id": "mp-23", "energy_per_atom": -5.78107405}, "Co": {"mp_id": "mp-54", "energy_per_atom": -7.10999434}, "Ge": {"mp_id": "mp-32", "energy_per_atom": -4.622746205}, "Mo": {"mp_id": "mp-129", "energy_per_atom": -10.86234306}, "S": {"mp_id": "mp-96", "energy_per_atom": -4.1278785359375}, "Ho": {"mp_id": "mp-144", "energy_per_atom": -4.578061785}, "Ce": {"mp_id": "mp-28", "energy_per_atom": -5.93432323}, "Pb": {"mp_id": "mp-20483", "energy_per_atom": -3.71506024}, "Be": {"mp_id": "mp-87", "energy_per_atom": -3.742610435}, "Ru": {"mp_id": "mp-33", "energy_per_atom": -9.276352585}, "Cr": {"mp_id": "mp-90", "energy_per_atom": -9.63670386}, "Nd": {"mp_id": "mp-123", "energy_per_atom": -4.7650955725}, "Hg": {"mp_id": "mp-975272", "energy_per_atom": -0.30369045}, "Te": {"mp_id": "mp-19", "energy_per_atom": -3.14241513}, "Sn": {"mp_id": "mp-117", "energy_per_atom": -4.009397445}, "U": {"mp_id": "mp-44", "energy_per_atom": -11.30030361}, "Ti": {"mp_id": "mp-72", "energy_per_atom": -7.897127353333333}, "B": {"mp_id": "mp-160", "energy_per_atom": -6.678526593333333}, "Rh": {"mp_id": "mp-74", "energy_per_atom": -7.35700461}, "Hf": {"mp_id": "mp-103", "energy_per_atom": -9.954265395}, "Cd": {"mp_id": "mp-94", "energy_per_atom": -0.914734355}, "Cs": {"mp_id": "mp-1184151", "energy_per_atom": -0.8953900537931034}, "Ga": {"mp_id": "mp-142", "energy_per_atom": -3.03723344}, "Ta": {"mp_id": "mp-50", "energy_per_atom": -11.85554519}, "Lu": {"mp_id": "mp-145", "energy_per_atom": -4.52586882}, "Sr": {"mp_id": "mp-76", "energy_per_atom": -1.68596503}, "N": {"mp_id": "mp-1080711", "energy_per_atom": -7.952472187620001}, "Eu": {"mp_id": "mp-1057315", "energy_per_atom": -10.292631755}, "Pt": {"mp_id": "mp-126", "energy_per_atom": -6.0568289}, "Mg": {"mp_id": "mp-1094122", "energy_per_atom": -1.60433496}, "Tc": {"mp_id": "mp-113", "energy_per_atom": -10.35847686}, "Al": {"mp_id": "mp-134", "energy_per_atom": -3.74810318}, "Fe": {"mp_id": "mp-13", "energy_per_atom": -8.45983087}, "P": {"mp_id": "mp-1198724", "energy_per_atom": -5.409794347857143}, "Ca": {"mp_id": "mp-1064227", "energy_per_atom": -2.0031633825}, "Mn": {"mp_id": "mp-35", "energy_per_atom": -9.159249260000001}, "Zn": {"mp_id": "mp-79", "energy_per_atom": -1.272826825}, "Ag": {"mp_id": "mp-124", "energy_per_atom": -2.83173514}, "Zr": {"mp_id": "mp-131", "energy_per_atom": -8.54752196}, "O": {"mp_id": "mp-12957", "energy_per_atom": -4.93552791875}, "Pm": {"mp_id": "mp-867200", "energy_per_atom": -4.7464623925}, "Np": {"mp_id": "mp-11534", "energy_per_atom": -12.94085569125}, "Cl": {"mp_id": "mp-22848", "energy_per_atom": -1.25385097674}, "Br": {"mp_id": "mp-23154", "energy_per_atom": -1.62901478}, "I": {"mp_id": "mp-23153", "energy_per_atom": -1.51905924}, "F": {"mp_id": "mp-21848", "energy_per_atom": -1.42055013381}}
+{
+  "Cu": {
+    "mp_id": "mp-30",
+    "energy_per_atom": -4.09929227
+  },
+  "Os": {
+    "mp_id": "mp-49",
+    "energy_per_atom": -11.219782735
+  },
+  "Bi": {
+    "mp_id": "mp-23152",
+    "energy_per_atom": -3.898244935
+  },
+  "Pd": {
+    "mp_id": "mp-2",
+    "energy_per_atom": -5.18261814
+  },
+  "Sm": {
+    "mp_id": "mp-69",
+    "energy_per_atom": -4.7163491075
+  },
+  "In": {
+    "mp_id": "mp-1184502",
+    "energy_per_atom": -2.7518583366666665
+  },
+  "Tm": {
+    "mp_id": "mp-143",
+    "energy_per_atom": -4.47817827
+  },
+  "Se": {
+    "mp_id": "mp-570481",
+    "energy_per_atom": -3.48949941140625
+  },
+  "Ba": {
+    "mp_id": "mp-122",
+    "energy_per_atom": -1.92459366
+  },
+  "Dy": {
+    "mp_id": "mp-1184067",
+    "energy_per_atom": -4.6054439
+  },
+  "W": {
+    "mp_id": "mp-91",
+    "energy_per_atom": -12.95962612
+  },
+  "Li": {
+    "mp_id": "mp-135",
+    "energy_per_atom": -1.90797265
+  },
+  "Sc": {
+    "mp_id": "mp-67",
+    "energy_per_atom": -6.33519936
+  },
+  "Nb": {
+    "mp_id": "mp-75",
+    "energy_per_atom": -10.11313917
+  },
+  "As": {
+    "mp_id": "mp-11",
+    "energy_per_atom": -4.658070555
+  },
+  "Rb": {
+    "mp_id": "mp-1186899",
+    "energy_per_atom": -1.0165324696551723
+  },
+  "Pr": {
+    "mp_id": "mp-1059256",
+    "energy_per_atom": -4.78410449
+  },
+  "C": {
+    "mp_id": "mp-568286",
+    "energy_per_atom": -9.22547358125
+  },
+  "Gd": {
+    "mp_id": "mp-155",
+    "energy_per_atom": -14.09632375
+  },
+  "Tb": {
+    "mp_id": "mp-11698",
+    "energy_per_atom": -4.629697466666666
+  },
+  "Sb": {
+    "mp_id": "mp-104",
+    "energy_per_atom": -4.127761275
+  },
+  "Ir": {
+    "mp_id": "mp-101",
+    "energy_per_atom": -8.86382689
+  },
+  "Y": {
+    "mp_id": "mp-112",
+    "energy_per_atom": -6.46738415
+  },
+  "Re": {
+    "mp_id": "mp-1186901",
+    "energy_per_atom": -12.4438572025
+  },
+  "Si": {
+    "mp_id": "mp-149",
+    "energy_per_atom": -5.42536649
+  },
+  "Na": {
+    "mp_id": "mp-1186055",
+    "energy_per_atom": -1.3384015255
+  },
+  "Er": {
+    "mp_id": "mp-99",
+    "energy_per_atom": -4.567411195
+  },
+  "Yb": {
+    "mp_id": "mp-162",
+    "energy_per_atom": -1.52883786
+  },
+  "Ac": {
+    "mp_id": "mp-1183069",
+    "energy_per_atom": -4.1276203533333335
+  },
+  "Th": {
+    "mp_id": "mp-37",
+    "energy_per_atom": -7.41110202
+  },
+  "Pu": {
+    "mp_id": "mp-613989",
+    "energy_per_atom": -14.331771153125
+  },
+  "V": {
+    "mp_id": "mp-146",
+    "energy_per_atom": -9.0866256
+  },
+  "Tl": {
+    "mp_id": "mp-82",
+    "energy_per_atom": -2.367207755
+  },
+  "La": {
+    "mp_id": "mp-156",
+    "energy_per_atom": -4.94788566
+  },
+  "Au": {
+    "mp_id": "mp-81",
+    "energy_per_atom": -3.27381448
+  },
+  "K": {
+    "mp_id": "mp-1184905",
+    "energy_per_atom": -1.110334322
+  },
+  "Pa": {
+    "mp_id": "mp-62",
+    "energy_per_atom": -9.51729469
+  },
+  "Ni": {
+    "mp_id": "mp-23",
+    "energy_per_atom": -5.78107405
+  },
+  "Co": {
+    "mp_id": "mp-54",
+    "energy_per_atom": -7.10999434
+  },
+  "Ge": {
+    "mp_id": "mp-32",
+    "energy_per_atom": -4.622746205
+  },
+  "Mo": {
+    "mp_id": "mp-129",
+    "energy_per_atom": -10.86234306
+  },
+  "S": {
+    "mp_id": "mp-96",
+    "energy_per_atom": -4.1278785359375
+  },
+  "Ho": {
+    "mp_id": "mp-144",
+    "energy_per_atom": -4.578061785
+  },
+  "Ce": {
+    "mp_id": "mp-28",
+    "energy_per_atom": -5.93432323
+  },
+  "Pb": {
+    "mp_id": "mp-20483",
+    "energy_per_atom": -3.71506024
+  },
+  "Be": {
+    "mp_id": "mp-87",
+    "energy_per_atom": -3.742610435
+  },
+  "Ru": {
+    "mp_id": "mp-33",
+    "energy_per_atom": -9.276352585
+  },
+  "Cr": {
+    "mp_id": "mp-90",
+    "energy_per_atom": -9.63670386
+  },
+  "Nd": {
+    "mp_id": "mp-123",
+    "energy_per_atom": -4.7650955725
+  },
+  "Hg": {
+    "mp_id": "mp-975272",
+    "energy_per_atom": -0.30369045
+  },
+  "Te": {
+    "mp_id": "mp-19",
+    "energy_per_atom": -3.14241513
+  },
+  "Sn": {
+    "mp_id": "mp-117",
+    "energy_per_atom": -4.009397445
+  },
+  "U": {
+    "mp_id": "mp-44",
+    "energy_per_atom": -11.30030361
+  },
+  "Ti": {
+    "mp_id": "mp-72",
+    "energy_per_atom": -7.897127353333333
+  },
+  "B": {
+    "mp_id": "mp-160",
+    "energy_per_atom": -6.678526593333333
+  },
+  "Rh": {
+    "mp_id": "mp-74",
+    "energy_per_atom": -7.35700461
+  },
+  "Hf": {
+    "mp_id": "mp-103",
+    "energy_per_atom": -9.954265395
+  },
+  "Cd": {
+    "mp_id": "mp-94",
+    "energy_per_atom": -0.914734355
+  },
+  "Cs": {
+    "mp_id": "mp-1184151",
+    "energy_per_atom": -0.8953900537931034
+  },
+  "Ga": {
+    "mp_id": "mp-142",
+    "energy_per_atom": -3.03723344
+  },
+  "Ta": {
+    "mp_id": "mp-50",
+    "energy_per_atom": -11.85554519
+  },
+  "Lu": {
+    "mp_id": "mp-145",
+    "energy_per_atom": -4.52586882
+  },
+  "Sr": {
+    "mp_id": "mp-76",
+    "energy_per_atom": -1.68596503
+  },
+  "N": {
+    "mp_id": "mp-1080711",
+    "energy_per_atom": -7.952472187620001
+  },
+  "Eu": {
+    "mp_id": "mp-1057315",
+    "energy_per_atom": -10.292631755
+  },
+  "Pt": {
+    "mp_id": "mp-126",
+    "energy_per_atom": -6.0568289
+  },
+  "Mg": {
+    "mp_id": "mp-1094122",
+    "energy_per_atom": -1.60433496
+  },
+  "Tc": {
+    "mp_id": "mp-113",
+    "energy_per_atom": -10.35847686
+  },
+  "Al": {
+    "mp_id": "mp-134",
+    "energy_per_atom": -3.74810318
+  },
+  "Fe": {
+    "mp_id": "mp-13",
+    "energy_per_atom": -8.45983087
+  },
+  "P": {
+    "mp_id": "mp-1198724",
+    "energy_per_atom": -5.409794347857143
+  },
+  "Ca": {
+    "mp_id": "mp-1064227",
+    "energy_per_atom": -2.0031633825
+  },
+  "Mn": {
+    "mp_id": "mp-35",
+    "energy_per_atom": -9.159249260000001
+  },
+  "Zn": {
+    "mp_id": "mp-79",
+    "energy_per_atom": -1.272826825
+  },
+  "Ag": {
+    "mp_id": "mp-124",
+    "energy_per_atom": -2.83173514
+  },
+  "Zr": {
+    "mp_id": "mp-131",
+    "energy_per_atom": -8.54752196
+  },
+  "O": {
+    "mp_id": "mp-12957",
+    "energy_per_atom": -4.93552791875
+  },
+  "Pm": {
+    "mp_id": "mp-867200",
+    "energy_per_atom": -4.7464623925
+  },
+  "Np": {
+    "mp_id": "mp-11534",
+    "energy_per_atom": -12.94085569125
+  },
+  "Cl": {
+    "mp_id": "mp-22848",
+    "energy_per_atom": -1.25385097674
+  },
+  "Br": {
+    "mp_id": "mp-23154",
+    "energy_per_atom": -1.62901478
+  },
+  "I": {
+    "mp_id": "mp-23153",
+    "energy_per_atom": -1.51905924
+  },
+  "F": {
+    "mp_id": "mp-21848",
+    "energy_per_atom": -1.42055013381
+  }
+}

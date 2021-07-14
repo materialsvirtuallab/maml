@@ -4,13 +4,12 @@ DFT wrapper
 import os
 import subprocess
 from monty.os.path import which
-from monty.tempfile import ScratchDir
 from monty.serialization import loadfn
-
+from monty.tempfile import ScratchDir
 from pymatgen.core.structure import Structure
+from pymatgen.entries.compatibility import MaterialsProjectCompatibility
 from pymatgen.io.vasp.outputs import Vasprun
 from pymatgen.io.vasp.sets import MPStaticSet
-from pymatgen.entries.compatibility import MaterialsProjectCompatibility
 
 from maml.apps.bowsr.model.base import EnergyModel
 

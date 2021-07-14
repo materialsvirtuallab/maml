@@ -1,13 +1,15 @@
 """CGCNN Wrapper."""
 import argparse
 import os
-import warnings
 from typing import Dict, List, Tuple, Any
-import numpy as np
+import warnings
 
+import numpy as np
 from monty.dev import requires
 from pymatgen.core.structure import Structure
+
 from maml.apps.bowsr.model.base import EnergyModel
+
 
 try:
     import torch
@@ -20,7 +22,6 @@ except ImportError as error:
     cgcnn = None  # type: ignore
     Tensor = None  # type: ignore
 
-
 pjoin = os.path.join
 module_dir = os.path.dirname(__file__)
 model_dir = pjoin(module_dir, "model_files", "cgcnn", "formation-energy-per-atom.pth.tar")
@@ -31,7 +32,6 @@ class CGCNN(EnergyModel):
     """Wrapper to generate cgcnn energy prediction model."""
 
     def __init__(self, model_path: str = model_dir, orig_atom_fea_len: int = 92, nbr_fea_len: int = 41):
-
         """
         Init CGCNN.
         Args:
@@ -162,11 +162,9 @@ class CGCNNInput:
 
 @requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")
 class CGCNNNormalizer:
-
     """Normalize a Tensor and restore it later."""
 
     def __init__(self, tensor: Tensor):
-
         """
         Tensor is taken as a sample to calculate the mean and std.
 
@@ -177,7 +175,6 @@ class CGCNNNormalizer:
         self.std = torch.std(tensor)
 
     def norm(self, tensor: Tensor) -> Tensor:
-
         """
         Normalize tensor.
 
@@ -190,7 +187,6 @@ class CGCNNNormalizer:
         return (tensor - self.mean) / self.std
 
     def denorm(self, normed_tensor: Tensor) -> Tensor:
-
         """
         Denormalize tensor.
 
@@ -203,7 +199,6 @@ class CGCNNNormalizer:
         return normed_tensor * self.std + self.mean
 
     def state_dict(self) -> dict:
-
         """
         Get dict of mean and std.
 
@@ -213,7 +208,6 @@ class CGCNNNormalizer:
         return {"mean": self.mean, "std": self.std}
 
     def load_state_dict(self, state_dict: Dict) -> None:
-
         """
         Load the normalizer with mean and std.
 

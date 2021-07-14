@@ -1,26 +1,25 @@
 """
 Module implemets the BayesianOptimizer.
 """
-
-import warnings
 from copy import copy
+import warnings
 from typing import Dict, List, Tuple, Any
+
 import numpy as np
 
-
-from pymatgen.core.structure import Structure, Lattice
 from pymatgen.core.operations import SymmOp
+from pymatgen.core.structure import Structure, Lattice
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
-
 from sklearn.base import clone
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RationalQuadratic
 
-from maml.apps.bowsr.target_space import TargetSpace
+from maml.apps.bowsr.acquisition import AcquisitionFunction
+from maml.apps.bowsr.acquisition import ensure_rng, propose_query_point
 from maml.apps.bowsr.model import EnergyModel
-from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
-from maml.apps.bowsr.acquisition import ensure_rng, propose_query_point, AcquisitionFunction
 from maml.apps.bowsr.perturbation import WyckoffPerturbation, LatticePerturbation, get_standardized_structure
+from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+from maml.apps.bowsr.target_space import TargetSpace
 
 
 def struct2perturbation(
