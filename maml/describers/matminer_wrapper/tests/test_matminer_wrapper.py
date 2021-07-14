@@ -3,10 +3,15 @@ import unittest
 
 from maml.describers.matminer_wrapper import wrap_matminer_describer
 from maml.utils import to_composition
-from matminer.featurizers import composition
+
+try:
+    from matminer.featurizers import composition
+except ImportError:
+    composition = None
 from pymatgen.util.testing import PymatgenTest
 
 
+@unittest.skipIf(composition is None, "matminer package is needed")
 class TestWrapper(PymatgenTest):
     @classmethod
     def setUp(cls) -> None:

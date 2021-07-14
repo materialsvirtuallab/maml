@@ -7,12 +7,13 @@ import numpy as np
 from pymatgen.util.testing import PymatgenTest
 from pymatgen.core import Composition, Molecule
 
-from maml.describers import ElementProperty, ElementStats
+from maml.describers import ElementStats, ElementProperty
 
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
 
+@unittest.skipIf(ElementProperty is None, "matminer package is needed")
 class ElementPropertyTest(unittest.TestCase):
 
     s = PymatgenTest.get_structure("Li2O")

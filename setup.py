@@ -94,7 +94,7 @@ setup(
         "tensorflow": ["tensorflow>=2"],
         "tensorflow with gpu": ["tensorflow-gpu>=2"],
     },
-    namespace_packages=['maml.apps'],
+    namespace_packages=["maml.apps"],
     author="Materials Virtual Lab",
     author_email="ongsp@eng.ucsd.edu",
     maintainer="Shyue Ping Ong",

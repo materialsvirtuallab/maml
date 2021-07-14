@@ -37,14 +37,14 @@ def make_doc(ctx):
         ctx.run("rm maml*.tests.*rst", warn=True)
         for f in glob.glob("maml*.rst"):
             newoutput = []
-            with open(f, 'r') as fid:
+            with open(f, "r") as fid:
                 for line in fid:
                     if re.search("maml.*\._.*", line):
                         continue
                     else:
                         newoutput.append(line)
 
-            with open(f, 'w') as fid:
+            with open(f, "w") as fid:
                 fid.write("".join(newoutput))
         ctx.run("rm maml*._*.rst")
 
@@ -58,9 +58,10 @@ def make_doc(ctx):
         ctx.run("rm -r .doctrees", warn=True)
 
         # This makes sure maml.org works to redirect to the Github page
-        ctx.run("echo \"maml.ai\" > CNAME")
+        ctx.run('echo "maml.ai" > CNAME')
         # Avoid the use of jekyll so that _dir works as intended.
         ctx.run("touch .nojekyll")
+
 
 @task
 def update_doc(ctx):
@@ -73,7 +74,7 @@ def update_doc(ctx):
     ctx.run("cp api-docs-source/conf.py docs/conf.py")
     make_doc(ctx)
     ctx.run("git add .")
-    ctx.run("git commit -a -m \"Update docs\"")
+    ctx.run('git commit -a -m "Update docs"')
     ctx.run("git push")
 
 
@@ -104,8 +105,7 @@ def set_ver(ctx):
     lines = []
     with open("setup.py", "rt") as f:
         for l in f:
-            lines.append(re.sub(r'version=([^,]+),', 'version="%s",' % NEW_VER,
-                                l.rstrip()))
+            lines.append(re.sub(r"version=([^,]+),", 'version="%s",' % NEW_VER, l.rstrip()))
     with open("setup.py", "wt") as f:
         f.write("\n".join(lines) + "\n")
 
@@ -136,4 +136,3 @@ def release(ctx, notest=True):
         headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]},
     )
     print(response.text)
-

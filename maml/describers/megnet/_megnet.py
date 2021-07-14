@@ -36,9 +36,11 @@ class MEGNetSite(BaseDescriber):
                 path or a MEGNet GraphModel, if no name is provided, the models will be Eform_MP_2019.
             level (int): megnet graph layer level
         """
-
-        from megnet.utils.models import MODEL_MAPPING, load_model
-        from megnet.utils.descriptor import MEGNetDescriptor
+        try:
+            from megnet.utils.models import MODEL_MAPPING, load_model
+            from megnet.utils.descriptor import MEGNetDescriptor
+        except ImportError:
+            raise MEGNetNotFound
 
         self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
         if isinstance(name, str) and name in self.AVAILBLE_MODELS:
@@ -115,8 +117,11 @@ class MEGNetStructure(BaseDescriber):
                 'final': Use the concatenated atom, bond and global features
             level (int): megnet graph layer level
         """
-        from megnet.utils.models import MODEL_MAPPING, load_model
-        from megnet.utils.descriptor import MEGNetDescriptor
+        try:
+            from megnet.utils.models import MODEL_MAPPING, load_model
+            from megnet.utils.descriptor import MEGNetDescriptor
+        except ImportError:
+            raise MEGNetNotFound
 
         self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
         if isinstance(name, str) and name in self.AVAILBLE_MODELS:
@@ -171,3 +176,20 @@ class MEGNetStructure(BaseDescriber):
         if self.mode == "final":
             return pd.DataFrame(self.describer_model.get_structure_features(obj))
         raise ValueError("Mode not allowed.")
+
+
+class MEGNetNotFound(Exception):
+    """
+    MEGNet not found exception
+    """
+
+    def __init__(self):
+        """
+        MEGNet not found exception
+        """
+        super().__init__(
+            "This module requires installation of megnet, "
+            "which is not found in your current environment."
+            "Please install it via `pip install megnet` or "
+            "via github source"
+        )
