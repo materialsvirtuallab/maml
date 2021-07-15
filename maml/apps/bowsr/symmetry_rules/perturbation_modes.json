@@ -1,1 +1,2193 @@
-{"1": {"a": "lambda x: x"}, "2": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: np.zeros(3)", "i": "lambda x: x"}, "3": {"a": "lambda x: perturbation_mapping(x, [0, 2])", "b": "lambda x: perturbation_mapping(x, [0, 2])", "c": "lambda x: perturbation_mapping(x, [0, 2])", "d": "lambda x: perturbation_mapping(x, [0, 2])", "e": "lambda x: x"}, "4": {"a": "lambda x: x"}, "5": {"a": "lambda x: perturbation_mapping(x, [0, 2])", "b": "lambda x: perturbation_mapping(x, [0, 2])", "c": "lambda x: x"}, "6": {"a": "lambda x: perturbation_mapping(x, [1])", "b": "lambda x: perturbation_mapping(x, [1])", "c": "lambda x: x"}, "7": {"a": "lambda x: x"}, "8": {"a": "lambda x: perturbation_mapping(x, [1])", "b": "lambda x: x"}, "9": {"a": "lambda x: x"}, "10": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: np.zeros(3)", "i": "lambda x: perturbation_mapping(x, [0, 2])", "j": "lambda x: perturbation_mapping(x, [0, 2])", "k": "lambda x: perturbation_mapping(x, [0, 2])", "l": "lambda x: perturbation_mapping(x, [0, 2])", "m": "lambda x: perturbation_mapping(x, [1])", "n": "lambda x: perturbation_mapping(x, [1])", "o": "lambda x: x"}, "11": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1])", "f": "lambda x: x"}, "12": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [1])", "j": "lambda x: x"}, "13": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 2])", "f": "lambda x: perturbation_mapping(x, [0, 2])", "g": "lambda x: x"}, "14": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: x"}, "15": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 2])", "f": "lambda x: x"}, "16": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: np.zeros(3)", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [0, 2])", "n": "lambda x: perturbation_mapping(x, [0, 2])", "o": "lambda x: perturbation_mapping(x, [0, 2])", "p": "lambda x: perturbation_mapping(x, [0, 2])", "q": "lambda x: perturbation_mapping(x, [0, 1])", "r": "lambda x: perturbation_mapping(x, [0, 1])", "s": "lambda x: perturbation_mapping(x, [0, 1])", "t": "lambda x: perturbation_mapping(x, [0, 1])", "u": "lambda x: x"}, "17": {"a": "lambda x: perturbation_mapping(x, [1, 2])", "b": "lambda x: perturbation_mapping(x, [1, 2])", "c": "lambda x: perturbation_mapping(x, [0, 2])", "d": "lambda x: perturbation_mapping(x, [0, 2])", "e": "lambda x: x"}, "18": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "19": {"a": "lambda x: x"}, "20": {"a": "lambda x: perturbation_mapping(x, [1, 2])", "b": "lambda x: perturbation_mapping(x, [0, 2])", "c": "lambda x: x"}, "21": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [0, 1])", "k": "lambda x: perturbation_mapping(x, [0, 1])", "l": "lambda x: x"}, "22": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [0, 2])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: x"}, "23": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [0, 1])", "k": "lambda x: x"}, "24": {"a": "lambda x: perturbation_mapping(x, [1, 2])", "b": "lambda x: perturbation_mapping(x, [0, 2])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "25": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: perturbation_mapping(x, [1])", "f": "lambda x: perturbation_mapping(x, [1])", "g": "lambda x: perturbation_mapping(x, [0])", "h": "lambda x: perturbation_mapping(x, [0])", "i": "lambda x: x"}, "26": {"a": "lambda x: perturbation_mapping(x, [0])", "b": "lambda x: perturbation_mapping(x, [0])", "c": "lambda x: x"}, "27": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: x"}, "28": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0])", "d": "lambda x: x"}, "29": {"a": "lambda x: x"}, "30": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "31": {"a": "lambda x: perturbation_mapping(x, [0])", "b": "lambda x: x"}, "32": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "33": {"a": "lambda x: x"}, "34": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "35": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [1])", "e": "lambda x: perturbation_mapping(x, [0])", "f": "lambda x: x"}, "36": {"a": "lambda x: perturbation_mapping(x, [0])", "b": "lambda x: x"}, "37": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "38": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [1])", "d": "lambda x: perturbation_mapping(x, [0])", "e": "lambda x: perturbation_mapping(x, [0])", "f": "lambda x: x"}, "39": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [1])", "d": "lambda x: x"}, "40": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0])", "c": "lambda x: x"}, "41": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: x"}, "42": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0])", "d": "lambda x: perturbation_mapping(x, [1])", "e": "lambda x: x"}, "43": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: x"}, "44": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [1])", "d": "lambda x: perturbation_mapping(x, [0])", "e": "lambda x: x"}, "45": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "46": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0])", "c": "lambda x: x"}, "47": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: np.zeros(3)", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [0, 2])", "n": "lambda x: perturbation_mapping(x, [0, 2])", "o": "lambda x: perturbation_mapping(x, [0, 2])", "p": "lambda x: perturbation_mapping(x, [0, 2])", "q": "lambda x: perturbation_mapping(x, [0, 1])", "r": "lambda x: perturbation_mapping(x, [0, 1])", "s": "lambda x: perturbation_mapping(x, [0, 1])", "t": "lambda x: perturbation_mapping(x, [0, 1])", "u": "lambda x: perturbation_mapping(x, [0])", "v": "lambda x: perturbation_mapping(x, [0])", "w": "lambda x: perturbation_mapping(x, [1])", "x": "lambda x: perturbation_mapping(x, [1])", "y": "lambda x: perturbation_mapping(x, [2])", "z": "lambda x: perturbation_mapping(x, [2])", "A": "lambda x: x"}, "48": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [0, 2])", "j": "lambda x: perturbation_mapping(x, [0, 2])", "k": "lambda x: perturbation_mapping(x, [0, 1])", "l": "lambda x: perturbation_mapping(x, [0, 1])", "m": "lambda x: x"}, "49": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: np.zeros(3)", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [0, 2])", "l": "lambda x: perturbation_mapping(x, [0, 2])", "m": "lambda x: perturbation_mapping(x, [0, 1])", "n": "lambda x: perturbation_mapping(x, [0, 1])", "o": "lambda x: perturbation_mapping(x, [0, 1])", "p": "lambda x: perturbation_mapping(x, [0, 1])", "q": "lambda x: perturbation_mapping(x, [2])", "r": "lambda x: x"}, "50": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [0, 2])", "j": "lambda x: perturbation_mapping(x, [0, 2])", "k": "lambda x: perturbation_mapping(x, [0, 1])", "l": "lambda x: perturbation_mapping(x, [0, 1])", "m": "lambda x: x"}, "51": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [1])", "j": "lambda x: perturbation_mapping(x, [1])", "k": "lambda x: perturbation_mapping(x, [0])", "l": "lambda x: x"}, "52": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: x"}, "53": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0])", "i": "lambda x: x"}, "54": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 2])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: x"}, "55": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [2])", "h": "lambda x: perturbation_mapping(x, [2])", "i": "lambda x: x"}, "56": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: x"}, "57": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [1, 2])", "d": "lambda x: perturbation_mapping(x, [2])", "e": "lambda x: x"}, "58": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [2])", "h": "lambda x: x"}, "59": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0])", "f": "lambda x: perturbation_mapping(x, [1])", "g": "lambda x: x"}, "60": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 2])", "d": "lambda x: x"}, "61": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: x"}, "62": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [1])", "d": "lambda x: x"}, "63": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 2])", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [0])", "g": "lambda x: perturbation_mapping(x, [2])", "h": "lambda x: x"}, "64": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: perturbation_mapping(x, [0, 2])", "f": "lambda x: perturbation_mapping(x, [0])", "g": "lambda x: x"}, "65": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [0, 2])", "j": "lambda x: perturbation_mapping(x, [0, 2])", "k": "lambda x: perturbation_mapping(x, [0, 1])", "l": "lambda x: perturbation_mapping(x, [0, 1])", "m": "lambda x: perturbation_mapping(x, [0, 1])", "n": "lambda x: perturbation_mapping(x, [0])", "o": "lambda x: perturbation_mapping(x, [1])", "p": "lambda x: perturbation_mapping(x, [2])", "q": "lambda x: perturbation_mapping(x, [2])", "r": "lambda x: x"}, "66": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [0, 1])", "k": "lambda x: perturbation_mapping(x, [0, 1])", "l": "lambda x: perturbation_mapping(x, [2])", "m": "lambda x: x"}, "67": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [0, 2])", "k": "lambda x: perturbation_mapping(x, [0, 2])", "l": "lambda x: perturbation_mapping(x, [0, 1])", "m": "lambda x: perturbation_mapping(x, [0])", "n": "lambda x: perturbation_mapping(x, [1])", "o": "lambda x: x"}, "68": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [0, 2])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: x"}, "69": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [0, 1])", "k": "lambda x: perturbation_mapping(x, [0, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [0])", "n": "lambda x: perturbation_mapping(x, [1])", "o": "lambda x: perturbation_mapping(x, [2])", "p": "lambda x: x"}, "70": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [0, 2])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: x"}, "71": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [0, 1])", "k": "lambda x: np.zeros(3)", "l": "lambda x: perturbation_mapping(x, [0])", "m": "lambda x: perturbation_mapping(x, [1])", "n": "lambda x: perturbation_mapping(x, [2])", "o": "lambda x: x"}, "72": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: x"}, "73": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [1, 2])", "d": "lambda x: perturbation_mapping(x, [0, 2])", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: x"}, "74": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [0, 2])", "h": "lambda x: perturbation_mapping(x, [0])", "i": "lambda x: perturbation_mapping(x, [1])", "j": "lambda x: x"}, "75": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "76": {"a": "lambda x: x"}, "77": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "78": {"a": "lambda x: x"}, "79": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "80": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: x"}, "81": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: x"}, "82": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: x"}, "83": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: perturbation_mapping(x, [2])", "l": "lambda x: x"}, "84": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: x"}, "85": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: x"}, "86": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: x"}, "87": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [2])", "i": "lambda x: x"}, "88": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: x"}, "89": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: np.array([1, 1, 0]) * x", "k": "lambda x: np.array([1, 1, 0]) * x", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [1, 2])", "n": "lambda x: perturbation_mapping(x, [1, 2])", "o": "lambda x: perturbation_mapping(x, [1, 2])", "p": "lambda x: x"}, "90": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: np.array([1, 1, 0]) * x", "f": "lambda x: np.array([1, 1, 0]) * x", "g": "lambda x: x"}, "91": {"a": "lambda x: perturbation_mapping(x, [0, 2])", "b": "lambda x: perturbation_mapping(x, [0, 2])", "c": "lambda x: np.array([1, 1, 0]) * x", "d": "lambda x: x"}, "92": {"a": "lambda x: np.array([1, 1, 0]) * x", "b": "lambda x: x"}, "93": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [1, 2])", "n": "lambda x: np.array([1, 1, 0]) * x", "o": "lambda x: np.array([1, 1, 0]) * x", "p": "lambda x: x"}, "94": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: np.array([1, 1, 0]) * x", "f": "lambda x: np.array([1, 1, 0]) * x", "g": "lambda x: x"}, "95": {"a": "lambda x: perturbation_mapping(x, [0, 2])", "b": "lambda x: perturbation_mapping(x, [0, 2])", "c": "lambda x: np.array([1, 1, 0]) * x", "d": "lambda x: x"}, "96": {"a": "lambda x: np.array([1, 1, 0]) * x", "b": "lambda x: x"}, "97": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: np.array([1, 1, 0]) * x", "k": "lambda x: x"}, "98": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.array([1, 1, 0]) * x", "e": "lambda x: np.array([-1, 1, 0]) * x", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: x"}, "99": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "e": "lambda x: perturbation_mapping(x, [1])", "f": "lambda x: perturbation_mapping(x, [1])", "g": "lambda x: x"}, "100": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "d": "lambda x: x"}, "101": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "e": "lambda x: x"}, "102": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "d": "lambda x: x"}, "103": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "104": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "105": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [1])", "e": "lambda x: perturbation_mapping(x, [1])", "f": "lambda x: x"}, "106": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "107": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "d": "lambda x: perturbation_mapping(x, [1])", "e": "lambda x: x"}, "108": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "d": "lambda x: x"}, "109": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0])", "c": "lambda x: x"}, "110": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: x"}, "111": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [0, 1])", "n": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "o": "lambda x: x"}, "112": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [0, 2])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [0, 2])", "k": "lambda x: perturbation_mapping(x, [0, 1])", "l": "lambda x: perturbation_mapping(x, [0, 1])", "m": "lambda x: perturbation_mapping(x, [0, 1])", "n": "lambda x: x"}, "113": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "f": "lambda x: x"}, "114": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: x"}, "115": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: np.array([1, 1, 0]) * x", "j": "lambda x: perturbation_mapping(x, [1])", "k": "lambda x: perturbation_mapping(x, [1])", "l": "lambda x: x"}, "116": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.array([1, 1, 0]) * x", "f": "lambda x: np.array([1, 1, 0]) * x", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: x"}, "117": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: x"}, "118": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.array([1, -1, 0]) * x", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: x"}, "119": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: perturbation_mapping(x, [1])", "j": "lambda x: x"}, "120": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.array([1, 1, 0]) * x", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: x"}, "121": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "j": "lambda x: x"}, "122": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: x"}, "123": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: np.array([1, 1, 0]) * x", "k": "lambda x: np.array([1, 1, 0]) * x", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [1, 2])", "n": "lambda x: perturbation_mapping(x, [1, 2])", "o": "lambda x: perturbation_mapping(x, [1, 2])", "p": "lambda x: perturbation_mapping(x, [2])", "q": "lambda x: perturbation_mapping(x, [2])", "r": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "s": "lambda x: perturbation_mapping(x, [1])", "t": "lambda x: perturbation_mapping(x, [1])", "u": "lambda x: x"}, "124": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: np.array([1, 1, 0]) * x", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [2])", "n": "lambda x: x"}, "125": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: np.array([1, 1, 0]) * x", "j": "lambda x: np.array([1, 1, 0]) * x", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "n": "lambda x: x"}, "126": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: x"}, "127": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: perturbation_mapping(x, [2])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "l": "lambda x: x"}, "128": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: perturbation_mapping(x, [2])", "i": "lambda x: x"}, "129": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, -1, 0]) * x", "h": "lambda x: np.array([1, -1, 0]) * x", "i": "lambda x: perturbation_mapping(x, [0])", "j": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "k": "lambda x: x"}, "130": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.array([1, -1, 0]) * x", "g": "lambda x: x"}, "131": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [1, 2])", "n": "lambda x: np.array([1, 1, 0]) * x", "o": "lambda x: perturbation_mapping(x, [0])", "p": "lambda x: perturbation_mapping(x, [0])", "q": "lambda x: perturbation_mapping(x, [2])", "r": "lambda x: x"}, "132": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: np.array([1, 1, 0]) * x", "j": "lambda x: np.array([1, 1, 0]) * x", "k": "lambda x: perturbation_mapping(x, [0, 1])", "l": "lambda x: perturbation_mapping(x, [1, 2])", "m": "lambda x: perturbation_mapping(x, [1, 2])", "n": "lambda x: perturbation_mapping(x, [2])", "o": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "p": "lambda x: x"}, "133": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: np.array([1, 1, 0]) * x", "k": "lambda x: x"}, "134": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: np.array([1, 1, 0]) * x", "l": "lambda x: np.array([1, 1, 0]) * x", "m": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "n": "lambda x: x"}, "135": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: perturbation_mapping(x, [2])", "i": "lambda x: x"}, "136": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.array([1, 1, 0]) * x", "g": "lambda x: np.array([1, -1, 0]) * x", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [2])", "j": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "k": "lambda x: x"}, "137": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.array([1, -1, 0]) * x", "g": "lambda x: perturbation_mapping(x, [0])", "h": "lambda x: x"}, "138": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.array([1, -1, 0]) * x", "h": "lambda x: np.array([1, -1, 0]) * x", "i": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "j": "lambda x: x"}, "139": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: np.array([1, 1, 0]) * x", "l": "lambda x: perturbation_mapping(x, [2])", "m": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "n": "lambda x: perturbation_mapping(x, [0])", "o": "lambda x: x"}, "140": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: np.array([1, 1, 0]) * x", "i": "lambda x: np.array([1, 1, 0]) * x", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [2])", "l": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "m": "lambda x: x"}, "141": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.array([1, 1, 0]) * x", "h": "lambda x: perturbation_mapping(x, [0])", "i": "lambda x: x"}, "142": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.array([1, 1, 0]) * x", "g": "lambda x: x"}, "143": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "144": {"a": "lambda x: x"}, "145": {"a": "lambda x: x"}, "146": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: x"}, "147": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: x"}, "148": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: x"}, "149": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: np.array([1, -1, 0]) * x", "k": "lambda x: np.array([1, -1, 0]) * x", "l": "lambda x: x"}, "150": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: x"}, "151": {"a": "lambda x: np.array([1, -1, 0]) * x", "b": "lambda x: np.array([1, -1, 0]) * x", "c": "lambda x: x"}, "152": {"a": "lambda x: perturbation_mapping(x, [1, 2])", "b": "lambda x: perturbation_mapping(x, [1, 2])", "c": "lambda x: x"}, "153": {"a": "lambda x: np.array([1, -1, 0]) * x", "b": "lambda x: np.array([1, -1, 0]) * x", "c": "lambda x: x"}, "154": {"a": "lambda x: perturbation_mapping(x, [1, 2])", "b": "lambda x: perturbation_mapping(x, [1, 2])", "c": "lambda x: x"}, "155": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: x"}, "156": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "e": "lambda x: x"}, "157": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [1])", "d": "lambda x: x"}, "158": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "159": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "160": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "c": "lambda x: x"}, "161": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: x"}, "162": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: np.array([1, -1, 0]) * x", "j": "lambda x: np.array([1, -1, 0]) * x", "k": "lambda x: perturbation_mapping(x, [1])", "l": "lambda x: x"}, "163": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.zeros(3)", "h": "lambda x: np.array([1, -1, 0]) * x", "i": "lambda x: x"}, "164": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "j": "lambda x: x"}, "165": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [0, 1])", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: x"}, "166": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "i": "lambda x: x"}, "167": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: x"}, "168": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "169": {"a": "lambda x: x"}, "170": {"a": "lambda x: x"}, "171": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "172": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "173": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: x"}, "174": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: perturbation_mapping(x, [2])", "l": "lambda x: x"}, "175": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: perturbation_mapping(x, [2])", "l": "lambda x: x"}, "176": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.zeros(3)", "h": "lambda x: perturbation_mapping(x, [2])", "i": "lambda x: x"}, "177": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: np.array([1, -1, 0]) * x", "m": "lambda x: np.array([1, -1, 0]) * x", "n": "lambda x: x"}, "178": {"a": "lambda x: perturbation_mapping(x, [1, 2])", "b": "lambda x: np.array([1, 2, 0]) * x", "c": "lambda x: x"}, "179": {"a": "lambda x: perturbation_mapping(x, [1, 2])", "b": "lambda x: np.array([1, 2, 0]) * x", "c": "lambda x: x"}, "180": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.array([1, 2, 0]) * x", "j": "lambda x: np.array([1, 2, 0]) * x", "k": "lambda x: x"}, "181": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.array([1, 2, 0]) * x", "j": "lambda x: np.array([1, 2, 0]) * x", "k": "lambda x: x"}, "182": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: np.array([1, 2, 0]) * x", "i": "lambda x: x"}, "183": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: perturbation_mapping(x, [1])", "e": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "f": "lambda x: x"}, "184": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [0, 1])", "d": "lambda x: x"}, "185": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: perturbation_mapping(x, [1])", "d": "lambda x: x"}, "186": {"a": "lambda x: perturbation_mapping(x, [0, 1])", "b": "lambda x: perturbation_mapping(x, [0, 1])", "c": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "d": "lambda x: x"}, "187": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: np.array([1, -1, 0]) * x", "k": "lambda x: np.array([1, -1, 0]) * x", "l": "lambda x: perturbation_mapping(x, [2])", "m": "lambda x: perturbation_mapping(x, [2])", "n": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))", "o": "lambda x: x"}, "188": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [0, 1])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: np.array([1, -1, 0]) * x", "k": "lambda x: perturbation_mapping(x, [2])", "l": "lambda x: x"}, "189": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [1])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: perturbation_mapping(x, [2])", "l": "lambda x: x"}, "190": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [2])", "i": "lambda x: x"}, "191": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: perturbation_mapping(x, [1, 2])", "l": "lambda x: np.array([1, 2, 0]) * x", "m": "lambda x: np.array([1, 2, 0]) * x", "n": "lambda x: perturbation_mapping(x, [1])", "o": "lambda x: np.concatenate((np.array([1, 2]) * x[0], x[1:]))", "p": "lambda x: perturbation_mapping(x, [2])", "q": "lambda x: perturbation_mapping(x, [2])", "r": "lambda x: x"}, "192": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.zeros(3)", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: perturbation_mapping(x, [0, 1])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: np.array([1, 2, 0]) * x", "l": "lambda x: perturbation_mapping(x, [2])", "m": "lambda x: x"}, "193": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [0, 1])", "i": "lambda x: np.array([1, 2, 0]) * x", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: perturbation_mapping(x, [1])", "l": "lambda x: x"}, "194": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [0, 1])", "f": "lambda x: perturbation_mapping(x, [0, 1])", "g": "lambda x: np.zeros(3)", "h": "lambda x: np.array([1, 2, 0]) * x", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [2])", "k": "lambda x: np.concatenate((np.array([1, 2]) * x[0], x[1:]))", "l": "lambda x: x"}, "195": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: x"}, "196": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: x"}, "197": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.repeat(x, repeats=3)", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: x"}, "198": {"a": "lambda x: np.repeat(x, repeats=3)", "b": "lambda x: x"}, "199": {"a": "lambda x: np.repeat(x, repeats=3)", "b": "lambda x: perturbation_mapping(x, [1, 2])", "c": "lambda x: x"}, "200": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.repeat(x, repeats=3)", "j": "lambda x: perturbation_mapping(x, [0])", "k": "lambda x: perturbation_mapping(x, [0])", "l": "lambda x: x"}, "201": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: x"}, "202": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.repeat(x, repeats=3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [0])", "i": "lambda x: x"}, "203": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: x"}, "204": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.repeat(x, repeats=3)", "g": "lambda x: perturbation_mapping(x, [0])", "h": "lambda x: x"}, "205": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.repeat(x, repeats=3)", "d": "lambda x: x"}, "206": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.repeat(x, repeats=3)", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: x"}, "207": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.repeat(x, repeats=3)", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.array([0, 1, 1]) * x", "j": "lambda x: np.array([0, 1, 1]) * x", "k": "lambda x: x"}, "208": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: np.repeat(x, repeats=3)", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: perturbation_mapping(x, [1, 2])", "k": "lambda x: np.array([0, 1, -1]) * x", "l": "lambda x: np.array([0, 1, 1]) * x", "m": "lambda x: x"}, "209": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.repeat(x, repeats=3)", "g": "lambda x: np.array([0, 1, 1]) * x", "h": "lambda x: np.array([0, 1, 1]) * x", "i": "lambda x: perturbation_mapping(x, [1, 2])", "j": "lambda x: x"}, "210": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.array([0, 1, -1]) * x", "h": "lambda x: x"}, "211": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.repeat(x, repeats=3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: np.array([0, 1, 1]) * x", "i": "lambda x: np.array([0, 1, -1]) * x", "j": "lambda x: x"}, "212": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.repeat(x, repeats=3)", "d": "lambda x: np.array([0, 1, -1]) * x", "e": "lambda x: x"}, "213": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.repeat(x, repeats=3)", "d": "lambda x: np.array([0, 1, 1]) * x", "e": "lambda x: x"}, "214": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.array([0, 1, 1]) * x", "h": "lambda x: np.array([0, 1, -1]) * x", "i": "lambda x: x"}, "215": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "j": "lambda x: x"}, "216": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "i": "lambda x: x"}, "217": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.repeat(x, repeats=3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "h": "lambda x: x"}, "218": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: x"}, "219": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: x"}, "220": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.repeat(x, repeats=3)", "d": "lambda x: perturbation_mapping(x, [1, 2])", "e": "lambda x: x"}, "221": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.repeat(x, repeats=3)", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.array([0, 1, 1]) * x", "j": "lambda x: np.array([0, 1, 1]) * x", "k": "lambda x: perturbation_mapping(x, [0])", "l": "lambda x: perturbation_mapping(x, [0])", "m": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "n": "lambda x: x"}, "222": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.repeat(x, repeats=3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: np.array([0, 1, 1]) * x", "i": "lambda x: x"}, "223": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.zeros(3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.repeat(x, repeats=3)", "j": "lambda x: np.array([0, 1, 1]) * x", "k": "lambda x: perturbation_mapping(x, [0])", "l": "lambda x: x"}, "224": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: np.zeros(3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: perturbation_mapping(x, [1, 2])", "i": "lambda x: np.array([0, 1, 1]) * x", "j": "lambda x: np.array([0, 1, -1]) * x", "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "l": "lambda x: x"}, "225": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.repeat(x, repeats=3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: np.array([0, 1, 1]) * x", "i": "lambda x: np.array([0, 1, 1]) * x", "j": "lambda x: perturbation_mapping(x, [0])", "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "l": "lambda x: x"}, "226": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.repeat(x, repeats=3)", "h": "lambda x: np.array([0, 1, 1]) * x", "i": "lambda x: perturbation_mapping(x, [0])", "j": "lambda x: x"}, "227": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "h": "lambda x: np.array([0, 1, -1]) * x", "i": "lambda x: x"}, "228": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.array([0, 1, -1]) * x", "h": "lambda x: x"}, "229": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: perturbation_mapping(x, [1, 2])", "f": "lambda x: np.repeat(x, repeats=3)", "g": "lambda x: perturbation_mapping(x, [1, 2])", "h": "lambda x: np.array([0, 1, 1]) * x", "i": "lambda x: np.array([0, 1, -1]) * x", "j": "lambda x: perturbation_mapping(x, [0])", "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))", "l": "lambda x: x"}, "230": {"a": "lambda x: np.zeros(3)", "b": "lambda x: np.zeros(3)", "c": "lambda x: np.zeros(3)", "d": "lambda x: np.zeros(3)", "e": "lambda x: np.repeat(x, repeats=3)", "f": "lambda x: perturbation_mapping(x, [1, 2])", "g": "lambda x: np.array([0, 1, -1]) * x", "h": "lambda x: x"}}
+{
+  "1": {
+    "a": "lambda x: x"
+  },
+  "2": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: np.zeros(3)",
+    "i": "lambda x: x"
+  },
+  "3": {
+    "a": "lambda x: perturbation_mapping(x, [0, 2])",
+    "b": "lambda x: perturbation_mapping(x, [0, 2])",
+    "c": "lambda x: perturbation_mapping(x, [0, 2])",
+    "d": "lambda x: perturbation_mapping(x, [0, 2])",
+    "e": "lambda x: x"
+  },
+  "4": {
+    "a": "lambda x: x"
+  },
+  "5": {
+    "a": "lambda x: perturbation_mapping(x, [0, 2])",
+    "b": "lambda x: perturbation_mapping(x, [0, 2])",
+    "c": "lambda x: x"
+  },
+  "6": {
+    "a": "lambda x: perturbation_mapping(x, [1])",
+    "b": "lambda x: perturbation_mapping(x, [1])",
+    "c": "lambda x: x"
+  },
+  "7": {
+    "a": "lambda x: x"
+  },
+  "8": {
+    "a": "lambda x: perturbation_mapping(x, [1])",
+    "b": "lambda x: x"
+  },
+  "9": {
+    "a": "lambda x: x"
+  },
+  "10": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: np.zeros(3)",
+    "i": "lambda x: perturbation_mapping(x, [0, 2])",
+    "j": "lambda x: perturbation_mapping(x, [0, 2])",
+    "k": "lambda x: perturbation_mapping(x, [0, 2])",
+    "l": "lambda x: perturbation_mapping(x, [0, 2])",
+    "m": "lambda x: perturbation_mapping(x, [1])",
+    "n": "lambda x: perturbation_mapping(x, [1])",
+    "o": "lambda x: x"
+  },
+  "11": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1])",
+    "f": "lambda x: x"
+  },
+  "12": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1])",
+    "j": "lambda x: x"
+  },
+  "13": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 2])",
+    "f": "lambda x: perturbation_mapping(x, [0, 2])",
+    "g": "lambda x: x"
+  },
+  "14": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: x"
+  },
+  "15": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 2])",
+    "f": "lambda x: x"
+  },
+  "16": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: np.zeros(3)",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [0, 2])",
+    "n": "lambda x: perturbation_mapping(x, [0, 2])",
+    "o": "lambda x: perturbation_mapping(x, [0, 2])",
+    "p": "lambda x: perturbation_mapping(x, [0, 2])",
+    "q": "lambda x: perturbation_mapping(x, [0, 1])",
+    "r": "lambda x: perturbation_mapping(x, [0, 1])",
+    "s": "lambda x: perturbation_mapping(x, [0, 1])",
+    "t": "lambda x: perturbation_mapping(x, [0, 1])",
+    "u": "lambda x: x"
+  },
+  "17": {
+    "a": "lambda x: perturbation_mapping(x, [1, 2])",
+    "b": "lambda x: perturbation_mapping(x, [1, 2])",
+    "c": "lambda x: perturbation_mapping(x, [0, 2])",
+    "d": "lambda x: perturbation_mapping(x, [0, 2])",
+    "e": "lambda x: x"
+  },
+  "18": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "19": {
+    "a": "lambda x: x"
+  },
+  "20": {
+    "a": "lambda x: perturbation_mapping(x, [1, 2])",
+    "b": "lambda x: perturbation_mapping(x, [0, 2])",
+    "c": "lambda x: x"
+  },
+  "21": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [0, 1])",
+    "k": "lambda x: perturbation_mapping(x, [0, 1])",
+    "l": "lambda x: x"
+  },
+  "22": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [0, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: x"
+  },
+  "23": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [0, 1])",
+    "k": "lambda x: x"
+  },
+  "24": {
+    "a": "lambda x: perturbation_mapping(x, [1, 2])",
+    "b": "lambda x: perturbation_mapping(x, [0, 2])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "25": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: perturbation_mapping(x, [1])",
+    "f": "lambda x: perturbation_mapping(x, [1])",
+    "g": "lambda x: perturbation_mapping(x, [0])",
+    "h": "lambda x: perturbation_mapping(x, [0])",
+    "i": "lambda x: x"
+  },
+  "26": {
+    "a": "lambda x: perturbation_mapping(x, [0])",
+    "b": "lambda x: perturbation_mapping(x, [0])",
+    "c": "lambda x: x"
+  },
+  "27": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: x"
+  },
+  "28": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0])",
+    "d": "lambda x: x"
+  },
+  "29": {
+    "a": "lambda x: x"
+  },
+  "30": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "31": {
+    "a": "lambda x: perturbation_mapping(x, [0])",
+    "b": "lambda x: x"
+  },
+  "32": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "33": {
+    "a": "lambda x: x"
+  },
+  "34": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "35": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [1])",
+    "e": "lambda x: perturbation_mapping(x, [0])",
+    "f": "lambda x: x"
+  },
+  "36": {
+    "a": "lambda x: perturbation_mapping(x, [0])",
+    "b": "lambda x: x"
+  },
+  "37": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "38": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [1])",
+    "d": "lambda x: perturbation_mapping(x, [0])",
+    "e": "lambda x: perturbation_mapping(x, [0])",
+    "f": "lambda x: x"
+  },
+  "39": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [1])",
+    "d": "lambda x: x"
+  },
+  "40": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0])",
+    "c": "lambda x: x"
+  },
+  "41": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: x"
+  },
+  "42": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0])",
+    "d": "lambda x: perturbation_mapping(x, [1])",
+    "e": "lambda x: x"
+  },
+  "43": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: x"
+  },
+  "44": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [1])",
+    "d": "lambda x: perturbation_mapping(x, [0])",
+    "e": "lambda x: x"
+  },
+  "45": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "46": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0])",
+    "c": "lambda x: x"
+  },
+  "47": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: np.zeros(3)",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [0, 2])",
+    "n": "lambda x: perturbation_mapping(x, [0, 2])",
+    "o": "lambda x: perturbation_mapping(x, [0, 2])",
+    "p": "lambda x: perturbation_mapping(x, [0, 2])",
+    "q": "lambda x: perturbation_mapping(x, [0, 1])",
+    "r": "lambda x: perturbation_mapping(x, [0, 1])",
+    "s": "lambda x: perturbation_mapping(x, [0, 1])",
+    "t": "lambda x: perturbation_mapping(x, [0, 1])",
+    "u": "lambda x: perturbation_mapping(x, [0])",
+    "v": "lambda x: perturbation_mapping(x, [0])",
+    "w": "lambda x: perturbation_mapping(x, [1])",
+    "x": "lambda x: perturbation_mapping(x, [1])",
+    "y": "lambda x: perturbation_mapping(x, [2])",
+    "z": "lambda x: perturbation_mapping(x, [2])",
+    "A": "lambda x: x"
+  },
+  "48": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 2])",
+    "j": "lambda x: perturbation_mapping(x, [0, 2])",
+    "k": "lambda x: perturbation_mapping(x, [0, 1])",
+    "l": "lambda x: perturbation_mapping(x, [0, 1])",
+    "m": "lambda x: x"
+  },
+  "49": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: np.zeros(3)",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [0, 2])",
+    "l": "lambda x: perturbation_mapping(x, [0, 2])",
+    "m": "lambda x: perturbation_mapping(x, [0, 1])",
+    "n": "lambda x: perturbation_mapping(x, [0, 1])",
+    "o": "lambda x: perturbation_mapping(x, [0, 1])",
+    "p": "lambda x: perturbation_mapping(x, [0, 1])",
+    "q": "lambda x: perturbation_mapping(x, [2])",
+    "r": "lambda x: x"
+  },
+  "50": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 2])",
+    "j": "lambda x: perturbation_mapping(x, [0, 2])",
+    "k": "lambda x: perturbation_mapping(x, [0, 1])",
+    "l": "lambda x: perturbation_mapping(x, [0, 1])",
+    "m": "lambda x: x"
+  },
+  "51": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1])",
+    "j": "lambda x: perturbation_mapping(x, [1])",
+    "k": "lambda x: perturbation_mapping(x, [0])",
+    "l": "lambda x: x"
+  },
+  "52": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: x"
+  },
+  "53": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0])",
+    "i": "lambda x: x"
+  },
+  "54": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 2])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: x"
+  },
+  "55": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [2])",
+    "h": "lambda x: perturbation_mapping(x, [2])",
+    "i": "lambda x: x"
+  },
+  "56": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: x"
+  },
+  "57": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [1, 2])",
+    "d": "lambda x: perturbation_mapping(x, [2])",
+    "e": "lambda x: x"
+  },
+  "58": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [2])",
+    "h": "lambda x: x"
+  },
+  "59": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0])",
+    "f": "lambda x: perturbation_mapping(x, [1])",
+    "g": "lambda x: x"
+  },
+  "60": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 2])",
+    "d": "lambda x: x"
+  },
+  "61": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: x"
+  },
+  "62": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [1])",
+    "d": "lambda x: x"
+  },
+  "63": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 2])",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [0])",
+    "g": "lambda x: perturbation_mapping(x, [2])",
+    "h": "lambda x: x"
+  },
+  "64": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: perturbation_mapping(x, [0, 2])",
+    "f": "lambda x: perturbation_mapping(x, [0])",
+    "g": "lambda x: x"
+  },
+  "65": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 2])",
+    "j": "lambda x: perturbation_mapping(x, [0, 2])",
+    "k": "lambda x: perturbation_mapping(x, [0, 1])",
+    "l": "lambda x: perturbation_mapping(x, [0, 1])",
+    "m": "lambda x: perturbation_mapping(x, [0, 1])",
+    "n": "lambda x: perturbation_mapping(x, [0])",
+    "o": "lambda x: perturbation_mapping(x, [1])",
+    "p": "lambda x: perturbation_mapping(x, [2])",
+    "q": "lambda x: perturbation_mapping(x, [2])",
+    "r": "lambda x: x"
+  },
+  "66": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [0, 1])",
+    "k": "lambda x: perturbation_mapping(x, [0, 1])",
+    "l": "lambda x: perturbation_mapping(x, [2])",
+    "m": "lambda x: x"
+  },
+  "67": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [0, 2])",
+    "k": "lambda x: perturbation_mapping(x, [0, 2])",
+    "l": "lambda x: perturbation_mapping(x, [0, 1])",
+    "m": "lambda x: perturbation_mapping(x, [0])",
+    "n": "lambda x: perturbation_mapping(x, [1])",
+    "o": "lambda x: x"
+  },
+  "68": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [0, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: x"
+  },
+  "69": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [0, 1])",
+    "k": "lambda x: perturbation_mapping(x, [0, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [0])",
+    "n": "lambda x: perturbation_mapping(x, [1])",
+    "o": "lambda x: perturbation_mapping(x, [2])",
+    "p": "lambda x: x"
+  },
+  "70": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [0, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: x"
+  },
+  "71": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [0, 1])",
+    "k": "lambda x: np.zeros(3)",
+    "l": "lambda x: perturbation_mapping(x, [0])",
+    "m": "lambda x: perturbation_mapping(x, [1])",
+    "n": "lambda x: perturbation_mapping(x, [2])",
+    "o": "lambda x: x"
+  },
+  "72": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: x"
+  },
+  "73": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [1, 2])",
+    "d": "lambda x: perturbation_mapping(x, [0, 2])",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: x"
+  },
+  "74": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [0, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0])",
+    "i": "lambda x: perturbation_mapping(x, [1])",
+    "j": "lambda x: x"
+  },
+  "75": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "76": {
+    "a": "lambda x: x"
+  },
+  "77": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "78": {
+    "a": "lambda x: x"
+  },
+  "79": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "80": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: x"
+  },
+  "81": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: x"
+  },
+  "82": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: x"
+  },
+  "83": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: perturbation_mapping(x, [2])",
+    "l": "lambda x: x"
+  },
+  "84": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: x"
+  },
+  "85": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: x"
+  },
+  "86": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: x"
+  },
+  "87": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [2])",
+    "i": "lambda x: x"
+  },
+  "88": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: x"
+  },
+  "89": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: np.array([1, 1, 0]) * x",
+    "k": "lambda x: np.array([1, 1, 0]) * x",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [1, 2])",
+    "n": "lambda x: perturbation_mapping(x, [1, 2])",
+    "o": "lambda x: perturbation_mapping(x, [1, 2])",
+    "p": "lambda x: x"
+  },
+  "90": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: np.array([1, 1, 0]) * x",
+    "f": "lambda x: np.array([1, 1, 0]) * x",
+    "g": "lambda x: x"
+  },
+  "91": {
+    "a": "lambda x: perturbation_mapping(x, [0, 2])",
+    "b": "lambda x: perturbation_mapping(x, [0, 2])",
+    "c": "lambda x: np.array([1, 1, 0]) * x",
+    "d": "lambda x: x"
+  },
+  "92": {
+    "a": "lambda x: np.array([1, 1, 0]) * x",
+    "b": "lambda x: x"
+  },
+  "93": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [1, 2])",
+    "n": "lambda x: np.array([1, 1, 0]) * x",
+    "o": "lambda x: np.array([1, 1, 0]) * x",
+    "p": "lambda x: x"
+  },
+  "94": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: np.array([1, 1, 0]) * x",
+    "f": "lambda x: np.array([1, 1, 0]) * x",
+    "g": "lambda x: x"
+  },
+  "95": {
+    "a": "lambda x: perturbation_mapping(x, [0, 2])",
+    "b": "lambda x: perturbation_mapping(x, [0, 2])",
+    "c": "lambda x: np.array([1, 1, 0]) * x",
+    "d": "lambda x: x"
+  },
+  "96": {
+    "a": "lambda x: np.array([1, 1, 0]) * x",
+    "b": "lambda x: x"
+  },
+  "97": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: np.array([1, 1, 0]) * x",
+    "k": "lambda x: x"
+  },
+  "98": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.array([1, 1, 0]) * x",
+    "e": "lambda x: np.array([-1, 1, 0]) * x",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: x"
+  },
+  "99": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "e": "lambda x: perturbation_mapping(x, [1])",
+    "f": "lambda x: perturbation_mapping(x, [1])",
+    "g": "lambda x: x"
+  },
+  "100": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "d": "lambda x: x"
+  },
+  "101": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "e": "lambda x: x"
+  },
+  "102": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "d": "lambda x: x"
+  },
+  "103": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "104": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "105": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [1])",
+    "e": "lambda x: perturbation_mapping(x, [1])",
+    "f": "lambda x: x"
+  },
+  "106": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "107": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "d": "lambda x: perturbation_mapping(x, [1])",
+    "e": "lambda x: x"
+  },
+  "108": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "d": "lambda x: x"
+  },
+  "109": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0])",
+    "c": "lambda x: x"
+  },
+  "110": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: x"
+  },
+  "111": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [0, 1])",
+    "n": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "o": "lambda x: x"
+  },
+  "112": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [0, 2])",
+    "k": "lambda x: perturbation_mapping(x, [0, 1])",
+    "l": "lambda x: perturbation_mapping(x, [0, 1])",
+    "m": "lambda x: perturbation_mapping(x, [0, 1])",
+    "n": "lambda x: x"
+  },
+  "113": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "f": "lambda x: x"
+  },
+  "114": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: x"
+  },
+  "115": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: np.array([1, 1, 0]) * x",
+    "j": "lambda x: perturbation_mapping(x, [1])",
+    "k": "lambda x: perturbation_mapping(x, [1])",
+    "l": "lambda x: x"
+  },
+  "116": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.array([1, 1, 0]) * x",
+    "f": "lambda x: np.array([1, 1, 0]) * x",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: x"
+  },
+  "117": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: x"
+  },
+  "118": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.array([1, -1, 0]) * x",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: x"
+  },
+  "119": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: perturbation_mapping(x, [1])",
+    "j": "lambda x: x"
+  },
+  "120": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.array([1, 1, 0]) * x",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: x"
+  },
+  "121": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "j": "lambda x: x"
+  },
+  "122": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: x"
+  },
+  "123": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: np.array([1, 1, 0]) * x",
+    "k": "lambda x: np.array([1, 1, 0]) * x",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [1, 2])",
+    "n": "lambda x: perturbation_mapping(x, [1, 2])",
+    "o": "lambda x: perturbation_mapping(x, [1, 2])",
+    "p": "lambda x: perturbation_mapping(x, [2])",
+    "q": "lambda x: perturbation_mapping(x, [2])",
+    "r": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "s": "lambda x: perturbation_mapping(x, [1])",
+    "t": "lambda x: perturbation_mapping(x, [1])",
+    "u": "lambda x: x"
+  },
+  "124": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: np.array([1, 1, 0]) * x",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [2])",
+    "n": "lambda x: x"
+  },
+  "125": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: np.array([1, 1, 0]) * x",
+    "j": "lambda x: np.array([1, 1, 0]) * x",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "n": "lambda x: x"
+  },
+  "126": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: x"
+  },
+  "127": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: perturbation_mapping(x, [2])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "l": "lambda x: x"
+  },
+  "128": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: perturbation_mapping(x, [2])",
+    "i": "lambda x: x"
+  },
+  "129": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, -1, 0]) * x",
+    "h": "lambda x: np.array([1, -1, 0]) * x",
+    "i": "lambda x: perturbation_mapping(x, [0])",
+    "j": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "k": "lambda x: x"
+  },
+  "130": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.array([1, -1, 0]) * x",
+    "g": "lambda x: x"
+  },
+  "131": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [1, 2])",
+    "n": "lambda x: np.array([1, 1, 0]) * x",
+    "o": "lambda x: perturbation_mapping(x, [0])",
+    "p": "lambda x: perturbation_mapping(x, [0])",
+    "q": "lambda x: perturbation_mapping(x, [2])",
+    "r": "lambda x: x"
+  },
+  "132": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: np.array([1, 1, 0]) * x",
+    "j": "lambda x: np.array([1, 1, 0]) * x",
+    "k": "lambda x: perturbation_mapping(x, [0, 1])",
+    "l": "lambda x: perturbation_mapping(x, [1, 2])",
+    "m": "lambda x: perturbation_mapping(x, [1, 2])",
+    "n": "lambda x: perturbation_mapping(x, [2])",
+    "o": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "p": "lambda x: x"
+  },
+  "133": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: np.array([1, 1, 0]) * x",
+    "k": "lambda x: x"
+  },
+  "134": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: np.array([1, 1, 0]) * x",
+    "l": "lambda x: np.array([1, 1, 0]) * x",
+    "m": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "n": "lambda x: x"
+  },
+  "135": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: perturbation_mapping(x, [2])",
+    "i": "lambda x: x"
+  },
+  "136": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.array([1, 1, 0]) * x",
+    "g": "lambda x: np.array([1, -1, 0]) * x",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [2])",
+    "j": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "k": "lambda x: x"
+  },
+  "137": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.array([1, -1, 0]) * x",
+    "g": "lambda x: perturbation_mapping(x, [0])",
+    "h": "lambda x: x"
+  },
+  "138": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.array([1, -1, 0]) * x",
+    "h": "lambda x: np.array([1, -1, 0]) * x",
+    "i": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "j": "lambda x: x"
+  },
+  "139": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: np.array([1, 1, 0]) * x",
+    "l": "lambda x: perturbation_mapping(x, [2])",
+    "m": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "n": "lambda x: perturbation_mapping(x, [0])",
+    "o": "lambda x: x"
+  },
+  "140": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: np.array([1, 1, 0]) * x",
+    "i": "lambda x: np.array([1, 1, 0]) * x",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [2])",
+    "l": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "m": "lambda x: x"
+  },
+  "141": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.array([1, 1, 0]) * x",
+    "h": "lambda x: perturbation_mapping(x, [0])",
+    "i": "lambda x: x"
+  },
+  "142": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.array([1, 1, 0]) * x",
+    "g": "lambda x: x"
+  },
+  "143": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "144": {
+    "a": "lambda x: x"
+  },
+  "145": {
+    "a": "lambda x: x"
+  },
+  "146": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: x"
+  },
+  "147": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: x"
+  },
+  "148": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: x"
+  },
+  "149": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: np.array([1, -1, 0]) * x",
+    "k": "lambda x: np.array([1, -1, 0]) * x",
+    "l": "lambda x: x"
+  },
+  "150": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: x"
+  },
+  "151": {
+    "a": "lambda x: np.array([1, -1, 0]) * x",
+    "b": "lambda x: np.array([1, -1, 0]) * x",
+    "c": "lambda x: x"
+  },
+  "152": {
+    "a": "lambda x: perturbation_mapping(x, [1, 2])",
+    "b": "lambda x: perturbation_mapping(x, [1, 2])",
+    "c": "lambda x: x"
+  },
+  "153": {
+    "a": "lambda x: np.array([1, -1, 0]) * x",
+    "b": "lambda x: np.array([1, -1, 0]) * x",
+    "c": "lambda x: x"
+  },
+  "154": {
+    "a": "lambda x: perturbation_mapping(x, [1, 2])",
+    "b": "lambda x: perturbation_mapping(x, [1, 2])",
+    "c": "lambda x: x"
+  },
+  "155": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: x"
+  },
+  "156": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "e": "lambda x: x"
+  },
+  "157": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [1])",
+    "d": "lambda x: x"
+  },
+  "158": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "159": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "160": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "c": "lambda x: x"
+  },
+  "161": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: x"
+  },
+  "162": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: np.array([1, -1, 0]) * x",
+    "j": "lambda x: np.array([1, -1, 0]) * x",
+    "k": "lambda x: perturbation_mapping(x, [1])",
+    "l": "lambda x: x"
+  },
+  "163": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: np.array([1, -1, 0]) * x",
+    "i": "lambda x: x"
+  },
+  "164": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "j": "lambda x: x"
+  },
+  "165": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [0, 1])",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: x"
+  },
+  "166": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "i": "lambda x: x"
+  },
+  "167": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: x"
+  },
+  "168": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "169": {
+    "a": "lambda x: x"
+  },
+  "170": {
+    "a": "lambda x: x"
+  },
+  "171": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "172": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "173": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: x"
+  },
+  "174": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: perturbation_mapping(x, [2])",
+    "l": "lambda x: x"
+  },
+  "175": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: perturbation_mapping(x, [2])",
+    "l": "lambda x: x"
+  },
+  "176": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: perturbation_mapping(x, [2])",
+    "i": "lambda x: x"
+  },
+  "177": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: np.array([1, -1, 0]) * x",
+    "m": "lambda x: np.array([1, -1, 0]) * x",
+    "n": "lambda x: x"
+  },
+  "178": {
+    "a": "lambda x: perturbation_mapping(x, [1, 2])",
+    "b": "lambda x: np.array([1, 2, 0]) * x",
+    "c": "lambda x: x"
+  },
+  "179": {
+    "a": "lambda x: perturbation_mapping(x, [1, 2])",
+    "b": "lambda x: np.array([1, 2, 0]) * x",
+    "c": "lambda x: x"
+  },
+  "180": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.array([1, 2, 0]) * x",
+    "j": "lambda x: np.array([1, 2, 0]) * x",
+    "k": "lambda x: x"
+  },
+  "181": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.array([1, 2, 0]) * x",
+    "j": "lambda x: np.array([1, 2, 0]) * x",
+    "k": "lambda x: x"
+  },
+  "182": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: np.array([1, 2, 0]) * x",
+    "i": "lambda x: x"
+  },
+  "183": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: perturbation_mapping(x, [1])",
+    "e": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "f": "lambda x: x"
+  },
+  "184": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [0, 1])",
+    "d": "lambda x: x"
+  },
+  "185": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: perturbation_mapping(x, [1])",
+    "d": "lambda x: x"
+  },
+  "186": {
+    "a": "lambda x: perturbation_mapping(x, [0, 1])",
+    "b": "lambda x: perturbation_mapping(x, [0, 1])",
+    "c": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "d": "lambda x: x"
+  },
+  "187": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: np.array([1, -1, 0]) * x",
+    "k": "lambda x: np.array([1, -1, 0]) * x",
+    "l": "lambda x: perturbation_mapping(x, [2])",
+    "m": "lambda x: perturbation_mapping(x, [2])",
+    "n": "lambda x: np.concatenate((np.array([1, -1]) * x[0], x[1:]))",
+    "o": "lambda x: x"
+  },
+  "188": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [0, 1])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: np.array([1, -1, 0]) * x",
+    "k": "lambda x: perturbation_mapping(x, [2])",
+    "l": "lambda x: x"
+  },
+  "189": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [1])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: perturbation_mapping(x, [2])",
+    "l": "lambda x: x"
+  },
+  "190": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [2])",
+    "i": "lambda x: x"
+  },
+  "191": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: perturbation_mapping(x, [1, 2])",
+    "l": "lambda x: np.array([1, 2, 0]) * x",
+    "m": "lambda x: np.array([1, 2, 0]) * x",
+    "n": "lambda x: perturbation_mapping(x, [1])",
+    "o": "lambda x: np.concatenate((np.array([1, 2]) * x[0], x[1:]))",
+    "p": "lambda x: perturbation_mapping(x, [2])",
+    "q": "lambda x: perturbation_mapping(x, [2])",
+    "r": "lambda x: x"
+  },
+  "192": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: perturbation_mapping(x, [0, 1])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: np.array([1, 2, 0]) * x",
+    "l": "lambda x: perturbation_mapping(x, [2])",
+    "m": "lambda x: x"
+  },
+  "193": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0, 1])",
+    "i": "lambda x: np.array([1, 2, 0]) * x",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: perturbation_mapping(x, [1])",
+    "l": "lambda x: x"
+  },
+  "194": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [0, 1])",
+    "f": "lambda x: perturbation_mapping(x, [0, 1])",
+    "g": "lambda x: np.zeros(3)",
+    "h": "lambda x: np.array([1, 2, 0]) * x",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [2])",
+    "k": "lambda x: np.concatenate((np.array([1, 2]) * x[0], x[1:]))",
+    "l": "lambda x: x"
+  },
+  "195": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: x"
+  },
+  "196": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: x"
+  },
+  "197": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.repeat(x, repeats=3)",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: x"
+  },
+  "198": {
+    "a": "lambda x: np.repeat(x, repeats=3)",
+    "b": "lambda x: x"
+  },
+  "199": {
+    "a": "lambda x: np.repeat(x, repeats=3)",
+    "b": "lambda x: perturbation_mapping(x, [1, 2])",
+    "c": "lambda x: x"
+  },
+  "200": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.repeat(x, repeats=3)",
+    "j": "lambda x: perturbation_mapping(x, [0])",
+    "k": "lambda x: perturbation_mapping(x, [0])",
+    "l": "lambda x: x"
+  },
+  "201": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: x"
+  },
+  "202": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.repeat(x, repeats=3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [0])",
+    "i": "lambda x: x"
+  },
+  "203": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: x"
+  },
+  "204": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.repeat(x, repeats=3)",
+    "g": "lambda x: perturbation_mapping(x, [0])",
+    "h": "lambda x: x"
+  },
+  "205": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.repeat(x, repeats=3)",
+    "d": "lambda x: x"
+  },
+  "206": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.repeat(x, repeats=3)",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: x"
+  },
+  "207": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.repeat(x, repeats=3)",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.array([0, 1, 1]) * x",
+    "j": "lambda x: np.array([0, 1, 1]) * x",
+    "k": "lambda x: x"
+  },
+  "208": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: np.repeat(x, repeats=3)",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: perturbation_mapping(x, [1, 2])",
+    "k": "lambda x: np.array([0, 1, -1]) * x",
+    "l": "lambda x: np.array([0, 1, 1]) * x",
+    "m": "lambda x: x"
+  },
+  "209": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.repeat(x, repeats=3)",
+    "g": "lambda x: np.array([0, 1, 1]) * x",
+    "h": "lambda x: np.array([0, 1, 1]) * x",
+    "i": "lambda x: perturbation_mapping(x, [1, 2])",
+    "j": "lambda x: x"
+  },
+  "210": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.array([0, 1, -1]) * x",
+    "h": "lambda x: x"
+  },
+  "211": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.repeat(x, repeats=3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: np.array([0, 1, 1]) * x",
+    "i": "lambda x: np.array([0, 1, -1]) * x",
+    "j": "lambda x: x"
+  },
+  "212": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.repeat(x, repeats=3)",
+    "d": "lambda x: np.array([0, 1, -1]) * x",
+    "e": "lambda x: x"
+  },
+  "213": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.repeat(x, repeats=3)",
+    "d": "lambda x: np.array([0, 1, 1]) * x",
+    "e": "lambda x: x"
+  },
+  "214": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.array([0, 1, 1]) * x",
+    "h": "lambda x: np.array([0, 1, -1]) * x",
+    "i": "lambda x: x"
+  },
+  "215": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "j": "lambda x: x"
+  },
+  "216": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "i": "lambda x: x"
+  },
+  "217": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.repeat(x, repeats=3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "h": "lambda x: x"
+  },
+  "218": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: x"
+  },
+  "219": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: x"
+  },
+  "220": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.repeat(x, repeats=3)",
+    "d": "lambda x: perturbation_mapping(x, [1, 2])",
+    "e": "lambda x: x"
+  },
+  "221": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.repeat(x, repeats=3)",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.array([0, 1, 1]) * x",
+    "j": "lambda x: np.array([0, 1, 1]) * x",
+    "k": "lambda x: perturbation_mapping(x, [0])",
+    "l": "lambda x: perturbation_mapping(x, [0])",
+    "m": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "n": "lambda x: x"
+  },
+  "222": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.repeat(x, repeats=3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: np.array([0, 1, 1]) * x",
+    "i": "lambda x: x"
+  },
+  "223": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.zeros(3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.repeat(x, repeats=3)",
+    "j": "lambda x: np.array([0, 1, 1]) * x",
+    "k": "lambda x: perturbation_mapping(x, [0])",
+    "l": "lambda x: x"
+  },
+  "224": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: np.zeros(3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: perturbation_mapping(x, [1, 2])",
+    "i": "lambda x: np.array([0, 1, 1]) * x",
+    "j": "lambda x: np.array([0, 1, -1]) * x",
+    "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "l": "lambda x: x"
+  },
+  "225": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.repeat(x, repeats=3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: np.array([0, 1, 1]) * x",
+    "i": "lambda x: np.array([0, 1, 1]) * x",
+    "j": "lambda x: perturbation_mapping(x, [0])",
+    "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "l": "lambda x: x"
+  },
+  "226": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.repeat(x, repeats=3)",
+    "h": "lambda x: np.array([0, 1, 1]) * x",
+    "i": "lambda x: perturbation_mapping(x, [0])",
+    "j": "lambda x: x"
+  },
+  "227": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "h": "lambda x: np.array([0, 1, -1]) * x",
+    "i": "lambda x: x"
+  },
+  "228": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.array([0, 1, -1]) * x",
+    "h": "lambda x: x"
+  },
+  "229": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: perturbation_mapping(x, [1, 2])",
+    "f": "lambda x: np.repeat(x, repeats=3)",
+    "g": "lambda x: perturbation_mapping(x, [1, 2])",
+    "h": "lambda x: np.array([0, 1, 1]) * x",
+    "i": "lambda x: np.array([0, 1, -1]) * x",
+    "j": "lambda x: perturbation_mapping(x, [0])",
+    "k": "lambda x: np.concatenate((np.array([1, 1]) * x[0], x[1:]))",
+    "l": "lambda x: x"
+  },
+  "230": {
+    "a": "lambda x: np.zeros(3)",
+    "b": "lambda x: np.zeros(3)",
+    "c": "lambda x: np.zeros(3)",
+    "d": "lambda x: np.zeros(3)",
+    "e": "lambda x: np.repeat(x, repeats=3)",
+    "f": "lambda x: perturbation_mapping(x, [1, 2])",
+    "g": "lambda x: np.array([0, 1, -1]) * x",
+    "h": "lambda x: x"
+  }
+}

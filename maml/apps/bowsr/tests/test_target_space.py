@@ -1,62 +1,66 @@
+import numpy as np
 import os
 import unittest
-import numpy as np
 from pymatgen.core.structure import Structure
-from maml.apps.bowsr.acquisition import ensure_rng
-from maml.apps.bowsr.target_space import TargetSpace
-from maml.apps.bowsr.optimizer import struct2perturbation
-from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
-from maml.apps.bowsr.perturbation import WyckoffPerturbation
 
-test_lfpo = Structure.from_file(os.path.join(
-    os.path.dirname(__file__), 'test_structures', 'test_lfpo.cif'))
+from maml.apps.bowsr.acquisition import ensure_rng
+from maml.apps.bowsr.optimizer import struct2perturbation
+from maml.apps.bowsr.perturbation import WyckoffPerturbation
+from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+from maml.apps.bowsr.target_space import TargetSpace
+
+test_lfpo = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_structures", "test_lfpo.cif"))
+
 
 class TargetSpaceTest(unittest.TestCase):
-
     def setUp(self):
         self.wyckoff_dims = [2, 2, 3]
-        self.wps = [
-            WyckoffPerturbation(62, "c"), 
-            WyckoffPerturbation(62, "c"), 
-            WyckoffPerturbation(62, "d")
-        ]
+        self.wps = [WyckoffPerturbation(62, "c"), WyckoffPerturbation(62, "c"), WyckoffPerturbation(62, "d")]
         self.wps[0].sanity_check(test_lfpo[4])
         self.wps[1].sanity_check(test_lfpo[12])
         self.wps[2].sanity_check(test_lfpo[20])
         self.abc_dim = 3
         self.angles_dim = 0
-        self.space1 = TargetSpace(target_func=lambda x: sum(x ** 2),
-                                  wps=self.wps,
-                                  abc_dim=self.abc_dim,
-                                  angles_dim=self.angles_dim,
-                                  relax_coords=True,
-                                  relax_lattice=True,
-                                  scaler=DummyScaler(),
-                                  random_state=ensure_rng(42))
-        self.space2 = TargetSpace(target_func=lambda x: sum(x * 2),
-                                  wps=self.wps,
-                                  abc_dim=self.abc_dim,
-                                  angles_dim=self.angles_dim,
-                                  relax_coords=True,
-                                  relax_lattice=False,
-                                  scaler=DummyScaler(),
-                                  random_state=ensure_rng((42)))
-        self.space3 = TargetSpace(target_func=lambda x: np.mean(x * 3),
-                                  wps=self.wps,
-                                  abc_dim=self.abc_dim,
-                                  angles_dim=self.angles_dim,
-                                  relax_coords=True,
-                                  relax_lattice=True,
-                                  scaler=DummyScaler(),
-                                  random_state=ensure_rng(42))
-        self.space4 = TargetSpace(target_func=lambda x: np.mean(x * 3),
-                                  wps=self.wps,
-                                  abc_dim=self.abc_dim,
-                                  angles_dim=self.angles_dim,
-                                  relax_coords=True,
-                                  relax_lattice=True,
-                                  scaler=StandardScaler(),
-                                  random_state=ensure_rng(42))
+        self.space1 = TargetSpace(
+            target_func=lambda x: sum(x ** 2),
+            wps=self.wps,
+            abc_dim=self.abc_dim,
+            angles_dim=self.angles_dim,
+            relax_coords=True,
+            relax_lattice=True,
+            scaler=DummyScaler(),
+            random_state=ensure_rng(42),
+        )
+        self.space2 = TargetSpace(
+            target_func=lambda x: sum(x * 2),
+            wps=self.wps,
+            abc_dim=self.abc_dim,
+            angles_dim=self.angles_dim,
+            relax_coords=True,
+            relax_lattice=False,
+            scaler=DummyScaler(),
+            random_state=ensure_rng((42)),
+        )
+        self.space3 = TargetSpace(
+            target_func=lambda x: np.mean(x * 3),
+            wps=self.wps,
+            abc_dim=self.abc_dim,
+            angles_dim=self.angles_dim,
+            relax_coords=True,
+            relax_lattice=True,
+            scaler=DummyScaler(),
+            random_state=ensure_rng(42),
+        )
+        self.space4 = TargetSpace(
+            target_func=lambda x: np.mean(x * 3),
+            wps=self.wps,
+            abc_dim=self.abc_dim,
+            angles_dim=self.angles_dim,
+            relax_coords=True,
+            relax_lattice=True,
+            scaler=StandardScaler(),
+            random_state=ensure_rng(42),
+        )
 
     def test_attributes(self):
         self.space1.set_bounds()
@@ -137,33 +141,33 @@ class TargetSpaceTest(unittest.TestCase):
             target = self.space1.target_func(sample)
             self.space1.register(sample, target)
         self.assertEqual(len(self.space1), 10)
-        self.assertTrue(all(abs(np.sum(self.space1.params ** 2, axis=1) \
-                                - self.space1.target) < 1e-2))
+        self.assertTrue(all(abs(np.sum(self.space1.params ** 2, axis=1) - self.space1.target) < 1e-2))
 
         for _ in range(20):
             sample = self.space2.uniform_sample()
             target = self.space2.target_func(sample)
             self.space2.register(sample, target)
         self.assertEqual(len(self.space2), 20)
-        self.assertTrue(all(abs(np.sum(self.space2.params * 2, axis=1) \
-                                - self.space2.target) < 1e-2))
+        self.assertTrue(all(abs(np.sum(self.space2.params * 2, axis=1) - self.space2.target) < 1e-2))
 
         for _ in range(15):
             sample = self.space3.uniform_sample()
             target = self.space3.target_func(sample)
             self.space3.register(sample, target)
         self.assertEqual(len(self.space3), 15)
-        self.assertTrue(all(abs(np.mean(self.space3.params * 3, axis=1) \
-                                - self.space3.target) < 1e-2))
+        self.assertTrue(all(abs(np.mean(self.space3.params * 3, axis=1) - self.space3.target) < 1e-2))
 
         for _ in range(10):
             sample = self.space4.uniform_sample()
             target = self.space4.target_func(sample)
             self.space4.register(sample, target)
         self.assertEqual(len(self.space4), 10)
-        self.assertTrue(all(abs(np.mean(
-                self.space4.scaler.inverse_transform(self.space4.params) * 3, axis=1) \
-                - self.space4.target) < 1e-2))
+        self.assertTrue(
+            all(
+                abs(np.mean(self.space4.scaler.inverse_transform(self.space4.params) * 3, axis=1) - self.space4.target)
+                < 1e-2
+            )
+        )
 
     def test_probe(self):
         self.space1.set_bounds()
@@ -248,5 +252,5 @@ class TargetSpaceTest(unittest.TestCase):
         self.assertEqual(len(self.space4), 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

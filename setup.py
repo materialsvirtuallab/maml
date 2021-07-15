@@ -61,7 +61,7 @@ For all the requirements above::
 
     pip install -r requirements-ci.txt
     pip install -r requirements-optional.txt
-    pip install -r requirements-tf.txt
+    pip install -r requirements-dl.txt
     pip install -r requirements.txt
 
 Citing
@@ -94,7 +94,7 @@ setup(
         "tensorflow": ["tensorflow>=2"],
         "tensorflow with gpu": ["tensorflow-gpu>=2"],
     },
-    namespace_packages=['maml.apps'],
+    namespace_packages=["maml.apps"],
     author="Materials Virtual Lab",
     author_email="ongsp@eng.ucsd.edu",
     maintainer="Shyue Ping Ong",

@@ -8,7 +8,6 @@ from typing import Dict, List, Union, Optional, Tuple
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA, KernelPCA
-from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
 from pymatgen.core import Composition, Structure, Element, Species
 
 from maml.base import BaseDescriber, describer_type
@@ -28,9 +27,15 @@ for length in [2, 3, 4, 8, 16, 32]:
     DATA_MAPPING["megnet_ion_l%d" % length] = "data/ion_embedding_1MEGNet_layer_length_%d.json" % length
 
 
-ElementProperty = wrap_matminer_describer(
-    "ElementProperty", MatminerElementProperty, to_composition, describer_type="composition"
-)
+try:
+    from matminer.featurizers.composition import ElementProperty as MatminerElementProperty  # noqa
+
+    ElementProperty = wrap_matminer_describer(
+        "ElementProperty", MatminerElementProperty, to_composition, describer_type="composition"
+    )
+
+except ImportError:
+    ElementProperty = None
 
 
 @describer_type("composition")

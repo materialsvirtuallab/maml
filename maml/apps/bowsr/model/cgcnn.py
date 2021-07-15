@@ -1,33 +1,37 @@
 """CGCNN Wrapper."""
 import argparse
 import os
+from typing import Dict, List, Tuple, Any
 import warnings
-from typing import Dict, List, Tuple
-import numpy as np
 
-from pymatgen import Structure
-from bowsr.model.base import EnergyModel
+import numpy as np
+from monty.dev import requires
+from pymatgen.core.structure import Structure
+
+from maml.apps.bowsr.model.base import EnergyModel
+
 
 try:
     import torch
+    import cgcnn
+    from torch import Tensor
     from cgcnn.model import CrystalGraphConvNet
     from cgcnn.data import GaussianDistance, AtomCustomJSONInitializer
-except ImportError:
-    print("Please refer to https://github.com/txie-93/cgcnn.git to download package of cgcnn")
+except ImportError as error:
+    torch = None  # type: ignore
+    cgcnn = None  # type: ignore
+    Tensor = None  # type: ignore
 
 pjoin = os.path.join
 module_dir = os.path.dirname(__file__)
 model_dir = pjoin(module_dir, "model_files", "cgcnn", "formation-energy-per-atom.pth.tar")
 
 
+@requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")
 class CGCNN(EnergyModel):
     """Wrapper to generate cgcnn energy prediction model."""
 
-    def __init__(self,
-                 model_path: str = model_dir,
-                 orig_atom_fea_len: int = 92,
-                 nbr_fea_len: int = 41):
-
+    def __init__(self, model_path: str = model_dir, orig_atom_fea_len: int = 92, nbr_fea_len: int = 41):
         """
         Init CGCNN.
         Args:
@@ -39,20 +43,20 @@ class CGCNN(EnergyModel):
                             i.e. Number of neighbors (default 41)
 
         """
-        checkpoint = torch.load(model_path,
-                                map_location=lambda storage, loc: storage)
-        model_args = argparse.Namespace(**checkpoint['args'])
+        checkpoint = torch.load(model_path, map_location=lambda storage, loc: storage)
+        model_args = argparse.Namespace(**checkpoint["args"])
         self.model = CrystalGraphConvNet(
             orig_atom_fea_len=orig_atom_fea_len,
             nbr_fea_len=nbr_fea_len,
             n_h=model_args.n_h,
             n_conv=model_args.n_conv,
-            h_fea_len=model_args.h_fea_len)
+            h_fea_len=model_args.h_fea_len,
+        )
         self.normalizer = CGCNNNormalizer(torch.zeros(3))
-        self.model.load_state_dict(checkpoint['state_dict'])
-        self.normalizer.load_state_dict(checkpoint['normalizer'])
+        self.model.load_state_dict(checkpoint["state_dict"])
+        self.normalizer.load_state_dict(checkpoint["normalizer"])
 
-    def predict_energy(self, structure: Structure) -> np.ndarray:
+    def predict_energy(self, structure: Structure) -> np.ndarray:  # type: ignore
         """
         CGCNN predict formatio nenergy from pymatgen structure.
 
@@ -65,22 +69,18 @@ class CGCNN(EnergyModel):
         self.model.eval()
         input_generator = CGCNNInput()
         inp = input_generator.generate_input(structure)
-        inp = inp + ([torch.LongTensor(np.arange(structure.num_sites))],)
+        inp = inp + ([torch.LongTensor(np.arange(structure.num_sites))],)  # type: ignore
         output = self.model(*inp)
         return self.normalizer.denorm(output).data.cpu().numpy()[0][0]
 
 
+@requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")
 class CGCNNInput:
     """Wrapper to generate input for cgcnn from pymatgen structure."""
 
-    atom_init_filename = pjoin(module_dir,
-                               "model_files", "cgcnn", "atom_init.json")
+    atom_init_filename = pjoin(module_dir, "model_files", "cgcnn", "atom_init.json")
 
-    def __init__(self,
-                 max_num_nbr: int = 12,
-                 radius: float = 8,
-                 dmin: float = 0,
-                 step: float = 0.2):
+    def __init__(self, max_num_nbr: int = 12, radius: float = 8, dmin: float = 0, step: float = 0.2):
 
         """
         Init CGCNNInput.
@@ -107,23 +107,21 @@ class CGCNNInput:
         nbr_fea_idx, nbr_fea = [], []
         for nbr in all_nbrs:
             if len(nbr) < self.max_num_nbr:
-                warnings.warn('{} not find enough neighbors to build graph. '
-                              'If it happens frequently, consider increase '
-                              'radius.'.format(cif_id))
-                nbr_fea_idx.append(list(map(lambda x: x[2], nbr)) +
-                                   [0] * (self.max_num_nbr - len(nbr)))
-                nbr_fea.append(list(map(lambda x: x[1], nbr)) +
-                               [self.radius + 1.] * (self.max_num_nbr - len(nbr)))
+                warnings.warn(
+                    "{} not find enough neighbors to build graph. "
+                    "If it happens frequently, consider increase "
+                    "radius.".format(cif_id)
+                )
+                nbr_fea_idx.append(list(map(lambda x: x[2], nbr)) + [0] * (self.max_num_nbr - len(nbr)))
+                nbr_fea.append(list(map(lambda x: x[1], nbr)) + [self.radius + 1.0] * (self.max_num_nbr - len(nbr)))
             else:
-                nbr_fea_idx.append(list(map(lambda x: x[2], nbr[:self.max_num_nbr])))
-                nbr_fea.append(list(map(lambda x: x[1], nbr[:self.max_num_nbr])))
-        nbr_fea_idx, nbr_fea = np.array(nbr_fea_idx), np.array(nbr_fea)
+                nbr_fea_idx.append(list(map(lambda x: x[2], nbr[: self.max_num_nbr])))
+                nbr_fea.append(list(map(lambda x: x[1], nbr[: self.max_num_nbr])))
+        nbr_fea_idx, nbr_fea = np.array(nbr_fea_idx), np.array(nbr_fea)  # type: ignore
         nbr_fea = self.gdf.expand(nbr_fea)
-        return tuple((nbr_fea_idx, nbr_fea))
+        return tuple((nbr_fea_idx, nbr_fea))  # type: ignore
 
-    def generate_input(self,
-                       structure: Structure,
-                       cif_id: int = None) -> Tuple[torch.Tensor, torch.Tensor, torch.LongTensor]:
+    def generate_input(self, structure: Structure, cif_id: int = None) -> Tuple[Any, ...]:
 
         """
         Generate cgcnn inputs for given structure.
@@ -134,11 +132,9 @@ class CGCNNInput:
 
         Returns: Tuple of input (atom_fea, nbr_fea, nbr_fea_idx)
         """
-        atom_fea = [sum([(self.ari.get_atom_fea(el.Z) * oc)
-                         for el, oc in site.species.items()])
-                    for site in structure]
-        atom_fea = np.vstack(atom_fea)
-        atom_fea = torch.Tensor(atom_fea)
+        atom_fea = [sum([(self.ari.get_atom_fea(el.Z) * oc) for el, oc in site.species.items()]) for site in structure]
+        atom_fea = np.vstack(atom_fea)  # type: ignore
+        atom_fea = Tensor(atom_fea)  # type: ignore
         all_nbrs = structure.get_all_neighbors(self.radius, include_index=True)
         # sort the nbrs by distance
         all_nbrs = [sorted(nbrs, key=lambda x: x[1]) for nbrs in all_nbrs]
@@ -147,14 +143,11 @@ class CGCNNInput:
             nbr_fea_idx, nbr_fea = self._get_nbr_fea(all_nbrs, cif_id)
         else:
             nbr_fea_idx, nbr_fea = self._get_nbr_fea(all_nbrs, 0)
-        nbr_fea = torch.Tensor(nbr_fea)
-        nbr_fea_idx = torch.LongTensor(nbr_fea_idx)
+        nbr_fea = Tensor(nbr_fea)  # type: ignore
+        nbr_fea_idx = torch.LongTensor(nbr_fea_idx)  # type: ignore
         return tuple((atom_fea, nbr_fea, nbr_fea_idx))
 
-    def generate_inputs(self,
-                        structures: List[Structure],
-                        cif_ids: List[int] = None) \
-            -> List[Tuple[torch.Tensor, torch.Tensor, torch.LongTensor]]:
+    def generate_inputs(self, structures: List[Structure], cif_ids: List[int] = None) -> List[Tuple[Any, ...]]:
         """
         Generate cgcnn inputs for given list of structures
         Args:
@@ -163,45 +156,42 @@ class CGCNNInput:
 
         """
         if not cif_ids:
-            cif_ids = range(len(structures))
+            cif_ids = list(range(len(structures)))
         return [self.generate_input(s, id) for s, id in zip(structures, cif_ids)]
 
 
-class CGCNNNormalizer(object):
+@requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")
+class CGCNNNormalizer:
+    """Normalize a Tensor and restore it later."""
 
-    """Normalize a Tensor and restore it later. """
-
-    def __init__(self, tensor: torch.Tensor):
-
+    def __init__(self, tensor: Tensor):
         """
         Tensor is taken as a sample to calculate the mean and std.
 
         Args:
-            tensor(torch.Tensor): data
+            tensor(Tensor): data
         """
         self.mean = torch.mean(tensor)
         self.std = torch.std(tensor)
 
-    def norm(self, tensor: torch.Tensor) -> torch.Tensor:
-
+    def norm(self, tensor: Tensor) -> Tensor:
         """
         Normalize tensor.
 
         Args:
-            tensor(torch.Tensor): data
+            tensor(Tensor): data
 
         Returns: normalized tensor
 
         """
         return (tensor - self.mean) / self.std
 
-    def denorm(self, normed_tensor: torch.Tensor) -> torch.Tensor:
-
+    def denorm(self, normed_tensor: Tensor) -> Tensor:
         """
         Denormalize tensor.
 
         Args:
-            normed_tensor(torch.Tensor): normalized tensor data
+            normed_tensor(Tensor): normalized tensor data
 
         Returns: denormalized tensor
 
@@ -209,18 +199,15 @@ class CGCNNNormalizer(object):
         return normed_tensor * self.std + self.mean
 
     def state_dict(self) -> dict:
-
         """
         Get dict of mean and std.
 
         Returns: dict of mean and std of the normalizer。
 
         """
-        return {'mean': self.mean,
-                'std': self.std}
+        return {"mean": self.mean, "std": self.std}
 
     def load_state_dict(self, state_dict: Dict) -> None:
-
         """
         Load the normalizer with mean and std.
 
@@ -230,5 +217,5 @@ class CGCNNNormalizer(object):
         Returns: None
 
         """
-        self.mean = state_dict['mean']
-        self.std = state_dict['std']
+        self.mean = state_dict["mean"]
+        self.std = state_dict["std"]

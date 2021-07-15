@@ -26,7 +26,7 @@ class TestLayer(unittest.TestCase):
         maml_set.build([[1, 3, 2], [1, 3], [1, 3]])
         x = np.random.normal(size=(1, 3, 2))
         weights = np.array([0.5, 0.5, 1], dtype=np.float64).reshape((1, -1))
-        indices = np.array([0, 0, 0]).reshape((1, -1))
+        indices = np.array([0, 0, 0], dtype="int32").reshape((1, -1))
         res = maml_set([x, weights, indices])
         self.assertTrue(res.shape == (1, 1, 4))
 

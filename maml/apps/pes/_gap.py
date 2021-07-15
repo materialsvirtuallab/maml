@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from collections import OrderedDict, defaultdict
 
 import numpy as np
-import ruamel.yaml as yaml
+from ruamel import yaml
 from monty.io import zopen
 from monty.os.path import which
 from monty.serialization import loadfn
@@ -453,8 +453,9 @@ class GAPotential(LammpsPotential):
             if predict_stress:
                 exe_command.append("virial=T")
 
-            with subprocess.Popen(exe_command, stdout=open(predict_file, "w")) as p:
-                p.communicate()[0]
+            with open(predict_file, "w") as f:
+                with subprocess.Popen(exe_command, stdout=f) as p:
+                    _ = p.communicate()[0]
 
             _, df_predict = self.read_cfgs(predict_file, predict=True)
 

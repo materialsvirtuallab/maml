@@ -34,7 +34,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-ci.txt
-          pip install -r requirements-tf.txt
+          pip install -r requirements-dl.txt
           pip install -r requirements-optional.txt
           pip install -e .
       - name: pytest

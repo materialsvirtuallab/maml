@@ -1,16 +1,15 @@
 """
 Module implemets the target space.
 """
-
 from typing import Union, Dict, List, Callable
 
 import numpy as np
 from numpy.random import RandomState
 from pymatgen.core.periodic_table import _pt_data as pt_data
+
 from maml.apps.bowsr.acquisition import lhs_sample
 from maml.apps.bowsr.perturbation import WyckoffPerturbation
 from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
-
 
 
 def _hashable(x):
@@ -26,15 +25,18 @@ class TargetSpace:
     -- formation energy (Y). Allows for constant-time appends while
     ensuring no duplicates are added.
     """
-    def __init__(self,
-                 target_func: Callable,
-                 wps: List[WyckoffPerturbation],
-                 abc_dim: int,
-                 angles_dim: int,
-                 relax_coords: bool,
-                 relax_lattice: bool,
-                 scaler: Union[StandardScaler, DummyScaler],
-                 random_state: RandomState):
+
+    def __init__(
+        self,
+        target_func: Callable,
+        wps: List[WyckoffPerturbation],
+        abc_dim: int,
+        angles_dim: int,
+        relax_coords: bool,
+        relax_lattice: bool,
+        scaler: Union[StandardScaler, DummyScaler],
+        random_state: RandomState,
+    ):
         """
         Args:
             target_func: Target function to be maximized.
@@ -59,9 +61,12 @@ class TargetSpace:
         wyckoff_dims = [wp.dim for wp in wps]
 
         if not any([relax_coords, relax_lattice]):
-            raise ValueError("No degrees of freedom for relaxation are given. "
-                             "Please check the relax_coords and relax_lattice arguments.")
-        elif all([relax_coords, relax_lattice]):
+            raise ValueError(
+                "No degrees of freedom for relaxation are given. "
+                "Please check the relax_coords and relax_lattice arguments."
+            )
+
+        if all([relax_coords, relax_lattice]):
             self.dim = sum(wyckoff_dims) + abc_dim + angles_dim
         elif relax_coords:
             self.dim = sum(wyckoff_dims)
@@ -71,9 +76,6 @@ class TargetSpace:
         # Preallocated memory for x and y points.
         self._params = np.empty(shape=(0, self.dim))
         self._target = np.empty(shape=(0))
-
-    def __contains__(self, x):
-        return _hashable(x) in self._cache
 
     def __len__(self):
         assert len(self._params) == len(self._target)
@@ -146,10 +148,9 @@ class TargetSpace:
         params = lhs_sample(n_intervals, self.bounds, self.random_state)
         return params
 
-    def set_bounds(self,
-                   abc_bound: float = 1.2,
-                   angles_bound: float = 5,
-                   element_wise_wyckoff_bounds: Dict = None) -> None:
+    def set_bounds(
+        self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: Dict = None
+    ) -> None:
         """
         Set the bound value of wyckoff perturbation and
         lattice perturbation/volume perturbation.
@@ -157,26 +158,32 @@ class TargetSpace:
         if not element_wise_wyckoff_bounds:
             element_wise_wyckoff_bounds = {}
         included_elements = list(element_wise_wyckoff_bounds.keys())
-        element_wise_wyckoff_bounds = {frozenset({el: 1}.items()): bound
-                                       for el, bound in element_wise_wyckoff_bounds.items()}
-        element_wise_wyckoff_bounds.update({frozenset({el: 1}): 0.2 for el in pt_data
-                                            if el not in included_elements})
+        element_wise_wyckoff_bounds = {
+            frozenset({el: 1}.items()): bound for el, bound in element_wise_wyckoff_bounds.items()
+        }
+        element_wise_wyckoff_bounds.update({frozenset({el: 1}): 0.2 for el in pt_data if el not in included_elements})
 
         for wp in self.wps:
             frozen_key = frozenset(wp.site.species.as_dict().items())
             if frozen_key not in element_wise_wyckoff_bounds:
                 element_wise_wyckoff_bounds.update({frozen_key: 0.2})
 
-        wyckoff_bounds = np.concatenate([np.tile([-1, 1], (wp.dim, 1))
-                         * element_wise_wyckoff_bounds[frozenset(wp.site.species.as_dict().items())]
-                         for wp in self.wps])
+        wyckoff_bounds = np.concatenate(
+            [
+                np.tile([-1, 1], (wp.dim, 1))
+                * element_wise_wyckoff_bounds[frozenset(wp.site.species.as_dict().items())]
+                for wp in self.wps
+            ]
+        )
         abc_bounds = np.tile([-1, 1], (self.abc_dim, 1)) * abc_bound
         angles_bounds = np.tile([-1, 1], (self.angles_dim, 1)) * angles_bound
 
         if not any([self.relax_coords, self.relax_lattice]):
-            raise ValueError("No degrees of freedom for relaxation are given. "
-                             "Please check the relax_coords and relax_lattice arguments.")
-        elif all([self.relax_coords, self.relax_lattice]):
+            raise ValueError(
+                "No degrees of freedom for relaxation are given. "
+                "Please check the relax_coords and relax_lattice arguments."
+            )
+        if all([self.relax_coords, self.relax_lattice]):
             self._bounds = np.concatenate((wyckoff_bounds, abc_bounds, angles_bounds))
         elif self.relax_coords:
             self._bounds = wyckoff_bounds
@@ -185,14 +192,12 @@ class TargetSpace:
 
     def set_empty(self) -> None:
         """
-        Empty the cache, param, target of the space.
+        Empty the param, target of the space.
         """
         self._params = np.empty(shape=(0, self.dim))
         self._target = np.empty(shape=(0))
 
-        self._cache = {}
-
     def __repr__(self):
         return "{0}(relax_coords={1}, relax_lattice={2}, dim={3}, length={4})".format(
-            self.__class__.__name__, self.relax_coords, self.relax_lattice,
-            self.dim, len(self))
+            self.__class__.__name__, self.relax_coords, self.relax_lattice, self.dim, len(self)
+        )

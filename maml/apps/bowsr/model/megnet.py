@@ -1,28 +1,48 @@
+"""
+megnet model wrapper implementation
+"""
+import os
+import warnings
+
+import numpy as np
+from monty.dev import requires
+from pymatgen.core.periodic_table import Element
+from pymatgen.core.structure import Structure
+
+from maml.apps.bowsr.model.base import EnergyModel
+
 try:
     import megnet
-    import numpy as np
-    from pymatgen.core.periodic_table import Element
     from megnet.models import MEGNetModel
     from megnet.data.crystal import CrystalGraph
     from megnet.data.graph import GaussianDistance
-except Exception as e:
+except Exception as error:
     megnet = None
     MEGNetModel = None
-    raise ImportError("megnet module should be installed to use this model type!")
-
-import os
-from pymatgen.core.structure import Structure
-from bowsr.model.base import EnergyModel
+    CrystalGraph = None
+    GaussianDistance = None
+    warnings.warn("megnet module should be installed to use this model type!")
 
 module_dir = os.path.dirname(__file__)
-model_filename = os.path.join(module_dir, "model_files", "megnet","formation_energy.hdf5")
+model_filename = os.path.join(module_dir, "model_files", "megnet", "formation_energy.hdf5")
 
 
+@requires(megnet is not None, "megnet package needs to be installed to use " "this module")
 class MEGNet(EnergyModel):
     """
     MEGNetModel wrapper.
     """
-    def __init__(self, model=MEGNetModel.from_file(model_filename), reconstruct=False, **kwargs):
+
+    def __init__(self, model=None, reconstruct=False, **kwargs):
+        """
+
+        Args:
+            model:  MEGNet energy model
+            reconstruct: Whether to reconstruct the model (used in
+                disordered model)
+            **kwargs:
+        """
+        model = model or MEGNetModel.from_file(model_filename)
         gaussian_cutoff = kwargs.get("gaussian_cutoff", 6)
         radius_cutoff = kwargs.get("radius_cutoff", 5)
         npass = kwargs.get("npass", 2)
@@ -30,8 +50,9 @@ class MEGNet(EnergyModel):
         weights = model.get_weights()
         self.embedding = weights[0]
         if reconstruct:
-            cg = CrystalGraph(bond_converter=GaussianDistance(np.linspace(0, gaussian_cutoff, 100),
-                              0.5), cutoff=radius_cutoff)
+            cg = CrystalGraph(
+                bond_converter=GaussianDistance(np.linspace(0, gaussian_cutoff, 100), 0.5), cutoff=radius_cutoff
+            )
             model_new = MEGNetModel(100, 2, 16, npass=npass, graph_converter=cg)
             model_new.set_weights(weights[1:])
             self.model = model_new
@@ -47,13 +68,12 @@ class MEGNet(EnergyModel):
         Returns: float
         """
         if not structure.is_ordered and not self.reconstruct:
-            raise ValueError("To predict properties of disordered structure, "
-                             "please set reconstruct=True")
+            raise ValueError("To predict properties of disordered structure, " "please set reconstruct=True")
 
         if self.reconstruct:
             species = [dict(site.species.as_dict()) for site in structure]
             structure_copy = structure.copy()
-            structure_copy[:] = '' #dummy variable
+            structure_copy[:] = ""  # dummy variable
             graph = self.model.graph_converter.convert(structure_copy)
 
             atom = []
@@ -62,7 +82,7 @@ class MEGNet(EnergyModel):
                 for el, amt in d.items():
                     f += self.embedding[Element(el).number] * amt
                 atom.append(f)
-            graph['atom'] = atom
+            graph["atom"] = atom
 
             energy = self.model.predict_graph(graph)[0]
         else:

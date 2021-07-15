@@ -3,11 +3,16 @@
 import unittest
 
 from pymatgen.core import Lattice, Structure
-from megnet.models import MEGNetModel
+
+try:
+    from megnet.models import MEGNetModel
+except ImportError:
+    MEGNetModel = None
 
 from maml.describers.megnet import MEGNetSite, MEGNetStructure
 
 
+@unittest.skipIf(MEGNetModel is None, "MEGNet package is required")
 class MEGNETTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
