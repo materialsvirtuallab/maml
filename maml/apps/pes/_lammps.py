@@ -138,7 +138,8 @@ class LMPStaticCalculator:
             input_file = self._setup()
             data = []
             for struct in structures:
-                ld = LammpsData.from_structure(struct, ff_elements)
+                struct.remove_oxidation_states()
+                ld = LammpsData.from_structure(struct, ff_elements, atom_style="atomic")
                 ld.write_file("data.static")
                 with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
                     stdout = p.communicate()[0]
@@ -401,9 +402,12 @@ class ElasticConstant(LMPStaticCalculator):
             jiggle (float): The amount of random jiggle for atoms to
                 prevent atoms from staying on saddle points.
             lattice (str): The lattice type of structure. e.g. bcc or diamond.
+                If lattice=None, the calculator expects input structures in the calculate method.
             alat (float): The lattice constant of specific lattice and specie.
+                If alat=None, the calculator expects input structures in the calculate method.
             atom_type (int): The specified atom type if more than 1 species
-                contained in the ff_settings.
+                contained in the ff_settings. If atom_type=None, the calculator expects
+                input structures in the calculate method.
             maxiter (float): The maximum number of iteration. Default to 400.
             maxeval (float): The maximum number of evaluation. Default to 1000.
         """
@@ -424,7 +428,9 @@ class ElasticConstant(LMPStaticCalculator):
         self.maxeval = maxeval
         super().__init__(**kwargs)
 
-    def _setup(self):
+    def _setup(
+        self,
+    ):
         template_dir = os.path.join(os.path.dirname(__file__), "templates", "elastic")
 
         with open(os.path.join(template_dir, "in.elastic"), "r") as f:
@@ -437,6 +443,18 @@ class ElasticConstant(LMPStaticCalculator):
             displace_template = f.read()
 
         input_file = "in.elastic"
+        init_template = init_template.format(
+            deformation_size=self.deformation_size,
+            jiggle=self.jiggle,
+            maxiter=self.maxiter,
+            maxeval=self.maxeval,
+            lattice=self.lattice,
+            alat=self.alat,
+            num_species=self.num_species,
+            atom_type=self.atom_type,
+            masses="\n".join(["mass {} {}".format(i + 1, i + 1) for i in range(self.num_species)]),
+        )
+        init_template = init_template.splitlines()
 
         if isinstance(self.ff_settings, Potential):
             ff_settings = self.ff_settings.write_param()
@@ -445,45 +463,57 @@ class ElasticConstant(LMPStaticCalculator):
 
         with open(input_file, "w") as f:
             f.write(input_template.format(write_restart=self.write_command, restart_file=self.restart_file))
-        with open("init.mod", "w") as f:
-            f.write(
-                init_template.format(
-                    deformation_size=self.deformation_size,
-                    jiggle=self.jiggle,
-                    maxiter=self.maxiter,
-                    maxeval=self.maxeval,
-                    lattice=self.lattice,
-                    alat=self.alat,
-                    num_species=self.num_species,
-                    atom_type=self.atom_type,
-                    masses="\n".join(["mass {} {}".format(i + 1, i + 1) for i in range(self.num_species)]),
-                )
-            )
+        if None in [self.alat, self.lattice, self.atom_type]:
+            read_data = ["box             tilt large", "read_data       data.static"]
+            with open("init.mod", "w") as f:
+                f.write("\n".join(init_template[:-12] + read_data))
+        else:
+            with open("init.mod", "w") as f:
+                f.writelines("\n".join(init_template))
         with open("potential.mod", "w") as f:
             f.write(potential_template.format(ff_settings="\n".join(ff_settings)))
         with open("displace.mod", "w") as f:
             f.write(displace_template.format(read_restart=self.read_command, restart_file=self.restart_file))
         return input_file
 
-    def calculate(self):
+    def calculate(self, structures=None):
         """
         Calculate the elastic constant given Potential class.
+        Args:
+            structures (list): A list of structures. If structures=None, the alat, lattice and atom_type
+                should not be None when initializing the calculator.
+
+        Returns:
+            List of elastic constants.
         """
-        with ScratchDir("."):
-            input_file = self._setup()
-            with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
-                stdout = p.communicate()[0]
-                rc = p.returncode
-            if rc != 0:
-                error_msg = "LAMMPS exited with return code %d" % rc
-                msg = stdout.decode("utf-8").split("\n")[:-1]
-                try:
-                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
-                    error_msg += ", ".join(msg[error_line:])
-                except Exception:
-                    error_msg += msg[-1]
-                raise RuntimeError(error_msg)
-            result = self._parse()
+        if structures:
+            if None not in [self.alat, self.lattice, self.atom_type]:
+                raise ValueError(
+                    "To calculate elastic constants of input structures, at least one of "
+                    "the alat, lattice and atom_type should be None when initializing the calculator."
+                )
+            result = super().calculate(structures=structures)
+        else:
+            if None in [self.alat, self.lattice, self.atom_type]:
+                raise ValueError(
+                    "Without providing input structures, the alat, lattice and atom_type "
+                    "should not be None when initializing the calculator."
+                )
+            with ScratchDir("."):
+                input_file = self._setup()
+                with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
+                    stdout = p.communicate()[0]
+                    rc = p.returncode
+                if rc != 0:
+                    error_msg = "LAMMPS exited with return code %d" % rc
+                    msg = stdout.decode("utf-8").split("\n")[:-1]
+                    try:
+                        error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                        error_msg += ", ".join(msg[error_line:])
+                    except Exception:
+                        error_msg += msg[-1]
+                    raise RuntimeError(error_msg)
+                result = self._parse()
         return result
 
     def _sanity_check(self, structure):
