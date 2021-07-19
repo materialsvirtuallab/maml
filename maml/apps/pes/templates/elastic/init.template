@@ -35,15 +35,7 @@ variable        maxiter equal {maxiter}
 variable        maxeval equal {maxeval}
 variable        dmax equal 1.0e-2
 
-# generate the box and atom positions using a {lattice} lattice
-variable        a equal {alat}
-
-boundary	    p p p
-
-lattice         {lattice} $a
-region		    box prism 0 2.0 0 3.0 0 4.0 0.0 0.0 0.0
-create_box	    {num_species} box
-create_atoms	{atom_type} box
-
-# Need to set mass to something, just to satisfy LAMMPS
-{masses}
+# read structure from data.static
+box             tilt large
+read_data       data.static
+change_box  all triclinic

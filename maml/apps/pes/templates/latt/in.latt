@@ -3,7 +3,7 @@
 # --------------- INITIALIZATION ------------------
 clear
 units             metal
-atom_style        charge
+atom_style        atomic
 # ------------------ ATOM DEFINITION -------------------
 box               tilt large
 read_data         data.static
