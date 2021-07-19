@@ -162,6 +162,12 @@ variable poissonratio equal 1.0/(1.0+${{C11cubic}}/${{C12cubic}})
 #               C12 = 76.4 GPa
 #               C44 = 56.4 GPa
 print "${{C11all}} ${{C12all}} ${{C44all}} ${{bulkmodulus}}" file elastic.txt
+print "${{C11all}} ${{C12all}} ${{C13all}} ${{C14all}} ${{C15all}} ${{C16all}}" file    voigt_tensor.txt
+print "${{C21all}} ${{C22all}} ${{C23all}} ${{C24all}} ${{C25all}} ${{C26all}}" append  voigt_tensor.txt
+print "${{C31all}} ${{C32all}} ${{C33all}} ${{C34all}} ${{C35all}} ${{C36all}}" append  voigt_tensor.txt
+print "${{C41all}} ${{C42all}} ${{C43all}} ${{C44all}} ${{C45all}} ${{C46all}}" append  voigt_tensor.txt
+print "${{C51all}} ${{C52all}} ${{C53all}} ${{C54all}} ${{C55all}} ${{C56all}}" append  voigt_tensor.txt
+print "${{C61all}} ${{C62all}} ${{C63all}} ${{C64all}} ${{C65all}} ${{C66all}}" append  voigt_tensor.txt
 print "========================================="
 print "Components of the Elastic Constant Tensor"
 print "========================================="

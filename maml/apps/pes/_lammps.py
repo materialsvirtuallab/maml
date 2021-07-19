@@ -384,6 +384,7 @@ class ElasticConstant(LMPStaticCalculator):
         jiggle=1e-5,
         maxiter=400,
         maxeval=1000,
+        full_matrix=False,
         **kwargs,
     ):
         """
@@ -400,6 +401,9 @@ class ElasticConstant(LMPStaticCalculator):
                 prevent atoms from staying on saddle points.
             maxiter (float): The maximum number of iteration. Default to 400.
             maxeval (float): The maximum number of evaluation. Default to 1000.
+            full_matrix (bool): If False, only c11, c12, c44 and bulk modulus are returned.
+                If True, 6 x 6 elastic matrices in the Voigt notation are returned.
+
         """
         self.ff_settings = ff_settings
         self.write_command = self._RESTART_CONFIG[potential_type]["write_command"]
@@ -409,6 +413,7 @@ class ElasticConstant(LMPStaticCalculator):
         self.jiggle = jiggle
         self.maxiter = maxiter
         self.maxeval = maxeval
+        self.full_matrix = full_matrix
         super().__init__(**kwargs)
 
     def _setup(
@@ -461,6 +466,10 @@ class ElasticConstant(LMPStaticCalculator):
         Parse results from dump files.
 
         """
+        if self.full_matrix:
+            voigt = np.loadtxt("voigt_tensor.txt")
+            return voigt
+
         C11, C12, C44, bulkmodulus = np.loadtxt("elastic.txt")
         return C11, C12, C44, bulkmodulus
 
