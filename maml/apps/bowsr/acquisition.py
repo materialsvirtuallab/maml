@@ -11,6 +11,19 @@ from scipy.special import erfc
 from sklearn.gaussian_process import GaussianProcessRegressor
 
 
+def _trunc(values: np.ndarray, decimals: int = 3):
+    """
+    Truncate values to decimal places
+    Args:
+        values (np.ndarray): input array
+        decimals (int): number of decimals to keep
+
+    Returns: truncated array
+
+    """
+    return np.trunc(values * 10 ** decimals) / 10 ** decimals
+
+
 def ensure_rng(seed: int = None) -> RandomState:
     """
     Create a random number generator based on an optional seed.
@@ -59,7 +72,7 @@ def lhs_sample(n_intervals: int, bounds: np.ndarray, random_state: RandomState) 
     bounds = np.array(bounds)
     dim = len(bounds)
     linspace = np.linspace(bounds[:, 0], bounds[:, 1], n_intervals + 1)
-    linspace = np.round(linspace, decimals=3)
+    linspace = _trunc(linspace, decimals=3)
     lower = linspace[:n_intervals, :]
     upper = linspace[1 : n_intervals + 1, :]
     _center = (lower + upper) / 2
@@ -94,7 +107,7 @@ def propose_query_point(
     if sampler == "lhs":
         x_warmup = lhs_sample(n_warmup, bounds, random_state)
     else:
-        x_warmup = np.round(random_state.uniform(bounds[:, 0], bounds[:, 1], size=(n_warmup, dim)), decimals=3)
+        x_warmup = _trunc(random_state.uniform(bounds[:, 0], bounds[:, 1], size=(n_warmup, dim)), decimals=3)
     x_warmup = scaler.transform(x_warmup)
     acq_warmup = acquisition(x_warmup, gpr=gpr, y_max=y_max, noise=noise)
     x_max = x_warmup[acq_warmup.argmax()]
@@ -113,7 +126,7 @@ def propose_query_point(
 
     # Clip output to make sure it lies within the bounds.
     # return np.clip(scaler.inverse_transform(x_max), bounds[:, 0], bounds[:, 1])
-    return np.round(scaler.inverse_transform(x_max), decimals=3)
+    return _trunc(scaler.inverse_transform(x_max), decimals=3)
 
 
 class AcquisitionFunction:
