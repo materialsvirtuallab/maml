@@ -1,9 +1,9 @@
 pytest==6.2.4
 pytest-cov==2.12.1
 coverage==5.5
-coveralls==3.1.0
+coveralls==3.2.0
 mypy==0.910
 pydocstyle==6.1.1
-pylint==2.9.3
+pylint==2.9.5
 black==21.7b0
 flake8==3.9.2
