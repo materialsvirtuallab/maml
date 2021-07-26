@@ -66,7 +66,7 @@ class LMPStaticCalculator:
     using LAMMPS.
     """
 
-    _COMMON_CMDS = ["units metal", "atom_style charge", "box tilt large", "read_data data.static", "run 0"]
+    _COMMON_CMDS = ["units metal", "atom_style atomic", "box tilt large", "read_data data.static", "run 0"]
 
     allowed_kwargs = ["lmp_exe"]
 
