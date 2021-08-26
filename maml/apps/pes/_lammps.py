@@ -599,7 +599,9 @@ class NudgedElasticBand(LMPStaticCalculator):
             raise ValueError("Lattice type is invalid.")
 
         super_cell = unit_cell * scale_factor
-        super_cell_ld = LammpsData.from_structure(super_cell, ff_elements=self.ff_settings.elements)
+        super_cell_ld = LammpsData.from_structure(
+            super_cell, ff_elements=self.ff_settings.elements, atom_style="atomic"
+        )
         super_cell_ld.write_file("data.supercell")
 
         with open("in.relax", "w") as f:
@@ -652,7 +654,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                 error_msg += msg[-1]
             raise RuntimeError(error_msg)
 
-        final_relaxed_struct = LammpsData.from_file("final.relaxed", atom_style="charge").structure
+        final_relaxed_struct = LammpsData.from_file("final.relaxed", atom_style="atomic").structure
 
         lines = ["{}".format(final_relaxed_struct.num_sites)]
 
@@ -690,10 +692,9 @@ class NudgedElasticBand(LMPStaticCalculator):
             with subprocess.Popen(
                 [
                     "mpirun",
-                    "--oversubscribe",
                     "-n",
                     str(self.num_replicas),
-                    "lmp_mpi",
+                    self.LMP_EXE,
                     "-partition",
                     "{}x1".format(self.num_replicas),
                     "-in",
@@ -806,7 +807,9 @@ class DefectFormation(LMPStaticCalculator):
         efs_calculator = EnergyForceStress(ff_settings=self.ff_settings)
         energy_per_atom = efs_calculator.calculate([super_cell])[0][0] / len(super_cell)
 
-        super_cell_ld = LammpsData.from_structure(super_cell, ff_elements=self.ff_settings.elements)
+        super_cell_ld = LammpsData.from_structure(
+            super_cell, ff_elements=self.ff_settings.elements, atom_style="atomic"
+        )
         super_cell_ld.write_file("data.supercell")
 
         input_file = "in.defect"
