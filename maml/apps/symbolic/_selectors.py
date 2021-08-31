@@ -175,7 +175,7 @@ class BaseSelector:
                 parameter names mapped to their values
 
         """
-        out = dict()
+        out = {}
         for key in self._get_param_names():
             value = getattr(self, key, None)
             out[key] = value
