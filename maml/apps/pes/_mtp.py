@@ -530,10 +530,14 @@ class MTPotential(LammpsPotential):
         unfitted_mtp="08g.mtp",
         max_dist=5,
         radial_basis_size=8,
-        max_iter=500,
+        max_iter=1000,
         energy_weight=1,
         force_weight=1e-2,
         stress_weight=1e-3,
+        init_params="same",
+        scale_by_force=0,
+        bfgs_conv_tol=1e-3,
+        weighting="vibration",
     ):
         """
         Training data with moment tensor method.
@@ -557,6 +561,14 @@ class MTPotential(LammpsPotential):
             energy_weight (float): The weight of energy.
             force_weight (float): The weight of forces.
             stress_weight (float): The weight of stresses. Zero-weight can be assigned.
+            init_params (str): How to initialize parameters if a potential was not
+                pre-fitted. Choose from "same" and "random".
+            scale_by_force (float): Default=0. If >0 then configurations near equilibrium
+               (with roughtly force < scale_by_force) get more weight.
+            bfgs_conv_tol (float): Stop training if error dropped by a factor smaller than this
+                over 50 BFGS iterations.
+            weighting (str): How to weight configuration with different sizes relative to each other.
+                Choose from "vibrations", "molecules" and "structures".
         """
         if not which("mlp"):
             raise RuntimeError(
@@ -610,7 +622,10 @@ class MTPotential(LammpsPotential):
                     "--energy-weight={}".format(energy_weight),
                     "--force-weight={}".format(force_weight),
                     "--stress-weight={}".format(stress_weight),
-                    "--init-params=same",
+                    "--init-params={}".format(init_params),
+                    "--scale-by-force={}".format(scale_by_force),
+                    "--bfgs-conv-tol={}".format(bfgs_conv_tol),
+                    "--weighting={}".format(weighting),
                 ],
                 stdout=subprocess.PIPE,
             ) as p:
