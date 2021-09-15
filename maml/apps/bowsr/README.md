@@ -1,6 +1,6 @@
 ## Bayesian Optimization With Symmetry Relaxation Algorithm (BOWSR)
 
-The BWOSR app is designed for obtaining near-equilibrium crystal structures via
+The BOWSR app is designed for obtaining near-equilibrium crystal structures via
 bayesian optimization and graph deep learning energy model without expensive
 DFT. The current implementation is compatible with energy evaluators
 for [MEGNet](https://github.com/materialsvirtuallab/megnet)
