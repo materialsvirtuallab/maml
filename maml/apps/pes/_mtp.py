@@ -518,7 +518,7 @@ class MTPotential(LammpsPotential):
             d["outputs"]["virial_stress"] = virial_stress
 
             data_pool.append(d)
-        _, df = convert_docs(docs=data_pool)
+        _, df = convert_docs(docs=data_pool, include_stress=True)
         return data_pool, df
 
     def train(
