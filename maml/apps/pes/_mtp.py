@@ -107,7 +107,7 @@ class MTPotential(LammpsPotential):
             lines.append(" Energy")
             lines.append("{:>24.12f}".format(inputs["Energy"]))
         if "Stress" in inputs:
-            if self.version == "mlip-2":
+            if not hasattr(self, "version") or self.version == "mlip-2":
                 format_str = "{:>16s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
                 lines.append(format_str.format("PlusStress:  xx", "yy", "zz", "yz", "xz", "xy"))
             if self.version == "mlip-dev":
@@ -309,7 +309,7 @@ class MTPotential(LammpsPotential):
                             if not specified. Default to None.
         """
         lines = []
-        if self.version == "mlip-2":
+        if not hasattr(self, "version") or self.version == "mlip-2":
             format_str = "{:<48s}{:<20s}"
             lines.append(format_str.format("mtp-filename", mtp_filename))
             if kwargs.get("write_cfgs"):
@@ -518,7 +518,7 @@ class MTPotential(LammpsPotential):
             d["outputs"]["virial_stress"] = virial_stress
 
             data_pool.append(d)
-        _, df = convert_docs(docs=data_pool)
+        _, df = convert_docs(docs=data_pool, include_stress=True)
         return data_pool, df
 
     def train(
@@ -718,7 +718,7 @@ class MTPotential(LammpsPotential):
             original_file = self.write_cfg(original_file, cfg_pool=predict_pool)
             _, df_orig = self.read_cfgs(original_file)
 
-            if self.version == "mlip-2":
+            if not hasattr(self, "version") or self.version == "mlip-2":
                 cmd = ["mlp", "calc-efs", fitted_mtp, original_file, predict_file]
             elif self.version == "mlip-dev":
                 cmd = ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)]
