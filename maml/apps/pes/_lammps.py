@@ -373,7 +373,7 @@ class ElasticConstant(LMPStaticCalculator):
 
     _RESTART_CONFIG = {
         "internal": {"write_command": "write_restart", "read_command": "read_restart", "restart_file": "restart.equil"},
-        "external": {"write_command": "write_data", "read_command": "read_data", "restart_file": "data.static"},
+        "external": {"write_command": "write_restart", "read_command": "read_restart", "restart_file": "restart.equil"},
     }
 
     def __init__(
