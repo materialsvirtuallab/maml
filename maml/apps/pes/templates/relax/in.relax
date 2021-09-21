@@ -19,11 +19,9 @@ reset_timestep    0
 thermo            1
 thermo_style      custom pe cella cellb cellc cellalpha cellbeta cellgamma
 
-fix               1 all box/relax aniso 0.0 vmax 0.001
-min_style         cg
-minimize          1e-15 1e-15 5000 5000
-#minimize          0 1e-10 400 400
-
+{box_relax_settings}
+min_style         {min_style}
+minimize          {etol} {ftol} {maxiter} {maxeval}
 
 variable          a equal cella
 variable          b equal cellb
@@ -38,5 +36,5 @@ variable          energy equal pe
 ######################################
 # SIMULATION DONE
 print             "All done"
-print             "${{a}} ${{b}} ${{c}}" file lattice.txt
+#print             "${{a}} ${{b}} ${{c}}" file lattice.txt
 write_data        data.relaxed

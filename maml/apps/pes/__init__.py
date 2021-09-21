@@ -11,9 +11,11 @@ from ._lammps import (  # noqa
     EnergyForceStress,  # noqa
     SpectralNeighborAnalysis,
     ElasticConstant,  # noqa
-    LatticeConstant,
     NudgedElasticBand,
     DefectFormation,  # noqa
+    LMPRelaxationCalculator,
+    LatticeConstant,
+    SurfaceEnergy,
     get_default_lmp_exe,  # noqa
 )
 from ._mtp import MTPotential  # noqa

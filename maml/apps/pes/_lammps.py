@@ -474,55 +474,6 @@ class ElasticConstant(LMPStaticCalculator):
         return C11, C12, C44, bulkmodulus
 
 
-class LatticeConstant(LMPStaticCalculator):
-    """
-    Lattice Constant Relaxation Calculator.
-    """
-
-    def __init__(self, ff_settings, **kwargs):
-        """
-        Args:
-            ff_settings (list/Potential): Configure the force field settings for
-                LAMMPS calculation, if given a Potential object, should apply
-                Potential.write_param method to get the force field setting.
-        """
-        self.ff_settings = ff_settings
-        super().__init__(**kwargs)
-
-    def _setup(self):
-        template_dir = os.path.join(os.path.dirname(__file__), "templates", "latt")
-
-        with open(os.path.join(template_dir, "in.latt"), "r") as f:
-            input_template = f.read()
-
-        input_file = "in.latt"
-
-        if isinstance(self.ff_settings, Potential):
-            ff_settings = self.ff_settings.write_param()
-        else:
-            ff_settings = self.ff_settings
-
-        with open(input_file, "w") as f:
-            f.write(input_template.format(ff_settings="\n".join(ff_settings)))
-
-        return input_file
-
-    def _sanity_check(self, structure):
-        """
-        Check if the structure is valid for this calculation.
-
-        """
-        return True
-
-    def _parse(self):
-        """
-        Parse results from dump files.
-
-        """
-        a, b, c = np.loadtxt("lattice.txt")
-        return a, b, c
-
-
 class NudgedElasticBand(LMPStaticCalculator):
     """
     NudgedElasticBand migration energy calculator.
@@ -859,6 +810,231 @@ class DefectFormation(LMPStaticCalculator):
         force = _read_dump("force.dump")
         stress = np.loadtxt("stress.txt")
         return energy, force, stress
+
+
+class LMPRelaxationCalculator(LMPStaticCalculator):
+    """
+    Structural Relaxation Calculator.
+    """
+
+    def __init__(
+        self,
+        ff_settings,
+        box_relax=True,
+        box_relax_keywords="aniso 0.0 vmax 0.001",
+        min_style="cg",
+        etol=1e-15,
+        ftol=1e-15,
+        maxiter=5000,
+        maxeval=5000,
+        **kwargs,
+    ):
+        """
+        Args:
+            ff_settings (list/Potential): Configure the force field settings for
+                LAMMPS calculation, if given a Potential object, should apply
+                Potential.write_param method to get the force field setting.
+            box_relax (bool): Whether to allow the box size and shape to vary
+                during the minimization.
+            box_relax_keywords (str): Keywords and values to define the conditions
+                and constraints on the box size and shape.
+            min_style (str): The minimization algorithm to use.
+            etol (float): The stopping tolerance for energy during the minimization.
+            ftol (float): The stopping tolerance for force during the minimization.
+            maxiter (int): The max iterations of minimizer.
+            maxeval (int): The max number of force/energy evaluations.
+        """
+        self.ff_settings = ff_settings
+        self.box_relax = box_relax
+        self.box_relax_keywords = box_relax_keywords
+        self.min_style = min_style
+        self.etol = etol
+        self.ftol = ftol
+        self.maxiter = maxiter
+        self.maxeval = maxeval
+        super().__init__(**kwargs)
+
+    def _setup(self):
+        template_dir = os.path.join(os.path.dirname(__file__), "templates", "relax")
+
+        with open(os.path.join(template_dir, "in.relax"), "r") as f:
+            input_template = f.read()
+
+        input_file = "in.relax"
+
+        if isinstance(self.ff_settings, Potential):
+            ff_settings = self.ff_settings.write_param()
+        else:
+            ff_settings = self.ff_settings
+
+        box_relax_settings = ""
+        if self.box_relax:
+            box_relax_settings = "fix   1 all box/relax {}".format(self.box_relax_keywords)
+
+        inputs = input_template.format(
+            ff_settings="\n".join(ff_settings),
+            box_relax_settings=box_relax_settings,
+            min_style=self.min_style,
+            etol=self.etol,
+            ftol=self.ftol,
+            maxiter=self.maxiter,
+            maxeval=self.maxeval,
+        )
+
+        with open(input_file, "w") as f:
+            f.write(inputs)
+
+        return input_file
+
+    def _sanity_check(self, structure):
+        """
+        Check if the structure is valid for this calculation.
+
+        """
+        return True
+
+    def _parse(self):
+        """
+        Parse results from dump files.
+
+        """
+        ld = LammpsData.from_file("data.relaxed", atom_style="atomic")
+        final_structure = ld.structure
+        efs_calculator = EnergyForceStress(ff_settings=self.ff_settings)
+        energy, forces, stresses = efs_calculator.calculate([final_structure])[0]
+        return final_structure, energy, forces, stresses
+
+
+class LatticeConstant(LMPRelaxationCalculator):
+    """
+    Lattice Constant Relaxation Calculator.
+    """
+
+    def calculate(self, structures):
+        """
+        Calculate the relaxed lattice parameters of a list of structures:
+
+        Args:
+            structures [Structure]: Input structures in a list.
+
+        Returns:
+            List of relaxed lattice constants (a, b, c in Å) of the input structures.
+
+        """
+        results = super().calculate(structures)
+        structures_relaxed = [r[0] for r in results]
+        lattice_constants = [list(struct.lattice.abc) for struct in structures_relaxed]
+
+        return lattice_constants
+
+
+class SurfaceEnergy(LMPRelaxationCalculator):
+    """
+    Surface energy Calculator.
+
+    This calculator generate and calculate surface energies of slab structures based on inputs of
+    bulk_structure and miller_indexes with the SlabGenerator in pymatgen:
+    https://pymatgen.org/pymatgen.core.surface.html
+
+    """
+
+    def __init__(
+        self,
+        ff_settings,
+        bulk_structure,
+        miller_indexes,
+        min_slab_size=15,
+        min_vacuum_size=15,
+        lll_reduce=False,
+        center_slab=False,
+        in_unit_planes=False,
+        primitive=True,
+        max_normal_search=None,
+        reorient_lattice=True,
+        box_relax=False,
+        **kwargs,
+    ):
+        """
+        Args:
+            ff_settings (list/Potential): Configure the force field settings for
+                LAMMPS calculation, if given a Potential object, should apply
+                Potential.write_param method to get the force field setting.
+            bulk_structure (Structure): The bulk structure of target system. Slab structures
+                will be generated based on inputs of bulk_structure and miller_indexes with
+                the SlabGenerator in pymatgen.
+            miller_indexes (list): A list of miller indexes of planes parallel to
+                the surface of target slabs. Slab structures
+                will be generated based on inputs of bulk_structure and miller_indexes with
+                the SlabGenerator in pymatgen.
+            min_slab_size (float): Minimum size in angstroms of layers containing atoms.
+            min_vacuum_size (float): Minimize size in angstroms of layers containing vacuum.
+            lll_reduce (bool): Whether or not the slabs will be orthogonalized.
+            center_slab (bool): Whether or not the slabs will be centered between the vacuum layer.
+            in_unit_planes (bool): Whether to set min_slab_size and min_vac_size in units
+                of hkl planes (True) or Angstrom (False/default).
+            primitive (bool): Whether to reduce any generated slabs to a primitive cell.
+            max_normal_search (int): If set to a positive integer, the code will conduct a search
+                for a normal lattice vector that is as perpendicular to the surface as possible by
+                considering multiples linear combinations of lattice vectors up to max_normal_search.
+            reorient_lattice (bool): Whether or not to reorient the lattice parameters such that
+                the c direction is the third vector of the lattice matrix.
+            box_relax (bool): Whether to allow the box size and shape of the slab structures to vary
+                during the minimization. Normally, this should be turned off.
+        """
+
+        super().__init__(ff_settings=ff_settings, box_relax=True, **kwargs)
+        bulk_structure_relaxed, bulk_energy, _, _ = super().calculate([bulk_structure])[0]
+        self.bulk_energy_per_atom = bulk_energy / bulk_structure_relaxed.num_sites
+        from pymatgen.core.surface import SlabGenerator
+
+        slab_generators = [
+            SlabGenerator(
+                initial_structure=bulk_structure_relaxed,
+                miller_index=miller_index,
+                min_slab_size=min_slab_size,
+                min_vacuum_size=min_vacuum_size,
+                lll_reduce=lll_reduce,
+                center_slab=center_slab,
+                in_unit_planes=in_unit_planes,
+                primitive=primitive,
+                max_normal_search=max_normal_search,
+                reorient_lattice=reorient_lattice,
+            )
+            for miller_index in miller_indexes
+        ]
+        slabs = [SG.get_slab() for SG in slab_generators]
+        self.miller_indexes = miller_indexes
+        self.slabs = slabs
+        self.surface_areas = [s.surface_area for s in slabs]
+
+        super().__init__(ff_settings=ff_settings, box_relax=box_relax, **kwargs)
+
+    def calculate(self):
+        """
+        Calculate surface energies with the formula:
+        E(Surface) = (E(Slab) - E(bulk)) / Area(surface). (J/m^2)
+
+        Returns:
+            List of miller_indexes with their respective relaxed slab structures and surface energies in J/m^2.
+
+        """
+        results = super().calculate(self.slabs)
+        slabs_relaxed = [r[0] for r in results]
+        slab_energies = [r[1] for r in results]
+        surface_energies = [
+            (slab_energy - slabs_relaxed[i].num_sites * self.bulk_energy_per_atom) / 2 / self.surface_areas[i]
+            for i, slab_energy in enumerate(slab_energies)
+        ]
+        from pymatgen.core.units import Unit
+
+        energy_unit_conversion_factor = Unit("eV").get_conversion_factor("J")
+        length_unit_conversion_factor = Unit("ang").get_conversion_factor("m")
+        surface_energies = [
+            surface_energy * energy_unit_conversion_factor / length_unit_conversion_factor ** 2
+            for surface_energy in surface_energies
+        ]
+
+        return list(zip(self.miller_indexes, slabs_relaxed, surface_energies))
 
 
 class LammpsPotential(Potential, abc.ABC):  # type: ignore
