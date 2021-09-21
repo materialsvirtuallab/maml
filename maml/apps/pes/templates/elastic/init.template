@@ -20,6 +20,7 @@ variable        atomjiggle equal {jiggle}
 
 # metal units, elastic constants in GPa
 units		    metal
+atom_style      charge
 variable        cfac equal 1.0e-4
 variable        cunits string GPa
 
@@ -38,4 +39,4 @@ variable        dmax equal 1.0e-2
 # read structure from data.static
 box             tilt large
 read_data       data.static
-change_box  all triclinic
+change_box      all triclinic

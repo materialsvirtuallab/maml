@@ -4,7 +4,7 @@
 clear
 units           metal
 boundary        p p p
-atom_style      atomic
+atom_style      charge
 
 # ------------------ ATOM DEFINITION -------------------
 box             tilt large

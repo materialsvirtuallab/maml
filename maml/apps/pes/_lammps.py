@@ -66,7 +66,7 @@ class LMPStaticCalculator:
     using LAMMPS.
     """
 
-    _COMMON_CMDS = ["units metal", "atom_style atomic", "box tilt large", "read_data data.static", "run 0"]
+    _COMMON_CMDS = ["units metal", "atom_style charge", "box tilt large", "read_data data.static", "run 0"]
 
     allowed_kwargs = ["lmp_exe"]
 
@@ -139,7 +139,7 @@ class LMPStaticCalculator:
             data = []
             for struct in structures:
                 struct.remove_oxidation_states()
-                ld = LammpsData.from_structure(struct, ff_elements, atom_style="atomic")
+                ld = LammpsData.from_structure(struct, ff_elements, atom_style="charge")
                 ld.write_file("data.static")
                 with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
                     stdout = p.communicate()[0]
@@ -551,7 +551,7 @@ class NudgedElasticBand(LMPStaticCalculator):
 
         super_cell = unit_cell * scale_factor
         super_cell_ld = LammpsData.from_structure(
-            super_cell, ff_elements=self.ff_settings.elements, atom_style="atomic"
+            super_cell, ff_elements=self.ff_settings.elements, atom_style="charge"
         )
         super_cell_ld.write_file("data.supercell")
 
@@ -605,7 +605,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                 error_msg += msg[-1]
             raise RuntimeError(error_msg)
 
-        final_relaxed_struct = LammpsData.from_file("final.relaxed", atom_style="atomic").structure
+        final_relaxed_struct = LammpsData.from_file("final.relaxed", atom_style="charge").structure
 
         lines = ["{}".format(final_relaxed_struct.num_sites)]
 
@@ -759,7 +759,7 @@ class DefectFormation(LMPStaticCalculator):
         energy_per_atom = efs_calculator.calculate([super_cell])[0][0] / len(super_cell)
 
         super_cell_ld = LammpsData.from_structure(
-            super_cell, ff_elements=self.ff_settings.elements, atom_style="atomic"
+            super_cell, ff_elements=self.ff_settings.elements, atom_style="charge"
         )
         super_cell_ld.write_file("data.supercell")
 
@@ -898,7 +898,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
         Parse results from dump files.
 
         """
-        ld = LammpsData.from_file("data.relaxed", atom_style="atomic")
+        ld = LammpsData.from_file("data.relaxed", atom_style="charge")
         final_structure = ld.structure
         efs_calculator = EnergyForceStress(ff_settings=self.ff_settings)
         energy, forces, stresses = efs_calculator.calculate([final_structure])[0]
