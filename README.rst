@@ -98,7 +98,7 @@ Citing
 ::
 
     @misc{maml,
-        author = {Chen, Chi and Zuo, Yunxing and Ye, Weike and Ong, Shyue Ping},
+        author = {Chen, Chi and Zuo, Yunxing, Ye, Weike, Ji, Qi and Ong, Shyue Ping},
         title = {{Maml - materials machine learning package}},
         year = {2020},
         publisher = {GitHub},
@@ -115,4 +115,4 @@ For the ML-IAP package (`maml.pes`), please cite::
 For the BOWSR package (`maml.bowsr`), please cite::
 
     Zuo, Y.; Qin, M.; Chen, C.; Ye, W., Li, X.; Luo, J., Ong, S. P. Accelerating Materials Discovery with 
-    Bayesian Optimization and Graph Deep Learning. arXiv:2104.10242 https://arxiv.org/abs/2104.10242
+    Bayesian Optimization and Graph Deep Learning. Mater. Today 2021, Accepted, https://doi.org/10.1016/j.mattod.2021.08.012 
