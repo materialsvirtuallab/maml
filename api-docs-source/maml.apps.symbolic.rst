@@ -1,6 +1,14 @@
 maml.apps.symbolic package
 ==========================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 7
+
+   maml.apps.symbolic.tests
+
 Submodules
 ----------
 

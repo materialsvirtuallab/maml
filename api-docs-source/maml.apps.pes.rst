@@ -1,6 +1,14 @@
 maml.apps.pes package
 =====================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 7
+
+   maml.apps.pes.tests
+
 Submodules
 ----------
 

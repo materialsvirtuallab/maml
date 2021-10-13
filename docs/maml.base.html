@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>maml.base package &#8212; maml 0.01 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -30,63 +31,63 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="maml-base-package">
+  <section id="maml-base-package">
 <h1>maml.base package<a class="headerlink" href="#maml-base-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
+<section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-<div class="section" id="module-maml.base">
+</section>
+<section id="module-maml.base">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-maml.base" title="Permalink to this headline">¶</a></h2>
 <p>Define abstract base classes.</p>
 <dl class="py class">
-<dt id="maml.base.BaseDataSource">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">BaseDataSource</span></code><a class="headerlink" href="#maml.base.BaseDataSource" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDataSource">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">BaseDataSource</span></span><a class="headerlink" href="#maml.base.BaseDataSource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Abstract base class for a data source.</p>
 <dl class="py method">
-<dt id="maml.base.BaseDataSource.get">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">get</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="headerlink" href="#maml.base.BaseDataSource.get" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDataSource.get">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="headerlink" href="#maml.base.BaseDataSource.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get data from sources</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.BaseDescriber">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">BaseDescriber</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseDescriber" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDescriber">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">BaseDescriber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">monty.json.MSONable</span></code></p>
 <p>Base class for a Describer. A describers converts an object to a descriptor,
 typically a numerical representation useful for machine learning.
 The output for the describers can be a single DataFrame/numpy.ndarray or
 a list of DataFrame/numpy.ndarray.</p>
 <dl class="py attribute">
-<dt id="maml.base.BaseDescriber._abc_impl">
-<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.base.BaseDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDescriber._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.base.BaseDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseDescriber._is_multi_output">
-<code class="sig-name descname"><span class="pre">_is_multi_output</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#maml.base.BaseDescriber._is_multi_output" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDescriber._is_multi_output">
+<span class="sig-name descname"><span class="pre">_is_multi_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#maml.base.BaseDescriber._is_multi_output" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseDescriber.clear_cache">
-<code class="sig-name descname"><span class="pre">clear_cache</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseDescriber.clear_cache" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDescriber.clear_cache">
+<span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseDescriber.clear_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear cache</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="maml.base.BaseDescriber.feature_dim">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">feature_dim</span></code><a class="headerlink" href="#maml.base.BaseDescriber.feature_dim" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="maml.base.BaseDescriber.feature_dim">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">feature_dim</span></span><a class="headerlink" href="#maml.base.BaseDescriber.feature_dim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Feature dimension, useful when certain models need to specif
 the feature dimension, e.g., MLP models.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseDescriber.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">maml.base._describer.BaseDescriber</span><a class="headerlink" href="#maml.base.BaseDescriber.fit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDescriber.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#maml.base.BaseDescriber" title="maml.base._describer.BaseDescriber"><span class="pre">maml.base._describer.BaseDescriber</span></a></span></span><a class="headerlink" href="#maml.base.BaseDescriber.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Place holder for fit API</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>x: Any inputs
@@ -97,8 +98,8 @@ y: Any outputs</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseDescriber.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Any</span><a class="headerlink" href="#maml.base.BaseDescriber.transform" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDescriber.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#maml.base.BaseDescriber.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform a list of objs. If the return data is DataFrame,
 use df.xs(index, level=’input_index’) to get the result for the i-th object.</p>
 <dl class="simple">
@@ -110,23 +111,23 @@ use df.xs(index, level=’input_index’) to get the result for the i-th object.
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseDescriber.transform_one">
-<code class="sig-name descname"><span class="pre">transform_one</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#maml.base.BaseDescriber.transform_one" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseDescriber.transform_one">
+<span class="sig-name descname"><span class="pre">transform_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#maml.base.BaseDescriber.transform_one" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform an object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.BaseModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">BaseModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">describer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">maml.base._describer.BaseDescriber</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">BaseModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">describer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#maml.base.BaseDescriber" title="maml.base._describer.BaseDescriber"><span class="pre">maml.base._describer.BaseDescriber</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.BaseModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Abstract Base class for a Model. Basically, it usually wraps around a deep
 learning package, e.g., the Sequential Model in Keras, but provides for
 transparent conversion of arbitrary input and outputs.</p>
 <dl class="py method">
-<dt id="maml.base.BaseModel._predict">
-<code class="sig-name descname"><span class="pre">_predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#maml.base.BaseModel._predict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseModel._predict">
+<span class="sig-name descname"><span class="pre">_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#maml.base.BaseModel._predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the values given a set of inputs based on fitted models.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>features (np.ndarray): array-like input features.</p>
@@ -137,8 +138,8 @@ transparent conversion of arbitrary input and outputs.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseModel.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">maml.base._model.BaseModel</span><a class="headerlink" href="#maml.base.BaseModel.fit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><span class="pre">maml.base._model.BaseModel</span></a></span></span><a class="headerlink" href="#maml.base.BaseModel.fit" title="Permalink to this definition">¶</a></dt>
 <dd><dl>
 <dt>Args:</dt><dd><dl class="simple">
 <dt>features (list or np.ndarray): Numerical input feature list or</dt><dd><p>numpy array with dim (m, n) where m is the number of data and
@@ -156,8 +157,8 @@ val_targets (list or np.ndarray): validation targets</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseModel.predict_objs">
-<code class="sig-name descname"><span class="pre">predict_objs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#maml.base.BaseModel.predict_objs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseModel.predict_objs">
+<span class="sig-name descname"><span class="pre">predict_objs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#maml.base.BaseModel.predict_objs" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Predict the values given a set of objects. Usually Pymatgen</dt><dd><p>Structure objects.</p>
 </dd>
@@ -165,8 +166,8 @@ val_targets (list or np.ndarray): validation targets</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.BaseModel.train">
-<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">maml.base._model.BaseModel</span><a class="headerlink" href="#maml.base.BaseModel.train" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.BaseModel.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><span class="pre">maml.base._model.BaseModel</span></a></span></span><a class="headerlink" href="#maml.base.BaseModel.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train the models from object, target pairs</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>objs (list of objects): List of objects
@@ -182,18 +183,18 @@ val_targets (list): list of validation targets
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.DummyDescriber">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">DummyDescriber</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.DummyDescriber" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></p>
+<dt class="sig sig-object py" id="maml.base.DummyDescriber">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">DummyDescriber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.DummyDescriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.base.BaseDescriber" title="maml.base._describer.BaseDescriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._describer.BaseDescriber</span></code></a></p>
 <p>Dummy Describer that does nothing</p>
 <dl class="py attribute">
-<dt id="maml.base.DummyDescriber._abc_impl">
-<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.base.DummyDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.DummyDescriber._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.base.DummyDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.DummyDescriber.transform_one">
-<code class="sig-name descname"><span class="pre">transform_one</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.DummyDescriber.transform_one" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.DummyDescriber.transform_one">
+<span class="sig-name descname"><span class="pre">transform_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.DummyDescriber.transform_one" title="Permalink to this definition">¶</a></dt>
 <dd><p>Does nothing but return the original features</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>obj: Any inputs</p>
@@ -205,20 +206,20 @@ val_targets (list): list of validation targets
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.KerasModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">KerasModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">describer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">maml.base._describer.BaseDescriber</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.KerasModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></p>
+<dt class="sig sig-object py" id="maml.base.KerasModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">KerasModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">describer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#maml.base.BaseDescriber" title="maml.base._describer.BaseDescriber"><span class="pre">maml.base._describer.BaseDescriber</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.KerasModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.KerasMixin</span></code></p>
 <p>MAML models with keras models as estimators</p>
 <dl class="py method">
-<dt id="maml.base.KerasModel._get_validation_data">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">_get_validation_data</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">val_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.KerasModel._get_validation_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.KerasModel._get_validation_data">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">_get_validation_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">val_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.KerasModel._get_validation_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>construct validation data, the default is just returning a list of
 val_features and val_targets</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.KerasModel.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">maml.base._model.BaseModel</span><a class="headerlink" href="#maml.base.KerasModel.fit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.KerasModel.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><span class="pre">maml.base._model.BaseModel</span></a></span></span><a class="headerlink" href="#maml.base.KerasModel.fit" title="Permalink to this definition">¶</a></dt>
 <dd><dl>
 <dt>Args:</dt><dd><dl class="simple">
 <dt>features (list or np.ndarray): Numerical input feature list or</dt><dd><p>numpy array with dim (m, n) where m is the number of data and
@@ -238,37 +239,37 @@ val_targets (list or np.ndarray): validation targets</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.SKLModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">SKLModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">describer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">maml.base._describer.BaseDescriber</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SKLModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></p>
+<dt class="sig sig-object py" id="maml.base.SKLModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">SKLModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">describer</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#maml.base.BaseDescriber" title="maml.base._describer.BaseDescriber"><span class="pre">maml.base._describer.BaseDescriber</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SKLModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.BaseModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">maml.base._model.SklearnMixin</span></code></p>
 <p>MAML models with sklearn models as estimator</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.SequentialDescriber">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">SequentialDescriber</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">describers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SequentialDescriber" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.SequentialDescriber">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">SequentialDescriber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">describers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.SequentialDescriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.pipeline.Pipeline</span></code></p>
 <p>A thin wrapper of sklearn Pipeline</p>
 <dl class="py attribute">
-<dt id="maml.base.SequentialDescriber._abc_impl">
-<code class="sig-name descname"><span class="pre">_abc_impl</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.base.SequentialDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.SequentialDescriber._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#maml.base.SequentialDescriber._abc_impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="maml.base.SequentialDescriber.steps">
-<code class="sig-name descname"><span class="pre">steps</span></code><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#maml.base.SequentialDescriber.steps" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.SequentialDescriber.steps">
+<span class="sig-name descname"><span class="pre">steps</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#maml.base.SequentialDescriber.steps" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="maml.base.TargetScalerMixin">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">TargetScalerMixin</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.TargetScalerMixin" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.TargetScalerMixin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">TargetScalerMixin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.TargetScalerMixin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mixin class for models with target scaler</p>
 <dl class="py method">
-<dt id="maml.base.TargetScalerMixin.predict_objs">
-<code class="sig-name descname"><span class="pre">predict_objs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><a class="headerlink" href="#maml.base.TargetScalerMixin.predict_objs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.TargetScalerMixin.predict_objs">
+<span class="sig-name descname"><span class="pre">predict_objs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#maml.base.TargetScalerMixin.predict_objs" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Predict the values given a set of objects. Usually Pymatgen</dt><dd><p>Structure objects.</p>
 </dd>
@@ -276,8 +277,8 @@ val_targets (list or np.ndarray): validation targets</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="maml.base.TargetScalerMixin.train">
-<code class="sig-name descname"><span class="pre">train</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">maml.base._model.BaseModel</span><a class="headerlink" href="#maml.base.TargetScalerMixin.train" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.TargetScalerMixin.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_objs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_targets</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><span class="pre">maml.base._model.BaseModel</span></a></span></span><a class="headerlink" href="#maml.base.TargetScalerMixin.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train the models from object, target pairs</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>objs (list of objects): List of objects
@@ -293,8 +294,8 @@ val_targets (list): list of validation targets
 </dd></dl>
 
 <dl class="py function">
-<dt id="maml.base.describer_type">
-<code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">describer_type</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.describer_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.describer_type">
+<span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">describer_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.base.describer_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorate to set describers class type</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dtype (str): describers type, e.g., site, composition, structure etc.</p>
@@ -305,8 +306,8 @@ val_targets (list): list of validation targets
 </dd></dl>
 
 <dl class="py function">
-<dt id="maml.base.get_feature_batch">
-<code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">get_feature_batch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fb_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Callable</span><a class="headerlink" href="#maml.base.get_feature_batch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.get_feature_batch">
+<span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">get_feature_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fb_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#maml.base.get_feature_batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Providing a feature batch name, returning the function callable
 Args:</p>
 <blockquote>
@@ -316,8 +317,8 @@ Args:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="maml.base.is_keras_model">
-<code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">is_keras_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">maml.base._model.BaseModel</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#maml.base.is_keras_model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.is_keras_model">
+<span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">is_keras_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><span class="pre">maml.base._model.BaseModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#maml.base.is_keras_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether the model is keras
 Args:</p>
 <blockquote>
@@ -327,8 +328,8 @@ Args:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="maml.base.is_sklearn_model">
-<code class="sig-prename descclassname"><span class="pre">maml.base.</span></code><code class="sig-name descname"><span class="pre">is_sklearn_model</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">maml.base._model.BaseModel</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#maml.base.is_sklearn_model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="maml.base.is_sklearn_model">
+<span class="sig-prename descclassname"><span class="pre">maml.base.</span></span><span class="sig-name descname"><span class="pre">is_sklearn_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#maml.base.BaseModel" title="maml.base._model.BaseModel"><span class="pre">maml.base._model.BaseModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#maml.base.is_sklearn_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether the model is sklearn
 Args:</p>
 <blockquote>
@@ -337,8 +338,8 @@ Args:</p>
 <p>Returns: bool</p>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -369,7 +370,7 @@ Args:</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -391,7 +392,7 @@ Args:</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
