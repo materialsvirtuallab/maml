@@ -400,7 +400,8 @@ class SiteElementProperty(BaseDescriber):
         """
         Args:
             element_features (dict): mapping from atomic number of feature vectors
-            allow_disordered (bool): whether to allow disordered structures
+            output_weights (bool): whether to output the site fraction,
+                used in disordered compositions
         """
         self.feature_dict = feature_dict
         self.output_weights = output_weights
