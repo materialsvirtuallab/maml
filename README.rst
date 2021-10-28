@@ -116,3 +116,8 @@ For the BOWSR package (`maml.bowsr`), please cite::
 
     Zuo, Y.; Qin, M.; Chen, C.; Ye, W., Li, X.; Luo, J., Ong, S. P. Accelerating Materials Discovery with 
     Bayesian Optimization and Graph Deep Learning. Mater. Today 2021, Accepted, https://doi.org/10.1016/j.mattod.2021.08.012 
+
+For the AtomSets model (`maml.models.AtomSets`), please cite::
+
+    Chen, C.; Ong, S. P. AtomSets as a hierarchical transfer learning framework for small and large materials datasets. Npj Comput. Mater. 2021, 7, 173. 
+    https://doi.org/10.1038/s41524-021-00639-w
