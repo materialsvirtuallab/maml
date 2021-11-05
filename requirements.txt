@@ -1,4 +1,4 @@
-numpy==1.21.3
+numpy==1.21.4
 scipy==1.7.1
 pymatgen==2022.0.12
 monty==2021.8.17
