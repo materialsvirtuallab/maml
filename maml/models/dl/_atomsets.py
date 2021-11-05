@@ -1,12 +1,16 @@
 """
 neural network models
 """
+import os
 import math
+import json
 from typing import Optional, Sequence, Union, List, Any
 
+import joblib
 import numpy as np
 
 from maml.base import KerasModel, BaseDescriber, BaseModel
+from ._keras_utils import deserialize_keras_activation, deserialize_keras_optimizer
 
 
 def construct_atom_sets(
@@ -147,7 +151,12 @@ class AtomSets(KerasModel):
             symmetry_func_kwargs (dict): kwargs for symmetry function
 
         """
+
         input_dim = self.get_input_dim(describer, input_dim)
+
+        optimizer = deserialize_keras_optimizer(optimizer)
+        activation = deserialize_keras_activation(activation)
+
         model = construct_atom_sets(
             input_dim=input_dim,
             is_embedding=is_embedding,
@@ -164,7 +173,21 @@ class AtomSets(KerasModel):
             is_classification=is_classification,
             **symmetry_func_kwargs,
         )
+
+        self.input_dim = input_dim
         self.is_embedding = is_embedding
+        self.n_neurons = n_neurons
+        self.n_neurons_final = n_neurons_final
+        self.n_targets = n_targets
+        self.activation = activation
+        self.embedding_vcal = embedding_vcal
+        self.embedding_dim = embedding_dim
+        self.symmetry_func = symmetry_func
+        self.optimizer = optimizer
+        self.loss = loss
+        self.compile_metrics = compile_metrics
+        self.is_classification = is_classification
+        self.symmetry_func_kwargs = symmetry_func_kwargs
         super().__init__(model=model, describer=describer)
 
     def _get_data_generator(self, features, targets, batch_size=128, is_shuffle=True):
@@ -222,6 +245,71 @@ class AtomSets(KerasModel):
                     self.targets = [self.targets[i] for i in indices]
 
         return _DataGenerator()
+
+    def save(self, dirname: str):
+        """Save the models and describers
+
+        Arguments:
+            dirname (str): dirname for save
+        """
+        import tensorflow as tf
+
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
+
+        joblib.dump(self.describer, os.path.join(dirname, "describer.sav"))
+
+        def _to_json_type(d):
+            if isinstance(d, dict):
+                return {i: _to_json_type(j) for i, j in d.items()}
+            if isinstance(d, np.float32):
+                return float(d)
+            if isinstance(d, np.int32):
+                return int(d)
+            if isinstance(d, (list, tuple)):
+                return [_to_json_type(i) for i in d]
+            return d
+
+        with open(os.path.join(dirname, "config.json"), "w") as f:
+            json.dump(
+                {
+                    "input_dim": self.input_dim,
+                    "is_embedding": self.is_embedding,
+                    "n_neurons": self.n_neurons,
+                    "n_neurons_final": self.n_neurons_final,
+                    "n_targets": self.n_targets,
+                    "activation": _to_json_type(tf.keras.activations.serialize(self.activation)),
+                    "embedding_vcal": self.embedding_vcal,
+                    "embedding_dim": self.embedding_dim,
+                    "symmetry_func": self.symmetry_func,
+                    "optimizer": _to_json_type(tf.keras.optimizers.serialize(self.optimizer)),
+                    "loss": self.loss,
+                    "compile_metrics": self.compile_metrics,
+                    "is_classification": self.is_classification,
+                    "symmetry_func_kwargs": self.symmetry_func_kwargs,
+                },
+                f,
+            )
+        self.model.save(os.path.join(dirname, "model_weights.hdf5"))
+
+    @classmethod
+    def from_dir(cls, dirname: str):
+        """
+        Load the models from file
+        Args:
+            dirname (str): directory name
+        Returns: object instance
+        """
+        with open(os.path.join(dirname, "config.json"), "r") as f:
+            kwarg_dict = json.load(f)
+
+        symmetry_kwargs = kwarg_dict.pop("symmetry_func_kwargs")
+        kwarg_dict.update(**symmetry_kwargs)
+
+        describer = joblib.load(os.path.join(dirname, "describer.sav"))
+        instance = cls(describer=describer, **kwarg_dict)
+        instance.model.load_weights(os.path.join(dirname, "model_weights.hdf5"))
+        return instance
 
     def fit(
         self,
