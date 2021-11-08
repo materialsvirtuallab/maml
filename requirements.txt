@@ -1,5 +1,5 @@
 numpy==1.21.3
-scipy==1.7.1
+scipy==1.7.2
 pymatgen==2022.0.12
 monty==2021.8.17
 pandas==1.3.2
