@@ -87,7 +87,7 @@ For the ML-IAP package (`maml.pes`), please cite::
 setup(
     name="maml",
     packages=find_packages(),
-    version="2021.10.14",
+    version="2021.12.13",
     install_requires=["numpy", "scipy", "monty", "scikit-learn", "pandas", "pymatgen", "tqdm"],
     extras_requires={
         "maml.apps.symbolic._selectors_cvxpy": ["cvxpy"],

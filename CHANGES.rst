@@ -1,6 +1,15 @@
 Change log
 ==========
 
+v2021.12.13
+-----------
+* Update dependencies
+* Fix bugs
+
+v2021.10.13
+-----------
+* add bowsr
+
 v2021.3.2
 ---------
 * Set up namespace package architecture for maml.apps. The RFXAS package is now available as a separate package
