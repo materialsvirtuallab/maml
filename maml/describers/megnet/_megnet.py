@@ -13,6 +13,24 @@ from maml.utils import get_full_stats_and_funcs
 DEFAULT_MODEL = Path(__file__).parent / "../data/megnet_models/formation_energy.hdf5"
 
 
+def _load_model(name: Optional[Union[str, object]] = None):
+    try:
+        from megnet.utils.models import MODEL_MAPPING, load_model
+        from megnet.utils.descriptor import MEGNetDescriptor
+    except ImportError:
+        raise MEGNetNotFound
+
+    AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
+    if isinstance(name, str) and name in AVAILBLE_MODELS:
+        name_or_model = load_model(name)
+    elif name is None:
+        name_or_model = str(DEFAULT_MODEL)
+
+    else:
+        name_or_model = name
+    return MEGNetDescriptor(name_or_model)
+
+
 @describer_type("site")
 class MEGNetSite(BaseDescriber):
     """
@@ -36,22 +54,8 @@ class MEGNetSite(BaseDescriber):
                 path or a MEGNet GraphModel, if no name is provided, the models will be Eform_MP_2019.
             level (int): megnet graph layer level
         """
-        try:
-            from megnet.utils.models import MODEL_MAPPING, load_model
-            from megnet.utils.descriptor import MEGNetDescriptor
-        except ImportError:
-            raise MEGNetNotFound
 
-        self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
-        if isinstance(name, str) and name in self.AVAILBLE_MODELS:
-            name_or_model = load_model(name)
-        elif name is None:
-            name_or_model = str(DEFAULT_MODEL)
-
-        else:
-            name_or_model = name
-
-        self.describer_model = MEGNetDescriptor(name_or_model)
+        self.describer_model = _load_model(name)
 
         if level is None:
             n_layers = sum([i.startswith("meg_net") for i in self.describer_model.valid_names]) // 3
@@ -72,6 +76,26 @@ class MEGNetSite(BaseDescriber):
         """
         features = self.describer_model.get_atom_features(obj, level=self.level)
         return pd.DataFrame(features)
+
+    def __getstate__(self):
+        """
+        Get state for pickle
+        Returns: dictionary
+        """
+        d = self.__dict__.copy()
+        d["describer_model"] = None
+        return d
+
+    def __setstate__(self, state):
+        """
+        Set state of object
+        Args:
+            state:
+        Returns:
+        """
+        for i, j in state.items():
+            setattr(self, i, j)
+        self.describer_model = _load_model(self.name)
 
 
 @describer_type("structure")
@@ -117,21 +141,8 @@ class MEGNetStructure(BaseDescriber):
                 'final': Use the concatenated atom, bond and global features
             level (int): megnet graph layer level
         """
-        try:
-            from megnet.utils.models import MODEL_MAPPING, load_model
-            from megnet.utils.descriptor import MEGNetDescriptor
-        except ImportError:
-            raise MEGNetNotFound
 
-        self.AVAILBLE_MODELS = list(MODEL_MAPPING.keys())
-        if isinstance(name, str) and name in self.AVAILBLE_MODELS:
-            name_or_model = load_model(name)
-        elif name is None:
-            name_or_model = str(DEFAULT_MODEL)
-        else:
-            name_or_model = name
-
-        self.describer_model = MEGNetDescriptor(name_or_model)
+        self.describer_model = _load_model(name)
 
         if level is None:
             n_layers = (
@@ -176,6 +187,26 @@ class MEGNetStructure(BaseDescriber):
         if self.mode == "final":
             return pd.DataFrame(self.describer_model.get_structure_features(obj))
         raise ValueError("Mode not allowed.")
+
+    def __getstate__(self):
+        """
+        Get state for pickle
+        Returns: dictionary
+        """
+        d = self.__dict__.copy()
+        d["describer_model"] = None
+        return d
+
+    def __setstate__(self, state):
+        """
+        Set state of object
+        Args:
+            state:
+        Returns:
+        """
+        for i, j in state.items():
+            setattr(self, i, j)
+        self.describer_model = _load_model(self.name)
 
 
 class MEGNetNotFound(Exception):
