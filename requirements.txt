@@ -1,10 +1,10 @@
-numpy==1.21.3
+numpy==1.21.4
 scipy==1.7.1
-pymatgen==2022.0.12
-monty==2021.8.17
-pandas==1.3.2
-scikit-learn==0.24.2
+pymatgen==2022.0.16
+monty==2021.12.1
+pandas==1.3.4
+scikit-learn==1.0.1
 h5py==3.5.0
-joblib==1.0.1
+joblib==1.1.0
 tqdm==4.62.3
-pymongo==3.12.1
+pymongo==4.0
