@@ -125,7 +125,7 @@ def propose_query_point(
 
     x0 = x_max.reshape(-1, dim)
     # make sure that the initial conditions fall into the bounds
-    x0 = np.clip(x0, bounds[:, 0] + EPS, bounds[:, 1] - EPS)
+    x0 = np.clip(x0, bounds[:, 0] + 3 * EPS, bounds[:, 1] - 3 * EPS)
 
     res = minimize(min_obj, x0=x0, bounds=bounds, method="L-BFGS-B")
     if -res.fun[0] >= acq_max:
