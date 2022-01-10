@@ -8,6 +8,7 @@ from pymatgen.util.testing import PymatgenTest
 from maml.apps.symbolic import SIS, ISIS, L0BrutalForce
 from maml.apps.symbolic._sis import _get_coeff, _best_combination
 
+
 CWD = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -62,9 +63,9 @@ class testISIS(PymatgenTest):
         # Test update gamma
         np.random.seed(42)
         isis = ISIS(SIS(gamma=0.1, selector=L0BrutalForce(1e-4)))
-        selected = isis.run(self.x.values, self.y, max_p=5)
-        self.assertAlmostEqual(isis.sis.gamma, 0.15)
-        np.testing.assert_equal(selected, [10, 11, 12, 5, 0])
+        selected = isis.run(self.x.values, self.y, max_p=3)
+        self.assertAlmostEqual(isis.sis.gamma, 0.1)
+        np.testing.assert_equal(selected, [10, 11, 12])
 
 
 if __name__ == "__main__":
