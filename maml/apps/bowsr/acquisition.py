@@ -11,6 +11,9 @@ from scipy.special import erfc
 from sklearn.gaussian_process import GaussianProcessRegressor
 
 
+EPS = np.finfo(float).eps
+
+
 def _trunc(values: np.ndarray, decimals: int = 3):
     """
     Truncate values to decimal places
@@ -121,18 +124,12 @@ def propose_query_point(
     # print(bounds)
 
     x0 = x_max.reshape(-1, dim)
-
     # make sure that the initial conditions fall into the bounds
-    x0 = np.where(x0 < bounds[:, 0][None, :], bounds[:, 0][None, :], x0)
-    x0 = np.where(x0 > bounds[:, 1][None, :], bounds[:, 1][None, :], x0)
+    x0 = np.clip(x0, bounds[:, 0] + EPS, bounds[:, 1] - EPS)
 
     res = minimize(min_obj, x0=x0, bounds=bounds, method="L-BFGS-B")
-
     if -res.fun[0] >= acq_max:
         x_max = res.x
-
-    # Clip output to make sure it lies within the bounds.
-    # return np.clip(scaler.inverse_transform(x_max), bounds[:, 0], bounds[:, 1])
     return _trunc(scaler.inverse_transform(x_max), decimals=3)
 
 
