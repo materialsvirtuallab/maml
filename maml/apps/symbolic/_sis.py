@@ -238,8 +238,7 @@ class ISIS:
                     self.sis.update_gamma(step)
                     find_sel_new = self.sis.run(new_x, new_y)
             if self.l0_regulate:
-                find_sel, _, _ = _best_combination(
-                    x, y, find_sel, new_findex[find_sel_new], metric)
+                find_sel, _, _ = _best_combination(x, y, find_sel, new_findex[find_sel_new], metric)
             else:
                 find_sel = np.append(find_sel, new_findex[find_sel_new])
             new_findex = np.array(list(set(findex) - set(find_sel)))
