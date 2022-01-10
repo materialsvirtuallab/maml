@@ -9,7 +9,7 @@ jobs:
       max-parallel: 20
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.8]
+        python-version: [3.8, 3.9]
 
     runs-on: ${{ matrix.os }}
 
@@ -48,5 +48,6 @@ jobs:
       run: |
         pytest maml --cov=maml
     - name: Coveralls Python
+      continue-on-error: true
       if: matrix.os == 'ubuntu-latest'
       uses: AndreMiras/coveralls-python-action@v20201129
