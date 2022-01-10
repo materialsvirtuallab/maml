@@ -160,21 +160,21 @@ class SIS:
         Set gamma
 
         Args:
-            gamma(float): new gamma value
+            gamma (float): new gamma value
 
         """
         self.gamma = gamma
 
-    def update_gamma(self, step: float = 0.5):
+    def update_gamma(self, ratio: float = 0.5):
         """
         Update the sis object so that sis.select
         return at least one feature
 
         Args:
-            step(float): ratio to update the parameters
+            ratio (float): ratio to update the parameters
 
         """
-        self.set_gamma(self.gamma * (1 + step))
+        self.set_gamma(self.gamma * (1 + ratio))
 
 
 class ISIS:
@@ -195,8 +195,8 @@ class ISIS:
 
     def run(
         self,
-        x,
-        y,
+        x: np.ndarray,
+        y: np.ndarray,
         max_p: int = 10,
         metric: str = "neg_mean_absolute_error",
         options: Optional[Dict] = None,
@@ -205,8 +205,8 @@ class ISIS:
         """
         Run the ISIS
         Args:
-            x:
-            y:
+            x (np.ndarray): input array
+            y (np.ndarray): target array
             max_p(int): Number of feature desired
             metric (str): scorer function, used with
                 sklearn.metrics.get_scorer
@@ -222,6 +222,7 @@ class ISIS:
         findex = np.array(np.arange(0, x.shape[1]))
         find_sel = self.sis.select(x, y, options)
         self.coeff = _get_coeff(x[:, find_sel], y)
+
         if len(find_sel) >= max_p:
             self.coeff = _get_coeff(x[:, find_sel[:max_p]], y)
             return find_sel[:max_p]
@@ -237,7 +238,8 @@ class ISIS:
                     self.sis.update_gamma(step)
                     find_sel_new = self.sis.run(new_x, new_y)
             if self.l0_regulate:
-                find_sel, _, _ = _best_combination(x, y, find_sel, new_findex[find_sel_new], metric)
+                find_sel, _, _ = _best_combination(
+                    x, y, find_sel, new_findex[find_sel_new], metric)
             else:
                 find_sel = np.append(find_sel, new_findex[find_sel_new])
             new_findex = np.array(list(set(findex) - set(find_sel)))

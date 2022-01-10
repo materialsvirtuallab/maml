@@ -25,7 +25,7 @@ class TestSIS(PymatgenTest):
         np.testing.assert_almost_equal(selected, [12, 10, 9])
         sis.set_gamma(0.1)
         self.assertEqual(sis.gamma, 0.1)
-        sis.update_gamma(step=0.5)
+        sis.update_gamma(ratio=0.5)
         self.assertAlmostEqual(sis.gamma, 0.15)
 
 
@@ -59,17 +59,12 @@ class testISIS(PymatgenTest):
         self.assertAlmostEqual(score_best, 0)
 
     def test_isis(self):
-        # isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)))
-        # selected = isis.run(self.x.values, self.y, max_p=4)
-        # # np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
-        # np.testing.assert_equal(selected, [10, 11, 12,  4])
-
         # Test update gamma
+        np.random.seed(42)
         isis = ISIS(SIS(gamma=0.1, selector=L0BrutalForce(1e-4)))
         selected = isis.run(self.x.values, self.y, max_p=5)
         self.assertAlmostEqual(isis.sis.gamma, 0.15)
-        #     # np.testing.assert_equal(selected, [10, 11, 12,  4,  5,  6,  0,  3,  2,  8])
-        np.testing.assert_equal(selected, [10, 11, 12, 4, 0])
+        np.testing.assert_equal(selected, [10, 11, 12, 5, 0])
 
 
 if __name__ == "__main__":
