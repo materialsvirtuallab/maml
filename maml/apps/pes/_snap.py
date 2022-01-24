@@ -14,8 +14,7 @@ from monty.io import zopen
 
 from maml.base import SKLModel
 from maml.describers import BispectrumCoefficients
-from maml.utils import pool_from, convert_docs, \
-    check_structures_forces_stresses, stress_format_change
+from maml.utils import pool_from, convert_docs, check_structures_forces_stresses, stress_format_change
 from ._lammps import LammpsPotential
 
 
@@ -47,15 +46,23 @@ class SNAPotential(LammpsPotential):
             "Please be sure to rotate forces and stresses to get the "
             "correct mapping for ensuring correct mapping. You may "
             "use`maml.utils.check_structures_forces_stresses` to do the "
-            "correct rotations.")
+            "correct rotations."
+        )
 
         self.name = name if name else "SNAPotential"
         self.model = model
         self.elements = self.model.describer.elements
 
     def train(
-        self, train_structures, train_energies, train_forces, train_stresses=None,
-            include_stress=False, stress_format='VASP', **kwargs):
+        self,
+        train_structures,
+        train_energies,
+        train_forces,
+        train_stresses=None,
+        include_stress=False,
+        stress_format="VASP",
+        **kwargs,
+    ):
         """
         Training data with models.
 
@@ -78,8 +85,8 @@ class SNAPotential(LammpsPotential):
         )
         if include_stress:
             train_stresses = [
-                stress_format_change(i, from_format=stress_format,
-                                     to_format="SNAP") for i in train_stresses]
+                stress_format_change(i, from_format=stress_format, to_format="SNAP") for i in train_stresses
+            ]
 
         train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
         _, df = convert_docs(train_pool, include_stress=include_stress)
@@ -87,9 +94,15 @@ class SNAPotential(LammpsPotential):
         xtrain = self.model.describer.transform(train_structures)
         self.model.fit(features=xtrain, targets=ytrain, **kwargs)
 
-    def evaluate(self, test_structures, test_energies, test_forces,
-                 test_stresses=None, include_stress=False,
-                 stress_format="VASP"):
+    def evaluate(
+        self,
+        test_structures,
+        test_energies,
+        test_forces,
+        test_stresses=None,
+        include_stress=False,
+        stress_format="VASP",
+    ):
         """
         Evaluate energies, forces and stresses of structures with trained
         machinea learning potentials.
@@ -111,8 +124,8 @@ class SNAPotential(LammpsPotential):
         )
         if include_stress:
             test_stresses = [
-                stress_format_change(i, from_format=stress_format,
-                                     to_format="SNAP") for i in test_stresses]
+                stress_format_change(i, from_format=stress_format, to_format="SNAP") for i in test_stresses
+            ]
 
         predict_pool = pool_from(test_structures, test_energies, test_forces, test_stresses)
         _, df_orig = convert_docs(predict_pool, include_stress=include_stress)
