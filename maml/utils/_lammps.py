@@ -84,10 +84,16 @@ def check_structures_forces_stresses(
             new_forces.append(None)
 
         if not no_stress:
-            stress_matrix = stress_list_to_matrix(stresses[i], stress_format)
-            stress_matrix = rot_matrix.dot(stress_matrix).dot(rot_matrix.T)
+            if np.size(stresses[i]) != 9:
+                # voigt stress format
+                stress_matrix = stress_list_to_matrix(stresses[i], stress_format)
+                stress_matrix = rot_matrix.dot(stress_matrix).dot(rot_matrix.T)
+                stress_matrix = stress_matrix_to_list(stress_matrix, stress_format)
+            else:
+                # 3x3 stress matrix
+                stress_matrix = rot_matrix.dot(stresses[i]).dot(rot_matrix.T)
             # R \sigma R^T stress rotation
-            new_stresses.append(stress_matrix_to_list(stress_matrix, stress_format))
+            new_stresses.append(stress_matrix)
         else:
             new_stresses.append(None)
 

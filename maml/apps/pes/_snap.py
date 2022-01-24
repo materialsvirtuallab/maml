@@ -5,6 +5,7 @@
 """This module provides SNAP interatomic potential class."""
 
 import re
+from logging import getLogger
 
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -13,8 +14,12 @@ from monty.io import zopen
 
 from maml.base import SKLModel
 from maml.describers import BispectrumCoefficients
-from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
+from maml.utils import pool_from, convert_docs, \
+    check_structures_forces_stresses, stress_format_change
 from ._lammps import LammpsPotential
+
+
+logger = getLogger(__name__)
 
 
 class SNAPotential(LammpsPotential):
@@ -36,13 +41,21 @@ class SNAPotential(LammpsPotential):
                 atomic descriptos as features and properties as targets.
             name (str): Name of force field.
         """
+
+        logger.warning(
+            "Triclinic structures will be rotated to lammps format. "
+            "Please be sure to rotate forces and stresses to get the "
+            "correct mapping for ensuring correct mapping. You may "
+            "use`maml.utils.check_structures_forces_stresses` to do the "
+            "correct rotations.")
+
         self.name = name if name else "SNAPotential"
         self.model = model
         self.elements = self.model.describer.elements
 
     def train(
-        self, train_structures, train_energies, train_forces, train_stresses=None, include_stress=False, **kwargs
-    ):
+        self, train_structures, train_energies, train_forces, train_stresses=None,
+            include_stress=False, stress_format='VASP', **kwargs):
         """
         Training data with models.
 
@@ -58,17 +71,25 @@ class SNAPotential(LammpsPotential):
             train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
             include_stress (bool): Whether to include stress components.
+            stress_format (string): stress format, default to VASP
         """
         train_structures, train_forces, train_stresses = check_structures_forces_stresses(
-            train_structures, train_forces, train_stresses
+            train_structures, train_forces, train_stresses, stress_format=stress_format
         )
+        if include_stress:
+            train_stresses = [
+                stress_format_change(i, from_format=stress_format,
+                                     to_format="SNAP") for i in train_stresses]
+
         train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
         _, df = convert_docs(train_pool, include_stress=include_stress)
         ytrain = df["y_orig"] / df["n"]
         xtrain = self.model.describer.transform(train_structures)
         self.model.fit(features=xtrain, targets=ytrain, **kwargs)
 
-    def evaluate(self, test_structures, test_energies, test_forces, test_stresses=None, include_stress=False):
+    def evaluate(self, test_structures, test_energies, test_forces,
+                 test_stresses=None, include_stress=False,
+                 stress_format="VASP"):
         """
         Evaluate energies, forces and stresses of structures with trained
         machinea learning potentials.
@@ -83,10 +104,16 @@ class SNAPotential(LammpsPotential):
             test_stresses (list): List of DFT-calculated (6, ) viriral stresses
                 of each structure in structures list.
             include_stress (bool): Whether to include stress components.
+            stress_format (str): stress format, default to "VASP"
         """
         test_structures, test_forces, test_stresses = check_structures_forces_stresses(
             test_structures, test_forces, test_stresses
         )
+        if include_stress:
+            test_stresses = [
+                stress_format_change(i, from_format=stress_format,
+                                     to_format="SNAP") for i in test_stresses]
+
         predict_pool = pool_from(test_structures, test_energies, test_forces, test_stresses)
         _, df_orig = convert_docs(predict_pool, include_stress=include_stress)
         _, df_predict = convert_docs(pool_from(test_structures), include_stress=include_stress)
