@@ -10,10 +10,22 @@ import pandas as pd
 from pymatgen.ext.matproj import MPRester, MPRestError
 from pymatgen.core import Element, Structure
 from pymatgen.analysis.local_env import (
-    NearNeighbors, VoronoiNN, JmolNN, MinimumDistanceNN, OpenBabelNN,
-    CovalentBondNN, MinimumVIRENN, MinimumOKeeffeNN,
-    BrunnerNN_reciprocal, BrunnerNN_real, BrunnerNN_relative,
-    EconNN, CrystalNN, CutOffDictNN, Critic2NN)
+    NearNeighbors,
+    VoronoiNN,
+    JmolNN,
+    MinimumDistanceNN,
+    OpenBabelNN,
+    CovalentBondNN,
+    MinimumVIRENN,
+    MinimumOKeeffeNN,
+    BrunnerNN_reciprocal,
+    BrunnerNN_real,
+    BrunnerNN_relative,
+    EconNN,
+    CrystalNN,
+    CutOffDictNN,
+    Critic2NN,
+)
 from pymatgen.analysis.gb.grain import GrainBoundary
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from monty.json import MSONable
@@ -48,9 +60,7 @@ def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
 
     # make sure gcd(rotation_axis)==1
     if reduce(gcd, rotation_axis) != 1:
-        rotation_axis = [
-            int(round(x / reduce(gcd, rotation_axis))) for x in rotation_axis
-        ]
+        rotation_axis = [int(round(x / reduce(gcd, rotation_axis))) for x in rotation_axis]
     return np.array(rotation_axis)
 
 
@@ -80,9 +90,7 @@ class GBDescriber(BaseDescriber):
     with selected structural and elemental features
     """
 
-    def __init__(self, structural_features: list = None,
-                 elemental_features: list = None,
-                 **kwargs):
+    def __init__(self, structural_features: list = None, elemental_features: list = None, **kwargs):
         """
 
         Args:
@@ -91,18 +99,16 @@ class GBDescriber(BaseDescriber):
             **kwargs (dict): parameters for BaseDescriber
         """
         if not elemental_features:
-            elemental_features = [preset.e_coh, preset.G, preset.a0, preset.ar,
-                                  preset.mean_delta_bl, preset.mean_bl]
+            elemental_features = [preset.e_coh, preset.G, preset.a0, preset.ar, preset.mean_delta_bl, preset.mean_bl]
         if not structural_features:
             structural_features = [preset.d_gb, preset.d_rot, preset.sin_theta, preset.cos_theta]
         self.elem_features = elemental_features
         self.struc_features = structural_features
         super().__init__(**kwargs)
 
-    def transform_one(self, db_entry: Dict,
-                      inc_target: bool = True,
-                      inc_bulk_ref: bool = True,
-                      mp_api: str = None) -> pd.DataFrame:
+    def transform_one(
+        self, db_entry: Dict, inc_target: bool = True, inc_bulk_ref: bool = True, mp_api: str = None
+    ) -> pd.DataFrame:
         """
         Describe gb with selected structural and elemental features
         Args:
@@ -120,8 +126,8 @@ class GBDescriber(BaseDescriber):
         """
         structural = get_structural_feature(db_entry=db_entry, features=self.struc_features)
         elemental = get_elemental_feature(db_entry=db_entry, features=self.elem_features, mp_api=mp_api)
-        df = pd.concat([structural, elemental], axis=1, join='inner')
-        df['task_id'] = db_entry['task_id']
+        df = pd.concat([structural, elemental], axis=1, join="inner")
+        df["task_id"] = db_entry["task_id"]
         if inc_target:
             df[preset.e_gb.str_name] = db_entry["gb_energy"]
         if inc_bulk_ref:
@@ -167,21 +173,20 @@ def get_structural_feature(db_entry: Dict, features: list = None) -> pd.DataFram
 
     """
     if features is None:
-        features = [preset.d_gb, preset.d_rot,
-                    preset.sin_theta, preset.cos_theta]
-    if isinstance(db_entry['bulk_conv'], dict):
-        bulk_conv = Structure.from_dict(db_entry['bulk_conv'])
+        features = [preset.d_gb, preset.d_rot, preset.sin_theta, preset.cos_theta]
+    if isinstance(db_entry["bulk_conv"], dict):
+        bulk_conv = Structure.from_dict(db_entry["bulk_conv"])
     else:
-        bulk_conv = db_entry['bulk_conv']
+        bulk_conv = db_entry["bulk_conv"]
     sg = SpacegroupAnalyzer(bulk_conv)
-    gb_plane = np.array(db_entry['gb_plane'])
-    rotation_axis = db_entry['rotation_axis']
+    gb_plane = np.array(db_entry["gb_plane"])
+    rotation_axis = db_entry["rotation_axis"]
     if gb_plane.shape[0] == 4:
         gb_plane = convert_hcp_plane(list(gb_plane))
         rotation_axis = convert_hcp_direction(rotation_axis, lat_type=sg.get_crystal_system())
     d_gb = bulk_conv.lattice.d_hkl(gb_plane)
     d_rot = bulk_conv.lattice.d_hkl(rotation_axis)
-    theta = db_entry['rotation_angle']
+    theta = db_entry["rotation_angle"]
     sin_theta = np.sin(theta * np.pi / 180)
     cos_theta = np.cos(theta * np.pi / 180)
     fvalues = []
@@ -191,15 +196,13 @@ def get_structural_feature(db_entry: Dict, features: list = None) -> pd.DataFram
         elif f == preset.cos_theta:
             fvalues.append(np.cos(theta * np.pi / 180))
         else:
-            fvalues.append(locals()['{}'.format(f.str_name)])
-    return pd.DataFrame([fvalues],
-                        columns=[f.str_name for f in features])
+            fvalues.append(locals()["{}".format(f.str_name)])
+    return pd.DataFrame([fvalues], columns=[f.str_name for f in features])
 
 
-def get_elemental_feature(db_entry: Dict,
-                          loc_algo: str = 'crystalnn',
-                          features: list = None,
-                          mp_api: str = None) -> pd.DataFrame:
+def get_elemental_feature(
+    db_entry: Dict, loc_algo: str = "crystalnn", features: list = None, mp_api: str = None
+) -> pd.DataFrame:
     """
     Function to get the elemental features
     Args:
@@ -221,9 +224,16 @@ def get_elemental_feature(db_entry: Dict,
         pd.DataFrame of elemental features
     """
     if features is None:
-        features = [preset.e_coh, preset.G, preset.a0, preset.ar,
-                    preset.mean_delta_bl, preset.bdensity, preset.CLTE,
-                    preset.hb]
+        features = [
+            preset.e_coh,
+            preset.G,
+            preset.a0,
+            preset.ar,
+            preset.mean_delta_bl,
+            preset.bdensity,
+            preset.CLTE,
+            preset.hb,
+        ]
     if preset.mean_delta_bl in features or preset.mean_bl in features:
         mdbl = load_mean_delta_bl_dict(loc_algo=loc_algo)
     f_dict = {}
@@ -234,12 +244,12 @@ def get_elemental_feature(db_entry: Dict,
     bulk = rester.get_data(db_entry["material_id"])
     bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])
     if bulk:
-        f_dict[preset.bdensity.str_name] = bulk[0]['density']
-        f_dict[preset.G.str_name] = bulk[0]['elasticity']['G_VRH']
-    el = Element(db_entry['pretty_formula'])
+        f_dict[preset.bdensity.str_name] = bulk[0]["density"]
+        f_dict[preset.G.str_name] = bulk[0]["elasticity"]["G_VRH"]
+    el = Element(db_entry["pretty_formula"])
     f_dict[preset.ar.str_name] = el.atomic_radius
     f_dict[preset.a0.str_name] = bulk_s.lattice.a
-    f_dict[preset.e_coh.str_name] = rester.get_cohesive_energy(db_entry['material_id'])
+    f_dict[preset.e_coh.str_name] = rester.get_cohesive_energy(db_entry["material_id"])
     f_dict[preset.hb.str_name] = el.brinell_hardness
     f_dict[preset.CLTE.str_name] = el.coefficient_of_linear_thermal_expansion
 
@@ -248,7 +258,7 @@ def get_elemental_feature(db_entry: Dict,
 
     def get_bl(db_entry):
         b0_dict = load_b0_dict()
-        b0 = b0_dict[db_entry['pretty_formula']]
+        b0 = b0_dict[db_entry["pretty_formula"]]
         return mdbl[str(db_entry["task_id"])] + b0
 
     fvalues = []
@@ -271,14 +281,28 @@ class GBBond(MSONable):
     Available algorithms: GBBond.NNDict.keys(), default CrystalNN
     """
 
-    NNDict = {i.__name__.lower(): i for i in [
-        NearNeighbors, VoronoiNN, JmolNN, MinimumDistanceNN,
-        OpenBabelNN, CovalentBondNN, MinimumVIRENN, MinimumOKeeffeNN,
-        BrunnerNN_reciprocal, BrunnerNN_real, BrunnerNN_relative,
-        EconNN, CrystalNN, CutOffDictNN, Critic2NN]}
+    NNDict = {
+        i.__name__.lower(): i
+        for i in [
+            NearNeighbors,
+            VoronoiNN,
+            JmolNN,
+            MinimumDistanceNN,
+            OpenBabelNN,
+            CovalentBondNN,
+            MinimumVIRENN,
+            MinimumOKeeffeNN,
+            BrunnerNN_reciprocal,
+            BrunnerNN_real,
+            BrunnerNN_relative,
+            EconNN,
+            CrystalNN,
+            CutOffDictNN,
+            Critic2NN,
+        ]
+    }
 
-    def __init__(self, gb: GrainBoundary, loc_algo: str = "crystalnn",
-                 bond_mat: np.ndarray = None, **kwargs):
+    def __init__(self, gb: GrainBoundary, loc_algo: str = "crystalnn", bond_mat: np.ndarray = None, **kwargs):
         """
 
         Args:
@@ -318,11 +342,10 @@ class GBBond(MSONable):
         for i, _ in enumerate(gb.sites):
             # compute the all_nn_info first then call
             # the protected function is faster for multiple computation
-            nn = self.loc_algo._get_nn_shell_info(structure=gb, site_idx=i,
-                                                  shell=1, all_nn_info=all_nn_info)
+            nn = self.loc_algo._get_nn_shell_info(structure=gb, site_idx=i, shell=1, all_nn_info=all_nn_info)
             for b in nn:
-                bl = gb.get_distance(i, b['site_index'])
-                bond_mat[i][b['site_index']] = bl
+                bl = gb.get_distance(i, b["site_index"])
+                bond_mat[i][b["site_index"]] = bl
         return bond_mat
 
     def get_breakbond_ratio(self, gb: GrainBoundary, b0: float, return_count: bool = False):
@@ -395,11 +418,14 @@ class GBBond(MSONable):
             dict of {"loc_algo": str, "bond_mat": bond matrix}
         """
         return_dict = super().as_dict()
-        return_dict.update({"loc_algo": self.loc_algo.__class__.__name__.lower(),
-                            "bond_mat": self.bond_mat,
-                            # "min_bl": self.min_bl,
-                            # "max_bl": self.max_bl
-                            })
+        return_dict.update(
+            {
+                "loc_algo": self.loc_algo.__class__.__name__.lower(),
+                "bond_mat": self.bond_mat,
+                # "min_bl": self.min_bl,
+                # "max_bl": self.max_bl
+            }
+        )
         return return_dict
 
     @classmethod
@@ -413,6 +439,4 @@ class GBBond(MSONable):
             GBBond
 
         """
-        return cls(gb=d['gb'],
-                   loc_algo=d['loc_algo'],
-                   bond_mat=d['bond_mat'])
+        return cls(gb=d["gb"], loc_algo=d["loc_algo"], bond_mat=d["bond_mat"])

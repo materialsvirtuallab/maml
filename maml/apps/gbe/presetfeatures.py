@@ -48,38 +48,41 @@ class my_quant:
         return self.latex_unit
 
 
-initial_fnames = [r'$d_{GB}$',
-                  r'$d_{rot}$',
-                  r'cos($\theta$)',
-                  r'$E_{coh}$',
-                  r'$\widebar{{\Delta} BL}$',
-                  r'$G$',
-                  r'$a_{0}$',
-                  r'$\gamma_{GB}^{DFT}$', ]
-str2lat = {'d_gb': r'$d_{GB}$',
-           'd_rot': r'$d_{rot}$',
-           'sin(theta)': r'sin($\theta$)',
-           'cos(theta)': r'cos($\theta$)',
-           'e_coh': r'$E_{coh}$',
-           'G': r'$G$',
-           'a_0': r'$a_{0}$',
-           'a_r': r'$a_{r}$',
-           'mean_delta_bl': r'$\bar{{\Delta} BL}$',
-           'mean_bl': r'$\bar{BL}$',
-           'Density': 'Density',
-           'e_gb': r'$\gamma_{GB}$'}
-features = ['d_gb', 'd_rot', 'cos(theta)', 'mean_delta_bl',
-            'G', 'mean_bl']
+initial_fnames = [
+    r"$d_{GB}$",
+    r"$d_{rot}$",
+    r"cos($\theta$)",
+    r"$E_{coh}$",
+    r"$\widebar{{\Delta} BL}$",
+    r"$G$",
+    r"$a_{0}$",
+    r"$\gamma_{GB}^{DFT}$",
+]
+str2lat = {
+    "d_gb": r"$d_{GB}$",
+    "d_rot": r"$d_{rot}$",
+    "sin(theta)": r"sin($\theta$)",
+    "cos(theta)": r"cos($\theta$)",
+    "e_coh": r"$E_{coh}$",
+    "G": r"$G$",
+    "a_0": r"$a_{0}$",
+    "a_r": r"$a_{r}$",
+    "mean_delta_bl": r"$\bar{{\Delta} BL}$",
+    "mean_bl": r"$\bar{BL}$",
+    "Density": "Density",
+    "e_gb": r"$\gamma_{GB}$",
+}
+features = ["d_gb", "d_rot", "cos(theta)", "mean_delta_bl", "G", "mean_bl"]
 
-e_coh = my_quant("e_coh", str2lat['e_coh'], "J")
-a0 = my_quant("a_0", str2lat['a_0'], r"$\AA$")
-ar = my_quant("a_r", str2lat['a_r'], r"$\AA$")
-cos_theta = my_quant("cos(theta)", str2lat['cos(theta)'])
-sin_theta = my_quant("sin(theta)", str2lat['sin(theta)'])
+e_coh = my_quant("e_coh", str2lat["e_coh"], "J")
+a0 = my_quant("a_0", str2lat["a_0"], r"$\AA$")
+ar = my_quant("a_r", str2lat["a_r"], r"$\AA$")
+cos_theta = my_quant("cos(theta)", str2lat["cos(theta)"])
+sin_theta = my_quant("sin(theta)", str2lat["sin(theta)"])
 d_gb = my_quant("d_gb", str2lat["d_gb"])
 d_rot = my_quant("d_rot", str2lat["d_rot"])
 mean_delta_bl = my_quant("mean_delta_bl", str2lat["mean_delta_bl"], r"$\AA$")
-G = my_quant("G", str2lat['G'], r"J m$^{-3}$")
+G = my_quant("G", str2lat["G"], r"J m$^{-3}$")
 e_gb = my_quant("e_gb", r"$E_{GB}$", r"J m$^{-2}$")
 hb = my_quant("HB", "HB", "")
 bdensity = my_quant("Density", r"$Density$", r"g cm$^{-3}$")
