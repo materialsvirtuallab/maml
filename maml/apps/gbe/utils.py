@@ -7,7 +7,7 @@ from monty.serialization import dumpfn, loadfn
 from pymatgen.ext.matproj import MPRester, MPRestError
 from pymatgen.core import Structure
 
-import maml.apps.gbe as gbe
+from maml.apps import gbe
 
 pjoin = os.path.join
 module_dir = os.path.dirname(gbe.__file__)
