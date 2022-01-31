@@ -1,11 +1,13 @@
-import numpy as np
-import pandas as pd
-from typing import Dict, Union, Any
+"""
+Module implements the describer for GB entry
+"""
+from typing import Dict
 from functools import reduce
 from math import gcd
+import numpy as np
+import pandas as pd
 
-from maml.base import BaseDescriber
-from pymatgen.ext.matproj import MPRester
+from pymatgen.ext.matproj import MPRester, MPRestError
 from pymatgen.core import Element, Structure
 from pymatgen.analysis.local_env import (
     NearNeighbors, VoronoiNN, JmolNN, MinimumDistanceNN, OpenBabelNN,
@@ -16,18 +18,16 @@ from pymatgen.analysis.gb.grain import GrainBoundary
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from monty.json import MSONable
 
-from gb_sisso import settings
-from gb_sisso.utils import load_mean_delta_bl_dict, load_b0_dict
-import gb_sisso.presetfeatures as preset
+from maml.base import BaseDescriber
 from maml.apps.gbe.utils import load_mean_delta_bl_dict, load_b0_dict
 import maml.apps.gbe.presetfeatures as preset
 
 
-def convert_hcp_direction(rotation_axis: Union, lat_type: str) -> np.ndarray:
+def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
     """
     four index notion to three index notion for hcp and rhombohedral axis
     Args:
-        rotation_axis (Union): four index notion of axis
+        rotation_axis (list): four index notion of axis
         lat_type(str): the
     Returns:
         rotation axis in three index notion
@@ -54,11 +54,11 @@ def convert_hcp_direction(rotation_axis: Union, lat_type: str) -> np.ndarray:
     return np.array(rotation_axis)
 
 
-def convert_hcp_plane(plane: Union) -> np.ndarray:
+def convert_hcp_plane(plane: list) -> np.ndarray:
     """
     four index notion to three index notion for hcp and rhombohedral plane
     Args:
-        plane (Union):  four index notion
+        plane (list):  four index notion
 
     Returns:
         three index notion of plane
@@ -80,15 +80,23 @@ class GBDescriber(BaseDescriber):
     with selected structural and elemental features
     """
 
-    def __init__(self, structural_features=None,
-                 elemental_features=None, **kwargs):
-        if elemental_features is None:
+    def __init__(self, structural_features: list = None,
+                 elemental_features: list = None,
+                 **kwargs):
+        """
+
+        Args:
+            structural_features (list): list of structural features
+            elemental_features (list): list of elemental features
+            **kwargs (dict): parameters for BaseDescriber
+        """
+        if not elemental_features:
             elemental_features = [preset.e_coh, preset.G, preset.a0, preset.ar,
                                   preset.mean_delta_bl, preset.mean_bl]
-        if structural_features is None:
+        if not structural_features:
             structural_features = [preset.d_gb, preset.d_rot, preset.sin_theta, preset.cos_theta]
-        self.struc_features = structural_features
         self.elem_features = elemental_features
+        self.struc_features = structural_features
         super().__init__(**kwargs)
 
     def transform_one(self, db_entry: Dict,
@@ -142,7 +150,7 @@ class GBDescriber(BaseDescriber):
         return new_df
 
 
-def get_structural_feature(db_entry: Dict, features: [Any] = None) -> pd.DataFrame:
+def get_structural_feature(db_entry: Dict, features: list = None) -> pd.DataFrame:
     """
     The structural features:
     d_gb: interplanal distance of the gb_plane
@@ -169,7 +177,7 @@ def get_structural_feature(db_entry: Dict, features: [Any] = None) -> pd.DataFra
     gb_plane = np.array(db_entry['gb_plane'])
     rotation_axis = db_entry['rotation_axis']
     if gb_plane.shape[0] == 4:
-        gb_plane = convert_hcp_plane(gb_plane)
+        gb_plane = convert_hcp_plane(list(gb_plane))
         rotation_axis = convert_hcp_direction(rotation_axis, lat_type=sg.get_crystal_system())
     d_gb = bulk_conv.lattice.d_hkl(gb_plane)
     d_rot = bulk_conv.lattice.d_hkl(rotation_axis)
@@ -190,7 +198,7 @@ def get_structural_feature(db_entry: Dict, features: [Any] = None) -> pd.DataFra
 
 def get_elemental_feature(db_entry: Dict,
                           loc_algo: str = 'crystalnn',
-                          features: [Any] = None,
+                          features: list = None,
                           mp_api: str = None) -> pd.DataFrame:
     """
     Function to get the elemental features
@@ -222,7 +230,7 @@ def get_elemental_feature(db_entry: Dict,
     if mp_api:
         rester = MPRester(mp_api)
     else:
-        return "Please provide API key to access Materials Project"
+        raise MPRestError("Please provide API key to access Materials Project")
     bulk = rester.get_data(db_entry["material_id"])
     bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])
     if bulk:
@@ -379,7 +387,13 @@ class GBBond(MSONable):
         """
         return (self.bond_mat[self.bond_mat > 0] - b0).mean()
 
-    def as_dict(self):
+    def as_dict(self) -> dict:
+        """
+        Dict representation of the GBond class
+
+        Returns:
+            dict of {"loc_algo": str, "bond_mat": bond matrix}
+        """
         return_dict = super().as_dict()
         return_dict.update({"loc_algo": self.loc_algo.__class__.__name__.lower(),
                             "bond_mat": self.bond_mat,
@@ -403,45 +417,44 @@ class GBBond(MSONable):
                    loc_algo=d['loc_algo'],
                    bond_mat=d['bond_mat'])
 
-
-def get_breakbond_ratio(gb: GrainBoundary,
-                        b0: float,
-                        loc_algo=CrystalNN,
-                        return_count: bool = False):
-    """
-    Get the breakbond ratio, i.e the ratio of shorter bonds vs longer bonds
-    compared to the bulk bond length (b0)
-    The algo to find the bonds can vary
-    Meme: if use get_neighbors, require a hard set cutoff, which adds to
-        arbitrariness
-
-    Args:
-        gb (GrainBoundary): a GrainBoundary object
-        b0 (float): cutoff to determine short vs. long bonds,
-                    default the bulk bond length
-        loc_algo (): algorithm to determine the loc env
-
-        return_count(bool): whether to return count of
-
-    Returns:
-        ratio (float): shorter_bond / longer_bonds
-        if return_count:
-        shorter_bond: # of short bonds
-        longer_bond: # of long bonds
-        # bond_mat: matrixt of bonds distance
-    """
-
-    bond_mat = []
-    bonded_s = loc_algo().get_bonded_structure(gb)
-    for i, site in enumerate(gb.sites):
-        bonds = bonded_s.get_connected_sites(i)
-        bond_mat.append([j.dist for j in bonds])
-    pad = len(max(bond_mat, key=len))
-    bond_mat = np.array([m + [np.nan] * (pad - len(m)) for m in bond_mat])
-    # total_bonds = bond_mat[~np.isnan(bond_mat)].sum()
-    long_bond = (bond_mat > b0).sum()
-    short_bond = (bond_mat < b0).sum()
-    ratio = short_bond / long_bond if long_bond else 0
-    if return_count:
-        return ratio, short_bond, long_bond
-    return ratio
+# def get_breakbond_ratio(gb: GrainBoundary,
+#                         b0: float,
+#                         loc_algo=CrystalNN,
+#                         return_count: bool = False):
+#     """
+#     Get the breakbond ratio, i.e the ratio of shorter bonds vs longer bonds
+#     compared to the bulk bond length (b0)
+#     The algo to find the bonds can vary
+#     Meme: if use get_neighbors, require a hard set cutoff, which adds to
+#         arbitrariness
+#
+#     Args:
+#         gb (GrainBoundary): a GrainBoundary object
+#         b0 (float): cutoff to determine short vs. long bonds,
+#                     default the bulk bond length
+#         loc_algo (): algorithm to determine the loc env
+#
+#         return_count(bool): whether to return count of
+#
+#     Returns:
+#         ratio (float): shorter_bond / longer_bonds
+#         if return_count:
+#         shorter_bond: # of short bonds
+#         longer_bond: # of long bonds
+#         # bond_mat: matrixt of bonds distance
+#     """
+#
+#     bond_mat = []
+#     bonded_s = loc_algo().get_bonded_structure(gb)
+#     for i, site in enumerate(gb.sites):
+#         bonds = bonded_s.get_connected_sites(i)
+#         bond_mat.append([j.dist for j in bonds])
+#     pad = len(max(bond_mat, key=len))
+#     bond_mat = np.array([m + [np.nan] * (pad - len(m)) for m in bond_mat])
+#     # total_bonds = bond_mat[~np.isnan(bond_mat)].sum()
+#     long_bond = (bond_mat > b0).sum()
+#     short_bond = (bond_mat < b0).sum()
+#     ratio = short_bond / long_bond if long_bond else 0
+#     if return_count:
+#         return ratio, short_bond, long_bond
+#     return ratio
