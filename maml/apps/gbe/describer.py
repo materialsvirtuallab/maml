@@ -19,8 +19,8 @@ from monty.json import MSONable
 from gb_sisso import settings
 from gb_sisso.utils import load_mean_delta_bl_dict, load_b0_dict
 import gb_sisso.presetfeatures as preset
-
-rester = MPRester(settings.mapikey)
+from maml.apps.gbe.utils import load_mean_delta_bl_dict, load_b0_dict
+import maml.apps.gbe.presetfeatures as preset
 
 
 def convert_hcp_direction(rotation_axis: Union, lat_type: str) -> np.ndarray:
@@ -92,7 +92,9 @@ class GBDescriber(BaseDescriber):
         super().__init__(**kwargs)
 
     def transform_one(self, db_entry: Dict,
-                      inc_target: bool = True, inc_bulk_ref: bool = True) -> pd.DataFrame:
+                      inc_target: bool = True,
+                      inc_bulk_ref: bool = True,
+                      mp_api: str = None) -> pd.DataFrame:
         """
         Describe gb with selected structural and elemental features
         Args:
@@ -101,14 +103,15 @@ class GBDescriber(BaseDescriber):
             inc_bulk_ref (bool): whether to generate bulk reference
                 bulk reference: i.e. the entry of the origin bulk of the GB,
                                 the rotation angle (theta) = 0, gb_energy = 0
+            mp_api (str): MP api key
 
 
         Returns: pd.DataFrame of processed data, columns are the feature labels
                  The task_id is included and serve as the unique id of the data
 
         """
-        structural = get_structural_feature(db_entry, features=self.struc_features)
-        elemental = get_elemental_feature(db_entry, features=self.elem_features)
+        structural = get_structural_feature(db_entry=db_entry, features=self.struc_features)
+        elemental = get_elemental_feature(db_entry=db_entry, features=self.elem_features, mp_api=mp_api)
         df = pd.concat([structural, elemental], axis=1, join='inner')
         df['task_id'] = db_entry['task_id']
         if inc_target:
@@ -147,7 +150,7 @@ def get_structural_feature(db_entry: Dict, features: [Any] = None) -> pd.DataFra
         w/ smallest interger index ) normal to rotation axis
     theta: rotation angle (sin and cos)
     Args:
-        db_entry (dict): db entry
+        db_entry (Dict): db entry
         features (List): list of features
 
 
@@ -187,7 +190,8 @@ def get_structural_feature(db_entry: Dict, features: [Any] = None) -> pd.DataFra
 
 def get_elemental_feature(db_entry: Dict,
                           loc_algo: str = 'crystalnn',
-                          features: [Any] = None) -> pd.DataFrame:
+                          features: [Any] = None,
+                          mp_api: str = None) -> pd.DataFrame:
     """
     Function to get the elemental features
     Args:
@@ -203,6 +207,7 @@ def get_elemental_feature(db_entry: Dict,
                 mean_delta_bl: the mean bond length difference
                     between GB and the bulk
                 bl: the mean bond length in GB
+        mp_api(str): api key to MP
 
     Returns:
         pd.DataFrame of elemental features
@@ -214,6 +219,10 @@ def get_elemental_feature(db_entry: Dict,
     if preset.mean_delta_bl in features or preset.mean_bl in features:
         mdbl = load_mean_delta_bl_dict(loc_algo=loc_algo)
     f_dict = {}
+    if mp_api:
+        rester = MPRester(mp_api)
+    else:
+        return "Please provide API key to access Materials Project"
     bulk = rester.get_data(db_entry["material_id"])
     bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])
     if bulk:

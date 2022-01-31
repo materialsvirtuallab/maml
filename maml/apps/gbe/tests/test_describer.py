@@ -29,9 +29,11 @@ class TestDescriber(PymatgenTest):
         self.assertArrayEqual(convert_hcp_direction((2, -1, -1, 0), 'hexagonal'), (1, 0, 0))
         self.assertArrayEqual(convert_hcp_direction((-1, -1, 2, 0), 'hexagonal'), (-1, -1, 0))
 
+    @unittest.skipUnless(os.getenv("MAPI_KEY"), "skip")
     def test_elemental_feature(self):
         # test case: W, theta 109.47122063449069 degree,
-        df = get_elemental_feature(self.db_entries[0])
+        df = get_elemental_feature(self.db_entries[0],
+                                   mp_api=os.getenv("MAPI_KEY"))
         ans_dict = {e_coh: 8.301059,
                     G: 147,
                     a0: 2.760381,
@@ -52,11 +54,13 @@ class TestDescriber(PymatgenTest):
         for k, v in ans_dict.items():
             self.assertAlmostEqual(df[k.str_name][0], v, places=6)
 
+    @unittest.skipUnless(os.getenv("MAPI_KEY"), "skip")
     def test_describer(self):
         describer = GBDescriber()
         df = describer.transform_one(self.db_entries[0],
                                      inc_target=True,
-                                     inc_bulk_ref=True)
+                                     inc_bulk_ref=True,
+                                     mp_api=os.getenv("MAPI_KEY"))
         df_gb = df.iloc[0].to_frame().transpose()
         df_bulk = df.iloc[1].to_frame().transpose()
         ans_dict = {e_coh: 8.301059,
