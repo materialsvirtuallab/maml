@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v2021.1.28
+----------
+* Fix SNAP stress components
+* Fix unexpected test outcome in BOWSR and symbolic regression
+
 v2021.12.13
 -----------
 * Update dependencies
