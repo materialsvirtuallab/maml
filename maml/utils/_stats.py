@@ -257,7 +257,7 @@ class Stats:
         std = Stats.std(data, weights=weights)
         if std < 1e-4:
             std = 1.0
-        return third ** 3 / std ** 3
+        return third**3 / std**3
 
     @staticmethod
     def kurtosis(data: List[float], weights: Optional[List[float]] = None) -> float:
@@ -275,7 +275,7 @@ class Stats:
         std = Stats.std(data, weights=weights)
         if std < 1e-4:
             std = 1.0
-        return fourth ** 4 / std ** 4
+        return fourth**4 / std**4
 
     @staticmethod
     def geometric_mean(data: List[float], weights: Optional[List[float]] = None) -> float:
@@ -317,9 +317,9 @@ class Stats:
         assert abs(sum(weights) - 1) < 1e-3
 
         if p == 0:
-            return np.prod([i ** j for i, j in zip(data, weights)]).item()
+            return np.prod([i**j for i, j in zip(data, weights)]).item()
 
-        s = np.sum([j * i ** p for i, j in zip(data, weights)])
+        s = np.sum([j * i**p for i, j in zip(data, weights)])
         return s ** (1.0 / p)
 
     @staticmethod

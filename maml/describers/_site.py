@@ -364,7 +364,7 @@ class BPSymmetryFunctions(BaseDescriber):
                 distances = np.stack((d1, d2, d3))
                 cutoffs = np.prod(self._fc(distances), axis=0)
                 cutoffs = np.atleast_1d(cutoffs)[:, None, None, None]
-                powers = np.sum(distances ** 2, axis=0)[:, None, None, None]
+                powers = np.sum(distances**2, axis=0)[:, None, None, None]
                 g4 = np.sum(
                     (1 + self.lambdas * cosines) ** self.zetas
                     * np.exp(-self.a_etas * powers)

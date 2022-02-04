@@ -193,7 +193,7 @@ class AcquisitionFunctionTest(unittest.TestCase):
 
     def test_distribution(self):
         z = np.random.random(5)
-        pdf = np.exp(-0.5 * z ** 2) / np.sqrt(2 * np.pi)
+        pdf = np.exp(-0.5 * z**2) / np.sqrt(2 * np.pi)
         cdf = 0.5 * erfc(-z / np.sqrt(2))
         self.assertTrue(np.all(abs(pdf - norm.pdf(z)) < 1e-4))
         self.assertTrue(np.all(abs(cdf - norm.cdf(z)) < 1e-4))

@@ -202,7 +202,7 @@ class CoulombMatrix(BaseDescriber):
         np.fill_diagonal(dis, np.inf)  # avoid dividing by zero
         zs = np.array([i.specie.Z for i in s])
         z_matrix = zs[:, None] * zs[None, :]
-        z_diag = 0.5 * zs ** 2.4
+        z_diag = 0.5 * zs**2.4
         c = z_matrix / dis
         np.fill_diagonal(c, z_diag)
         return c

@@ -24,7 +24,7 @@ def _trunc(values: np.ndarray, decimals: int = 3):
     Returns: truncated array
 
     """
-    return np.trunc(values * 10 ** decimals) / 10 ** decimals
+    return np.trunc(values * 10**decimals) / 10**decimals
 
 
 def ensure_rng(seed: int = None) -> RandomState:
@@ -59,7 +59,7 @@ def predict_mean_std(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, 
     y_mean = K_trans.dot(gpr.alpha_) + gpr._y_train_mean
     y_var = gpr.kernel_.diag(X)
     y_var = y_var - np.einsum("ij,ij->i", np.dot(K_trans, gpr._K_inv), K_trans)
-    y_var += noise ** 2
+    y_var += noise**2
     return tuple((y_mean, np.sqrt(y_var)))
 
 
@@ -196,7 +196,7 @@ class AcquisitionFunction:
 
         imp = mean - y_max - xi
         z = imp / std
-        pdf = np.exp(-0.5 * z ** 2) / np.sqrt(2 * np.pi)
+        pdf = np.exp(-0.5 * z**2) / np.sqrt(2 * np.pi)
         cdf = 0.5 * erfc(-z / np.sqrt(2))
         return imp * cdf + std * pdf
 

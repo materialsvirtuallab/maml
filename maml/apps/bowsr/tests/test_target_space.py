@@ -22,7 +22,7 @@ class TargetSpaceTest(unittest.TestCase):
         self.abc_dim = 3
         self.angles_dim = 0
         self.space1 = TargetSpace(
-            target_func=lambda x: sum(x ** 2),
+            target_func=lambda x: sum(x**2),
             wps=self.wps,
             abc_dim=self.abc_dim,
             angles_dim=self.angles_dim,
@@ -141,7 +141,7 @@ class TargetSpaceTest(unittest.TestCase):
             target = self.space1.target_func(sample)
             self.space1.register(sample, target)
         self.assertEqual(len(self.space1), 10)
-        self.assertTrue(all(abs(np.sum(self.space1.params ** 2, axis=1) - self.space1.target) < 1e-2))
+        self.assertTrue(all(abs(np.sum(self.space1.params**2, axis=1) - self.space1.target) < 1e-2))
 
         for _ in range(20):
             sample = self.space2.uniform_sample()

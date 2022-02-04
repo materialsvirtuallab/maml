@@ -1030,7 +1030,7 @@ class SurfaceEnergy(LMPRelaxationCalculator):
         energy_unit_conversion_factor = Unit("eV").get_conversion_factor("J")
         length_unit_conversion_factor = Unit("ang").get_conversion_factor("m")
         surface_energies = [
-            surface_energy * energy_unit_conversion_factor / length_unit_conversion_factor ** 2
+            surface_energy * energy_unit_conversion_factor / length_unit_conversion_factor**2
             for surface_energy in surface_energies
         ]
 

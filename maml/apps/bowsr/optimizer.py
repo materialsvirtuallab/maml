@@ -177,7 +177,7 @@ class BayesianOptimizer:
         self.angles_dim = angles_dim
 
         # Initialize internal GaussianProcessRegressor
-        self._gpr = GaussianProcessRegressor(kernel=RationalQuadratic(length_scale=1.0), alpha=0.028 ** 2)
+        self._gpr = GaussianProcessRegressor(kernel=RationalQuadratic(length_scale=1.0), alpha=0.028**2)
 
     def get_derived_structure(self, x: np.ndarray) -> Structure:
         """
