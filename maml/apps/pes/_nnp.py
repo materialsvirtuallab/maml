@@ -454,10 +454,8 @@ class NNPotential(LammpsPotential):
                         )
 
             self.num_symm_functions = sum(len(list(itertools.product(r_etas, r_shift))) for _ in self.elements) + sum(
-                
-                    len(list(itertools.product(a_etas, lambdas, zetas)))
-                    for _, _ in itertools.combinations_with_replacement(self.elements, 2)
-                
+                len(list(itertools.product(a_etas, lambdas, zetas)))
+                for _, _ in itertools.combinations_with_replacement(self.elements, 2)
             )
 
             self.layer_sizes = [self.num_symm_functions] + self.param.get("hidden_layers")
@@ -572,10 +570,8 @@ class NNPotential(LammpsPotential):
         ).tolist()
         param.update({"zetas": zetas})
         self.num_symm_functions = sum(len(list(itertools.product(r_etas, r_shift))) for _ in self.elements) + sum(
-            
-                len(list(itertools.product(a_etas, lambdas, zetas)))
-                for _, _ in itertools.combinations_with_replacement(self.elements, 2)
-            
+            len(list(itertools.product(a_etas, lambdas, zetas)))
+            for _, _ in itertools.combinations_with_replacement(self.elements, 2)
         )
         self.layer_sizes = [self.num_symm_functions] + hidden_layers
         self.param = param
