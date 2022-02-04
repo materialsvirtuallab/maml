@@ -183,10 +183,10 @@ def get_lammps_lattice_and_rotation(structure: Structure, origin=(0, 0, 0)) -> T
     xhi = a + xlo
     m = lattice.matrix
     xy = np.dot(m[1], m[0] / a)
-    yhi = np.sqrt(b ** 2 - xy ** 2) + ylo
+    yhi = np.sqrt(b**2 - xy**2) + ylo
     xz = np.dot(m[2], m[0] / a)
     yz = (np.dot(m[1], m[2]) - xy * xz) / (yhi - ylo)
-    zhi = np.sqrt(c ** 2 - xz ** 2 - yz ** 2) + zlo
+    zhi = np.sqrt(c**2 - xz**2 - yz**2) + zlo
     # tilt = None if lattice.is_orthogonal else [xy, xz, yz]
     new_matrix = np.array([[xhi - xlo, 0, 0], [xy, yhi - ylo, 0], [xz, yz, zhi - zlo]])
     rot_matrix = np.linalg.solve(new_matrix, m)
@@ -245,7 +245,7 @@ def write_data_from_structure(
     ph = "{:.%df}" % significant_figures
 
     for bound, d in zip(bounds, "xyz"):
-        line = " ".join([ph.format(i) for i in bound] + ["%s%s" % (d, i) for i in ["lo", "hi"]])
+        line = " ".join([ph.format(i) for i in bound] + [f"{d}{i}" for i in ["lo", "hi"]])
         lines.append(line)
     if tilt is not None:
         line = " ".join([ph.format(i) for i in tilt] + ["xy", "xz", "yz"])

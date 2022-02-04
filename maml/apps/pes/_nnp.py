@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
@@ -103,9 +102,9 @@ class NNPotential(LammpsPotential):
                     )
                 )
         if "Energy" in inputs:
-            lines.append("energy  {:f}".format(energy * self.eV_to_Ha))
+            lines.append(f"energy  {energy * self.eV_to_Ha:f}")
 
-        lines.append("charge  {:f}".format(structure.charge))
+        lines.append(f"charge  {structure.charge:f}")
         lines.append("end")
 
         return "\n".join(lines)
@@ -454,11 +453,11 @@ class NNPotential(LammpsPotential):
                             )
                         )
 
-            self.num_symm_functions = sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + sum(
-                [
+            self.num_symm_functions = sum(len(list(itertools.product(r_etas, r_shift))) for _ in self.elements) + sum(
+                
                     len(list(itertools.product(a_etas, lambdas, zetas)))
                     for _, _ in itertools.combinations_with_replacement(self.elements, 2)
-                ]
+                
             )
 
             self.layer_sizes = [self.num_symm_functions] + self.param.get("hidden_layers")
@@ -517,11 +516,11 @@ class NNPotential(LammpsPotential):
             return float(string) if "." in string or "e" in string else int(string)
 
         param = {}
-        with open(filename, "r") as f:
+        with open(filename) as f:
             lines = f.readlines()
         df = pd.DataFrame([line.split() for line in lines if "#" not in line])
         self.elements = sorted(
-            [element for element in np.ravel(df[df[0] == "elements"])[1:] if element is not None],
+            (element for element in np.ravel(df[df[0] == "elements"])[1:] if element is not None),
             key=lambda x: Element(x),
         )
 
@@ -549,7 +548,7 @@ class NNPotential(LammpsPotential):
             param.update({tag: value})
 
         r_cut = np.sort(np.array(df[(df[0] == "symfunction_short") & (df[2] == "2")][6], dtype=np.float64))[0]
-        r_cut = float("{:.1f}".format(r_cut * units.bohr_to_angstrom))
+        r_cut = float(f"{r_cut * units.bohr_to_angstrom:.1f}")
         param.update({"r_cut": r_cut})
         r_etas = np.sort(
             np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "2")][4]), dtype=np.float64)
@@ -558,7 +557,7 @@ class NNPotential(LammpsPotential):
         r_shift = np.sort(
             np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "2")][5]), dtype=np.float64)
         ).tolist()
-        r_shift = [float("{:.1f}".format(r * units.bohr_to_angstrom)) for r in r_shift]
+        r_shift = [float(f"{r * units.bohr_to_angstrom:.1f}") for r in r_shift]
         param.update({"r_shift": r_shift})
         a_etas = np.sort(
             np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][5]), dtype=np.float64)
@@ -572,11 +571,11 @@ class NNPotential(LammpsPotential):
             np.array(np.unique(df[(df[0] == "symfunction_short") & (df[2] == "3")][7]), dtype=np.float64)
         ).tolist()
         param.update({"zetas": zetas})
-        self.num_symm_functions = sum([len(list(itertools.product(r_etas, r_shift))) for _ in self.elements]) + sum(
-            [
+        self.num_symm_functions = sum(len(list(itertools.product(r_etas, r_shift))) for _ in self.elements) + sum(
+            
                 len(list(itertools.product(a_etas, lambdas, zetas)))
                 for _, _ in itertools.combinations_with_replacement(self.elements, 2)
-            ]
+            
         )
         self.layer_sizes = [self.num_symm_functions] + hidden_layers
         self.param = param

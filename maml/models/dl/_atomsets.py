@@ -300,7 +300,7 @@ class AtomSets(KerasModel):
             dirname (str): directory name
         Returns: object instance
         """
-        with open(os.path.join(dirname, "config.json"), "r") as f:
+        with open(os.path.join(dirname, "config.json")) as f:
             kwarg_dict = json.load(f)
 
         symmetry_kwargs = kwarg_dict.pop("symmetry_func_kwargs")

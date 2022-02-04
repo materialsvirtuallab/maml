@@ -1,11 +1,11 @@
-# NOTE: This script can be modified for different atomic structures, 
+# NOTE: This script can be modified for different atomic structures,
 # units, etc. See in.elastic for more info.
 #
 
 # Define the finite deformation size. Try several values of this
 # variable to verify that results do not depend on it.
 variable        up equal {deformation_size}
- 
+
 # Define the amount of random jiggle for atoms
 # This prevents atoms from staying on saddle points
 variable        atomjiggle equal {jiggle}

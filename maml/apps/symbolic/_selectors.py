@@ -165,7 +165,7 @@ class BaseSelector:
                     " %s with constructor %s doesn't "
                     " follow this convention." % (cls, init_signature)
                 )
-        return sorted([p.name for p in parameters])
+        return sorted(p.name for p in parameters)
 
     def get_params(self):
         """
@@ -386,11 +386,11 @@ class SCAD(PenalizedLeastSquares):
         beta_abs = np.abs(beta)
         penalty = (
             self.lambd * beta_abs * (beta_abs <= self.lambd)
-            + -(beta_abs ** 2 - 2 * self.a * self.lambd * beta_abs + self.lambd ** 2)
+            + -(beta_abs**2 - 2 * self.a * self.lambd * beta_abs + self.lambd**2)
             / (2 * (self.a - 1))
             * (beta_abs > self.lambd)
             * (beta_abs <= self.a * self.lambd)
-            + (self.a + 1) * self.lambd ** 2 / 2.0 * (beta_abs > self.a * self.lambd)
+            + (self.a + 1) * self.lambd**2 / 2.0 * (beta_abs > self.a * self.lambd)
         )
         return np.sum(penalty).item()
 

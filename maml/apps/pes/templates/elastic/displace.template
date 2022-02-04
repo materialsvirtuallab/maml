@@ -48,7 +48,7 @@ if "${{dir}} == 6" then &
 minimize ${{etol}} ${{ftol}} ${{maxiter}} ${{maxeval}}
 
 # Obtain new stress tensor
- 
+
 variable tmp equal pxx
 variable pxx1 equal ${{tmp}}
 variable tmp equal pyy
@@ -103,7 +103,7 @@ if "${{dir}} == 6" then &
 minimize ${{etol}} ${{ftol}} ${{maxiter}} ${{maxeval}}
 
 # Obtain new stress tensor
- 
+
 variable tmp equal pe
 variable e1 equal ${{tmp}}
 variable tmp equal press
@@ -130,7 +130,7 @@ variable C4pos equal ${{d4}}
 variable C5pos equal ${{d5}}
 variable C6pos equal ${{d6}}
 
-# Combine positive and negative 
+# Combine positive and negative
 
 variable C1${{dir}} equal 0.5*(${{C1neg}}+${{C1pos}})
 variable C2${{dir}} equal 0.5*(${{C2neg}}+${{C2pos}})

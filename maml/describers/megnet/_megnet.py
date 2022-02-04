@@ -58,7 +58,7 @@ class MEGNetSite(BaseDescriber):
         self.describer_model = _load_model(name)
 
         if level is None:
-            n_layers = sum([i.startswith("meg_net") for i in self.describer_model.valid_names]) // 3
+            n_layers = sum(i.startswith("meg_net") for i in self.describer_model.valid_names) // 3
             level = n_layers
         self.name = name
         self.level = level
@@ -146,7 +146,7 @@ class MEGNetStructure(BaseDescriber):
 
         if level is None:
             n_layers = (
-                sum([i.startswith("meg_net") or i.startswith("megnet") for i in self.describer_model.valid_names]) // 3
+                sum(i.startswith("meg_net") or i.startswith("megnet") for i in self.describer_model.valid_names) // 3
             )
             level = n_layers
 

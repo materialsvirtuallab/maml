@@ -198,6 +198,6 @@ class TargetSpace:
         self._target = np.empty(shape=(0))
 
     def __repr__(self):
-        return "{0}(relax_coords={1}, relax_lattice={2}, dim={3}, length={4})".format(
+        return "{}(relax_coords={}, relax_lattice={}, dim={}, length={})".format(
             self.__class__.__name__, self.relax_coords, self.relax_lattice, self.dim, len(self)
         )

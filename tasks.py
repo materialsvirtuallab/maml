@@ -37,9 +37,9 @@ def make_doc(ctx):
         ctx.run("rm maml*.tests.*rst", warn=True)
         for f in glob.glob("maml*.rst"):
             newoutput = []
-            with open(f, "r") as fid:
+            with open(f) as fid:
                 for line in fid:
-                    if re.search("maml.*\._.*", line):
+                    if re.search(r"maml.*\._.*", line):
                         continue
                     else:
                         newoutput.append(line)
@@ -93,7 +93,7 @@ def publish(ctx):
 @task
 def set_ver(ctx):
     lines = []
-    with open("maml/__init__.py", "rt") as f:
+    with open("maml/__init__.py") as f:
         for l in f:
             if "__version__" in l:
                 lines.append('__version__ = "%s"' % NEW_VER)
@@ -103,7 +103,7 @@ def set_ver(ctx):
         f.write("\n".join(lines) + "\n")
 
     lines = []
-    with open("setup.py", "rt") as f:
+    with open("setup.py") as f:
         for l in f:
             lines.append(re.sub(r"version=([^,]+),", 'version="%s",' % NEW_VER, l.rstrip()))
     with open("setup.py", "wt") as f:

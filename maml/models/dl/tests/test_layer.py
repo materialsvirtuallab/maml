@@ -15,7 +15,7 @@ class TestLayer(unittest.TestCase):
 
         x = x[0, :3, :]
         weights = weights[0, :3]
-        exp_weights = weights ** alpha
+        exp_weights = weights**alpha
         out_np = np.sum(x * exp_weights[:, None], axis=0) / np.sum(exp_weights)
         np.testing.assert_array_almost_equal(out.numpy()[0][0], out_np)
         self.assertTrue(wal.get_config().get("alpha") == alpha)

@@ -34,7 +34,7 @@ class RadialDistributionFunction:
 
         self.cutoff = self.r_max + self.dr / 2.0  # add a small shell to improve robustness
         self.sigma = ceil(sigma / self.dr)
-        self.volumes = 4.0 * np.pi * self.r ** 2 * self.dr
+        self.volumes = 4.0 * np.pi * self.r**2 * self.dr
         self.volumes[self.volumes < 1e-8] = 1e8  # avoid divide by zero
 
     def get_site_rdf(self, structure: Structure) -> Tuple[np.ndarray, List[Dict]]:
@@ -110,8 +110,8 @@ class RadialDistributionFunction:
 
         all_counts = [_dist_to_counts(d, r_min=self.r_min, r_max=self.r_max, n_grid=self.n_grid) for d in all_distances]
         sum_counts = np.sum(all_counts, axis=0)
-        total_density = sum([density[i] for i in species])
-        total_atoms = sum([n_atoms[i] for i in ref_species])
+        total_density = sum(density[i] for i in species)
+        total_atoms = sum(n_atoms[i] for i in ref_species)
         rdf_temp = sum_counts / total_density / self.volumes / total_atoms
         if self.sigma > 1e-8:
             rdf_temp = gaussian_filter1d(rdf_temp, self.sigma)
@@ -135,7 +135,7 @@ class RadialDistributionFunction:
                 continue
             for pair, rdf_pair in rdf.items():
                 _, specie = pair.split(":")
-                cns[i][pair] = np.cumsum(rdf_pair * density[specie] * 4.0 * np.pi * self.r ** 2 * self.dr)
+                cns[i][pair] = np.cumsum(rdf_pair * density[specie] * 4.0 * np.pi * self.r**2 * self.dr)
         return self.r, cns
 
     def get_species_coordination(
@@ -161,9 +161,9 @@ class RadialDistributionFunction:
 
         density = self._get_specie_density(structure)
         n_atoms = structure.composition.to_data_dict["unit_cell_composition"]
-        total_density = sum([density[i] for i in species])
-        total_atoms = sum([n_atoms[i] for i in ref_species])
-        return self.r, np.cumsum(rdf * total_density * 4.0 * np.pi * self.r ** 2 * self.dr * total_atoms)
+        total_density = sum(density[i] for i in species)
+        total_atoms = sum(n_atoms[i] for i in ref_species)
+        return self.r, np.cumsum(rdf * total_density * 4.0 * np.pi * self.r**2 * self.dr * total_atoms)
 
     @staticmethod
     def _get_specie_density(structure: Structure):

@@ -149,7 +149,7 @@ class DistinctSiteProperty(BaseDescriber):
             site = symm.equivalent_sites[symm.wyckoff_symbols.index(w)][0]
             for p in self.properties:
                 data.append(getattr(site.specie, p))
-                names.append("%s-%s" % (w, p))
+                names.append(f"{w}-{p}")
         return pd.DataFrame([data], columns=names)
 
 
@@ -202,7 +202,7 @@ class CoulombMatrix(BaseDescriber):
         np.fill_diagonal(dis, np.inf)  # avoid dividing by zero
         zs = np.array([i.specie.Z for i in s])
         z_matrix = zs[:, None] * zs[None, :]
-        z_diag = 0.5 * zs ** 2.4
+        z_diag = 0.5 * zs**2.4
         c = z_matrix / dis
         np.fill_diagonal(c, z_diag)
         return c

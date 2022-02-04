@@ -111,7 +111,7 @@ class ElementStats(BaseDescriber):
 
         full_stats, stats_func = get_full_stats_and_funcs(stats)
         for stat in full_stats:
-            all_property_names.extend(["%s_%s" % (p, stat) for p in property_names])
+            all_property_names.extend([f"{p}_{stat}" for p in property_names])
         self.stats = full_stats
         self.element_properties = element_properties
         self.property_names = property_names
@@ -168,7 +168,7 @@ class ElementStats(BaseDescriber):
 
         Returns: ElementStats class
         """
-        with open(filename, "r") as f:
+        with open(filename) as f:
             d = json.load(f)
 
         property_names = d.get("property_names", None)

@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
@@ -616,16 +615,16 @@ class MTPotential(LammpsPotential):
                     "train",
                     unfitted_mtp,
                     atoms_filename,
-                    "--max-iter={}".format(max_iter),
-                    "--trained-pot-name={}".format(save_fitted_mtp),
-                    "--curr-pot-name={}".format(unfitted_mtp),
-                    "--energy-weight={}".format(energy_weight),
-                    "--force-weight={}".format(force_weight),
-                    "--stress-weight={}".format(stress_weight),
-                    "--init-params={}".format(init_params),
-                    "--scale-by-force={}".format(scale_by_force),
-                    "--bfgs-conv-tol={}".format(bfgs_conv_tol),
-                    "--weighting={}".format(weighting),
+                    f"--max-iter={max_iter}",
+                    f"--trained-pot-name={save_fitted_mtp}",
+                    f"--curr-pot-name={unfitted_mtp}",
+                    f"--energy-weight={energy_weight}",
+                    f"--force-weight={force_weight}",
+                    f"--stress-weight={stress_weight}",
+                    f"--init-params={init_params}",
+                    f"--scale-by-force={scale_by_force}",
+                    f"--bfgs-conv-tol={bfgs_conv_tol}",
+                    f"--weighting={weighting}",
                 ],
                 stdout=subprocess.PIPE,
             ) as p:
@@ -643,7 +642,7 @@ class MTPotential(LammpsPotential):
 
             def load_config(filename):
                 param = OrderedDict()
-                with open(filename, "r") as f:
+                with open(filename) as f:
                     lines = f.readlines()
                 param["safe"] = [line.rstrip() for line in lines[:-2]]
                 for line in lines[-2:]:
@@ -721,7 +720,7 @@ class MTPotential(LammpsPotential):
             if not hasattr(self, "version") or self.version == "mlip-2":
                 cmd = ["mlp", "calc-efs", fitted_mtp, original_file, predict_file]
             elif self.version == "mlip-dev":
-                cmd = ["mlp", "run", "mlip.ini", "--filename={}".format(original_file)]
+                cmd = ["mlp", "run", "mlip.ini", f"--filename={original_file}"]
             with subprocess.Popen(cmd, stdout=subprocess.PIPE) as p:
                 stdout = p.communicate()[0]
                 rc = p.returncode
@@ -753,7 +752,7 @@ class MTPotential(LammpsPotential):
             MTPotential
         """
         param = OrderedDict()
-        with open(filename, "r") as f:
+        with open(filename) as f:
             lines = f.readlines()
         param["safe"] = [line.rstrip() for line in lines[:-2]]
         for line in lines[-2:]:

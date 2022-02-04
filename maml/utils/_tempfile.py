@@ -122,7 +122,7 @@ def _copy_r_with_suffix(src: str, dst: str, suffix: Optional[Any] = None):
         fpath = os.path.join(abssrc, f)
         if os.path.isfile(fpath):
             if suffix is not None:
-                new_path = "%s_%s" % (fpath, str(suffix))
+                new_path = f"{fpath}_{str(suffix)}"
                 shutil.copy(fpath, new_path)
                 fpath = new_path
             shutil.copy(fpath, absdst)

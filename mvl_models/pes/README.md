@@ -1,6 +1,6 @@
 # Pre-trained ML-IAPs from Materials Virtual Lab
 
-This directory contains pre-trained ML-IAPs from the Materials Virtual Lab. 
+This directory contains pre-trained ML-IAPs from the Materials Virtual Lab.
 
 Within `Ni/gap` directory,
 

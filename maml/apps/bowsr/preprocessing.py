@@ -60,7 +60,7 @@ class StandardScaler(MSONable):
         return transformed_target * self.std + self.mean
 
     def __repr__(self):
-        return "{0}(mean={1}, std={2})".format(self.__class__.__name__, self.mean, self.std)
+        return f"{self.__class__.__name__}(mean={self.mean}, std={self.std})"
 
     def as_dict(self):
         """
@@ -122,7 +122,7 @@ class DummyScaler(MSONable):
         return transformed_target
 
     def __repr__(self):
-        return "{0}".format(self.__class__.__name__)
+        return f"{self.__class__.__name__}"
 
     def as_dict(self):
         """

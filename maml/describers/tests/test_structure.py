@@ -1,5 +1,3 @@
-# coding: utf-8
-
 import unittest
 
 import pandas as pd
@@ -120,8 +118,8 @@ class CoulomMatrixTest(unittest.TestCase):
         na = Element("Na")
         cl = Element("Cl")
         dist = self.s1.distance_matrix
-        self.assertEqual(cmat[0][0], (na.Z ** 2.4) * 0.5)
-        self.assertEqual(cmat[4][4], (cl.Z ** 2.4) * 0.5)
+        self.assertEqual(cmat[0][0], (na.Z**2.4) * 0.5)
+        self.assertEqual(cmat[4][4], (cl.Z**2.4) * 0.5)
         self.assertEqual(cmat[0][1], (na.Z * na.Z) / dist[0][1])
 
     def test_sorted_coulomb_mat(self):

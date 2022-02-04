@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
@@ -290,7 +289,7 @@ class GAPotential(LammpsPotential):
         train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
 
         exe_command = ["gap_fit"]
-        exe_command.append("at_file={}".format(atoms_filename))
+        exe_command.append(f"at_file={atoms_filename}")
         gap_configure_params = [
             "l_max",
             "n_max",
@@ -311,13 +310,13 @@ class GAPotential(LammpsPotential):
         gap_command = ["soap"]
         for param_name in gap_configure_params:
             param = kwargs.get(param_name) if kwargs.get(param_name) else soap_params.get(param_name)
-            gap_command.append(param_name + "=" + "{}".format(param))
+            gap_command.append(param_name + "=" + f"{param}")
         gap_command.append("add_species=T")
         exe_command.append("gap.2020.01=" + "{" + "{}".format(" ".join(gap_command)) + "}")
 
         for param_name in preprocess_params:
             param = kwargs.get(param_name) if kwargs.get(param_name) else soap_params.get(param_name)
-            exe_command.append(param_name + "=" + "{}".format(param))
+            exe_command.append(param_name + "=" + f"{param}")
 
         default_sigma = [str(f) for f in default_sigma]
         exe_command.append("default_sigma={%s}" % (" ".join(default_sigma)))
@@ -328,7 +327,7 @@ class GAPotential(LammpsPotential):
             exe_command.append("force_parameter_name=dft_force")
         if use_stress:
             exe_command.append("virial_parameter_name=dft_virial")
-        exe_command.append("gp_file={}".format(xml_filename))
+        exe_command.append(f"gp_file={xml_filename}")
 
         with ScratchDir("."):
             self.write_cfgs(filename=atoms_filename, cfg_pool=train_pool)
@@ -387,7 +386,7 @@ class GAPotential(LammpsPotential):
             Z_pattern = re.compile(" Z=(.*?) ", re.S)
             element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
             atomic_numbers.append(str(Element(element).number))
-            param_file = "{}.soapparam".format(element)
+            param_file = f"{element}.soapparam"
             gpcoordinates.set("sparseX_filename", param_file)
             np.savetxt(param_file, element_param[element], fmt="%.20e")
         tree.write(xml_filename)
@@ -444,8 +443,8 @@ class GAPotential(LammpsPotential):
             _, df_orig = self.read_cfgs(original_file)
 
             exe_command = ["quip"]
-            exe_command.append("atoms_filename={}".format(original_file))
-            exe_command.append("param_filename={}".format(xml_file))
+            exe_command.append(f"atoms_filename={original_file}")
+            exe_command.append(f"param_filename={xml_file}")
             if predict_energies:
                 exe_command.append("energy=T")
             if predict_forces:

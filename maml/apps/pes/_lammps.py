@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
@@ -49,7 +48,7 @@ def _pretty_input(lines):
     clean_lines = [l.strip("\n") for l in lines]
     commands = [l for l in clean_lines if len(l.strip()) > 0]
     keys = [c.split()[0] for c in commands if not c.split()[0].startswith("#")]
-    width = max([len(k) for k in keys]) + 4
+    width = max(len(k) for k in keys) + 4
     new_lines = map(prettify, clean_lines)
     return "\n".join(new_lines)
 
@@ -84,7 +83,7 @@ class LMPStaticCalculator:
         self.LMP_EXE = lmp_exe
         for i, j in kwargs.items():
             if i not in self.allowed_kwargs:
-                raise TypeError("%s not in supported kwargs %s" % (str(i), str(self.allowed_kwargs)))
+                raise TypeError(f"{str(i)} not in supported kwargs {str(self.allowed_kwargs)}")
             setattr(self, i, j)
 
     @abc.abstractmethod
@@ -184,7 +183,7 @@ class EnergyForceStress(LMPStaticCalculator):
 
     def _setup(self):
         template_dir = os.path.join(os.path.dirname(__file__), "templates", "efs")
-        with open(os.path.join(template_dir, "in.efs"), "r") as f:
+        with open(os.path.join(template_dir, "in.efs")) as f:
             input_template = f.read()
 
         input_file = "in.efs"
@@ -333,12 +332,12 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
         def add_args(l):
             return l + compute_args if l.startswith("compute") else l
 
-        compute_args = "1 0.99363 {} ".format(self.twojmax)
+        compute_args = f"1 0.99363 {self.twojmax} "
         el_in_seq = sorted(self.element_profile.keys(), key=lambda x: Element(x))
         cutoffs = [self.element_profile[e]["r"] * self.rcutfac for e in el_in_seq]
         weights = [self.element_profile[e]["w"] for e in el_in_seq]
         compute_args += " ".join([str(p) for p in cutoffs + weights])
-        compute_args += " rmin0 0 quadraticflag {}".format(int(self.quadratic))
+        compute_args += f" rmin0 0 quadraticflag {int(self.quadratic)}"
         CMDS = list(map(add_args, self._CMDS))
         CMDS[2] += " bzeroflag 0"
         CMDS[3] += " bzeroflag 0"
@@ -421,13 +420,13 @@ class ElasticConstant(LMPStaticCalculator):
     ):
         template_dir = os.path.join(os.path.dirname(__file__), "templates", "elastic")
 
-        with open(os.path.join(template_dir, "in.elastic"), "r") as f:
+        with open(os.path.join(template_dir, "in.elastic")) as f:
             input_template = f.read()
-        with open(os.path.join(template_dir, "init.template"), "r") as f:
+        with open(os.path.join(template_dir, "init.template")) as f:
             init_template = f.read()
-        with open(os.path.join(template_dir, "potential.template"), "r") as f:
+        with open(os.path.join(template_dir, "potential.template")) as f:
             potential_template = f.read()
-        with open(os.path.join(template_dir, "displace.template"), "r") as f:
+        with open(os.path.join(template_dir, "displace.template")) as f:
             displace_template = f.read()
 
         input_file = "in.elastic"
@@ -527,9 +526,9 @@ class NudgedElasticBand(LMPStaticCalculator):
     def _setup(self):
         template_dir = os.path.join(os.path.dirname(__file__), "templates", "neb")
 
-        with open(os.path.join(template_dir, "in.relax"), "r") as f:
+        with open(os.path.join(template_dir, "in.relax")) as f:
             relax_template = f.read()
-        with open(os.path.join(template_dir, "in.neb"), "r") as f:
+        with open(os.path.join(template_dir, "in.neb")) as f:
             neb_template = f.read()
 
         unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice, alat=self.alat)
@@ -607,7 +606,7 @@ class NudgedElasticBand(LMPStaticCalculator):
 
         final_relaxed_struct = LammpsData.from_file("final.relaxed", atom_style="charge").structure
 
-        lines = ["{}".format(final_relaxed_struct.num_sites)]
+        lines = [f"{final_relaxed_struct.num_sites}"]
 
         for idx, site in enumerate(final_relaxed_struct):
             if idx == final_idx:
@@ -616,7 +615,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                 idx = final_idx
             else:
                 idx = idx
-            lines.append("{}  {:.3f}  {:.3f}  {:.3f}".format(idx + 1, site.x, site.y, site.z))
+            lines.append(f"{idx + 1}  {site.x:.3f}  {site.y:.3f}  {site.z:.3f}")
 
         with open("data.final_replica", "w") as f:
             f.write("\n".join(lines))
@@ -647,7 +646,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                     str(self.num_replicas),
                     self.LMP_EXE,
                     "-partition",
-                    "{}x1".format(self.num_replicas),
+                    f"{self.num_replicas}x1",
                     "-in",
                     input_file,
                 ],
@@ -737,7 +736,7 @@ class DefectFormation(LMPStaticCalculator):
     def _setup(self):
         template_dir = os.path.join(os.path.dirname(__file__), "templates", "defect")
 
-        with open(os.path.join(template_dir, "in.defect"), "r") as f:
+        with open(os.path.join(template_dir, "in.defect")) as f:
             defect_template = f.read()
 
         unit_cell = self.get_unit_cell(specie=self.specie, lattice=self.lattice, alat=self.alat)
@@ -857,7 +856,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
     def _setup(self):
         template_dir = os.path.join(os.path.dirname(__file__), "templates", "relax")
 
-        with open(os.path.join(template_dir, "in.relax"), "r") as f:
+        with open(os.path.join(template_dir, "in.relax")) as f:
             input_template = f.read()
 
         input_file = "in.relax"
@@ -869,7 +868,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
 
         box_relax_settings = ""
         if self.box_relax:
-            box_relax_settings = "fix   1 all box/relax {}".format(self.box_relax_keywords)
+            box_relax_settings = f"fix   1 all box/relax {self.box_relax_keywords}"
 
         inputs = input_template.format(
             ff_settings="\n".join(ff_settings),
@@ -1030,7 +1029,7 @@ class SurfaceEnergy(LMPRelaxationCalculator):
         energy_unit_conversion_factor = Unit("eV").get_conversion_factor("J")
         length_unit_conversion_factor = Unit("ang").get_conversion_factor("m")
         surface_energies = [
-            surface_energy * energy_unit_conversion_factor / length_unit_conversion_factor ** 2
+            surface_energy * energy_unit_conversion_factor / length_unit_conversion_factor**2
             for surface_energy in surface_energies
         ]
 
