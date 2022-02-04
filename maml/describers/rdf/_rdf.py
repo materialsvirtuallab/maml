@@ -161,8 +161,8 @@ class RadialDistributionFunction:
 
         density = self._get_specie_density(structure)
         n_atoms = structure.composition.to_data_dict["unit_cell_composition"]
-        total_density = sum(density[i] for i in species)
-        total_atoms = sum(n_atoms[i] for i in ref_species)
+        total_density = sum([density[i] for i in species])
+        total_atoms = sum([n_atoms[i] for i in ref_species])
         return self.r, np.cumsum(rdf * total_density * 4.0 * np.pi * self.r**2 * self.dr * total_atoms)
 
     @staticmethod
