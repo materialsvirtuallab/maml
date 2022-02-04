@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
@@ -139,8 +138,8 @@ class SNAPotential(LammpsPotential):
         """
         Write parameter and coefficient file to perform lammps calculation.
         """
-        param_file = "{}.snapparam".format(self.name)
-        coeff_file = "{}.snapcoeff".format(self.name)
+        param_file = f"{self.name}.snapparam"
+        coeff_file = f"{self.name}.snapcoeff"
         model = self.model
         describer = self.model.describer
         profile = describer.element_profile
@@ -150,7 +149,7 @@ class SNAPotential(LammpsPotential):
             nbc += int((1 + nbc) * nbc / 2)
 
         coeff_lines = []
-        coeff_lines.append("{} {}".format(ne, nbc + 1))
+        coeff_lines.append(f"{ne} {nbc + 1}")
         for element, coeff in zip(self.elements, np.split(model.model.coef_, ne)):
             coeff_lines.append("{} {} {}".format(element, profile[element]["r"], profile[element]["w"]))
             coeff_lines.extend([str(c) for c in coeff])
@@ -159,9 +158,9 @@ class SNAPotential(LammpsPotential):
 
         param_lines = []
         keys = ["rcutfac", "twojmax"]
-        param_lines.extend(["{} {}".format(k, getattr(describer, k)) for k in keys])
+        param_lines.extend([f"{k} {getattr(describer, k)}" for k in keys])
         param_lines.extend(["rfac0 0.99363", "rmin0 0"])
-        param_lines.append("quadraticflag {}".format(int(describer.quadratic)))
+        param_lines.append(f"quadraticflag {int(describer.quadratic)}")
         param_lines.append("bzeroflag 0")
         with open(param_file, "w") as f:
             f.write("\n".join(param_lines))

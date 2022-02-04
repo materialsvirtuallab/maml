@@ -378,7 +378,7 @@ def _root_moment(data, weights, order) -> float:
     if order > 1:
         mean = np.mean(data)
 
-    moment = sum([(i - mean) ** order * j for i, j in zip(data, pmf)])
+    moment = sum((i - mean) ** order * j for i, j in zip(data, pmf))
 
     # when order is odd, moment can be negative
     if moment < 0:

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Keras utils for deserialize activations and otpimizers
 """

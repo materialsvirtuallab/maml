@@ -23,7 +23,7 @@ class TestSelectors(PymatgenTest):
     @classmethod
     def setUpClass(cls):
         np.random.seed(42)
-        with open(os.path.join(CWD, "test_data.json"), "r") as f:
+        with open(os.path.join(CWD, "test_data.json")) as f:
             djson = json.load(f)
         cls.x = np.array(djson["x"])
         cls.beta = np.array(djson["beta"])

@@ -1,4 +1,3 @@
-# coding: utf-8
 import unittest
 
 from maml.describers.matminer_wrapper import wrap_matminer_describer

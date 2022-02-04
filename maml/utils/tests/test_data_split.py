@@ -11,7 +11,7 @@ class TestShuffleSplit(unittest.TestCase):
         self.assertEqual(len(train), 80)
         self.assertEqual(len(val), 10)
         self.assertEqual(len(test), 10)
-        self.assertTrue(set(range(100)) == set([*train, *val, *test]))
+        self.assertTrue(set(range(100)) == {*train, *val, *test})
 
         ss2 = ShuffleSplitter(ratios="90/10")
         train, test = ss2.split(mat_ids)

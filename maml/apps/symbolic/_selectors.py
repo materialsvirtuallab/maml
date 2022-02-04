@@ -165,7 +165,7 @@ class BaseSelector:
                     " %s with constructor %s doesn't "
                     " follow this convention." % (cls, init_signature)
                 )
-        return sorted([p.name for p in parameters])
+        return sorted(p.name for p in parameters)
 
     def get_params(self):
         """

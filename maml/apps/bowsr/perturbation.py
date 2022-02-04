@@ -257,7 +257,7 @@ class LatticePerturbation:
                 self._fit_lattice = False
                 return
             self.dims = (2, 0)
-            indices = [int((sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2)) for i in np.arange(3)]
+            indices = [int(sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2) for i in np.arange(3)]
             self.perturbation_mode = lambda x: np.concatenate((x[indices], np.zeros(3)))
             self._lattice = lattice  # type: ignore
             self._abc = [
@@ -282,7 +282,7 @@ class LatticePerturbation:
                 np.sort(angles), [90, 90, 120], angle_tol
             ):
                 self.dims = (2, 0)
-                indices = [int((sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2)) for i in np.arange(3)]
+                indices = [int(sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2) for i in np.arange(3)]
                 self.perturbation_mode = lambda x: np.concatenate((x[indices], np.zeros(3)))
                 self._lattice = lattice  # type: ignore
                 self._abc = [
@@ -299,7 +299,7 @@ class LatticePerturbation:
                 return
             if np.any([(sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2) for i in np.arange(3)]):
                 self.dims = (2, 0)
-                indices = [int((sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2)) for i in np.arange(3)]
+                indices = [int(sum(abs(np.array(abc) - abc[i]) < abc_tol) == 2) for i in np.arange(3)]
                 self.perturbation_mode = lambda x: np.concatenate((x[indices], np.zeros(3)))
                 self._lattice = lattice  # type: ignore
                 self._abc = [
@@ -328,7 +328,7 @@ class LatticePerturbation:
             self._fit_lattice = True
             return
         if self.crys_system == "monoclinic":
-            if sum([abs(angles[i] - 90) < 1e-5 for i in np.arange(3)]) == 2:
+            if sum(abs(angles[i] - 90) < 1e-5 for i in np.arange(3)) == 2:
                 self.dims = (3, 1)
                 indices = [int(abs(angles[i] - 90) < angle_tol) for i in np.arange(3)]
                 self.perturbation_mode = lambda x: np.concatenate(
@@ -380,10 +380,10 @@ class LatticePerturbation:
 
     def __repr__(self):
         if self._lattice is not None:
-            return "{0}(spg_int_number={1}, crystal_system={2})\n".format(
+            return "{}(spg_int_number={}, crystal_system={})\n".format(
                 self.__class__.__name__, self.spg_int_symbol, self.crys_system
             ) + repr(self.lattice)
-        return "{0}(spg_int_number={1}, crystal_system={2})\n".format(
+        return "{}(spg_int_number={}, crystal_system={})\n".format(
             self.__class__.__name__, self.spg_int_symbol, self.crys_system
         )
 

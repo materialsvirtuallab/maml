@@ -9,8 +9,8 @@ This directory `https://github.com/materialsvirtuallab/snap/tree/master/Ni-Mo/tr
 - Alloy structures constructed by partial substitution of supercells of the bulk fcc Ni with Mo and the bulk bcc Mo with Ni.
 ```
 
-The hyperparameter tuning and fitting procedures are described in detail in our publication [1] and thus are excluded from the repo. 
+The hyperparameter tuning and fitting procedures are described in detail in our publication [1] and thus are excluded from the repo.
 
 
-### Reference 
+### Reference
 [1]: X. Li, C. Hu, C. Chen, Z. Deng, J. Luo, & S.P. Ong Phys. Rev. B 98, 094104 (2018). Quantum-Accurate Spectral Neighbor Analysis Potential Models for Ni-Mo Binary Alloys and FCC Metals.

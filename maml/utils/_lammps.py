@@ -245,7 +245,7 @@ def write_data_from_structure(
     ph = "{:.%df}" % significant_figures
 
     for bound, d in zip(bounds, "xyz"):
-        line = " ".join([ph.format(i) for i in bound] + ["%s%s" % (d, i) for i in ["lo", "hi"]])
+        line = " ".join([ph.format(i) for i in bound] + [f"{d}{i}" for i in ["lo", "hi"]])
         lines.append(line)
     if tilt is not None:
         line = " ".join([ph.format(i) for i in tilt] + ["xy", "xz", "yz"])

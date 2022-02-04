@@ -110,8 +110,8 @@ class RadialDistributionFunction:
 
         all_counts = [_dist_to_counts(d, r_min=self.r_min, r_max=self.r_max, n_grid=self.n_grid) for d in all_distances]
         sum_counts = np.sum(all_counts, axis=0)
-        total_density = sum([density[i] for i in species])
-        total_atoms = sum([n_atoms[i] for i in ref_species])
+        total_density = sum(density[i] for i in species)
+        total_atoms = sum(n_atoms[i] for i in ref_species)
         rdf_temp = sum_counts / total_density / self.volumes / total_atoms
         if self.sigma > 1e-8:
             rdf_temp = gaussian_filter1d(rdf_temp, self.sigma)

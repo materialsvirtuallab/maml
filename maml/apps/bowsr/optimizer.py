@@ -396,9 +396,9 @@ class BayesianOptimizer:
 
     def __repr__(self):
         return (
-            "{0}(relax_coords={1}, relax_lattice={2}, use_symmetry={3}"
-            "\n\t\twyckoff_dims={4}, abc_dim={5}, "
-            "\n\t\tangles_dim={6}, kernel={7}, scaler={8}, noisy={9})".format(
+            "{}(relax_coords={}, relax_lattice={}, use_symmetry={}"
+            "\n\t\twyckoff_dims={}, abc_dim={}, "
+            "\n\t\tangles_dim={}, kernel={}, scaler={}, noisy={})".format(
                 self.__class__.__name__,
                 self.relax_coords,
                 self.relax_lattice,

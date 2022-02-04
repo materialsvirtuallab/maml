@@ -61,11 +61,11 @@ def expected_radius(struct):
 Finally, instantiate and run the optimizer:
 ```python
 compressed_optimizer = BayesianOptimizer(
-    model=model, 
-    structure=structure, 
-    relax_coords=True, 
+    model=model,
+    structure=structure,
+    relax_coords=True,
     relax_lattice=True,
-    use_symmetry=True, 
+    use_symmetry=True,
     seed=42
 )
 

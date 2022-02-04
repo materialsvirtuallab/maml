@@ -19,7 +19,7 @@ group 		{specie} type 1
 
 group 		del id {del_id}
 delete_atoms 	group del compress no
- 
+
 # choose potential
 
 {ff_settings}

@@ -16,7 +16,7 @@ class TestMultiScratchDir(unittest.TestCase):
                     os.system("touch tempfile")
                     os.chdir("..")
             tempfiles = set(glob("tempfile*"))
-            self.assertEqual(set(["tempfile_%d" % i for i in range(4)]), tempfiles)
+            self.assertEqual({"tempfile_%d" % i for i in range(4)}, tempfiles)
 
 
 if __name__ == "__main__":

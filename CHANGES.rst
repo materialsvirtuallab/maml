@@ -37,7 +37,7 @@ v0.0.3
 
 v0.0.2
 ------
-* major refactor 
+* major refactor
 * move mlearn potential energy surfaces to apps
 * fix potential problem of rotated structure in lammps
 * add rfxas app

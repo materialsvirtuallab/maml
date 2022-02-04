@@ -219,13 +219,13 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         atoms_filename = "structure.xyz"
 
         exe_command = ["quip"]
-        exe_command.append("atoms_filename={}".format(atoms_filename))
+        exe_command.append(f"atoms_filename={atoms_filename}")
 
         descriptor_command = ["soap"]
-        descriptor_command.append("cutoff" + "=" + "{}".format(self.cutoff))
-        descriptor_command.append("l_max" + "=" + "{}".format(self.l_max))
-        descriptor_command.append("n_max" + "=" + "{}".format(self.n_max))
-        descriptor_command.append("atom_sigma" + "=" + "{}".format(self.atom_sigma))
+        descriptor_command.append("cutoff" + "=" + f"{self.cutoff}")
+        descriptor_command.append("l_max" + "=" + f"{self.l_max}")
+        descriptor_command.append("n_max" + "=" + f"{self.n_max}")
+        descriptor_command.append("atom_sigma" + "=" + f"{self.atom_sigma}")
 
         atomic_numbers = [str(element.number) for element in sorted(np.unique(structure.species))]
         n_Z = len(atomic_numbers)

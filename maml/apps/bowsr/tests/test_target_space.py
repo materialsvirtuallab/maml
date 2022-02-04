@@ -39,7 +39,7 @@ class TargetSpaceTest(unittest.TestCase):
             relax_coords=True,
             relax_lattice=False,
             scaler=DummyScaler(),
-            random_state=ensure_rng((42)),
+            random_state=ensure_rng(42),
         )
         self.space3 = TargetSpace(
             target_func=lambda x: np.mean(x * 3),

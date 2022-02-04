@@ -149,7 +149,7 @@ class DistinctSiteProperty(BaseDescriber):
             site = symm.equivalent_sites[symm.wyckoff_symbols.index(w)][0]
             for p in self.properties:
                 data.append(getattr(site.specie, p))
-                names.append("%s-%s" % (w, p))
+                names.append(f"{w}-{p}")
         return pd.DataFrame([data], columns=names)
 
 
