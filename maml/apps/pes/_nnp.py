@@ -15,12 +15,12 @@ from monty.io import zopen
 from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
-from pymatgen.core import Structure, Lattice, Element
-from pymatgen.core import units
+from pymatgen.core import Element, Lattice, Structure, units
 
-from maml.utils import pool_from, convert_docs, check_structures_forces_stresses
+from maml.utils import (check_structures_forces_stresses, convert_docs,
+                        pool_from)
+
 from ._lammps import LammpsPotential
-
 
 module_dir = os.path.dirname(__file__)
 NNinput_params = loadfn(os.path.join(module_dir, "params", "NNinput.json"))

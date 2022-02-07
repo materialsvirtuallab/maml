@@ -2,16 +2,15 @@
 Module implements the perturbation class for atomic and lattice relaxation.
 """
 import os
-from typing import Union, List
+from typing import List, Union
 
 import numpy as np
 from monty.serialization import loadfn
 from pymatgen.core.operations import SymmOp
-from pymatgen.core.sites import Site, PeriodicSite
-from pymatgen.core.structure import Structure, Lattice
+from pymatgen.core.sites import PeriodicSite, Site
+from pymatgen.core.structure import Lattice, Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.symmetry.groups import SpaceGroup, in_array_list
-
 
 module_dir = os.path.dirname(__file__)
 

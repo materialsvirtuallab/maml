@@ -1,16 +1,18 @@
 """
 neural network models
 """
-import os
-import math
 import json
-from typing import Optional, Sequence, Union, List, Any
+import math
+import os
+from typing import Any, List, Optional, Sequence, Union
 
 import joblib
 import numpy as np
 
-from maml.base import KerasModel, BaseDescriber, BaseModel
-from ._keras_utils import deserialize_keras_activation, deserialize_keras_optimizer
+from maml.base import BaseDescriber, BaseModel, KerasModel
+
+from ._keras_utils import (deserialize_keras_activation,
+                           deserialize_keras_optimizer)
 
 
 def construct_atom_sets(
@@ -51,7 +53,7 @@ def construct_atom_sets(
         compile_metrics (tuple): metrics for validation
         symmetry_func_kwargs (dict): kwargs for symmetry function
     """
-    from tensorflow.keras.layers import Input, Dense, Embedding, Concatenate
+    from tensorflow.keras.layers import Concatenate, Dense, Embedding, Input
     from tensorflow.keras.models import Model
 
     if is_embedding and input_dim is not None:

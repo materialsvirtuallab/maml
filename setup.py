@@ -1,7 +1,7 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 long_desc = """
 maml (MAterials Machine Learning) is a Python package that aims to provide useful high-level interfaces that make ML

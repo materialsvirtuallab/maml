@@ -1,7 +1,7 @@
 """
 Module implements the new candidate proposal.
 """
-from typing import Union, List, Tuple, Any
+from typing import Any, List, Tuple, Union
 
 import numpy as np
 from numpy.random import RandomState
@@ -9,7 +9,6 @@ from scipy.linalg import solve_triangular
 from scipy.optimize import minimize
 from scipy.special import erfc
 from sklearn.gaussian_process import GaussianProcessRegressor
-
 
 EPS = np.finfo(float).eps
 

@@ -8,7 +8,7 @@ import shutil
 import tempfile
 import warnings
 from pathlib import Path
-from typing import Any, Union, List, Optional
+from typing import Any, List, Optional, Union
 
 from monty.shutil import copy_r, remove
 

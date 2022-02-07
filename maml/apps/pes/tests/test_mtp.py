@@ -2,14 +2,15 @@
 # Distributed under the terms of the BSD License.
 
 import os
-import unittest
-import tempfile
 import shutil
+import tempfile
+import unittest
 
 import numpy as np
 from monty.os.path import which
 from monty.serialization import loadfn
 from pymatgen.core import Structure
+
 from maml.apps.pes import MTPotential
 
 CWD = os.getcwd()

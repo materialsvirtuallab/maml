@@ -1,7 +1,7 @@
 """
 Module implemets the target space.
 """
-from typing import Union, Dict, List, Callable
+from typing import Callable, Dict, List, Union
 
 import numpy as np
 from numpy.random import RandomState
@@ -9,7 +9,7 @@ from pymatgen.core.periodic_table import _pt_data as pt_data
 
 from maml.apps.bowsr.acquisition import lhs_sample
 from maml.apps.bowsr.perturbation import WyckoffPerturbation
-from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 
 
 def _hashable(x):

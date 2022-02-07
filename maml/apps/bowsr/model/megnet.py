@@ -13,9 +13,9 @@ from maml.apps.bowsr.model.base import EnergyModel
 
 try:
     import megnet
-    from megnet.models import MEGNetModel
     from megnet.data.crystal import CrystalGraph
     from megnet.data.graph import GaussianDistance
+    from megnet.models import MEGNetModel
 except Exception as error:
     megnet = None
     MEGNetModel = None

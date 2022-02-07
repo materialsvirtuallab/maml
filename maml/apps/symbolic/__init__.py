@@ -8,15 +8,16 @@ except ImportError:
 
 from ._feature_generator import FeatureGenerator, Operator  # noqa
 from ._selectors import SCAD  # noqa
-from ._selectors import SCAD, L0BrutalForce  # noqa
-from ._sis import SIS, ISIS  # noqa
+from ._selectors import L0BrutalForce  # noqa
+from ._sis import ISIS, SIS  # noqa
 
 if cp is None:
-    from ._selectors import DantzigSelector, AdaptiveLasso, Lasso  # noqa  # noqa
+    from ._selectors import (AdaptiveLasso, DantzigSelector,  # noqa  # noqa
+                             Lasso)
 else:
     # import from cvxpy alternatives
-    from ._selectors_cvxpy import DantzigSelectorCP as DantzigSelector  # noqa
     from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso  # noqa
+    from ._selectors_cvxpy import DantzigSelectorCP as DantzigSelector  # noqa
     from ._selectors_cvxpy import LassoCP as Lasso  # noqa
 
 __all__ = [

@@ -1,16 +1,13 @@
 import unittest
 
-from pymatgen.core import Structure, Lattice
-from pymatgen.io.lammps.data import LammpsData
-from monty.tempfile import ScratchDir
 import numpy as np
+from monty.tempfile import ScratchDir
+from pymatgen.core import Lattice, Structure
+from pymatgen.io.lammps.data import LammpsData
 
-from maml.utils._lammps import (
-    stress_format_change,
-    stress_list_to_matrix,
-    check_structures_forces_stresses,
-    write_data_from_structure,
-)
+from maml.utils._lammps import (check_structures_forces_stresses,
+                                stress_format_change, stress_list_to_matrix,
+                                write_data_from_structure)
 
 
 class TestLAMMPS(unittest.TestCase):

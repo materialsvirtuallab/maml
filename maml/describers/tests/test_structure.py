@@ -1,17 +1,14 @@
 import unittest
 
-import pandas as pd
 import numpy as np
-from pymatgen.core import Structure, Element, Lattice
+import pandas as pd
+from pymatgen.core import Element, Lattice, Structure
 from pymatgen.util.testing import PymatgenTest
 
-from maml.describers._structure import (
-    DistinctSiteProperty,
-    CoulombMatrix,
-    SortedCoulombMatrix,
-    RandomizedCoulombMatrix,
-    CoulombEigenSpectrum,
-)
+from maml.describers._structure import (CoulombEigenSpectrum, CoulombMatrix,
+                                        DistinctSiteProperty,
+                                        RandomizedCoulombMatrix,
+                                        SortedCoulombMatrix)
 
 
 class DistinctSitePropertyTest(PymatgenTest):

@@ -2,30 +2,22 @@
 # Distributed under the terms of the BSD License.
 
 
-import unittest
-import tempfile
-import os
 import json
+import os
 import shutil
+import tempfile
+import unittest
 
 import numpy as np
 from monty.os.path import which
-from pymatgen.core import Structure, Lattice
+from pymatgen.core import Lattice, Structure
 from sklearn.linear_model import LinearRegression
 
+from maml.apps.pes import (DefectFormation, ElasticConstant, EnergyForceStress,
+                           LatticeConstant, NudgedElasticBand, SNAPotential,
+                           SpectralNeighborAnalysis, get_default_lmp_exe)
 from maml.base import SKLModel
-from maml.apps.pes import SNAPotential
 from maml.describers import BispectrumCoefficients
-from maml.apps.pes import (
-    SpectralNeighborAnalysis,
-    EnergyForceStress,
-    ElasticConstant,
-    LatticeConstant,
-    NudgedElasticBand,
-    DefectFormation,
-)
-from maml.apps.pes import get_default_lmp_exe
-
 
 CWD = os.getcwd()
 with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), "coeff.json")) as f:

@@ -4,21 +4,13 @@ numeric vectors or tensors.
 """
 
 from ._composition import ElementProperty, ElementStats  # noqa
-from ._site import (
-    BispectrumCoefficients,
-    SmoothOverlapAtomicPosition,  # noqa
-    BPSymmetryFunctions,
-    MEGNetSite,
-    SiteElementProperty,
-)  # noqa
-from ._structure import (
-    DistinctSiteProperty,
-    CoulombMatrix,
-    SortedCoulombMatrix,  # noqa
-    RandomizedCoulombMatrix,
-    MEGNetStructure,
-    CoulombEigenSpectrum,
-)  # noqa
+from ._site import SmoothOverlapAtomicPosition  # noqa
+from ._site import (BispectrumCoefficients, BPSymmetryFunctions,  # noqa
+                    MEGNetSite, SiteElementProperty)
+from ._structure import SortedCoulombMatrix  # noqa
+from ._structure import (CoulombEigenSpectrum, CoulombMatrix,  # noqa
+                         DistinctSiteProperty, MEGNetStructure,
+                         RandomizedCoulombMatrix)
 
 __all__ = [
     "BispectrumCoefficients",

@@ -4,7 +4,8 @@ import unittest
 from pymatgen.util.testing import PymatgenTest
 
 import maml.apps.gbe as gbe
-from maml.apps.gbe.utils import pjoin, load_data, load_b0_dict, load_mean_delta_bl_dict
+from maml.apps.gbe.utils import (load_b0_dict, load_data,
+                                 load_mean_delta_bl_dict, pjoin)
 
 module_dir = os.path.dirname(gbe.__file__)
 REFS = pjoin(module_dir, "references")

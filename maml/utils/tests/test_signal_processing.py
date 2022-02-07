@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from scipy import signal
 
-from maml.utils import get_sp_method, fft_magnitude, cwt, spectrogram, wvd
+from maml.utils import cwt, fft_magnitude, get_sp_method, spectrogram, wvd
 
 CWD = os.path.join(os.path.dirname(__file__))
 

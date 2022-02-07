@@ -1,38 +1,27 @@
 """
 Module implements the describer for GB entry
 """
-from typing import Dict
 from functools import reduce
 from math import gcd
+from typing import Dict
+
 import numpy as np
 import pandas as pd
-
-from pymatgen.ext.matproj import MPRester, MPRestError
-from pymatgen.core import Element, Structure
-from pymatgen.analysis.local_env import (
-    NearNeighbors,
-    VoronoiNN,
-    JmolNN,
-    MinimumDistanceNN,
-    OpenBabelNN,
-    CovalentBondNN,
-    MinimumVIRENN,
-    MinimumOKeeffeNN,
-    BrunnerNN_reciprocal,
-    BrunnerNN_real,
-    BrunnerNN_relative,
-    EconNN,
-    CrystalNN,
-    CutOffDictNN,
-    Critic2NN,
-)
-from pymatgen.analysis.gb.grain import GrainBoundary
-from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from monty.json import MSONable
+from pymatgen.analysis.gb.grain import GrainBoundary
+from pymatgen.analysis.local_env import (BrunnerNN_real, BrunnerNN_reciprocal,
+                                         BrunnerNN_relative, CovalentBondNN,
+                                         Critic2NN, CrystalNN, CutOffDictNN,
+                                         EconNN, JmolNN, MinimumDistanceNN,
+                                         MinimumOKeeffeNN, MinimumVIRENN,
+                                         NearNeighbors, OpenBabelNN, VoronoiNN)
+from pymatgen.core import Element, Structure
+from pymatgen.ext.matproj import MPRester, MPRestError
+from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
-from maml.base import BaseDescriber
-from maml.apps.gbe.utils import load_mean_delta_bl_dict, load_b0_dict
 import maml.apps.gbe.presetfeatures as preset
+from maml.apps.gbe.utils import load_b0_dict, load_mean_delta_bl_dict
+from maml.base import BaseDescriber
 
 
 def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
@@ -196,7 +185,7 @@ def get_structural_feature(db_entry: Dict, features: list = None) -> pd.DataFram
         elif f == preset.cos_theta:
             fvalues.append(np.cos(theta * np.pi / 180))
         else:
-            fvalues.append(locals()["{}".format(f.str_name)])
+            fvalues.append(locals()[f"{f.str_name}"])
     return pd.DataFrame([fvalues], columns=[f.str_name for f in features])
 
 
