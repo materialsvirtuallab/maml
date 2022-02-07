@@ -3,8 +3,10 @@ Tests for preprocessing
 """
 
 import unittest
-from maml.utils import StandardScaler, DummyScaler
-from pymatgen.core import Structure, Lattice
+
+from pymatgen.core import Lattice, Structure
+
+from maml.utils import DummyScaler, StandardScaler
 
 
 class TestPreprocessing(unittest.TestCase):

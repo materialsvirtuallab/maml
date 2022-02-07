@@ -3,17 +3,16 @@ Compositional describers
 """
 import json
 import os
-from typing import Dict, List, Union, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
+from pymatgen.core import Composition, Element, Species, Structure
 from sklearn.decomposition import PCA, KernelPCA
-from pymatgen.core import Composition, Structure, Element, Species
 
 from maml.base import BaseDescriber, describer_type
-from maml.utils import Stats, get_full_stats_and_funcs
-from maml.utils import to_composition
 from maml.describers.matminer_wrapper import wrap_matminer_describer
+from maml.utils import Stats, get_full_stats_and_funcs, to_composition
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 

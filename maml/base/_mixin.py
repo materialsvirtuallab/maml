@@ -1,9 +1,11 @@
 """Model mixins"""
 
-from typing import Union, Optional, List
+from typing import List, Optional, Union
 
 import numpy as np
+
 from maml.utils import DummyScaler
+
 from ._model import BaseModel
 
 

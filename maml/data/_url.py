@@ -3,9 +3,8 @@ Get data from url
 """
 from io import StringIO
 
-import requests
-
 import pandas as pd
+import requests
 
 from maml.base import BaseDataSource
 

@@ -1,13 +1,12 @@
-import unittest
 import os
+import unittest
 
 import numpy as np
 import pandas as pd
 from pymatgen.util.testing import PymatgenTest
 
-from maml.apps.symbolic import SIS, ISIS, L0BrutalForce
-from maml.apps.symbolic._sis import _get_coeff, _best_combination
-
+from maml.apps.symbolic import ISIS, SIS, L0BrutalForce
+from maml.apps.symbolic._sis import _best_combination, _get_coeff
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 

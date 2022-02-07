@@ -4,10 +4,11 @@
 import os
 import shutil
 import tempfile
-
 import unittest
+
 import numpy as np
 from monty.serialization import loadfn
+
 from maml.utils._data_conversion import convert_docs, pool_from
 
 CWD = os.getcwd()

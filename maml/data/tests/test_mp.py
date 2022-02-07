@@ -1,7 +1,7 @@
 import unittest
 
-from pymatgen.util.testing import PymatgenTest
 from pymatgen.core import SETTINGS
+from pymatgen.util.testing import PymatgenTest
 
 from maml.data._mp import MaterialsProject
 

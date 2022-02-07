@@ -3,9 +3,10 @@ Module implements helper functions to retrieve data for GB energy prediction pap
 """
 import os
 from typing import Dict, List, Optional
+
 from monty.serialization import dumpfn, loadfn
-from pymatgen.ext.matproj import MPRester, MPRestError
 from pymatgen.core import Structure
+from pymatgen.ext.matproj import MPRester, MPRestError
 
 from maml.apps import gbe
 

@@ -3,7 +3,7 @@ Materials utils
 """
 from typing import Union
 
-from pymatgen.core import Composition, Structure, Molecule
+from pymatgen.core import Composition, Molecule, Structure
 
 
 def to_composition(obj: Union[Composition, Molecule, Structure, str]) -> Composition:

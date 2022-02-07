@@ -2,10 +2,10 @@
 MEGNet-based describers
 """
 from pathlib import Path
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
 import pandas as pd
-from pymatgen.core import Structure, Molecule
+from pymatgen.core import Molecule, Structure
 
 from maml.base import BaseDescriber, describer_type
 from maml.utils import get_full_stats_and_funcs
@@ -15,8 +15,8 @@ DEFAULT_MODEL = Path(__file__).parent / "../data/megnet_models/formation_energy.
 
 def _load_model(name: Optional[Union[str, object]] = None):
     try:
-        from megnet.utils.models import MODEL_MAPPING, load_model
         from megnet.utils.descriptor import MEGNetDescriptor
+        from megnet.utils.models import MODEL_MAPPING, load_model
     except ImportError:
         raise MEGNetNotFound
 

@@ -4,7 +4,7 @@ Feature Generator
 import warnings
 from functools import partial
 from itertools import combinations_with_replacement
-from typing import Optional, Callable, Any, Union, Dict
+from typing import Any, Callable, Dict, Optional, Union
 
 import numpy as np
 import pandas as pd

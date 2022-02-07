@@ -1,9 +1,10 @@
-from glob import glob
 import os
 import unittest
+from glob import glob
+
+from monty.tempfile import ScratchDir
 
 from maml.utils._tempfile import MultiScratchDir
-from monty.tempfile import ScratchDir
 
 
 class TestMultiScratchDir(unittest.TestCase):

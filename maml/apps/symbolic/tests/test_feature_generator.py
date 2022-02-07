@@ -1,28 +1,30 @@
 import unittest
 import warnings
 from functools import partial
-import pandas as pd
-import numpy as np
 
+import numpy as np
+import pandas as pd
 from pymatgen.util.testing import PymatgenTest
 
 from maml.apps.symbolic import FeatureGenerator, Operator
-from maml.apps.symbolic._feature_generator import _update_df, generate_feature, operation_dict
 from maml.apps.symbolic._feature_generator import (
-    _my_power,
+    _my_abs_diff,
     _my_abs_sqrt,
+    _my_abs_sum,
+    _my_diff,
+    _my_div,
     _my_exp,
     _my_exp_power_2,
     _my_exp_power_3,
-    _my_sum,
-    _my_abs_sum,
     _my_mul,
-    _my_diff,
-    _my_abs_diff,
-    _my_div,
+    _my_power,
+    _my_sum,
+    _my_sum_exp,
     _my_sum_power_2,
     _my_sum_power_3,
-    _my_sum_exp,
+    _update_df,
+    generate_feature,
+    operation_dict,
 )
 
 pow2 = Operator.from_str("^2")

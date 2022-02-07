@@ -13,7 +13,7 @@ import subprocess
 import numpy as np
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-from pymatgen.core import Structure, Lattice, Element
+from pymatgen.core import Element, Lattice, Structure
 from pymatgen.io.lammps.data import LammpsData
 
 from maml.apps.pes._base import Potential

@@ -3,11 +3,11 @@ Radial distribution functions for site features.
 This was originally written in pymatgen-diffusion
 """
 from math import ceil
-from typing import List, Tuple, Optional, Dict
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
-from scipy.ndimage import gaussian_filter1d
 from pymatgen.core import Structure
+from scipy.ndimage import gaussian_filter1d
 
 
 class RadialDistributionFunction:

@@ -3,7 +3,7 @@ Multi-layer perceptron models
 """
 from typing import Optional
 
-from maml.base import KerasModel, BaseDescriber
+from maml.base import BaseDescriber, KerasModel
 
 
 def construct_mlp(
@@ -29,7 +29,7 @@ def construct_mlp(
         loss (str): loss function
         compile_metrics (tuple): metrics to evaluate during epochs
     """
-    from tensorflow.keras.layers import Input, Dense
+    from tensorflow.keras.layers import Dense, Input
     from tensorflow.keras.models import Model
 
     inp = Input(shape=(input_dim,))
