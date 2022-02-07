@@ -9,13 +9,13 @@ from ._lammps import DefectFormation  # noqa
 from ._lammps import ElasticConstant  # noqa
 from ._lammps import EnergyForceStress  # noqa
 from ._lammps import get_default_lmp_exe  # noqa
-from ._lammps import (
-    LatticeConstant,
+from ._lammps import (  # noqa
+    LatticeConstant,  # noqa
     LMPRelaxationCalculator,  # noqa
-    LMPStaticCalculator,
-    NudgedElasticBand,
-    SpectralNeighborAnalysis,
-    SurfaceEnergy,
+    LMPStaticCalculator,  # noqa
+    NudgedElasticBand,  # noqa
+    SpectralNeighborAnalysis,  # noqa
+    SurfaceEnergy,  # noqa
 )
 from ._mtp import MTPotential  # noqa
 from ._nnp import NNPotential  # noqa
