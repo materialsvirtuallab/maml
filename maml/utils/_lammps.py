@@ -2,10 +2,10 @@
 LAMMPS utility
 """
 import logging
-from typing import List, Optional, Union, Tuple
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
-from pymatgen.core import Structure, Element, Species, Lattice
+from pymatgen.core import Element, Lattice, Species, Structure
 from pymatgen.core.operations import SymmOp
 
 logging.basicConfig()

@@ -1,12 +1,14 @@
-import numpy as np
 import unittest
+
+import numpy as np
 from scipy.special import erfc
 from scipy.stats import norm
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Matern, RationalQuadratic
 
-from maml.apps.bowsr.acquisition import ensure_rng, propose_query_point, AcquisitionFunction, predict_mean_std
-from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+from maml.apps.bowsr.acquisition import (AcquisitionFunction, ensure_rng,
+                                         predict_mean_std, propose_query_point)
+from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 
 
 class AcquisitionFunctionTest(unittest.TestCase):

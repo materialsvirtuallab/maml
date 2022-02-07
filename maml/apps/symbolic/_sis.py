@@ -6,7 +6,7 @@ https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
 """
 import logging
 from itertools import combinations
-from typing import Optional, Dict, List
+from typing import Dict, List, Optional
 
 import numpy as np
 from sklearn.linear_model import LinearRegression

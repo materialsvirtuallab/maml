@@ -4,8 +4,8 @@ Data split
 from typing import Optional, Tuple
 
 import numpy as np
-from sklearn.utils import shuffle
 from monty.json import MSONable
+from sklearn.utils import shuffle
 
 
 class DataSplitter(MSONable):

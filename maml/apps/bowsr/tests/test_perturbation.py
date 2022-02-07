@@ -1,16 +1,14 @@
-import numpy as np
 import os
 import unittest
+
+import numpy as np
 from pymatgen.core.operations import SymmOp
 from pymatgen.core.structure import Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
-from maml.apps.bowsr.perturbation import (
-    get_standardized_structure,
-    WyckoffPerturbation,
-    LatticePerturbation,
-    crystal_system,
-)
+from maml.apps.bowsr.perturbation import (LatticePerturbation,
+                                          WyckoffPerturbation, crystal_system,
+                                          get_standardized_structure)
 
 test_lfpo = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_structures", "test_lfpo.cif"))
 test_lco = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_structures", "test_lco.cif"))

@@ -1,15 +1,16 @@
-import numpy as np
 import os
 import unittest
+
+import numpy as np
 from pymatgen.analysis.structure_matcher import StructureMatcher
-from pymatgen.core import Structure, Lattice
+from pymatgen.core import Lattice, Structure
 from sklearn.gaussian_process.kernels import Matern, RationalQuadratic
 
 from maml.apps.bowsr.acquisition import AcquisitionFunction
 from maml.apps.bowsr.model.megnet import MEGNet, megnet
 from maml.apps.bowsr.optimizer import BayesianOptimizer, struct2perturbation
 from maml.apps.bowsr.perturbation import get_standardized_structure
-from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 
 test_lfpo = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_structures", "test_lfpo.cif"))
 test_lco = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_structures", "test_lco.cif"))

@@ -1,7 +1,8 @@
 import unittest
 
-from maml.base import SKLModel, KerasModel, is_sklearn_model, is_keras_model
 from monty.tempfile import ScratchDir
+
+from maml.base import KerasModel, SKLModel, is_keras_model, is_sklearn_model
 
 
 class TestBaseModel(unittest.TestCase):
@@ -27,8 +28,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertFalse(is_keras_model(model))
 
     def test_keras_model(self):
-        import tensorflow as tf
         import numpy as np
+        import tensorflow as tf
 
         model = KerasModel(model=tf.keras.Sequential([tf.keras.layers.Dense(1, input_dim=2)]))
         model.model.compile("adam", "mse")

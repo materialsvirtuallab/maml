@@ -1,6 +1,7 @@
-import numpy as np
 import os
 import unittest
+
+import numpy as np
 from pymatgen.core import Structure
 from pymatgen.util.testing import PymatgenTest
 

@@ -1,7 +1,7 @@
 """
 Module implements the scaler.
 """
-from typing import Union, List
+from typing import List, Union
 
 import numpy as np
 from monty.json import MSONable

@@ -3,9 +3,10 @@ Module implements helper functions to retrieve data for GB energy prediction pap
 """
 import os
 from typing import Dict, List, Optional
+
 from monty.serialization import dumpfn, loadfn
-from pymatgen.ext.matproj import MPRester, MPRestError
 from pymatgen.core import Structure
+from pymatgen.ext.matproj import MPRester, MPRestError
 
 from maml.apps import gbe
 
@@ -87,8 +88,8 @@ def load_mean_delta_bl_dict(loc_algo: str = "crystalnn") -> Dict:
         {task_id (int): mean_delta_bl(float)}
 
     """
-    if os.path.isfile(pjoin(REFS, "mean_bl_chg_{}.json".format(loc_algo))):
-        return loadfn(pjoin(REFS, "mean_bl_chg_{}.json".format(loc_algo)))
+    if os.path.isfile(pjoin(REFS, f"mean_bl_chg_{loc_algo}.json")):
+        return loadfn(pjoin(REFS, f"mean_bl_chg_{loc_algo}.json"))
     raise ValueError(
         "Please provide mean_delta_bond_length data. "
         "Use gbe.describer.GBond.get_mean_bl_chg method"

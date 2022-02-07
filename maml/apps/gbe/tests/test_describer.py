@@ -1,33 +1,19 @@
 import os
 import unittest
+
 import numpy as np
 from pymatgen.core import Structure
 from pymatgen.util.testing import PymatgenTest
+
 import maml.apps.gbe as gbe
-from maml.apps.gbe.utils import load_data, load_b0_dict
-from maml.apps.gbe.describer import (
-    GBDescriber,
-    GBBond,
-    get_structural_feature,
-    get_elemental_feature,
-    convert_hcp_direction,
-    convert_hcp_plane,
-)
-from maml.apps.gbe.presetfeatures import (
-    e_coh,
-    G,
-    a0,
-    ar,
-    mean_delta_bl,
-    hb,
-    CLTE,
-    bdensity,
-    d_gb,
-    d_rot,
-    sin_theta,
-    cos_theta,
-    e_gb,
-)
+from maml.apps.gbe.describer import (GBBond, GBDescriber,
+                                     convert_hcp_direction, convert_hcp_plane,
+                                     get_elemental_feature,
+                                     get_structural_feature)
+from maml.apps.gbe.presetfeatures import (CLTE, G, a0, ar, bdensity, cos_theta,
+                                          d_gb, d_rot, e_coh, e_gb, hb,
+                                          mean_delta_bl, sin_theta)
+from maml.apps.gbe.utils import load_b0_dict, load_data
 
 pjoin = os.path.join
 module_dir = os.path.dirname(gbe.__file__)

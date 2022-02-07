@@ -1,8 +1,8 @@
 """CGCNN Wrapper."""
 import argparse
 import os
-from typing import Dict, List, Tuple, Any
 import warnings
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 from monty.dev import requires
@@ -10,13 +10,12 @@ from pymatgen.core.structure import Structure
 
 from maml.apps.bowsr.model.base import EnergyModel
 
-
 try:
-    import torch
     import cgcnn
-    from torch import Tensor
+    import torch
+    from cgcnn.data import AtomCustomJSONInitializer, GaussianDistance
     from cgcnn.model import CrystalGraphConvNet
-    from cgcnn.data import GaussianDistance, AtomCustomJSONInitializer
+    from torch import Tensor
 except ImportError as error:
     torch = None  # type: ignore
     cgcnn = None  # type: ignore

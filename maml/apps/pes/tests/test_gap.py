@@ -3,13 +3,14 @@
 
 import os
 import shutil
-import unittest
 import tempfile
+import unittest
 
 import numpy as np
-from pymatgen.core import Structure
 from monty.os.path import which
 from monty.serialization import loadfn
+from pymatgen.core import Structure
+
 from maml.apps.pes import GAPotential
 
 CWD = os.getcwd()

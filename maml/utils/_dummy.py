@@ -1,7 +1,7 @@
 """
 Dummy test systems
 """
-from pymatgen.core import Composition, Structure, Lattice, Molecule
+from pymatgen.core import Composition, Lattice, Molecule, Structure
 
 from ._data_conversion import to_array
 from ._inspect import get_param_types

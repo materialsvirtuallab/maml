@@ -2,12 +2,11 @@
 This module implements more robust optmization
 using the cvxpy package
 """
-from typing import Optional, List, Dict, Union
+from typing import Dict, List, Optional, Union
 
 import numpy as np
-from scipy.linalg import lstsq
-
 from monty.dev import requires
+from scipy.linalg import lstsq
 
 from maml.apps.symbolic._selectors import BaseSelector
 

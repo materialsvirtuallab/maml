@@ -1,12 +1,11 @@
-import unittest
 import os
+import unittest
 
 import numpy as np
-from pymatgen.util.testing import PymatgenTest
 from pymatgen.core import Composition, Molecule
+from pymatgen.util.testing import PymatgenTest
 
-from maml.describers import ElementStats, ElementProperty
-
+from maml.describers import ElementProperty, ElementStats
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 

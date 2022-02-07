@@ -2,7 +2,7 @@ import unittest
 
 from pymatgen.util.testing import PymatgenTest
 
-from maml.data._url import URLSource, FigshareSource
+from maml.data._url import FigshareSource, URLSource
 
 
 class URLSourceTest(PymatgenTest):

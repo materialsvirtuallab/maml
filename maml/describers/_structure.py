@@ -6,7 +6,7 @@ from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
-from pymatgen.core import Structure, Molecule
+from pymatgen.core import Molecule, Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from maml.base import BaseDescriber, describer_type

@@ -1,13 +1,10 @@
 """Signal processing utils"""
 from math import ceil, floor
-from typing import Union, Tuple, Callable
+from typing import Callable, Tuple, Union
 
 import numpy as np
-
-from scipy import fft
-from scipy import signal
-
 from monty.dev import requires
+from scipy import fft, signal
 
 try:
     import tftb

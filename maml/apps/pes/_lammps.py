@@ -13,11 +13,12 @@ import subprocess
 import numpy as np
 from monty.os.path import which
 from monty.tempfile import ScratchDir
-from pymatgen.core import Structure, Lattice, Element
+from pymatgen.core import Element, Lattice, Structure
 from pymatgen.io.lammps.data import LammpsData
 
 from maml.apps.pes._base import Potential
-from maml.utils import get_lammps_lattice_and_rotation, stress_list_to_matrix, stress_matrix_to_list
+from maml.utils import (get_lammps_lattice_and_rotation, stress_list_to_matrix,
+                        stress_matrix_to_list)
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

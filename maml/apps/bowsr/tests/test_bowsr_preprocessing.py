@@ -1,7 +1,8 @@
-import numpy as np
 import unittest
 
-from maml.apps.bowsr.preprocessing import StandardScaler, DummyScaler
+import numpy as np
+
+from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 
 
 class ScalerTest(unittest.TestCase):

@@ -3,11 +3,11 @@ Radial distribution functions for site features.
 This was originally written in pymatgen-diffusion
 """
 from math import ceil
-from typing import List, Tuple, Optional, Dict
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
-from scipy.ndimage import gaussian_filter1d
 from pymatgen.core import Structure
+from scipy.ndimage import gaussian_filter1d
 
 
 class RadialDistributionFunction:
@@ -161,8 +161,8 @@ class RadialDistributionFunction:
 
         density = self._get_specie_density(structure)
         n_atoms = structure.composition.to_data_dict["unit_cell_composition"]
-        total_density = sum([density[i] for i in species])
-        total_atoms = sum([n_atoms[i] for i in ref_species])
+        total_density = sum(density[i] for i in species)
+        total_atoms = sum(n_atoms[i] for i in ref_species)
         return self.r, np.cumsum(rdf * total_density * 4.0 * np.pi * self.r**2 * self.dr * total_atoms)
 
     @staticmethod

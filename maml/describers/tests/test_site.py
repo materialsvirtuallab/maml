@@ -1,18 +1,15 @@
+import itertools
 import os
 import tempfile
 import unittest
-import itertools
 
 import numpy as np
 from monty.os.path import which
 from pymatgen.core import Lattice, Structure
 
-from maml.describers._site import (
-    BispectrumCoefficients,
-    SmoothOverlapAtomicPosition,
-    BPSymmetryFunctions,
-    SiteElementProperty,
-)
+from maml.describers._site import (BispectrumCoefficients, BPSymmetryFunctions,
+                                   SiteElementProperty,
+                                   SmoothOverlapAtomicPosition)
 
 
 class BispectrumCoefficientsTest(unittest.TestCase):

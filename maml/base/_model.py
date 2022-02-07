@@ -1,12 +1,12 @@
 """
 MAML models base classes
 """
-from typing import Any, Union, List, Optional, Callable
+from typing import Any, Callable, List, Optional, Union
 
 import joblib
 import numpy as np
 
-from maml.base import DummyDescriber, BaseDescriber
+from maml.base import BaseDescriber, DummyDescriber
 from maml.utils import get_full_args, to_array
 
 
