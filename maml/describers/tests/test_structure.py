@@ -5,13 +5,10 @@ import pandas as pd
 from pymatgen.core import Element, Lattice, Structure
 from pymatgen.util.testing import PymatgenTest
 
-from maml.describers._structure import (
-    CoulombEigenSpectrum,
-    CoulombMatrix,
-    DistinctSiteProperty,
-    RandomizedCoulombMatrix,
-    SortedCoulombMatrix,
-)
+from maml.describers._structure import (CoulombEigenSpectrum, CoulombMatrix,
+                                        DistinctSiteProperty,
+                                        RandomizedCoulombMatrix,
+                                        SortedCoulombMatrix)
 
 
 class DistinctSitePropertyTest(PymatgenTest):

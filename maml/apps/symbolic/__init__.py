@@ -12,7 +12,8 @@ from ._selectors import L0BrutalForce  # noqa
 from ._sis import ISIS, SIS  # noqa
 
 if cp is None:
-    from ._selectors import AdaptiveLasso, DantzigSelector, Lasso  # noqa  # noqa
+    from ._selectors import (AdaptiveLasso, DantzigSelector,  # noqa  # noqa
+                             Lasso)
 else:
     # import from cvxpy alternatives
     from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso  # noqa
