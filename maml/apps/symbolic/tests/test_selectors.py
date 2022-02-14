@@ -10,12 +10,16 @@ from pymatgen.util.testing import PymatgenTest
 try:
     import cvxpy as cp
 
-    from maml.apps.symbolic._selectors_cvxpy import AdaptiveLassoCP, DantzigSelectorCP, LassoCP, cp
+    from maml.apps.symbolic._selectors_cvxpy import (AdaptiveLassoCP,
+                                                     DantzigSelectorCP,
+                                                     LassoCP, cp)
 
 except ImportError:
     cp = None  # noqa
 
-from maml.apps.symbolic._selectors import SCAD, AdaptiveLasso, DantzigSelector, L0BrutalForce, Lasso
+from maml.apps.symbolic._selectors import (SCAD, AdaptiveLasso,
+                                           DantzigSelector, L0BrutalForce,
+                                           Lasso)
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
