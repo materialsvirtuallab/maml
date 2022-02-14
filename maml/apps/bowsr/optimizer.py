@@ -13,9 +13,12 @@ from sklearn.base import clone
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RationalQuadratic
 
-from maml.apps.bowsr.acquisition import AcquisitionFunction, ensure_rng, propose_query_point
+from maml.apps.bowsr.acquisition import (AcquisitionFunction, ensure_rng,
+                                         propose_query_point)
 from maml.apps.bowsr.model import EnergyModel
-from maml.apps.bowsr.perturbation import LatticePerturbation, WyckoffPerturbation, get_standardized_structure
+from maml.apps.bowsr.perturbation import (LatticePerturbation,
+                                          WyckoffPerturbation,
+                                          get_standardized_structure)
 from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 from maml.apps.bowsr.target_space import TargetSpace
 

@@ -8,15 +8,13 @@ from ._gap import GAPotential  # noqa
 from ._lammps import DefectFormation  # noqa
 from ._lammps import ElasticConstant  # noqa
 from ._lammps import EnergyForceStress  # noqa
-from ._lammps import get_default_lmp_exe  # noqa
-from ._lammps import (  # noqa
-    LatticeConstant,  # noqa
-    LMPRelaxationCalculator,  # noqa
-    LMPStaticCalculator,  # noqa
-    NudgedElasticBand,  # noqa
-    SpectralNeighborAnalysis,  # noqa
-    SurfaceEnergy,  # noqa
-)
+from ._lammps import LatticeConstant  # noqa
+from ._lammps import LMPRelaxationCalculator  # noqa
+from ._lammps import LMPStaticCalculator  # noqa
+from ._lammps import NudgedElasticBand  # noqa
+from ._lammps import SpectralNeighborAnalysis  # noqa
+from ._lammps import SurfaceEnergy  # noqa
+from ._lammps import get_default_lmp_exe  # noqa; noqa
 from ._mtp import MTPotential  # noqa
 from ._nnp import NNPotential  # noqa
 from ._snap import SNAPotential  # noqa
