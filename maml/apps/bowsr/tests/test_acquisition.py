@@ -6,8 +6,7 @@ from scipy.stats import norm
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import Matern, RationalQuadratic
 
-from maml.apps.bowsr.acquisition import (AcquisitionFunction, ensure_rng,
-                                         predict_mean_std, propose_query_point)
+from maml.apps.bowsr.acquisition import AcquisitionFunction, ensure_rng, predict_mean_std, propose_query_point
 from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 
 

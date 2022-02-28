@@ -11,8 +11,7 @@ import numpy as np
 
 from maml.base import BaseDescriber, BaseModel, KerasModel
 
-from ._keras_utils import (deserialize_keras_activation,
-                           deserialize_keras_optimizer)
+from ._keras_utils import deserialize_keras_activation, deserialize_keras_optimizer
 
 
 def construct_atom_sets(

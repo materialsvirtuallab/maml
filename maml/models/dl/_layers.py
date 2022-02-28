@@ -3,8 +3,7 @@ from typing import Optional, Sequence
 
 import tensorflow as tf
 import tensorflow.keras.backend as kb
-from tensorflow.keras import (activations, constraints, initializers,
-                              regularizers)
+from tensorflow.keras import activations, constraints, initializers, regularizers
 from tensorflow.keras.layers import Layer
 
 

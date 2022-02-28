@@ -18,8 +18,7 @@ from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.core import Lattice, Structure
 
-from maml.utils import (check_structures_forces_stresses, convert_docs,
-                        pool_from)
+from maml.utils import check_structures_forces_stresses, convert_docs, pool_from
 
 from ._lammps import LammpsPotential
 

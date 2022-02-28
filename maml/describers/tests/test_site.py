@@ -7,9 +7,12 @@ import numpy as np
 from monty.os.path import which
 from pymatgen.core import Lattice, Structure
 
-from maml.describers._site import (BispectrumCoefficients, BPSymmetryFunctions,
-                                   SiteElementProperty,
-                                   SmoothOverlapAtomicPosition)
+from maml.describers._site import (
+    BispectrumCoefficients,
+    BPSymmetryFunctions,
+    SiteElementProperty,
+    SmoothOverlapAtomicPosition,
+)
 
 
 class BispectrumCoefficientsTest(unittest.TestCase):
