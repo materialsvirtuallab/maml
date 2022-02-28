@@ -88,8 +88,8 @@ def load_mean_delta_bl_dict(loc_algo: str = "crystalnn") -> Dict:
         {task_id (int): mean_delta_bl(float)}
 
     """
-    if os.path.isfile(pjoin(REFS, "mean_bl_chg_{}.json".format(loc_algo))):
-        return loadfn(pjoin(REFS, "mean_bl_chg_{}.json".format(loc_algo)))
+    if os.path.isfile(pjoin(REFS, f"mean_bl_chg_{loc_algo}.json")):
+        return loadfn(pjoin(REFS, f"mean_bl_chg_{loc_algo}.json"))
     raise ValueError(
         "Please provide mean_delta_bond_length data. "
         "Use gbe.describer.GBond.get_mean_bl_chg method"
