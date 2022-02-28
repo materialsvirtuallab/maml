@@ -4,5 +4,3 @@ Title: Multi-scale Investigation of Chemical Short-Range Order and Dislocation G
 Authors: Hui Zheng, Lauren T.W. Fey, Xiang-Guo Li, Yong-Jie Hu, Liang Qi, Chi Chen, Shuozhi Xu, Irene J. Beyerlein,  Shyue Ping Ong
 
 The element type order from 1 to 4 are Ta, Ti, Nb, and Mo.
-
-
