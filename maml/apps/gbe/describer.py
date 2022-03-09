@@ -9,23 +9,12 @@ import numpy as np
 import pandas as pd
 from monty.json import MSONable
 from pymatgen.analysis.gb.grain import GrainBoundary
-from pymatgen.analysis.local_env import (
-    BrunnerNN_real,
-    BrunnerNN_reciprocal,
-    BrunnerNN_relative,
-    CovalentBondNN,
-    Critic2NN,
-    CrystalNN,
-    CutOffDictNN,
-    EconNN,
-    JmolNN,
-    MinimumDistanceNN,
-    MinimumOKeeffeNN,
-    MinimumVIRENN,
-    NearNeighbors,
-    OpenBabelNN,
-    VoronoiNN,
-)
+from pymatgen.analysis.local_env import (BrunnerNN_real, BrunnerNN_reciprocal,
+                                         BrunnerNN_relative, CovalentBondNN,
+                                         Critic2NN, CrystalNN, CutOffDictNN,
+                                         EconNN, JmolNN, MinimumDistanceNN,
+                                         MinimumOKeeffeNN, MinimumVIRENN,
+                                         NearNeighbors, OpenBabelNN, VoronoiNN)
 from pymatgen.core import Element, Structure
 from pymatgen.ext.matproj import MPRester, MPRestError
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
