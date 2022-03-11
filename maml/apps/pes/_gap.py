@@ -18,7 +18,8 @@ from pymatgen.core import Element, Lattice, Structure
 from pymatgen.core.periodic_table import get_el_sp
 from ruamel import yaml
 
-from maml.utils import check_structures_forces_stresses, convert_docs, pool_from
+from maml.utils import (check_structures_forces_stresses, convert_docs,
+                        pool_from)
 
 from ._lammps import LammpsPotential
 

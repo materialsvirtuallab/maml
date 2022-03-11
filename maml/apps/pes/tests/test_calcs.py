@@ -13,16 +13,9 @@ from monty.os.path import which
 from pymatgen.core import Lattice, Structure
 from sklearn.linear_model import LinearRegression
 
-from maml.apps.pes import (
-    DefectFormation,
-    ElasticConstant,
-    EnergyForceStress,
-    LatticeConstant,
-    NudgedElasticBand,
-    SNAPotential,
-    SpectralNeighborAnalysis,
-    get_default_lmp_exe,
-)
+from maml.apps.pes import (DefectFormation, ElasticConstant, EnergyForceStress,
+                           LatticeConstant, NudgedElasticBand, SNAPotential,
+                           SpectralNeighborAnalysis, get_default_lmp_exe)
 from maml.base import SKLModel
 from maml.describers import BispectrumCoefficients
 
