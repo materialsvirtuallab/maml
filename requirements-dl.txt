@@ -1,2 +1,2 @@
 tensorflow==2.8.0
-torch==1.10.2
+torch==1.11.0
