@@ -9,8 +9,6 @@ import glob
 import json
 import os
 import re
-import subprocess
-import webbrowser
 
 import requests
 from invoke import task
