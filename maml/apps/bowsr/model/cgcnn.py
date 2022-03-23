@@ -16,7 +16,7 @@ try:
     from cgcnn.data import AtomCustomJSONInitializer, GaussianDistance
     from cgcnn.model import CrystalGraphConvNet
     from torch import Tensor
-except ImportError as error:
+except ImportError:
     torch = None  # type: ignore
     cgcnn = None  # type: ignore
     Tensor = None  # type: ignore
