@@ -5,7 +5,6 @@ import numpy as np
 from pymatgen.core.structure import Structure
 
 from maml.apps.bowsr.acquisition import ensure_rng
-from maml.apps.bowsr.optimizer import struct2perturbation
 from maml.apps.bowsr.perturbation import WyckoffPerturbation
 from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 from maml.apps.bowsr.target_space import TargetSpace
@@ -226,28 +225,28 @@ class TargetSpaceTest(unittest.TestCase):
 
         for i in range(10):
             sample = self.space1.uniform_sample()
-            target1 = self.space1.probe(sample)
+            self.space1.probe(sample)
             self.assertEqual(len(self.space1), i + 1)
         self.space1.set_empty()
         self.assertEqual(len(self.space1), 0)
 
         for i in range(20):
             sample = self.space2.uniform_sample()
-            target1 = self.space2.probe(sample)
+            self.space2.probe(sample)
             self.assertEqual(len(self.space2), i + 1)
         self.space2.set_empty()
         self.assertEqual(len(self.space2), 0)
 
         for i in range(15):
             sample = self.space3.uniform_sample()
-            target1 = self.space3.probe(sample)
+            self.space3.probe(sample)
             self.assertEqual(len(self.space3), i + 1)
         self.space3.set_empty()
         self.assertEqual(len(self.space3), 0)
 
         for i in range(10):
             sample = self.space4.uniform_sample()
-            target1 = self.space4.probe(sample)
+            self.space4.probe(sample)
             self.assertEqual(len(self.space4), i + 1)
         self.space4.set_empty()
         self.assertEqual(len(self.space4), 0)

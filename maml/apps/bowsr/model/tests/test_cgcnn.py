@@ -9,7 +9,7 @@ from maml.apps.bowsr.model.cgcnn import CGCNN, torch
 
 try:
     import cgcnn
-except ImportError as e:
+except ImportError:
     cgcnn = None
 
 module_dir = os.path.dirname(__file__)
