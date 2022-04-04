@@ -61,7 +61,6 @@ class PotentialMixin:
         Returns:
             energy, forces, stress
         """
-        pass
 
     @abc.abstractmethod
     def write_param(self):
@@ -84,5 +83,3 @@ class Potential(PotentialMixin, BaseModel):  # type: ignore
     Potential models that can be used to fit structure-[energy, force, stress]
     pairs
     """
-
-    pass
