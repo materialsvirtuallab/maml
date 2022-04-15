@@ -16,7 +16,7 @@ try:
     from megnet.data.crystal import CrystalGraph
     from megnet.data.graph import GaussianDistance
     from megnet.models import MEGNetModel
-except Exception as error:
+except Exception:
     megnet = None
     MEGNetModel = None
     CrystalGraph = None
