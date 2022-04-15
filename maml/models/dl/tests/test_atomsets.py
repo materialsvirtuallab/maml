@@ -1,7 +1,7 @@
 """
 Test models
 """
-from unittest import TestCase, main, skip
+from unittest import TestCase, main
 
 import numpy as np
 

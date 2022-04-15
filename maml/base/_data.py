@@ -16,4 +16,3 @@ class BaseDataSource:
         """
         Get data from sources
         """
-        pass

@@ -12,7 +12,12 @@ from sklearn.linear_model import LinearRegression
 
 from maml.base import SKLModel
 from maml.describers import BispectrumCoefficients
-from maml.utils import check_structures_forces_stresses, convert_docs, pool_from, stress_format_change
+from maml.utils import (
+    check_structures_forces_stresses,
+    convert_docs,
+    pool_from,
+    stress_format_change,
+)
 
 from ._lammps import LammpsPotential
 
