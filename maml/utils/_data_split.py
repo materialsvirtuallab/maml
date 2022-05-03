@@ -24,7 +24,6 @@ class DataSplitter(MSONable):
         Returns: (train_ids, val_ids, test_ids) or
             (train_ids, test_ids)
         """
-        pass
 
 
 class ShuffleSplitter(DataSplitter):

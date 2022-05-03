@@ -17,7 +17,11 @@ from pymatgen.core import Element, Lattice, Structure
 from pymatgen.io.lammps.data import LammpsData
 
 from maml.apps.pes._base import Potential
-from maml.utils import get_lammps_lattice_and_rotation, stress_list_to_matrix, stress_matrix_to_list
+from maml.utils import (
+    get_lammps_lattice_and_rotation,
+    stress_list_to_matrix,
+    stress_matrix_to_list,
+)
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -262,9 +266,13 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
         "compute snad all snad/atom ",
         "compute snav all snav/atom ",
         "dump 1 all custom 1 dump.element element",
+        "dump_modify 1 sort id",
         "dump 2 all custom 1 dump.sna c_sna[*]",
+        "dump_modify 2 sort id",
         "dump 3 all custom 1 dump.snad c_snad[*]",
+        "dump_modify 3 sort id",
         "dump 4 all custom 1 dump.snav c_snav[*]",
+        "dump_modify 4 sort id",
     ]
 
     def __init__(self, rcutfac, twojmax, element_profile, quadratic=False, **kwargs):
