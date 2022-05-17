@@ -1,4 +1,4 @@
-cvxpy==1.1.18
+cvxpy==1.2.1
 tftb==0.1.3
 megnet==1.3.0
 matminer==0.7.6
