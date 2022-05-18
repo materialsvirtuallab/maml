@@ -127,7 +127,7 @@ def propose_query_point(
     x0 = np.clip(x0, bounds[:, 0] + 3 * EPS, bounds[:, 1] - 3 * EPS)
 
     res = minimize(min_obj, x0=x0, bounds=bounds, method="L-BFGS-B")
-    if -res.fun[0] >= acq_max:
+    if -float(res.fun) >= acq_max:
         x_max = res.x
     return _trunc(scaler.inverse_transform(x_max), decimals=3)
 
