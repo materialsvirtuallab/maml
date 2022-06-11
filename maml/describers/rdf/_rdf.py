@@ -60,8 +60,7 @@ class RadialDistributionFunction:
             temp_neighbors = neighbors["neighbors"]
 
             rdfs[i] = {
-                "%s:%s"
-                % (c_specie, specie): _dist_to_counts(
+                f"{c_specie}:{specie}": _dist_to_counts(
                     temp_neighbors[specie], r_min=self.r_min, r_max=self.r_max, n_grid=self.n_grid
                 )
                 / self.volumes

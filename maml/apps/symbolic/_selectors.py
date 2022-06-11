@@ -14,7 +14,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import get_scorer
 
 
-# pylint: disable=R0201
 class BaseSelector:
     """
     Feature selector. This is meant to work on relatively smaller
@@ -161,8 +160,8 @@ class BaseSelector:
                     "scikit-learn estimators should always "
                     "specify their parameters in the signature"
                     " of their __init__ (no varargs)."
-                    " %s with constructor %s doesn't "
-                    " follow this convention." % (cls, init_signature)
+                    f" {cls} with constructor {init_signature} doesn't "
+                    " follow this convention."
                 )
         return sorted(p.name for p in parameters)
 
@@ -201,9 +200,9 @@ class BaseSelector:
             key, delim, sub_key = key.partition("__")
             if key not in valid_params:
                 raise ValueError(
-                    "Invalid parameter %s for selector %s. "
+                    f"Invalid parameter {key} for selector {self}. "
                     "Check the list of available parameters "
-                    "with `estimator.get_params().keys()`." % (key, self)
+                    "with `estimator.get_params().keys()`."
                 )
 
             if delim:

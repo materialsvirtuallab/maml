@@ -69,7 +69,7 @@ def check_structures_forces_stresses(
             new_stresses.append(stresses[i])  # type: ignore
             continue
 
-        logger.info("Structure index %d is rotated." % i)
+        logger.info(f"Structure index {i} is rotated.")
         new_latt_matrix, symmop, rot_matrix = get_lammps_lattice_and_rotation(s, (0, 0, 0))
         coords = symmop.operate_multi(s.cart_coords)
         new_s = Structure(
@@ -239,10 +239,10 @@ def write_data_from_structure(
 
     element_map = {i: j + 1 for j, i in enumerate(ff_elements)}
     # generate atom section
-    lines.append("%d    atoms\n" % len(structure))
-    lines.append("%d    atom types\n" % n_types)
+    lines.append(f"{len(structure)}    atoms\n")
+    lines.append(f"{n_types}    atom types\n")
 
-    ph = "{:.%df}" % significant_figures
+    ph = f"{{:.{significant_figures}f}}" % significant_figures
 
     for bound, d in zip(bounds, "xyz"):
         line = " ".join([ph.format(i) for i in bound] + [f"{d}{i}" for i in ["lo", "hi"]])

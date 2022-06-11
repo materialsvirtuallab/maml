@@ -54,7 +54,7 @@ class DFT(EnergyModel):
                 stdout, stderr = p_exe.communicate()
                 rc = p_exe.returncode
             if rc != 0:
-                error_msg = "vasp exited with return code %d" % rc
+                error_msg = f"vasp exited with return code {rc}"
                 msg = stderr.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]

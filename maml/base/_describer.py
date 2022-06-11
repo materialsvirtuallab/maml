@@ -55,11 +55,11 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
 
         for k, v in kwargs.items():
             if k not in allowed_kwargs:
-                raise TypeError("%s not allowed as kwargs" % (str(k)))
+                raise TypeError(f"{k} not allowed as kwargs")
         memory = kwargs.get("memory", None)
         if isinstance(memory, bool):
             memory = tempfile.mkdtemp()
-            logger.info("Created temporary directory %s" % memory)
+            logger.info(f"Created temporary directory {memory}")
         verbose = kwargs.get("verbose", False)
         n_jobs = kwargs.get("n_jobs", 0)
 

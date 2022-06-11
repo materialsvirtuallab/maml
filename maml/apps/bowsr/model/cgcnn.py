@@ -107,9 +107,9 @@ class CGCNNInput:
         for nbr in all_nbrs:
             if len(nbr) < self.max_num_nbr:
                 warnings.warn(
-                    "{} not find enough neighbors to build graph. "
+                    f"{cif_id} not find enough neighbors to build graph. "
                     "If it happens frequently, consider increase "
-                    "radius.".format(cif_id)
+                    "radius."
                 )
                 nbr_fea_idx.append(list(map(lambda x: x[2], nbr)) + [0] * (self.max_num_nbr - len(nbr)))
                 nbr_fea.append(list(map(lambda x: x[1], nbr)) + [self.radius + 1.0] * (self.max_num_nbr - len(nbr)))
