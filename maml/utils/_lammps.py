@@ -242,7 +242,7 @@ def write_data_from_structure(
     lines.append(f"{len(structure)}    atoms\n")
     lines.append(f"{n_types}    atom types\n")
 
-    ph = f"{{:.{significant_figures}f}}" % significant_figures
+    ph = f"{{{significant_figures:.f}}}"
 
     for bound, d in zip(bounds, "xyz"):
         line = " ".join([ph.format(i) for i in bound] + [f"{d}{i}" for i in ["lo", "hi"]])
