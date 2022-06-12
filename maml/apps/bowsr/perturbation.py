@@ -30,6 +30,16 @@ small_addup = np.array([1e-4] * 3)
 
 
 def perturbation_mapping(x, fixed_indices):
+    """
+    Perturbation mapping.
+    
+    Args:
+        x:
+        fixed_indices:
+
+    Returns:
+
+    """
     return np.array(
         [
             0 if i in fixed_indices else x[np.argwhere(np.arange(3)[~np.isin(range(3), fixed_indices)] == i)[0][0]]

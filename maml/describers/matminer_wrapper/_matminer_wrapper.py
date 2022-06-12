@@ -41,7 +41,7 @@ def wrap_matminer_describer(
         wrapped_class(*args, **kwargs)
         logger.info(f"Using matminer_wrapper {wrapped_class.__name__} class")
         base_kwargs = dict(n_jobs=n_jobs, memory=memory, verbose=verbose, feature_batch=feature_batch)
-        BaseDescriber(**base_kwargs)
+        BaseDescriber.__init__(self, **base_kwargs)
 
     @classmethod  # type: ignore
     def _get_param_names(cls):  # type: ignore
