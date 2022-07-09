@@ -176,7 +176,7 @@ class MEGNetStructure(BaseDescriber):
             column_names = []
             final_features = []
             for i, f in enumerate(features_transpose):
-                column_names.extend(["%d_%s" % (i, n) for n in self.full_stats])
+                column_names.extend([f"{i}_{n}" for n in self.full_stats])
                 final_features.extend([func(f) for func in self.stats_func])
             return pd.DataFrame([final_features], columns=column_names)
 

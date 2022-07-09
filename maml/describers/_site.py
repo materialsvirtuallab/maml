@@ -104,11 +104,11 @@ class BispectrumCoefficients(BaseDescriber):
         Args:
             structure (Structure): Pymatgen Structure object.
         """
-        columns = list(map(lambda s: "-".join(["%d" % i for i in s]), self.subscripts))
+        columns = list(map(lambda s: "-".join([str(i) for i in s]), self.subscripts))
         if self.quadratic:
             columns += list(
                 map(
-                    lambda s: "-".join(["%d%d%d" % (i, j, k) for i, j, k in s]),
+                    lambda s: "-".join([f"{i}{j}{k}" for i, j, k in s]),
                     itertools.combinations_with_replacement(self.subscripts, 2),
                 )
             )
@@ -129,7 +129,7 @@ class BispectrumCoefficients(BaseDescriber):
                 hstack_b.fillna(0, inplace=True)
                 dbs = np.split(db, len(self.elements), axis=1)
                 dbs = np.hstack([np.insert(d.reshape(-1, len(columns)), 0, 0, axis=1) for d in dbs])
-                db_index = ["%d_%s" % (i, d) for i in df_b.index for d in "xyz"]
+                db_index = [f"{i}_{d}" for i in df_b.index for d in "xyz"]
                 df_db = pd.DataFrame(dbs, index=db_index, columns=hstack_b.columns)
                 if self.include_stress:
                     vbs = np.split(vb.sum(axis=0), len(self.elements))
@@ -230,14 +230,14 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         atomic_numbers = [str(element.number) for element in sorted(np.unique(structure.species))]
         n_Z = len(atomic_numbers)
         n_species = len(atomic_numbers)
-        Z = "{" + "{}".format(" ".join(atomic_numbers)) + "}"
-        species_Z = "{" + "{}".format(" ".join(atomic_numbers)) + "}"
-        descriptor_command.append("n_Z" + "=" + str(n_Z))
-        descriptor_command.append("Z" + "=" + Z)
-        descriptor_command.append("n_species" + "=" + str(n_species))
-        descriptor_command.append("species_Z" + "=" + species_Z)
+        Z = "{" + " ".join(atomic_numbers) + "}"
+        species_Z = "{" + " ".join(atomic_numbers) + "}"
+        descriptor_command.append(f"n_Z={n_Z}")
+        descriptor_command.append(f"Z={Z}")
+        descriptor_command.append(f"n_species={n_species}")
+        descriptor_command.append(f"species_Z={species_Z}")
 
-        exe_command.append("descriptor_str=" + "{" + "{}".format(" ".join(descriptor_command)) + "}")
+        exe_command.append("descriptor_str={" + " ".join(descriptor_command) + "}")
 
         with ScratchDir("."):
             _ = self.operator.write_cfgs(filename=atoms_filename, cfg_pool=pool_from([structure]))
@@ -247,7 +247,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
                     stdout = p.communicate()[0]
                     rc = p.returncode
             if rc != 0:
-                error_msg = "quip/soap exited with return code %d" % rc
+                error_msg = f"quip/soap exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]

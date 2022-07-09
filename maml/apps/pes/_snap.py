@@ -155,7 +155,7 @@ class SNAPotential(LammpsPotential):
         coeff_lines = []
         coeff_lines.append(f"{ne} {nbc + 1}")
         for element, coeff in zip(self.elements, np.split(model.model.coef_, ne)):
-            coeff_lines.append("{} {} {}".format(element, profile[element]["r"], profile[element]["w"]))
+            coeff_lines.append(f"{element} {profile[element]['r']} {profile[element]['w']}")
             coeff_lines.extend([str(c) for c in coeff])
         with open(coeff_file, "w") as f:
             f.write("\n".join(coeff_lines))

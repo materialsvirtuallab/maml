@@ -85,8 +85,6 @@ def get_feature_batch(fb_name: Optional[Union[str, Callable]] = None) -> Callabl
         try:
             return AVAILABLE_FB_METHODS[fb_name]
         except KeyError:
-            raise KeyError(
-                "Feature batch method not supported!" "Available ones are %s" % str(AVAILABLE_FB_METHODS.keys())
-            )
+            raise KeyError("Feature batch method not supported! Available ones are " + str(AVAILABLE_FB_METHODS.keys()))
     else:
         return fb_name

@@ -22,8 +22,8 @@ DATA_MAPPING = {
 }
 
 for length in [2, 3, 4, 8, 16, 32]:
-    DATA_MAPPING["megnet_l%d" % length] = "data/elemental_embedding_1MEGNet_layer_length_%d.json" % length
-    DATA_MAPPING["megnet_ion_l%d" % length] = "data/ion_embedding_1MEGNet_layer_length_%d.json" % length
+    DATA_MAPPING[f"megnet_l{length}"] = f"data/elemental_embedding_1MEGNet_layer_length_{length}.json"
+    DATA_MAPPING[f"megnet_ion_l{length}"] = f"data/ion_embedding_1MEGNet_layer_length_{length}.json"
 
 
 try:
@@ -100,7 +100,7 @@ class ElementStats(BaseDescriber):
         n_single_property = n_property[0]
 
         if property_names is None:
-            property_names = ["p%d" % i for i in range(n_single_property)]
+            property_names = [f"p{i}" for i in range(n_single_property)]
 
         if len(property_names) != n_single_property:
             raise ValueError("Property name length is not consistent")
@@ -205,7 +205,7 @@ class ElementStats(BaseDescriber):
         """
         if isinstance(data_name, str):
             if data_name not in ElementStats.AVAILABLE_DATA:
-                raise ValueError("data name not found in the list %s" % str(ElementStats.AVAILABLE_DATA))
+                raise ValueError(f"Data name not found in the list {str(ElementStats.AVAILABLE_DATA)}")
 
             filename = os.path.join(CWD, DATA_MAPPING[data_name])
             return cls.from_file(filename, stats=stats, **kwargs)
@@ -231,7 +231,7 @@ class ElementStats(BaseDescriber):
             for k in common_keys:
                 element_properties[k].extend(instance.element_properties[k])
 
-            property_names.extend(["%d_%s" % (index, i) for i in instance.property_names])
+            property_names.extend([f"{index}_{i}" for i in instance.property_names])
 
         return cls(element_properties=element_properties, property_names=property_names, stats=stats, **kwargs)
 
@@ -270,10 +270,10 @@ class ElementStats(BaseDescriber):
         if reduction_algo == "pca":
 
             m = PCA(n_components=num_dim, **reduction_params)
-            property_names = ["pca_%d" % i for i in range(num_dim)]
+            property_names = [f"pca_{i}" for i in range(num_dim)]
         elif reduction_algo == "kpca":
             m = KernelPCA(n_components=num_dim, **reduction_params)
-            property_names = ["kpca_%d" % i for i in range(num_dim)]
+            property_names = [f"kpca_{i}" for i in range(num_dim)]
         else:
             raise ValueError("Reduction algorithm not available")
 

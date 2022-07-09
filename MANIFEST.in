@@ -2,4 +2,4 @@ include *.rst requirements*.txt
 recursive-include maml *.py
 recursive-include maml *.csv *.sav *.hdf5
 recursive-include maml *.json *.mtp in.* *.template
-recursive-exclude maml tests/*.* tests/*
+recursive-exclude maml tests/*.* tests/* .mypy_cache
