@@ -1,6 +1,6 @@
-pymatgen==2022.5.18
-scikit-learn==1.1.0
-h5py==3.6.0
+pymatgen==2022.5.26
+scikit-learn==1.1.1
+h5py==3.7.0
 joblib==1.1.0
 tqdm==4.64.0
 pymongo==4.1.1
