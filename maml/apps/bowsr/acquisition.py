@@ -31,7 +31,7 @@ def ensure_rng(seed: int = None) -> RandomState:
     Create a random number generator based on an optional seed.
     This can be an integer for a seeded rng or None for an unseeded rng.
     """
-    return np.random.RandomState(seed=seed)
+    return np.random.RandomState(seed=seed)  # pylint: disable=E1101
 
 
 def predict_mean_std(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float) -> Tuple[Any, ...]:
@@ -152,8 +152,7 @@ class AcquisitionFunction:
 
         if acq_type not in ["ucb", "ei", "poi", "gp-ucb"]:
             err_msg = (
-                "The utility function {} has not been implemented, "
-                "please choose one of ucb, ei, or poi.".format(acq_type)
+                f"The utility function {acq_type} has not been implemented, " "please choose one of ucb, ei, or poi."
             )
             raise NotImplementedError(err_msg)
         self.acq_type = acq_type

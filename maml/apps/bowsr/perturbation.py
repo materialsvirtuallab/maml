@@ -28,12 +28,24 @@ perturbation_modes = {int(k): v for k, v in perturbation_modes.items()}
 
 small_addup = np.array([1e-4] * 3)
 
-perturbation_mapping = lambda x, fixed_indices: np.array(
-    [
-        0 if i in fixed_indices else x[np.argwhere(np.arange(3)[~np.isin(range(3), fixed_indices)] == i)[0][0]]
-        for i in range(3)
-    ]
-)
+
+def perturbation_mapping(x, fixed_indices):
+    """
+    Perturbation mapping.
+
+    Args:
+        x:
+        fixed_indices:
+
+    Returns:
+
+    """
+    return np.array(
+        [
+            0 if i in fixed_indices else x[np.argwhere(np.arange(3)[~np.isin(range(3), fixed_indices)] == i)[0][0]]
+            for i in range(3)
+        ]
+    )
 
 
 class WyckoffPerturbation:
@@ -143,16 +155,12 @@ class WyckoffPerturbation:
 
     def __repr__(self):
         if self._site is not None:
-            return "{}(spg_int_number={}, wyckoff_symbol={}) {} [{:.4f}, {:.4f}, {:.4f}]".format(
-                self.__class__.__name__,
-                self.int_symbol,
-                self.wyckoff_symbol,
-                self._site.species_string,
-                *self._site.frac_coords,
+            a, b, c = self._site.frac_coords
+            return (
+                f"{self.__class__.__name__}(spg_int_number={self.int_symbol}, wyckoff_symbol={self.wyckoff_symbol})"
+                f" {self._site.species_string} [{a:.4f}, {b:.4f}, {c:.4f}]"
             )
-        return "{}(spg_int_number={}, wyckoff_symbol={})".format(
-            self.__class__.__name__, self.int_symbol, self.wyckoff_symbol
-        )
+        return f"{self.__class__.__name__}(spg_int_number={self.int_symbol}, wyckoff_symbol={self.wyckoff_symbol})"
 
 
 def crystal_system(int_number: int) -> str:
@@ -379,12 +387,11 @@ class LatticePerturbation:
 
     def __repr__(self):
         if self._lattice is not None:
-            return "{}(spg_int_number={}, crystal_system={})\n".format(
-                self.__class__.__name__, self.spg_int_symbol, self.crys_system
-            ) + repr(self.lattice)
-        return "{}(spg_int_number={}, crystal_system={})\n".format(
-            self.__class__.__name__, self.spg_int_symbol, self.crys_system
-        )
+            return (
+                f"{self.__class__.__name__}(spg_int_number={self.spg_int_symbol}, "
+                f"crystal_system={self.crys_system})\n" + repr(self.lattice)
+            )
+        return f"{self.__class__.__name__}(spg_int_number={self.spg_int_symbol}, crystal_system={self.crys_system})\n"
 
 
 def get_standardized_structure(structure: Structure) -> Structure:

@@ -19,7 +19,6 @@ except ImportError:
     Expression = "Expression"
 
 
-# pylint: disable=R0201
 class BaseSelectorCP(BaseSelector):
     """
     Base selector using cvxpy (CP)

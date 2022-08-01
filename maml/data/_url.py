@@ -36,7 +36,7 @@ class URLSource(BaseDataSource):
             pd.DataFrame
         """
         raw = requests.get(url).text
-        read_func = getattr(pd, "read_%s" % self.fmt)
+        read_func = getattr(pd, f"read_{self.fmt}")
         return read_func(StringIO(raw), **self.read_kwargs)
 
 
@@ -55,5 +55,5 @@ class FigshareSource(URLSource):
             data frame
         """
 
-        url = "https://ndownloader.figshare.com/files/%s" % file_id
+        url = f"https://ndownloader.figshare.com/files/{file_id}"
         return super().get(url)

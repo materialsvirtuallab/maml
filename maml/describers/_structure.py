@@ -285,7 +285,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         """
         c = self.get_coulomb_mat(s)
         row_norms = np.linalg.norm(c, axis=1)
-        rng = np.random.RandomState(self.random_seed)
+        rng = np.random.RandomState(self.random_seed)  # pylint: disable=E1101
         e = rng.normal(size=row_norms.size)
         p = np.argsort(row_norms + e)
         c = c[p][:, p]

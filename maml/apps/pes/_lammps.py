@@ -36,7 +36,7 @@ def get_default_lmp_exe():
 
     for lmp_exe in ["lmp_serial", "lmp_mpi", "lmp_g++_serial", "lmp_g++_mpich", "lmp_intel_cpu_intelmpi"]:
         if which(lmp_exe) is not None:
-            logger.info("Setting Lammps executable to %s" % lmp_exe)
+            logger.info(f"Setting Lammps executable to {lmp_exe}")
             return lmp_exe
     return None
 
@@ -83,7 +83,7 @@ class LMPStaticCalculator:
         if lmp_exe is None:
             lmp_exe = get_default_lmp_exe()
         if not which(lmp_exe):
-            raise ValueError("lammps executable %s not found" % str(lmp_exe))
+            raise ValueError(f"lammps executable {lmp_exe} not found")
         self.LMP_EXE = lmp_exe
         for i, j in kwargs.items():
             if i not in self.allowed_kwargs:
@@ -148,7 +148,7 @@ class LMPStaticCalculator:
                     stdout = p.communicate()[0]
                     rc = p.returncode
                 if rc != 0:
-                    error_msg = "LAMMPS exited with return code %d" % rc
+                    error_msg = f"LAMMPS exited with return code {rc}"
                     msg = stdout.decode("utf-8").split("\n")[:-1]
                     try:
                         error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -578,7 +578,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             stdout = p.communicate()[0]
             rc = p.returncode
         if rc != 0:
-            error_msg = "LAMMPS exited with return code %d" % rc
+            error_msg = f"LAMMPS exited with return code {rc}"
             msg = stdout.decode("utf-8").split("\n")[:-1]
             try:
                 error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -603,7 +603,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             stdout = p.communicate()[0]
             rc = p.returncode
         if rc != 0:
-            error_msg = "LAMMPS exited with return code %d" % rc
+            error_msg = f"LAMMPS exited with return code {rc}"
             msg = stdout.decode("utf-8").split("\n")[:-1]
             try:
                 error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -663,7 +663,7 @@ class NudgedElasticBand(LMPStaticCalculator):
                 stdout = p.communicate()[0]
                 rc = p.returncode
             if rc != 0:
-                error_msg = "LAMMPS exited with return code %d" % rc
+                error_msg = f"LAMMPS exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -796,7 +796,7 @@ class DefectFormation(LMPStaticCalculator):
                 stdout = p.communicate()[0]
                 rc = p.returncode
             if rc != 0:
-                error_msg = "LAMMPS exited with return code %d" % rc
+                error_msg = f"LAMMPS exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]

@@ -402,20 +402,11 @@ class BayesianOptimizer:
 
     def __repr__(self):
         return (
-            "{}(relax_coords={}, relax_lattice={}, use_symmetry={}"
-            "\n\t\twyckoff_dims={}, abc_dim={}, "
-            "\n\t\tangles_dim={}, kernel={}, scaler={}, noisy={})".format(
-                self.__class__.__name__,
-                self.relax_coords,
-                self.relax_lattice,
-                self.use_symmetry,
-                self.wyckoff_dims,
-                self.abc_dim,
-                self.angles_dim,
-                repr(self.gpr.kernel),
-                self.scaler.__class__.__name__,
-                self.noisy,
-            )
+            f"{self.__class__.__name__}(relax_coords={self.relax_coords}, relax_lattice={self.relax_lattice}, "
+            f"use_symmetry={self.use_symmetry}"
+            f"\n\t\twyckoff_dims={self.wyckoff_dims}, abc_dim={self.abc_dim}, "
+            f"\n\t\tangles_dim={self.angles_dim}, kernel={repr(self.gpr.kernel)}, "
+            f"scaler={self.scaler.__class__.__name__}, noisy={self.noisy})"
         )
 
     def as_dict(self):
@@ -522,7 +513,7 @@ class BayesianOptimizer:
 
             model = getattr(energy_model, d["model"])()
         else:
-            raise AttributeError("model {} is not supported.".format(d["model"]))
+            raise AttributeError(f"model {d['model']} is not supported.")
 
         structure = Structure.from_dict(d["structure"])
         use_symmetry = d["use_symmetry"]
@@ -555,7 +546,7 @@ class BayesianOptimizer:
         space_params = np.array(space_d["params"])
         space_target = np.array(space_d["target"])
         space_bounds = np.array(space_d["bounds"])
-        space_random_state = np.random.RandomState()
+        space_random_state = np.random.RandomState()  # pylint: disable=E1101
         space_random_state.set_state(space_d["random_state"])
         from maml.apps.bowsr import preprocessing
 

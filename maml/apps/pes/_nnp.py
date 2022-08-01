@@ -87,7 +87,7 @@ class NNPotential(LammpsPotential):
         if "SuperCell" in inputs:
             bohr_matrix = inputs["SuperCell"].matrix / self.bohr_to_angstrom
             for vec in bohr_matrix:
-                lines.append("lattice {:>15.6f}{:>15.6f}{:>15.6f}".format(*vec))
+                lines.append(f"lattice {vec[0]:>15.6f}{vec[1]:>15.6f}{vec[2]:>15.6f}")
         if "AtomData" in inputs:
             format_float = "atom{:>16.9f}{:>16.9f}{:>16.9f}{:>4s}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}"
             for i, (site, force) in enumerate(zip(structure, forces)):
@@ -733,7 +733,7 @@ class NNPotential(LammpsPotential):
                 stdout, stderr = p_scaling.communicate()
                 rc = p_scaling.returncode
             if rc != 0:
-                error_msg = "n2p2 exited with return code %d" % rc
+                error_msg = f"n2p2 exited with return code {rc}"
                 msg = stderr.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -749,7 +749,7 @@ class NNPotential(LammpsPotential):
                     rc = p_train.returncode
 
             if rc != 0:
-                error_msg = "n2p2 exited with return code %d" % rc
+                error_msg = f"n2p2 exited with return code {rc}"
                 msg = stderr.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -773,8 +773,8 @@ class NNPotential(LammpsPotential):
             self.validation_forces_rmse = errors[1]
 
             for specie in self.elements:
-                weights_filename = "weights.{}.{}.out".format(
-                    str(Element(specie).number).zfill(3), str(self.param["epochs"]).zfill(6)
+                weights_filename = (
+                    f"weights.{str(Element(specie).number).zfill(3)}.{str(self.param['epochs']).zfill(6)}.out"
                 )
                 self.weights[specie] = []
                 self.bs[specie] = []
@@ -824,7 +824,7 @@ class NNPotential(LammpsPotential):
                     stdout, stderr = p_evaluation.communicate()
                     rc = p_evaluation.returncode
                 if rc != 0:
-                    error_msg = "n2p2 exited with return code %d" % rc
+                    error_msg = f"n2p2 exited with return code {rc}"
                     msg = stderr.decode("utf-8").split("\n")[:-1]
                     try:
                         error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -857,9 +857,7 @@ class NNPotential(LammpsPotential):
         nnp.load_input(input_filename)
         nnp.load_scaler(scaling_filename)
         if len(nnp.elements) != len(weights_filenames):
-            raise ValueError(
-                "{} weights files should be given to " "{}".format(len(nnp.elements), " ".join(nnp.elements))
-            )
+            raise ValueError(f"{len(nnp.elements)} weights files should be given to " + " ".join(nnp.elements))
         for weights_filename, specie in zip(weights_filenames, nnp.elements):
             nnp.load_weights(weights_filename, specie)
         nnp.fitted = True
