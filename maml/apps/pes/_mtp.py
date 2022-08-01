@@ -114,7 +114,7 @@ class MTPotential(LammpsPotential):
                 format_str = "{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
                 lines.append(format_str.format("Stress:  xx", "yy", "zz", "yz", "xz", "xy"))
             format_float = "{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}"
-            lines.append(format_float.format(*np.array(virial_stress) / 1.228445))
+            lines.append(format_float.format(*np.array(virial_stress)))
 
         lines.append("END_CFG")
 
