@@ -87,12 +87,12 @@ class GAPotential(LammpsPotential):
 
         description = []
         if "Energy" in inputs:
-            description.append("dft_energy={}".format(inputs["Energy"]))
+            description.append("dft_energy=" + str(inputs["Energy"]))
         if "Stress" in inputs:
             description.append("dft_virial={%s}" % "\t".join(list(map(lambda f: str(f), inputs["Stress"]))))
         if "SuperCell" in inputs:
-            SuperCell_str = list(map(lambda f: str(f), inputs["SuperCell"].matrix.ravel()))
-            description.append('Lattice="{}"'.format("     ".join(SuperCell_str)))
+            super_cell_str = list(map(lambda f: str(f), inputs["SuperCell"].matrix.ravel()))
+            description.append(f'Lattice="{"     ".join(super_cell_str)}"')
         description.append("Properties=species:S:1:pos:R:3:Z:I:1:dft_force:R:3")
         lines.append(" ".join(description))
 
@@ -312,14 +312,14 @@ class GAPotential(LammpsPotential):
             param = kwargs.get(param_name) if kwargs.get(param_name) else soap_params.get(param_name)
             gap_command.append(param_name + "=" + f"{param}")
         gap_command.append("add_species=T")
-        exe_command.append("gap=" + "{" + "{}".format(" ".join(gap_command)) + "}")
+        exe_command.append("gap={" + " ".join(gap_command) + "}")
 
         for param_name in preprocess_params:
             param = kwargs.get(param_name) if kwargs.get(param_name) else soap_params.get(param_name)
             exe_command.append(param_name + "=" + f"{param}")
 
         default_sigma = [str(f) for f in default_sigma]
-        exe_command.append("default_sigma={%s}" % (" ".join(default_sigma)))
+        exe_command.append(f"default_sigma={{{' '.join(default_sigma)}}}")
 
         if use_energies:
             exe_command.append("energy_parameter_name=dft_energy")
@@ -336,7 +336,7 @@ class GAPotential(LammpsPotential):
                 stdout = p.communicate()[0]
                 rc = p.returncode
             if rc != 0:
-                error_msg = "gap_fit exited with return code %d" % rc
+                error_msg = f"gap_fit exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -392,7 +392,7 @@ class GAPotential(LammpsPotential):
         tree.write(xml_filename)
 
         pair_coeff = self.pair_coeff.format(
-            xml_filename, '"Potential xml_label={}"'.format(self.param.get("potential_label")), " ".join(atomic_numbers)
+            xml_filename, f'"Potential xml_label={self.param.get("potential_label")}"', " ".join(atomic_numbers)
         )
         ff_settings = [self.pair_style, pair_coeff]
         return ff_settings

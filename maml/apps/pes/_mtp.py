@@ -90,11 +90,11 @@ class MTPotential(LammpsPotential):
 
         if "Size" in inputs:
             lines.append(" Size")
-            lines.append("{:>7d}".format(inputs["Size"]))
+            lines.append(f"{inputs['Size']:>7d}")
         if "SuperCell" in inputs:
             lines.append(" SuperCell")
             for vec in inputs["SuperCell"].matrix:
-                lines.append("{:>17.6f}{:>14.6f}{:>14.6f}".format(*vec))
+                lines.append(f"{vec[0]:>17.6f}{vec[1]:>14.6f}{vec[2]:>14.6f}")
         if "AtomData" in inputs:
             format_str = "{:>14s}{:>5s}{:>15s}{:>14s}{:>14s}{:>13s}{:>13s}{:>13s}"
             format_float = "{:>14d}{:>5d}{:>15f}{:>14f}{:>14f}{:>13f}{:>13f}{:>13f}"
@@ -105,7 +105,7 @@ class MTPotential(LammpsPotential):
                 lines.append(format_float.format(i + 1, self.elements.index(str(site.specie)), *site.coords, *force))
         if "Energy" in inputs:
             lines.append(" Energy")
-            lines.append("{:>24.12f}".format(inputs["Energy"]))
+            lines.append(f"{inputs['Energy']:>24.12f}")
         if "Stress" in inputs:
             if not hasattr(self, "version") or self.version == "mlip-2":
                 format_str = "{:>16s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
@@ -114,7 +114,7 @@ class MTPotential(LammpsPotential):
                 format_str = "{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}{:>12s}"
                 lines.append(format_str.format("Stress:  xx", "yy", "zz", "yz", "xz", "xy"))
             format_float = "{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}{:>12f}"
-            lines.append(format_float.format(*np.array(virial_stress) / 1.228445))
+            lines.append(format_float.format(*np.array(virial_stress)))
 
         lines.append("END_CFG")
 
@@ -632,7 +632,7 @@ class MTPotential(LammpsPotential):
                 stdout = p.communicate()[0]
                 rc = p.returncode
             if rc != 0:
-                error_msg = "MLP exited with return code %d" % rc
+                error_msg = f"MLP exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
@@ -726,7 +726,7 @@ class MTPotential(LammpsPotential):
                 stdout = p.communicate()[0]
                 rc = p.returncode
             if rc != 0:
-                error_msg = "mlp exited with return code %d" % rc
+                error_msg = f"mlp exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
                     error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]

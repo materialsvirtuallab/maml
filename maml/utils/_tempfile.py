@@ -86,7 +86,7 @@ class MultiScratchDir:
             if self.start_copy:
                 [copy_r(".", tempdir) for tempdir in tempdirs]
             if self.create_symbolic_link:
-                [os.symlink(tempdir, "%s_%d" % (MultiScratchDir.SCR_LINK, i)) for i, tempdir in enumerate(tempdirs)]
+                [os.symlink(tempdir, f"{MultiScratchDir.SCR_LINK}_{i}") for i, tempdir in enumerate(tempdirs)]
         return tempdirs
 
     def __exit__(self, exc_type: str, exc_val: str, exc_tb: str):
@@ -130,4 +130,4 @@ def _copy_r_with_suffix(src: str, dst: str, suffix: Optional[Any] = None):
         elif not absdst.startswith(fpath):
             _copy_r_with_suffix(fpath, os.path.join(absdst, f), suffix=suffix)
         else:
-            warnings.warn("Cannot copy %s to itself" % fpath)
+            warnings.warn(f"Cannot copy {fpath} to itself")
