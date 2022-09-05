@@ -10,7 +10,7 @@ ci:
 repos:
 
   - repo: https://github.com/myint/autoflake
-    rev: v1.4
+    rev: v1.5.3
     hooks:
       - id: autoflake
         args:
@@ -41,12 +41,12 @@ repos:
         args: ["--profile", "black"]
 
   - repo: https://github.com/psf/black
-    rev: 22.6.0
+    rev: 22.8.0
     hooks:
       - id: black
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 5.0.2
+    rev: 5.0.4
     hooks:
       - id: flake8
 
