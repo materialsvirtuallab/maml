@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>maml.apps.bowsr.target_space module &#8212; maml 0.01 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,24 +33,24 @@
           <div class="body" role="main">
             
   <section id="module-maml.apps.bowsr.target_space">
-<span id="maml-apps-bowsr-target-space-module"></span><h1>maml.apps.bowsr.target_space module<a class="headerlink" href="#module-maml.apps.bowsr.target_space" title="Permalink to this headline">¶</a></h1>
+<span id="maml-apps-bowsr-target-space-module"></span><h1>maml.apps.bowsr.target_space module<a class="headerlink" href="#module-maml.apps.bowsr.target_space" title="Permalink to this heading">¶</a></h1>
 <p>Module implemets the target space.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="maml.apps.bowsr.target_space.TargetSpace">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.target_space.</span></span><span class="sig-name descname"><span class="pre">TargetSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_func</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="maml.apps.bowsr.perturbation.html#maml.apps.bowsr.perturbation.WyckoffPerturbation" title="maml.apps.bowsr.perturbation.WyckoffPerturbation"><span class="pre">maml.apps.bowsr.perturbation.WyckoffPerturbation</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abc_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relax_coords</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relax_lattice</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="maml.apps.bowsr.preprocessing.html#maml.apps.bowsr.preprocessing.StandardScaler" title="maml.apps.bowsr.preprocessing.StandardScaler"><span class="pre">maml.apps.bowsr.preprocessing.StandardScaler</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="maml.apps.bowsr.preprocessing.html#maml.apps.bowsr.preprocessing.DummyScaler" title="maml.apps.bowsr.preprocessing.DummyScaler"><span class="pre">maml.apps.bowsr.preprocessing.DummyScaler</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.random.mtrand.RandomState</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.target_space.</span></span><span class="sig-name descname"><span class="pre">TargetSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="maml.apps.bowsr.perturbation.html#maml.apps.bowsr.perturbation.WyckoffPerturbation" title="maml.apps.bowsr.perturbation.WyckoffPerturbation"><span class="pre">WyckoffPerturbation</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abc_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relax_coords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relax_lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="maml.apps.bowsr.preprocessing.html#maml.apps.bowsr.preprocessing.StandardScaler" title="maml.apps.bowsr.preprocessing.StandardScaler"><span class="pre">StandardScaler</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="maml.apps.bowsr.preprocessing.html#maml.apps.bowsr.preprocessing.DummyScaler" title="maml.apps.bowsr.preprocessing.DummyScaler"><span class="pre">DummyScaler</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RandomState</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Holds the perturbations of coordinates/lattice (x_wyckoff/x_lattice)
 – formation energy (Y). Allows for constant-time appends while
 ensuring no duplicates are added.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.target_space.TargetSpace.bounds">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bounds</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.bounds" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the search space of parameters.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.target_space.TargetSpace.lhs_sample">
-<span class="sig-name descname"><span class="pre">lhs_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.lhs_sample" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">lhs_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.lhs_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Latin hypercube sampling.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>n_intervals (int): Number of intervals.</p>
@@ -59,7 +60,7 @@ ensuring no duplicates are added.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.target_space.TargetSpace.params">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.params" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the parameters in target space.</p>
 </dd></dl>
 
@@ -87,7 +88,7 @@ target (float): Target value.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.target_space.TargetSpace.set_bounds">
-<span class="sig-name descname"><span class="pre">set_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abc_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_wise_wyckoff_bounds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.set_bounds" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abc_bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles_bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_wise_wyckoff_bounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.set_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the bound value of wyckoff perturbation and
 lattice perturbation/volume perturbation.</p>
 </dd></dl>
@@ -100,13 +101,13 @@ lattice perturbation/volume perturbation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.target_space.TargetSpace.target">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">target</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.target" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the target (i.e., formation energy) in target space.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.target_space.TargetSpace.uniform_sample">
-<span class="sig-name descname"><span class="pre">uniform_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.uniform_sample" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">uniform_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#maml.apps.bowsr.target_space.TargetSpace.uniform_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates random points within the bounds of the space.</p>
 </dd></dl>
 
@@ -154,7 +155,7 @@ lattice perturbation/volume perturbation.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -171,7 +172,7 @@ lattice perturbation/volume perturbation.</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

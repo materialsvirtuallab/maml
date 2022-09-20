@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>maml.apps.bowsr.perturbation module &#8212; maml 0.01 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,34 +33,34 @@
           <div class="body" role="main">
             
   <section id="module-maml.apps.bowsr.perturbation">
-<span id="maml-apps-bowsr-perturbation-module"></span><h1>maml.apps.bowsr.perturbation module<a class="headerlink" href="#module-maml.apps.bowsr.perturbation" title="Permalink to this headline">¶</a></h1>
+<span id="maml-apps-bowsr-perturbation-module"></span><h1>maml.apps.bowsr.perturbation module<a class="headerlink" href="#module-maml.apps.bowsr.perturbation" title="Permalink to this heading">¶</a></h1>
 <p>Module implements the perturbation class for atomic and lattice relaxation.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.LatticePerturbation">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">LatticePerturbation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spg_int_symbol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_symmetry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">LatticePerturbation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spg_int_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_symmetry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Perturbation class for determining the standard lattice.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.LatticePerturbation.abc">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">abc</span></span><em class="property"><span class="pre">:</span> <span class="pre">List[float]</span></em><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.abc" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.abc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the lattice lengths.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.LatticePerturbation.fit_lattice">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fit_lattice</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.fit_lattice" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fit_lattice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.fit_lattice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the lattice fits any crystal system.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.LatticePerturbation.lattice">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">lattice</span></span><em class="property"><span class="pre">:</span> <span class="pre">pymatgen.core.lattice.Lattice</span></em><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.lattice" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lattice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Lattice</span></em><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.lattice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the lattice.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.LatticePerturbation.sanity_check">
-<span class="sig-name descname"><span class="pre">sanity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pymatgen.core.lattice.Lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abc_tol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_tol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.sanity_check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sanity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lattice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abc_tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.LatticePerturbation.sanity_check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether the perturbation mode exists.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>lattice (Lattice): Lattice in Structure.
@@ -73,19 +74,19 @@ angle_tol (float): Tolerance for lattice angles determined by crystal system.</p
 
 <dl class="py class">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.WyckoffPerturbation">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">WyckoffPerturbation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int_symbol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wyckoff_symbol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symmetry_ops</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">pymatgen.core.operations.SymmOp</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_symmetry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">WyckoffPerturbation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wyckoff_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symmetry_ops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">SymmOp</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_symmetry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Perturbation class for determining the standard wyckoff position
 and generating corresponding equivalent fractional coordinates.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.WyckoffPerturbation.fit_site">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fit_site</span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.fit_site" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fit_site</span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.fit_site" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the site fits any standard wyckoff position.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.WyckoffPerturbation.get_orbit">
-<span class="sig-name descname"><span class="pre">get_orbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.get_orbit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_orbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.get_orbit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the orbit for a point.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>p (list/numpy.array): Fractional coordinated point.
@@ -96,7 +97,7 @@ tol (float): Tolerance for determining if sites are the same.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.WyckoffPerturbation.sanity_check">
-<span class="sig-name descname"><span class="pre">sanity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pymatgen.core.sites.Site</span><span class="p"><span class="pre">,</span> </span><span class="pre">pymatgen.core.sites.PeriodicSite</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wyc_tol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0003</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.sanity_check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sanity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Site</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PeriodicSite</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wyc_tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0003</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.sanity_check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether the perturbation mode exists.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>site (PeriodicSite): PeriodicSite in Structure.
@@ -107,13 +108,13 @@ wyc_tol (float): Tolerance for wyckoff symbol determined coordinates.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.WyckoffPerturbation.site">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">site</span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.site" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">site</span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.site" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the site.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.WyckoffPerturbation.standardize">
-<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.standardize" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.WyckoffPerturbation.standardize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the standardized position of p.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>p (list/numpy.array): Fractional coordinated point.
@@ -126,7 +127,7 @@ tol (float): Tolerance for determining if sites are the same.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.crystal_system">
-<span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">crystal_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int_number</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.crystal_system" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">crystal_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.crystal_system" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method for crystal system determination.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>int_number (int): International number of space group.</p>
@@ -136,7 +137,7 @@ tol (float): Tolerance for determining if sites are the same.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.get_standardized_structure">
-<span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">get_standardized_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pymatgen.core.structure.Structure</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pymatgen.core.structure.Structure</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.get_standardized_structure" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">get_standardized_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Structure</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Structure</span></span></span><a class="headerlink" href="#maml.apps.bowsr.perturbation.get_standardized_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get standardized structure.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>structure (Structure): Pymatgen Structure object.</p>
@@ -147,7 +148,14 @@ tol (float): Tolerance for determining if sites are the same.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="maml.apps.bowsr.perturbation.perturbation_mapping">
 <span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.perturbation.</span></span><span class="sig-name descname"><span class="pre">perturbation_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.perturbation.perturbation_mapping" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Perturbation mapping.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x:
+fixed_indices:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
 
 </section>
 
@@ -185,7 +193,7 @@ tol (float): Tolerance for determining if sites are the same.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -202,7 +210,7 @@ tol (float): Tolerance for determining if sites are the same.</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

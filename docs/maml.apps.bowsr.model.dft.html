@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>maml.apps.bowsr.model.dft module &#8212; maml 0.01 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,16 +33,16 @@
           <div class="body" role="main">
             
   <section id="module-maml.apps.bowsr.model.dft">
-<span id="maml-apps-bowsr-model-dft-module"></span><h1>maml.apps.bowsr.model.dft module<a class="headerlink" href="#module-maml.apps.bowsr.model.dft" title="Permalink to this headline">¶</a></h1>
+<span id="maml-apps-bowsr-model-dft-module"></span><h1>maml.apps.bowsr.model.dft module<a class="headerlink" href="#module-maml.apps.bowsr.model.dft" title="Permalink to this heading">¶</a></h1>
 <p>DFT wrapper</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="maml.apps.bowsr.model.dft.DFT">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.model.dft.</span></span><span class="sig-name descname"><span class="pre">DFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exe_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.model.dft.DFT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="maml.apps.bowsr.model.base.html#maml.apps.bowsr.model.base.EnergyModel" title="maml.apps.bowsr.model.base.EnergyModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">maml.apps.bowsr.model.base.EnergyModel</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">maml.apps.bowsr.model.dft.</span></span><span class="sig-name descname"><span class="pre">DFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exe_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.model.dft.DFT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="maml.apps.bowsr.model.base.html#maml.apps.bowsr.model.base.EnergyModel" title="maml.apps.bowsr.model.base.EnergyModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnergyModel</span></code></a></p>
 <p>DFT static calculation wrapped as energy model.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="maml.apps.bowsr.model.dft.DFT.predict_energy">
-<span class="sig-name descname"><span class="pre">predict_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pymatgen.core.structure.Structure</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.model.dft.DFT.predict_energy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">predict_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Structure</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#maml.apps.bowsr.model.dft.DFT.predict_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict energy from structure.
 Args:</p>
 <blockquote>
@@ -88,7 +89,7 @@ Args:</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -105,7 +106,7 @@ Args:</p>
       &copy;2020, Materials Virtual Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

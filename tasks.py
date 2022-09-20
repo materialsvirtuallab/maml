@@ -14,8 +14,6 @@ import requests
 from invoke import task
 from monty.os import cd
 
-NEW_VER = datetime.datetime.today().strftime("%Y.%-m.%-d")
-
 
 @task
 def make_doc(ctx):
@@ -88,12 +86,12 @@ def publish(ctx):
 
 
 @task
-def set_ver(ctx):
+def set_ver(ctx, version):
     lines = []
     with open("maml/__init__.py") as f:
         for l in f:
             if "__version__" in l:
-                lines.append('__version__ = "%s"' % NEW_VER)
+                lines.append('__version__ = "%s"' % version)
             else:
                 lines.append(l.rstrip())
     with open("maml/__init__.py", "wt") as f:
@@ -102,14 +100,14 @@ def set_ver(ctx):
     lines = []
     with open("setup.py") as f:
         for l in f:
-            lines.append(re.sub(r"version=([^,]+),", 'version="%s",' % NEW_VER, l.rstrip()))
+            lines.append(re.sub(r"version=([^,]+),", 'version="%s",' % version, l.rstrip()))
     with open("setup.py", "wt") as f:
         f.write("\n".join(lines) + "\n")
 
 
 @task
-def release(ctx, notest=True):
-    set_ver(ctx)
+def release(ctx, version=datetime.datetime.now().strftime("%Y.%-m.%-d"), notest=True, nodoc=False):
+    set_ver(ctx, version=version)
     ctx.run("rm -r dist build maml.egg-info", warn=True)
     if not notest:
         ctx.run("pytest maml")
@@ -119,10 +117,16 @@ def release(ctx, notest=True):
     desc = toks[1].strip()
     toks = desc.split("\n")
     desc = "\n".join(toks[:-1]).strip()
+    if not nodoc:
+        make_doc(ctx)
+        ctx.run("git add .")
+        ctx.run('git commit -a -m "Update docs"')
+        ctx.run("git push")
+
     payload = {
-        "tag_name": "v" + NEW_VER,
+        "tag_name": "v" + version,
         "target_commitish": "master",
-        "name": "v" + NEW_VER,
+        "name": "v" + version,
         "body": desc,
         "draft": False,
         "prerelease": False,
@@ -133,3 +137,7 @@ def release(ctx, notest=True):
         headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]},
     )
     print(response.text)
+    ctx.run("rm -f dist/*.*", warn=True)
+    ctx.run("python setup.py sdist bdist_wheel", warn=True)
+    ctx.run("twine upload --skip-existing dist/*.whl", warn=True)
+    ctx.run("twine upload --skip-existing dist/*.tar.gz", warn=True)
