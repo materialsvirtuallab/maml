@@ -119,16 +119,10 @@ def propose_query_point(
         # Minimize objective is the negative acquisition function
         return -acquisition(x.reshape(-1, dim), gpr=gpr, y_max=y_max, noise=noise)
 
-    x0 = x_max.reshape(-1, dim)
     # make sure that the initial conditions fall into the bounds
-    x0 = np.clip(x0, bounds[:, 0] + 3 * EPS, bounds[:, 1] - 3 * EPS)
+    x0 = np.clip(x_max, bounds[:, 0] + 3 * EPS, bounds[:, 1] - 3 * EPS)
 
-    try:
-        res = minimize(min_obj, x0=x0, bounds=bounds, method="L-BFGS-B")
-    except IndexError:
-        # For some reason, scipy sometimes result in a shape error for x0.
-        # Here, we just simply initialize based on x_max without clipping.
-        res = minimize(min_obj, x0=x_max.reshape(-1, dim), bounds=bounds, method="L-BFGS-B")
+    res = minimize(min_obj, x0=x0, bounds=bounds, method="L-BFGS-B")
     if -float(res.fun) >= acq_max:
         x_max = res.x
     return _trunc(scaler.inverse_transform(x_max), decimals=3)
