@@ -361,7 +361,7 @@ class Stats:
 
 def _root_moment(data, weights, order) -> float:
     """
-    Auxilliary function to compute moment
+    Auxiliary function to compute moment
 
     Args:
         data (list): list of float data

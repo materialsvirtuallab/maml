@@ -222,10 +222,10 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         exe_command.append(f"atoms_filename={atoms_filename}")
 
         descriptor_command = ["soap"]
-        descriptor_command.append("cutoff" + "=" + f"{self.cutoff}")
-        descriptor_command.append("l_max" + "=" + f"{self.l_max}")
-        descriptor_command.append("n_max" + "=" + f"{self.n_max}")
-        descriptor_command.append("atom_sigma" + "=" + f"{self.atom_sigma}")
+        descriptor_command.append(f"cutoff={self.cutoff}")
+        descriptor_command.append(f"l_max={self.l_max}")
+        descriptor_command.append(f"n_max={self.n_max}")
+        descriptor_command.append(f"atom_sigma={self.atom_sigma}")
 
         atomic_numbers = [str(element.number) for element in sorted(np.unique(structure.species))]
         n_Z = len(atomic_numbers)

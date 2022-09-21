@@ -30,7 +30,7 @@ class ValueProfile:
 
     def increment_step(self):
         """
-        increase step atttribute by one
+        increase step attribute by one
         """
         self.step += 1
         if self.step > self.max_steps:
