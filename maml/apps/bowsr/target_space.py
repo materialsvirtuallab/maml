@@ -1,5 +1,5 @@
 """
-Module implemets the target space.
+Module implements the target space.
 """
 from typing import Callable, Dict, List, Union
 

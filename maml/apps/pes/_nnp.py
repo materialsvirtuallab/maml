@@ -226,7 +226,7 @@ class NNPotential(LammpsPotential):
                     kalman_eta (float): Standard Kalman filter parameter eta.
                         Default to 0.01.
                     kalman_etatau (float): Standard Kalman filter parameter
-                        etatau. Defaul to 2.302.
+                        etatau. Defaults to 2.302.
                     kalman_etamax (float): Standard Kalman filter parameter
                         etamax. Default to 1.0.
 
@@ -241,7 +241,7 @@ class NNPotential(LammpsPotential):
         filename = "input.nn"
 
         head_formatter = "{:<32s}{value}"
-        type2_format = "symfunction_short {central_atom}  2 {neighbor_atom}" "    {r_eta:.7f}    {rs:.7f}    {rcut:.7f}"
+        type2_format = "symfunction_short {central_atom}  2 {neighbor_atom}    {r_eta:.7f}    {rs:.7f}    {rcut:.7f}"
         type3_format = (
             "symfunction_short {central_atom}  3 {neighbor_atom1} "
             "{neighbor_atom2}    {a_eta:.7f} {lambd:>2d} {zeta:.7f}   "

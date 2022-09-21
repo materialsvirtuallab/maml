@@ -147,9 +147,7 @@ class AcquisitionFunction:
         self.xi = xi
 
         if acq_type not in ["ucb", "ei", "poi", "gp-ucb"]:
-            err_msg = (
-                f"The utility function {acq_type} has not been implemented, " "please choose one of ucb, ei, or poi."
-            )
+            err_msg = f"The utility function {acq_type} has not been implemented, please choose one of ucb, ei, or poi."
             raise NotImplementedError(err_msg)
         self.acq_type = acq_type
 

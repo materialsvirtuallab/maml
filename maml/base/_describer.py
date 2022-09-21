@@ -133,7 +133,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
     @property
     def feature_dim(self):
         """
-        Feature dimension, useful when certain models need to specif
+        Feature dimension, useful when certain models need to specify
         the feature dimension, e.g., MLP models.
         """
         return feature_dim_from_test_system(self)

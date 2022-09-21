@@ -27,7 +27,7 @@ module_dir = os.path.dirname(__file__)
 model_filename = os.path.join(module_dir, "model_files", "megnet", "formation_energy.hdf5")
 
 
-@requires(megnet is not None, "megnet package needs to be installed to use " "this module")
+@requires(megnet is not None, "megnet package needs to be installed to use this module")
 class MEGNet(EnergyModel):
     """
     MEGNetModel wrapper.
@@ -68,7 +68,7 @@ class MEGNet(EnergyModel):
         Returns: float
         """
         if not structure.is_ordered and not self.reconstruct:
-            raise ValueError("To predict properties of disordered structure, " "please set reconstruct=True")
+            raise ValueError("To predict properties of disordered structure, please set reconstruct=True")
 
         if self.reconstruct:
             species = [dict(site.species.as_dict()) for site in structure]
