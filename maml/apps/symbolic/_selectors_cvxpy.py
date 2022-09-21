@@ -1,5 +1,5 @@
 """
-This module implements more robust optmization
+This module implements more robust optimization
 using the cvxpy package
 """
 from typing import Dict, List, Optional, Union
@@ -29,7 +29,7 @@ class BaseSelectorCP(BaseSelector):
         """
         Base selector
         Args:
-            coef_thres (float): threshold to discard certain coefficents
+            coef_thres (float): threshold to discard certain coefficients
             method (str): solver for cvxpy problem. The default is ECOS
         """
         super().__init__(coef_thres=coef_thres, method=method)

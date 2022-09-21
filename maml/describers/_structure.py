@@ -413,6 +413,6 @@ class CoulombEigenSpectrum(BaseDescriber):
         f = np.sort(eig_vals)[::-1]
         if self.max_atoms is not None:
             if self.max_atoms < len(f):
-                raise RuntimeError("max_atoms is smaller than the " "size of current molecule")
+                raise RuntimeError("max_atoms is smaller than the size of current molecule")
             f = np.pad(f, (0, self.max_atoms - len(f)))
         return f

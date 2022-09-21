@@ -14,8 +14,8 @@ except ImportError:
 
 def fft_magnitude(z: np.ndarray) -> np.ndarray:
     """
-    Dicrete Fourier Transform the signal z and return
-    the magnitude of the  coefficents
+    Discrete Fourier Transform the signal z and return
+    the magnitude of the  coefficients
     Args:
         z (np.ndarray): 1D signal array
     Returns: 1D magnitude

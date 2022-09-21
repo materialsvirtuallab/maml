@@ -1,5 +1,5 @@
 """
-Module implemets the BayesianOptimizer.
+Module implements the BayesianOptimizer.
 """
 import warnings
 from copy import copy

@@ -80,7 +80,7 @@ class MLP(KerasModel):
         """
         input_dim = self.get_input_dim(describer, input_dim)
         if input_dim is None:
-            raise ValueError("input_dim is not known and cannot be infered")
+            raise ValueError("input_dim is not known and cannot be inferred")
         model = construct_mlp(
             input_dim=input_dim,
             n_neurons=n_neurons,

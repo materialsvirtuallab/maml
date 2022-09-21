@@ -24,8 +24,8 @@ class BaseSelector:
         """
         Base selector
         Args:
-            coef_thres (float): threshold to discard certain coefficents
-            method (str): optimization methods in scipy.optmize.minimize
+            coef_thres (float): threshold to discard certain coefficients
+            method (str): optimization methods in scipy.optimize.minimize
         """
         self.coef_thres = coef_thres
         self.is_fitted = False

@@ -86,7 +86,7 @@ def convert_hcp_plane(plane: list) -> np.ndarray:
 
 class GBDescriber(BaseDescriber):
     """
-    The describer that descibe the grain boundary db entry
+    The describer that describes the grain boundary db entry
     with selected structural and elemental features
     """
 
@@ -161,7 +161,7 @@ def get_structural_feature(db_entry: Dict, features: list = None) -> pd.DataFram
     The structural features:
     d_gb: interplanal distance of the gb_plane
     d_rot: interplanal distance of the gb_plane
-        w/ smallest interger index ) normal to rotation axis
+        w/ smallest integer index ) normal to rotation axis
     theta: rotation angle (sin and cos)
     Args:
         db_entry (Dict): db entry

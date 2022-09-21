@@ -209,7 +209,7 @@ def write_data_from_structure(
         structure (Structure): pymatgen structure
         filename (str): filename
         ff_elements (list of str): elements to be considered
-        significant_figures (int): significant figures of floats in outout
+        significant_figures (int): significant figures of floats in output
         origin (tuple): origin coordinates
     """
     new_matrix, symmop, rot_matrix = get_lammps_lattice_and_rotation(structure=structure, origin=origin)
