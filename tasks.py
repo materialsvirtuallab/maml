@@ -47,13 +47,9 @@ def make_doc(ctx):
 
     ctx.run("sphinx-build -b html api-docs-source docs")
 
-    # ctx.run("cp _static/* ../docs/html/_static", warn=True)
-
     with cd("docs"):
         ctx.run("rm -r .doctrees", warn=True)
 
-        # This makes sure maml.org works to redirect to the Github page
-        ctx.run('echo "maml.ai" > CNAME')
         # Avoid the use of jekyll so that _dir works as intended.
         ctx.run("touch .nojekyll")
 
