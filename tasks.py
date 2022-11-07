@@ -90,14 +90,14 @@ def set_ver(ctx, version):
                 lines.append('__version__ = "%s"' % version)
             else:
                 lines.append(l.rstrip())
-    with open("maml/__init__.py", "wt") as f:
+    with open("maml/__init__.py", "w") as f:
         f.write("\n".join(lines) + "\n")
 
     lines = []
     with open("setup.py") as f:
         for l in f:
             lines.append(re.sub(r"version=([^,]+),", 'version="%s",' % version, l.rstrip()))
-    with open("setup.py", "wt") as f:
+    with open("setup.py", "w") as f:
         f.write("\n".join(lines) + "\n")
 
 
