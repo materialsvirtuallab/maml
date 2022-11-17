@@ -1,9 +1,10 @@
 """
 Module implements the BayesianOptimizer.
 """
+from __future__ import annotations
+
 import warnings
 from copy import copy
-from typing import Any, Dict, List, Tuple
 
 import numpy as np
 from pymatgen.core.operations import SymmOp
@@ -35,7 +36,7 @@ def struct2perturbation(
     abc_tol: float = 1e-3,
     angle_tol: float = 2e-1,
     symprec: float = 1e-2,
-) -> Tuple[List[WyckoffPerturbation], List[int], Dict, LatticePerturbation]:
+) -> tuple[list[WyckoffPerturbation], list[int], dict, LatticePerturbation]:
     """
     Get the symmetry-driven perturbation of the structure.
 
@@ -117,7 +118,7 @@ class BayesianOptimizer:
         use_symmetry: bool = True,
         use_scaler: bool = True,
         noisy: bool = True,
-        seed: int = None,
+        seed: int | None = None,
         **kwargs,
     ):
         """
@@ -345,7 +346,7 @@ class BayesianOptimizer:
             self.add_query(x_next)
             iteration += 1
 
-    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> Tuple[Any, ...]:
+    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> tuple:
         """
         Args:
             radius (float): Radius cutoff to identify reasonable structures.

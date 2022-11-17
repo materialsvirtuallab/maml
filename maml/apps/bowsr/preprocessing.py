@@ -1,7 +1,7 @@
 """
 Module implements the scaler.
 """
-from typing import List, Union
+from __future__ import annotations
 
 import numpy as np
 from monty.json import MSONable
@@ -13,7 +13,7 @@ class StandardScaler(MSONable):
     dictionary representation.
     """
 
-    def __init__(self, mean: Union[List, np.ndarray] = None, std: Union[List, np.ndarray] = None):
+    def __init__(self, mean: list | np.ndarray | None = None, std: list | np.ndarray | None = None):
         """
         Args:
             mean: np.ndarray, mean values
@@ -22,7 +22,7 @@ class StandardScaler(MSONable):
         self.mean = mean
         self.std = std
 
-    def fit(self, target: Union[List, np.ndarray]) -> None:
+    def fit(self, target: list | np.ndarray) -> None:
         """
         Fit the StandardScaler to the target.
 
@@ -91,7 +91,7 @@ class DummyScaler(MSONable):
     Dummy scaler does nothing.
     """
 
-    def fit(self, target: Union[List, np.ndarray]) -> None:
+    def fit(self, target: list | np.ndarray) -> None:
         """
         Fit the DummyScaler to the target.
 
@@ -101,7 +101,7 @@ class DummyScaler(MSONable):
         """
         return
 
-    def transform(self, target: Union[List, np.ndarray]) -> Union[List, np.ndarray]:
+    def transform(self, target: list | np.ndarray) -> list | np.ndarray:
         """
         Transform target.
 
@@ -111,7 +111,7 @@ class DummyScaler(MSONable):
         """
         return target
 
-    def inverse_transform(self, transformed_target: Union[List, np.ndarray]) -> Union[List, np.ndarray]:
+    def inverse_transform(self, transformed_target: list | np.ndarray) -> list | np.ndarray:
         """
         Inversely transform the target.
 

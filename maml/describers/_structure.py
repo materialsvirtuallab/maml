@@ -1,8 +1,9 @@
 """
 Structure-wise describers. These describers include structural information.
 """
+from __future__ import annotations
+
 import logging
-from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -105,9 +106,9 @@ class DistinctSiteProperty(BaseDescriber):
 
     def __init__(
         self,
-        properties: List[str],
+        properties: list[str],
         symprec: float = 0.1,
-        wyckoffs: Optional[List[str]] = None,
+        wyckoffs: list[str] | None = None,
         feature_batch: str = "pandas_concat",
         **kwargs,
     ):
@@ -169,9 +170,7 @@ class CoulombMatrix(BaseDescriber):
             year={2012}, publisher={APS}}
     """
 
-    def __init__(
-        self, random_seed: int = None, max_atoms: Optional[int] = None, is_ravel: Optional[bool] = True, **kwargs
-    ):
+    def __init__(self, random_seed: int | None = None, max_atoms: int | None = None, is_ravel: bool = True, **kwargs):
         """
         Args:
             random_seed (int): random seed
@@ -188,7 +187,7 @@ class CoulombMatrix(BaseDescriber):
         super().__init__(**kwargs)
 
     @staticmethod
-    def _get_columb_mat(s: Union[Molecule, Structure]) -> np.ndarray:
+    def _get_columb_mat(s: Molecule | Structure) -> np.ndarray:
         """
         Args:
             s (Molecule/Structure): input Molecule or Structure. Structure
@@ -207,7 +206,7 @@ class CoulombMatrix(BaseDescriber):
         np.fill_diagonal(c, z_diag)
         return c
 
-    def get_coulomb_mat(self, s: Union[Molecule, Structure]) -> np.ndarray:
+    def get_coulomb_mat(self, s: Molecule | Structure) -> np.ndarray:
         """
         Args:
             s (Molecule/Structure): input Molecule or Structure. Structure
@@ -223,7 +222,7 @@ class CoulombMatrix(BaseDescriber):
             return np.pad(c, (0, padding), mode="constant", constant_values=0)
         return c
 
-    def transform_one(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
+    def transform_one(self, s: Molecule | Structure) -> pd.DataFrame:
         """
         Args:
             s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
@@ -258,7 +257,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
             year={2013},publisher={IOP Publishing}}
     """
 
-    def __init__(self, random_seed: Optional[int] = None, is_ravel: Optional[bool] = True, **kwargs):
+    def __init__(self, random_seed: int | None = None, is_ravel: bool = True, **kwargs):
         """
         Args:
             random_seed (int): random seed
@@ -266,7 +265,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         """
         super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
 
-    def get_randomized_coulomb_mat(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
+    def get_randomized_coulomb_mat(self, s: Molecule | Structure) -> pd.DataFrame:
         """
         Returns the randomized matrix
         (i) take an arbitrary valid Coulomb matrix C
@@ -293,7 +292,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
             c = c.ravel()
         return pd.DataFrame(c)
 
-    def transform_one(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
+    def transform_one(self, s: Molecule | Structure) -> pd.DataFrame:
         """
         Transform one structure to descriptors
         Args:
@@ -323,7 +322,7 @@ class SortedCoulombMatrix(CoulombMatrix):
                 pages={440--448}, year={2012}}
     """
 
-    def __init__(self, random_seed: Optional[int] = None, is_ravel: Optional[bool] = True, **kwargs):
+    def __init__(self, random_seed: int | None = None, is_ravel: bool = True, **kwargs):
         """
         Args:
             random_seed (int): random seed
@@ -331,7 +330,7 @@ class SortedCoulombMatrix(CoulombMatrix):
         """
         super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
 
-    def get_sorted_coulomb_mat(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
+    def get_sorted_coulomb_mat(self, s: Molecule | Structure) -> pd.DataFrame:
         """
         Returns the matrix sorted by the row norm
 
@@ -348,7 +347,7 @@ class SortedCoulombMatrix(CoulombMatrix):
             c = c.ravel()
         return pd.DataFrame(c)
 
-    def transform_one(self, s: Union[Molecule, Structure]) -> pd.DataFrame:
+    def transform_one(self, s: Molecule | Structure) -> pd.DataFrame:
         """
         Transform one structure into descriptor
         Args:
@@ -377,7 +376,7 @@ class CoulombEigenSpectrum(BaseDescriber):
             year={2012}, publisher={APS}}
     """
 
-    def __init__(self, max_atoms: Optional[int] = None, **kwargs):
+    def __init__(self, max_atoms: int | None = None, **kwargs):
         """
         This method calculates the Coulomb matrix of a molecule and
         then sort the eigen values of the Coulomb matrix as the vector

@@ -1,10 +1,12 @@
 """
 neural network models
 """
+from __future__ import annotations
+
 import json
 import math
 import os
-from typing import Any, List, Optional, Sequence, Union
+from typing import Sequence
 
 import joblib
 import numpy as np
@@ -15,7 +17,7 @@ from ._keras_utils import deserialize_keras_activation, deserialize_keras_optimi
 
 
 def construct_atom_sets(
-    input_dim: Optional[int] = None,
+    input_dim: int | None = None,
     is_embedding: bool = True,
     n_neurons: Sequence[int] = (64, 64),
     n_neurons_final: Sequence[int] = (64, 64),
@@ -23,7 +25,7 @@ def construct_atom_sets(
     activation: str = "relu",
     embedding_vcal: int = 95,
     embedding_dim: int = 32,
-    symmetry_func: Union[List[str], str] = "mean",
+    symmetry_func: list[str] | str = "mean",
     optimizer: str = "adam",
     loss: str = "mse",
     compile_metrics: tuple = (),
@@ -102,7 +104,7 @@ def construct_atom_sets(
         out_ = Dense(n_neuron, activation=activation)(out_)
 
     if is_classification:
-        final_act: Optional[str] = "sigmoid"
+        final_act: str | None = "sigmoid"
     else:
         final_act = None
     out_ = Dense(n_targets, activation=final_act)(out_)
@@ -118,8 +120,8 @@ class AtomSets(KerasModel):
 
     def __init__(
         self,
-        describer: Optional[BaseDescriber] = None,
-        input_dim: Optional[int] = None,
+        describer: BaseDescriber | None = None,
+        input_dim: int | None = None,
         is_embedding: bool = True,
         n_neurons: Sequence[int] = (64, 64),
         n_neurons_final: Sequence[int] = (64, 64),
@@ -127,7 +129,7 @@ class AtomSets(KerasModel):
         activation: str = "relu",
         embedding_vcal: int = 95,
         embedding_dim: int = 32,
-        symmetry_func: Union[List[str], str] = "mean",
+        symmetry_func: list[str] | str = "mean",
         optimizer: str = "adam",
         loss: str = "mse",
         compile_metrics: tuple = (),
@@ -314,12 +316,12 @@ class AtomSets(KerasModel):
 
     def fit(
         self,
-        features: Union[List, np.ndarray],
-        targets: Union[List, np.ndarray] = None,
-        val_features: Optional[Union[List, np.ndarray]] = None,
-        val_targets: Optional[Union[List, np.ndarray]] = None,
+        features: list | np.ndarray,
+        targets: list | np.ndarray | None = None,
+        val_features: list | np.ndarray | None = None,
+        val_targets: list | np.ndarray | None = None,
         **kwargs,
-    ) -> "BaseModel":
+    ) -> BaseModel:
         """
         Args:
             features (list or np.ndarray): Numerical input feature list or
@@ -355,7 +357,7 @@ class AtomSets(KerasModel):
             predicted.append(self.model.predict(batch[0])[0])  # type: ignore
         return np.concatenate(predicted, axis=0)
 
-    def evaluate(self, eval_objs: Any, eval_targets: Any, is_feature: bool = False, batch_size: int = 16):
+    def evaluate(self, eval_objs, eval_targets, is_feature: bool = False, batch_size: int = 16):
         """
         Evaluate objs, targets
 

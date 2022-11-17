@@ -1,9 +1,10 @@
 """
 Module implements the describer for GB entry
 """
+from __future__ import annotations
+
 from functools import reduce
 from math import gcd
-from typing import Dict
 
 import numpy as np
 import pandas as pd
@@ -90,7 +91,7 @@ class GBDescriber(BaseDescriber):
     with selected structural and elemental features
     """
 
-    def __init__(self, structural_features: list = None, elemental_features: list = None, **kwargs):
+    def __init__(self, structural_features: list | None = None, elemental_features: list | None = None, **kwargs):
         """
 
         Args:
@@ -107,7 +108,7 @@ class GBDescriber(BaseDescriber):
         super().__init__(**kwargs)
 
     def transform_one(
-        self, db_entry: Dict, inc_target: bool = True, inc_bulk_ref: bool = True, mp_api: str = None
+        self, db_entry: dict, inc_target: bool = True, inc_bulk_ref: bool = True, mp_api: str | None = None
     ) -> pd.DataFrame:
         """
         Describe gb with selected structural and elemental features
@@ -156,7 +157,7 @@ class GBDescriber(BaseDescriber):
         return new_df
 
 
-def get_structural_feature(db_entry: Dict, features: list = None) -> pd.DataFrame:
+def get_structural_feature(db_entry: dict, features: list | None = None) -> pd.DataFrame:
     """
     The structural features:
     d_gb: interplanal distance of the gb_plane
@@ -201,7 +202,7 @@ def get_structural_feature(db_entry: Dict, features: list = None) -> pd.DataFram
 
 
 def get_elemental_feature(
-    db_entry: Dict, loc_algo: str = "crystalnn", features: list = None, mp_api: str = None
+    db_entry: dict, loc_algo: str = "crystalnn", features: list | None = None, mp_api: str | None = None
 ) -> pd.DataFrame:
     """
     Function to get the elemental features
@@ -302,7 +303,7 @@ class GBBond(MSONable):
         ]
     }
 
-    def __init__(self, gb: GrainBoundary, loc_algo: str = "crystalnn", bond_mat: np.ndarray = None, **kwargs):
+    def __init__(self, gb: GrainBoundary, loc_algo: str = "crystalnn", bond_mat: np.ndarray | None = None, **kwargs):
         """
 
         Args:

@@ -1,6 +1,7 @@
 """
 Module defines feature objects for GB energy model
 """
+from __future__ import annotations
 
 
 class my_quant:
@@ -8,7 +9,7 @@ class my_quant:
     An object to describe GB quantities
     """
 
-    def __init__(self, str_name: str, latex_name: str = None, latex_unit: str = None):
+    def __init__(self, str_name: str, latex_name: str | None = None, latex_unit: str | None = None):
         """
 
         Args:

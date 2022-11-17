@@ -1,7 +1,7 @@
 """
 Module implements the new candidate proposal.
 """
-from typing import Any, List, Tuple, Union
+from __future__ import annotations
 
 import numpy as np
 from numpy.random import RandomState
@@ -26,7 +26,7 @@ def _trunc(values: np.ndarray, decimals: int = 3):
     return np.trunc(values * 10**decimals) / 10**decimals
 
 
-def ensure_rng(seed: int = None) -> RandomState:
+def ensure_rng(seed: int | None = None) -> RandomState:
     """
     Create a random number generator based on an optional seed.
     This can be an integer for a seeded rng or None for an unseeded rng.
@@ -34,7 +34,7 @@ def ensure_rng(seed: int = None) -> RandomState:
     return np.random.RandomState(seed=seed)  # pylint: disable=E1101
 
 
-def predict_mean_std(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float) -> Tuple[Any, ...]:
+def predict_mean_std(x: list | np.ndarray, gpr: GaussianProcessRegressor, noise: float) -> tuple:
     """
     Speed up the gpr.predict method by manually computing the kernel operations.
 
@@ -151,9 +151,7 @@ class AcquisitionFunction:
             raise NotImplementedError(err_msg)
         self.acq_type = acq_type
 
-    def calculate(
-        self, x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, noise: float
-    ) -> np.ndarray:
+    def calculate(self, x: list | np.ndarray, gpr: GaussianProcessRegressor, y_max: float, noise: float) -> np.ndarray:
         """
         Calculate the value of acquisition function.
 
@@ -176,14 +174,12 @@ class AcquisitionFunction:
         return self._gpucb(x, gpr, noise)
 
     @staticmethod
-    def _ucb(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, kappa: float, noise: float) -> np.ndarray:
+    def _ucb(x: list | np.ndarray, gpr: GaussianProcessRegressor, kappa: float, noise: float) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
         return mean + kappa * std
 
     @staticmethod
-    def _ei(
-        x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float
-    ) -> np.ndarray:
+    def _ei(x: list | np.ndarray, gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
 
         imp = mean - y_max - xi
@@ -193,9 +189,7 @@ class AcquisitionFunction:
         return imp * cdf + std * pdf
 
     @staticmethod
-    def _poi(
-        x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float
-    ) -> np.ndarray:
+    def _poi(x: list | np.ndarray, gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
 
         z = (mean - y_max - xi) / std
@@ -203,7 +197,7 @@ class AcquisitionFunction:
         return cdf
 
     @staticmethod
-    def _gpucb(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float) -> np.ndarray:
+    def _gpucb(x: list | np.ndarray, gpr: GaussianProcessRegressor, noise: float) -> np.ndarray:
         if not hasattr(gpr, "X_train_"):
             raise AttributeError("GP-UCB acquisition function can not be applued.")
         T = gpr.X_train_.shape[0]

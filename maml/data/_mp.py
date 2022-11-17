@@ -1,7 +1,7 @@
 """
 Materials Project DataSource
 """
-from typing import Dict, List, Union
+from __future__ import annotations
 
 import pandas as pd
 from pymatgen.ext.matproj import MPRester
@@ -14,14 +14,14 @@ class MaterialsProject(BaseDataSource):
     Query the Materials Project for Data.
     """
 
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str | None = None):
         """
         Args:
             api_key (str or None): Materials Project API key.
         """
         self.mpr = MPRester(api_key=api_key)
 
-    def get(self, criteria: Union[str, Dict], properties: List[str]) -> pd.DataFrame:  # type: ignore
+    def get(self, criteria: str | dict, properties: list[str]) -> pd.DataFrame:  # type: ignore
         """
         Args:
             criteria (str or dict): Criteria for query

@@ -335,7 +335,9 @@ class BPSymmetryFunctions(BaseDescriber):
             }
             for specie in elements:
                 distances = np.array([nn_distance for _, nn_distance in temp_dict[specie]])[:, None, None]
-                g2 = np.sum(np.exp(-self.r_etas * (distances - self.r_shift) ** 2) * self._fc(distances), axis=0)
+                g2 = np.sum(
+                    np.exp(-self.r_etas * (distances - self.r_shift) ** 2) * self._fc(distances), axis=0
+                )  # type: ignore
                 site_symmfuncs.extend(g2.ravel().tolist())
 
             for specie1, specie2 in itertools.combinations_with_replacement(elements, 2):
@@ -362,7 +364,7 @@ class BPSymmetryFunctions(BaseDescriber):
                 cosines = np.sum((v1 - center) * (v2 - center), axis=1) / (d1 * d2)
                 cosines = cosines[:, None, None, None]
                 distances = np.stack((d1, d2, d3))
-                cutoffs = np.prod(self._fc(distances), axis=0)
+                cutoffs = np.prod(self._fc(distances), axis=0)  # type: ignore
                 cutoffs = np.atleast_1d(cutoffs)[:, None, None, None]
                 powers = np.sum(distances**2, axis=0)[:, None, None, None]
                 g4 = np.sum(
