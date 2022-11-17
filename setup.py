@@ -12,7 +12,7 @@ packages such as scikit-learn and tensorflow for implementations of ML algorithm
 packages such as `pymatgen <http://pymatgen.org>`_ and `matminer <http://hackingmaterials.lbl.gov/matminer/>`_ for
 crystal/molecule manipulation and feature generation.
 
-Official documentation at http://maml.ai/
+Official documentation at https://materialsvirtuallab.github.io/maml
 
 Features
 --------
@@ -99,7 +99,7 @@ setup(
     author_email="ongsp@eng.ucsd.edu",
     maintainer="Shyue Ping Ong",
     maintainer_email="ongsp@eng.ucsd.edu",
-    url="http://maml.ai/",
+    url="https://materialsvirtuallab.github.io/maml",
     license="BSD",
     description="maml is a machine learning library for materials science.",
     long_description=long_desc,
