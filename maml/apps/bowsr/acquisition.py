@@ -52,7 +52,7 @@ def predict_mean_std(x: list | np.ndarray, gpr: GaussianProcessRegressor, noise:
     # the dot product line. Please double check. I am disabling the cache for now
     if True:  # getattr(gpr, "_K_inv", None) is None:
         L_inv = solve_triangular(gpr.L_.T, np.eye(gpr.L_.shape[0]))
-        setattr(gpr, "_K_inv", L_inv.dot(L_inv.T))
+        gpr._K_inv = L_inv.dot(L_inv.T)
 
     K_trans = gpr.kernel_(X, gpr.X_train_)
     y_mean = K_trans.dot(gpr.alpha_) + gpr._y_train_mean
@@ -98,7 +98,7 @@ def propose_query_point(
             known data.
         y_max (float): The current maximum target value.
         noise (float): The noise added to the acquisition function if noisy-based
-            bayesian optimization was performed.
+            Bayesian optimization was performed.
         bounds (ndarray): The bounds of candidate points.
         random_state (RandomState): Random number generator.
         sampler (str): Sampler generating warmup points. "uniform" or "lhs".
@@ -160,11 +160,11 @@ class AcquisitionFunction:
             gpr (GaussianProcessRegressor): A Gaussian process regressor fitted to
                 known data.
             y_max (float): The current maximum target value.
-            noise (float): Noise added to acquisition function if noisy-based bayesian
+            noise (float): Noise added to acquisition function if noisy-based Bayesian
                 optimization is performed, 0 otherwise.
         """
         if self.acq_type not in ["ucb", "ei", "poi", "gp-ucb"]:
-            raise ValueError("acq type not recognised")
+            raise ValueError("acq type not recognized")
         if self.acq_type == "ucb":
             return self._ucb(x, gpr, self.kappa, noise)
         if self.acq_type == "ei":

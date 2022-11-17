@@ -47,13 +47,9 @@ def make_doc(ctx):
 
     ctx.run("sphinx-build -b html api-docs-source docs")
 
-    # ctx.run("cp _static/* ../docs/html/_static", warn=True)
-
     with cd("docs"):
         ctx.run("rm -r .doctrees", warn=True)
 
-        # This makes sure maml.org works to redirect to the Github page
-        ctx.run('echo "maml.ai" > CNAME')
         # Avoid the use of jekyll so that _dir works as intended.
         ctx.run("touch .nojekyll")
 
@@ -94,14 +90,14 @@ def set_ver(ctx, version):
                 lines.append('__version__ = "%s"' % version)
             else:
                 lines.append(l.rstrip())
-    with open("maml/__init__.py", "wt") as f:
+    with open("maml/__init__.py", "w") as f:
         f.write("\n".join(lines) + "\n")
 
     lines = []
     with open("setup.py") as f:
         for l in f:
             lines.append(re.sub(r"version=([^,]+),", 'version="%s",' % version, l.rstrip()))
-    with open("setup.py", "wt") as f:
+    with open("setup.py", "w") as f:
         f.write("\n".join(lines) + "\n")
 
 

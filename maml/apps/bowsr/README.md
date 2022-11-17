@@ -1,7 +1,7 @@
 ## Bayesian Optimization With Symmetry Relaxation Algorithm (BOWSR)
 
 The BOWSR app is designed for obtaining near-equilibrium crystal structures via
-bayesian optimization and graph deep learning energy model without expensive
+Bayesian optimization and graph deep learning energy model without expensive
 DFT. The current implementation is compatible with energy evaluators
 for [MEGNet](https://github.com/materialsvirtuallab/megnet)
 , [CGCNN](https://github.com/txie-93/cgcnn), and [VASP](https://www.vasp.at).
@@ -23,8 +23,17 @@ observations.
 By default, the current implementation uses the pre-trained graph models
 in [MEGNet-2019](https://github.com/materialsvirtuallab/megnet/tree/master/mvl_models/mp-2019.4.1)
 and [CGCNN-2018](https://github.com/txie-93/cgcnn/tree/master/pre-trained).
-Please visit the [notebooks directory](../../../notebooks/bowsr) for Jupyter
+Please visit the [notebooks directory](../../../notebooks/bowsr/bowsr) for Jupyter
 notebooks with more detailed code example.
+
+|                                       |                                                                                                                      |                                                                                                                   |                                                                                                                                               |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **BOWSR with MEGNet as energy model** | [![Binder]](https://mybinder.org/v2/gh/materialsvirtuallab/maml/master?labpath=notebooks/bowsr/megnet_example.ipynb) | [![View on GitHub]](https://github.com/materialsvirtuallab/maml/blob/master/notebooks/bowsr/megnet_example.ipynb) | [![Open in Google Colab]](https://colab.research.google.com/github/materialsvirtuallab/maml/blob/master/notebooks/bowsr/megnet_example.ipynb) |
+| **BOWSR with CGCNN as energy model**  | [![Binder]](https://mybinder.org/v2/gh/materialsvirtuallab/maml/master?labpath=notebooks/bowsr/cgcnn_example.ipynb)  | [![View on GitHub]](https://github.com/materialsvirtuallab/maml/blob/master/notebooks/bowsr/cgcnn_example.ipynb)  | [![Open in Google Colab]](https://colab.research.google.com/github/materialsvirtuallab/maml/blob/master/notebooks/bowsr/cgcnn_example.ipynb)  |
+
+[Binder]: https://mybinder.org/badge_logo.svg
+[View on GitHub]: https://img.shields.io/badge/View%20on-GitHub-darkblue?logo=github
+[Open in Google Colab]: https://colab.research.google.com/assets/colab-badge.svg
 
 ## Dependencies
 

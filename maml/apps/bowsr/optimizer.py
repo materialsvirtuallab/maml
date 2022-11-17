@@ -130,10 +130,10 @@ class BayesianOptimizer:
             use_symmetry (bool): Whether to use constraint of symmetry to reduce
                 parameters space.
             use_scaler (bool): Whether to use scaler for Gaussian process regression.
-            noisy (bool): Whether to perform noise-based bayesian optimization
-                (predictive noisy test data) or noise-free bayesian optimization
+            noisy (bool): Whether to perform noise-based Bayesian optimization
+                (predictive noisy test data) or noise-free Bayesian optimization
                 (predictive GP posterior).
-            seed (int): Seeded rng for random numbe generator. None
+            seed (int): Seeded rng for random number generator. None
                 for an unseeded rng.
         """
         random_state = ensure_rng(seed)
@@ -191,7 +191,7 @@ class BayesianOptimizer:
         Get the derived structure.
 
         Args:
-            x (ndarray): The input of getting perturbated structure.
+            x (ndarray): The input of getting perturbed structure.
         """
 
         struct = self.structure.copy()
@@ -229,9 +229,9 @@ class BayesianOptimizer:
 
     def get_formation_energy(self, x: np.ndarray) -> float:
         """
-        Calculate the formation energy of the perturbated structure. Absolute value
+        Calculate the formation energy of the perturbed structure. Absolute value
         is calculated on practical purpose of maximization of target function in
-        bayesian optimization.
+        Bayesian optimization.
 
         Args:
             x (ndarray): The input of formation energy calculation.
@@ -252,12 +252,12 @@ class BayesianOptimizer:
             target = 0
         return target
 
-    def propose(self, acquisitionfunction: AcquisitionFunction, n_warmup: int, sampler: str) -> np.ndarray:
+    def propose(self, acquisition_function: AcquisitionFunction, n_warmup: int, sampler: str) -> np.ndarray:
         """
         Suggest the next most promising point.
 
         Args:
-            acquisitionfunction (AcquisitionFunction): AcquisitionFunction.
+            acquisition_function (AcquisitionFunction): AcquisitionFunction.
             n_warmup (int): Number of randomly sampled points to select the initial
                 point for minimization.
             sampler (str): Sampler. Options are Latin Hyperparameter Sampling and uniform sampling.
@@ -278,7 +278,7 @@ class BayesianOptimizer:
 
         # Find the next point that maximize the acquisition function.
         x_next = propose_query_point(
-            acquisition=acquisitionfunction.calculate,
+            acquisition=acquisition_function.calculate,
             scaler=self.scaler,
             gpr=self.gpr,
             y_max=y_max,
@@ -342,7 +342,7 @@ class BayesianOptimizer:
 
         iteration = 0
         while iteration < n_iter:
-            x_next = self.propose(acquisitionfunction=acq, n_warmup=n_warmup, sampler=sampler)
+            x_next = self.propose(acquisition_function=acq, n_warmup=n_warmup, sampler=sampler)
             self.add_query(x_next)
             iteration += 1
 
