@@ -8,10 +8,10 @@ import re
 import subprocess
 import xml.etree.ElementTree as ET
 from collections import OrderedDict, defaultdict
+from shutil import which
 
 import numpy as np
 from monty.io import zopen
-from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.core import Element, Lattice, Structure

@@ -9,9 +9,9 @@ import itertools
 import logging
 import os
 import subprocess
+from shutil import which
 
 import numpy as np
-from monty.os.path import which
 from monty.tempfile import ScratchDir
 from pymatgen.core import Element, Lattice, Structure
 from pymatgen.io.lammps.data import LammpsData
