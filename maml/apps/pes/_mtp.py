@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 import numpy as np
 from monty.io import zopen
-from monty.os.path import which
+from shutil import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.core import Lattice, Structure

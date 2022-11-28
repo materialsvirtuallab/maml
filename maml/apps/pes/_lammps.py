@@ -11,7 +11,7 @@ import os
 import subprocess
 
 import numpy as np
-from monty.os.path import which
+from shutil import which
 from monty.tempfile import ScratchDir
 from pymatgen.core import Element, Lattice, Structure
 from pymatgen.io.lammps.data import LammpsData
