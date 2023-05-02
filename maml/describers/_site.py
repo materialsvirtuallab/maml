@@ -341,7 +341,6 @@ class BPSymmetryFunctions(BaseDescriber):
                 site_symmfuncs.extend(g2.ravel().tolist())
 
             for specie1, specie2 in itertools.combinations_with_replacement(elements, 2):
-
                 group1, group2 = temp_dict[specie1], temp_dict[specie2]
 
                 c = (

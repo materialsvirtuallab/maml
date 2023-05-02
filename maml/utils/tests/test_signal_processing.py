@@ -15,7 +15,6 @@ except ImportError:
 
 
 class TestSP(unittest.TestCase):
-
     x = np.load(os.path.join(CWD, "test_x.npy"))
 
     def test_fft(self):

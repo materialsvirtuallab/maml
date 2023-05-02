@@ -81,7 +81,6 @@ class CGCNNInput:
     atom_init_filename = pjoin(module_dir, "model_files", "cgcnn", "atom_init.json")
 
     def __init__(self, max_num_nbr: int = 12, radius: float = 8, dmin: float = 0, step: float = 0.2):
-
         """
         Init CGCNNInput.
 
@@ -122,7 +121,6 @@ class CGCNNInput:
         return tuple((nbr_fea_idx, nbr_fea))  # type: ignore
 
     def generate_input(self, structure: Structure, cif_id: int | None = None) -> tuple:
-
         """
         Generate cgcnn inputs for given structure.
 
