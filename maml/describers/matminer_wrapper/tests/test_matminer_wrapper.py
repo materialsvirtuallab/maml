@@ -26,7 +26,6 @@ class TestWrapper(PymatgenTest):
         self.assertListEqual(ep._get_param_names(), ["data_source", "features", "stats"])
 
     def test_atomic_orbitals(self):
-
         AtomicOrbitals = wrap_matminer_describer(
             "AtomicOrbitals", composition.AtomicOrbitals, to_composition, describer_type="composition"
         )
