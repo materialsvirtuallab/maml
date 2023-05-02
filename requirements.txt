@@ -1,5 +1,5 @@
 pymatgen==2022.11.7
-scikit-learn==1.2.0
+scikit-learn==1.2.2
 h5py==3.8.0
 joblib==1.2.0
 tqdm==4.65.0
