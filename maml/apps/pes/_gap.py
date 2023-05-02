@@ -157,7 +157,7 @@ class GAPotential(LammpsPotential):
         position_pattern = re.compile("\n(.+?)(?=\nE.*|\n\n.*|$)", re.S)
         # formatify = lambda string: [float(s) for s in string.split()]
 
-        for (size, block) in block_pattern.findall(lines):
+        for size, block in block_pattern.findall(lines):
             d = {"outputs": {}}
             size = int(size)
             lattice_str = lattice_pattern.findall(block)[0]

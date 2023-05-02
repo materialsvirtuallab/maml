@@ -12,7 +12,6 @@ CWD = os.path.abspath(os.path.dirname(__file__))
 
 @unittest.skipIf(ElementProperty is None, "matminer package is needed")
 class ElementPropertyTest(unittest.TestCase):
-
     s = PymatgenTest.get_structure("Li2O")
 
     def test_element_property(self):
