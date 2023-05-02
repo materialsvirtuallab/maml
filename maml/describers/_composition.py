@@ -268,7 +268,6 @@ class ElementStats(BaseDescriber):
         value_np_array = np.array(value_array)
 
         if reduction_algo == "pca":
-
             m = PCA(n_components=num_dim, **reduction_params)
             property_names = [f"pca_{i}" for i in range(num_dim)]
         elif reduction_algo == "kpca":
