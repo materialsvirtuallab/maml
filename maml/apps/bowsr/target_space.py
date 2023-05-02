@@ -77,7 +77,7 @@ class TargetSpace:
 
         # Preallocated memory for x and y points.
         self._params = np.empty(shape=(0, self.dim))
-        self._target = np.empty(shape=(0))
+        self._target = np.empty(shape=0)
 
     def __len__(self):
         assert len(self._params) == len(self._target)
@@ -197,7 +197,7 @@ class TargetSpace:
         Empty the param, target of the space.
         """
         self._params = np.empty(shape=(0, self.dim))
-        self._target = np.empty(shape=(0))
+        self._target = np.empty(shape=0)
 
     def __repr__(self):
         return (
