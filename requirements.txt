@@ -1,4 +1,4 @@
-pymatgen==2022.11.7
+pymatgen==2023.3.10
 scikit-learn==1.2.2
 h5py==3.8.0
 joblib==1.2.0
