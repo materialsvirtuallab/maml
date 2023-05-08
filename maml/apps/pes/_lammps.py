@@ -35,9 +35,10 @@ def get_default_lmp_exe():
     """
 
     for lmp_exe in ["lmp_serial", "lmp_mpi", "lmp_g++_serial", "lmp_g++_mpich", "lmp_intel_cpu_intelmpi"]:
-        if which(lmp_exe) is not None:
-            logger.info(f"Setting Lammps executable to {lmp_exe}")
-            return lmp_exe
+        lmp_exe_detected = which(lmp_exe)
+        if lmp_exe_detected is not None:
+            logger.info(f"Setting Lammps executable to {lmp_exe_detected}")
+            return lmp_exe_detected
     return None
 
 
@@ -829,6 +830,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
         ff_settings,
         box_relax=True,
         box_relax_keywords="aniso 0.0 vmax 0.001",
+        box_triclinic=False,
         min_style="cg",
         etol=1e-15,
         ftol=1e-15,
@@ -845,6 +847,8 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
                 during the minimization.
             box_relax_keywords (str): Keywords and values to define the conditions
                 and constraints on the box size and shape.
+            box_triclinic (bool): Whether to change box to triclinic so that
+                LAMMPS can adjust x, y and z independently in relaxation.
             min_style (str): The minimization algorithm to use.
             etol (float): The stopping tolerance for energy during the minimization.
             ftol (float): The stopping tolerance for force during the minimization.
@@ -854,6 +858,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
         self.ff_settings = ff_settings
         self.box_relax = box_relax
         self.box_relax_keywords = box_relax_keywords
+        self.box_triclinic = box_triclinic
         self.min_style = min_style
         self.etol = etol
         self.ftol = ftol
@@ -878,9 +883,12 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
         if self.box_relax:
             box_relax_settings = f"fix   1 all box/relax {self.box_relax_keywords}"
 
+        change_box = "" if not self.box_triclinic else "change_box all triclinic"
+
         inputs = input_template.format(
             ff_settings="\n".join(ff_settings),
             box_relax_settings=box_relax_settings,
+            change_box=change_box,
             min_style=self.min_style,
             etol=self.etol,
             ftol=self.ftol,
