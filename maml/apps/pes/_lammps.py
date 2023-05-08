@@ -847,6 +847,8 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
                 during the minimization.
             box_relax_keywords (str): Keywords and values to define the conditions
                 and constraints on the box size and shape.
+            box_triclinic (bool): Whether to change box to triclinic so that
+                LAMMPS can adjust x, y and z independently in relaxation.
             min_style (str): The minimization algorithm to use.
             etol (float): The stopping tolerance for energy during the minimization.
             ftol (float): The stopping tolerance for force during the minimization.
