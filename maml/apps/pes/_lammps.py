@@ -137,7 +137,6 @@ class LMPStaticCalculator:
             ff_settings = getattr(self, "ff_settings")
             if hasattr(ff_settings, "elements"):
                 ff_elements = getattr(ff_settings, "elements")
-        # ff_elements = ['Ti', 'Al']
 
         with ScratchDir("."):
             input_file = self._setup()
@@ -145,7 +144,7 @@ class LMPStaticCalculator:
             for struct in structures:
                 struct.remove_oxidation_states()
                 ld = LammpsData.from_structure(struct, ff_elements, atom_style="charge")
-                ld.write_file("data.static")	
+                ld.write_file("data.static")
                 with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
                     stdout = p.communicate()[0]
                     rc = p.returncode
