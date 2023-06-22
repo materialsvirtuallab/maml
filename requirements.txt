@@ -3,4 +3,4 @@ scikit-learn==1.2.2
 h5py==3.8.0
 joblib==1.2.0
 tqdm==4.65.0
-pymongo==4.3.3
+pymongo==4.4.0
