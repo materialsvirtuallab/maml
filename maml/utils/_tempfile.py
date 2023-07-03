@@ -92,7 +92,6 @@ class MultiScratchDir:
     def __exit__(self, exc_type: str, exc_val: str, exc_tb: str):
         if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
-
                 # First copy files over
                 [_copy_r_with_suffix(tempdir, self.cwd, i) for i, tempdir in enumerate(self.tempdirs)]
 

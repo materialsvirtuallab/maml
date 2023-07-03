@@ -10,7 +10,6 @@ from maml.models import AtomSets
 
 
 class TestAtomSets(TestCase):
-
     x = np.array([[0, 1, 0, 1, 0, 1]], dtype=np.int32).reshape((1, -1))
     x_vec = np.random.normal(size=(1, 6, 20))
     indices = np.array([[0, 0, 0, 1, 1, 1]], dtype=np.int32).reshape((1, -1))

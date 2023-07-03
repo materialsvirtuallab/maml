@@ -1,8 +1,9 @@
 """
 Module implements the perturbation class for atomic and lattice relaxation.
 """
+from __future__ import annotations
+
 import os
-from typing import List, Union
 
 import numpy as np
 from monty.serialization import loadfn
@@ -55,7 +56,7 @@ class WyckoffPerturbation:
     """
 
     def __init__(
-        self, int_symbol: int, wyckoff_symbol: str, symmetry_ops: List[SymmOp] = None, use_symmetry: bool = True
+        self, int_symbol: int, wyckoff_symbol: str, symmetry_ops: list[SymmOp] | None = None, use_symmetry: bool = True
     ):
         """
         Args:
@@ -86,7 +87,7 @@ class WyckoffPerturbation:
             self.perturbation_mode = eval("lambda x: x")
             self.symmetry_ops = SpaceGroup.from_int_number(1).symmetry_ops
 
-    def get_orbit(self, p: Union[List, np.ndarray], tol: float = 1e-3) -> List[np.ndarray]:
+    def get_orbit(self, p: list | np.ndarray, tol: float = 1e-3) -> list[np.ndarray]:
         """
         Returns the orbit for a point.
 
@@ -94,7 +95,7 @@ class WyckoffPerturbation:
             p (list/numpy.array): Fractional coordinated point.
             tol (float): Tolerance for determining if sites are the same.
         """
-        orbit: List[np.ndarray] = []
+        orbit: list[np.ndarray] = []
         for symm_op in self.symmetry_ops:
             pp = symm_op.operate(p)
             pp[(pp + np.ones(3) * tol) % 1.0 < tol] = 0.0
@@ -104,7 +105,7 @@ class WyckoffPerturbation:
 
         return orbit
 
-    def sanity_check(self, site: Union[Site, PeriodicSite], wyc_tol: float = 0.3 * 1e-3) -> None:
+    def sanity_check(self, site: Site | PeriodicSite, wyc_tol: float = 0.3 * 1e-3) -> None:
         """
         Check whether the perturbation mode exists.
 
@@ -124,7 +125,7 @@ class WyckoffPerturbation:
                 self._fit_site = True
                 break
 
-    def standardize(self, p: Union[List, np.ndarray], tol: float = 1e-3) -> List[float]:
+    def standardize(self, p: list | np.ndarray, tol: float = 1e-3) -> list[float]:
         """
         Get the standardized position of p.
 
@@ -132,7 +133,7 @@ class WyckoffPerturbation:
             p (list/numpy.array): Fractional coordinated point.
             tol (float): Tolerance for determining if sites are the same.
         """
-        pp: List[float] = []
+        pp: list[float] = []
         orbits = self.get_orbit(p, tol)
         for pp in orbits:  # type: ignore
             if self.standard_mode(pp):
@@ -379,7 +380,7 @@ class LatticePerturbation:
         return self._lattice  # type: ignore
 
     @property
-    def abc(self) -> List[float]:
+    def abc(self) -> list[float]:
         """
         Returns the lattice lengths.
         """

@@ -1,7 +1,9 @@
 """
 MAML models base classes
 """
-from typing import Any, Callable, List, Optional, Union
+from __future__ import annotations
+
+from typing import Callable
 
 import joblib
 import numpy as np
@@ -17,7 +19,7 @@ class BaseModel:
     transparent conversion of arbitrary input and outputs.
     """
 
-    def __init__(self, model: Any, describer: Optional[BaseDescriber] = None, **kwargs):
+    def __init__(self, model, describer: BaseDescriber | None = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
@@ -30,12 +32,12 @@ class BaseModel:
 
     def fit(
         self,
-        features: Union[List, np.ndarray],
-        targets: Optional[Union[List, np.ndarray]] = None,
-        val_features: Optional[Union[List, np.ndarray]] = None,
-        val_targets: Optional[Union[List, np.ndarray]] = None,
+        features: list | np.ndarray,
+        targets: list | np.ndarray | None = None,
+        val_features: list | np.ndarray | None = None,
+        val_targets: list | np.ndarray | None = None,
         **kwargs,
-    ) -> "BaseModel":
+    ) -> BaseModel:
         """
         Args:
             features (list or np.ndarray): Numerical input feature list or
@@ -54,12 +56,12 @@ class BaseModel:
 
     def train(
         self,
-        objs: Union[List, np.ndarray],
-        targets: Optional[Union[List, np.ndarray]] = None,
-        val_objs: Optional[Union[List, np.ndarray]] = None,
-        val_targets: Optional[Union[List, np.ndarray]] = None,
+        objs: list | np.ndarray,
+        targets: list | np.ndarray | None = None,
+        val_objs: list | np.ndarray | None = None,
+        val_targets: list | np.ndarray | None = None,
         **kwargs,
-    ) -> "BaseModel":
+    ) -> BaseModel:
         """
         Train the models from object, target pairs
 
@@ -100,7 +102,7 @@ class BaseModel:
         """
         return self.model.predict(features, **kwargs)  # type: ignore
 
-    def predict_objs(self, objs: Union[List, np.ndarray]) -> np.ndarray:
+    def predict_objs(self, objs: list | np.ndarray) -> np.ndarray:
         """
         Predict the values given a set of objects. Usually Pymatgen
             Structure objects.
@@ -151,10 +153,10 @@ class SklearnMixin:
 
     def evaluate(
         self,
-        eval_objs: Union[List, np.ndarray],
-        eval_targets: Union[List, np.ndarray],
+        eval_objs: list | np.ndarray,
+        eval_targets: list | np.ndarray,
         is_feature: bool = False,
-        metric: Union[str, Callable] = None,
+        metric: str | Callable | None = None,
     ) -> np.ndarray:
         """
         Evaluate objs, targets
@@ -187,7 +189,7 @@ class KerasMixin:
         joblib.dump(self.describer, filename)
         self.model.save(filename + ".hdf5")
 
-    def load(self, filename: str, custom_objects: List = None):
+    def load(self, filename: str, custom_objects: list | None = None):
         """
         Load models parameters from filename
         Args:
@@ -217,7 +219,7 @@ class KerasMixin:
         return instance
 
     def evaluate(
-        self, eval_objs: Union[List, np.ndarray], eval_targets: Union[List, np.ndarray], is_feature: bool = False
+        self, eval_objs: list | np.ndarray, eval_targets: list | np.ndarray, is_feature: bool = False
     ) -> np.ndarray:
         """
         Evaluate objs, targets
@@ -233,7 +235,7 @@ class KerasMixin:
         return self.model.evaluate(to_array(eval_features), to_array(eval_targets))  # type: ignore
 
     @staticmethod
-    def get_input_dim(describer: Optional[BaseDescriber] = None, input_dim: Optional[int] = None) -> Union[int, None]:
+    def get_input_dim(describer: BaseDescriber | None = None, input_dim: int | None = None) -> int | None:
         """
         Get feature dimension/input_dim from describers or input_dim
 
@@ -242,7 +244,7 @@ class KerasMixin:
             input_dim (int): optional input dim int
         """
         if input_dim is not None:
-            feature_size: Union[int, None] = input_dim
+            feature_size: int | None = input_dim
         elif describer is not None:
             feature_size = describer.feature_dim
         else:
@@ -253,7 +255,7 @@ class KerasMixin:
 class SKLModel(BaseModel, SklearnMixin):
     """MAML models with sklearn models as estimator"""
 
-    def __init__(self, model: Any, describer: Optional[BaseDescriber] = None, **kwargs):
+    def __init__(self, model, describer: BaseDescriber | None = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
@@ -265,7 +267,7 @@ class SKLModel(BaseModel, SklearnMixin):
 class KerasModel(BaseModel, KerasMixin):
     """MAML models with keras models as estimators"""
 
-    def __init__(self, model: Any, describer: Optional[BaseDescriber] = None, **kwargs):
+    def __init__(self, model, describer: BaseDescriber | None = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
@@ -275,12 +277,12 @@ class KerasModel(BaseModel, KerasMixin):
 
     def fit(
         self,
-        features: Union[List, np.ndarray],
-        targets: Optional[Union[List, np.ndarray]] = None,
-        val_features: Optional[Union[List, np.ndarray]] = None,
-        val_targets: Optional[Union[List, np.ndarray]] = None,
+        features: list | np.ndarray,
+        targets: list | np.ndarray | None = None,
+        val_features: list | np.ndarray | None = None,
+        val_targets: list | np.ndarray | None = None,
         **kwargs,
-    ) -> "BaseModel":
+    ) -> BaseModel:
         """
         Args:
             features (list or np.ndarray): Numerical input feature list or

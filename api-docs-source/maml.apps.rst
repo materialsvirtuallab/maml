@@ -8,8 +8,8 @@ Subpackages
    :maxdepth: 7
 
    maml.apps.bowsr
+   maml.apps.gbe
    maml.apps.pes
-   maml.apps.structure_prediction
    maml.apps.symbolic
 
 Module contents

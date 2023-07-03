@@ -37,7 +37,6 @@ class BayesianOptimizerTest(unittest.TestCase):
         )
 
     def test_struct2perturbation(self):
-
         lfpo_wps, lfpo_indices, lfpo_mapping, lfpo_lp = struct2perturbation(self.test_lfpo)
         self.assertTrue(len(lfpo_wps) == len(lfpo_indices))
         self.assertTrue(len(lfpo_wps) == 6)

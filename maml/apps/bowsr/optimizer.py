@@ -1,9 +1,10 @@
 """
-Module implemets the BayesianOptimizer.
+Module implements the BayesianOptimizer.
 """
+from __future__ import annotations
+
 import warnings
 from copy import copy
-from typing import Any, Dict, List, Tuple
 
 import numpy as np
 from pymatgen.core.operations import SymmOp
@@ -35,7 +36,7 @@ def struct2perturbation(
     abc_tol: float = 1e-3,
     angle_tol: float = 2e-1,
     symprec: float = 1e-2,
-) -> Tuple[List[WyckoffPerturbation], List[int], Dict, LatticePerturbation]:
+) -> tuple[list[WyckoffPerturbation], list[int], dict, LatticePerturbation]:
     """
     Get the symmetry-driven perturbation of the structure.
 
@@ -90,17 +91,17 @@ def struct2perturbation(
     return tuple((wps, indices, mapping, lp))  # type: ignore
 
 
-def atoms_crowded(structure: Structure, radius: float = 1.1) -> bool:
+def atoms_crowded(structure: Structure, cutoff_distance: float = 1.1) -> bool:
     """
     Identify whether structure is unreasonable because the atoms are "too close".
 
     Args:
         structure (Structure): Pymatgen Structure object.
-        radius (float): Radius cutoff.
+        cutoff_distance (float): The minimum allowed atomic distance.
     """
     distance_matrix = copy(structure.distance_matrix)
     distance_matrix[distance_matrix == 0] = np.inf
-    return np.min(distance_matrix) < radius
+    return np.min(distance_matrix) < cutoff_distance
 
 
 class BayesianOptimizer:
@@ -117,7 +118,7 @@ class BayesianOptimizer:
         use_symmetry: bool = True,
         use_scaler: bool = True,
         noisy: bool = True,
-        seed: int = None,
+        seed: int | None = None,
         **kwargs,
     ):
         """
@@ -129,10 +130,10 @@ class BayesianOptimizer:
             use_symmetry (bool): Whether to use constraint of symmetry to reduce
                 parameters space.
             use_scaler (bool): Whether to use scaler for Gaussian process regression.
-            noisy (bool): Whether to perform noise-based bayesian optimization
-                (predictive noisy test data) or noise-free bayesian optimization
+            noisy (bool): Whether to perform noise-based Bayesian optimization
+                (predictive noisy test data) or noise-free Bayesian optimization
                 (predictive GP posterior).
-            seed (int): Seeded rng for random numbe generator. None
+            seed (int): Seeded rng for random number generator. None
                 for an unseeded rng.
         """
         random_state = ensure_rng(seed)
@@ -190,7 +191,7 @@ class BayesianOptimizer:
         Get the derived structure.
 
         Args:
-            x (ndarray): The input of getting perturbated structure.
+            x (ndarray): The input of getting perturbed structure.
         """
 
         struct = self.structure.copy()
@@ -228,9 +229,9 @@ class BayesianOptimizer:
 
     def get_formation_energy(self, x: np.ndarray) -> float:
         """
-        Calculate the formation energy of the perturbated structure. Absolute value
+        Calculate the formation energy of the perturbed structure. Absolute value
         is calculated on practical purpose of maximization of target function in
-        bayesian optimization.
+        Bayesian optimization.
 
         Args:
             x (ndarray): The input of formation energy calculation.
@@ -251,12 +252,12 @@ class BayesianOptimizer:
             target = 0
         return target
 
-    def propose(self, acquisitionfunction: AcquisitionFunction, n_warmup: int, sampler: str) -> np.ndarray:
+    def propose(self, acquisition_function: AcquisitionFunction, n_warmup: int, sampler: str) -> np.ndarray:
         """
         Suggest the next most promising point.
 
         Args:
-            acquisitionfunction (AcquisitionFunction): AcquisitionFunction.
+            acquisition_function (AcquisitionFunction): AcquisitionFunction.
             n_warmup (int): Number of randomly sampled points to select the initial
                 point for minimization.
             sampler (str): Sampler. Options are Latin Hyperparameter Sampling and uniform sampling.
@@ -277,7 +278,7 @@ class BayesianOptimizer:
 
         # Find the next point that maximize the acquisition function.
         x_next = propose_query_point(
-            acquisition=acquisitionfunction.calculate,
+            acquisition=acquisition_function.calculate,
             scaler=self.scaler,
             gpr=self.gpr,
             y_max=y_max,
@@ -341,21 +342,21 @@ class BayesianOptimizer:
 
         iteration = 0
         while iteration < n_iter:
-            x_next = self.propose(acquisitionfunction=acq, n_warmup=n_warmup, sampler=sampler)
+            x_next = self.propose(acquisition_function=acq, n_warmup=n_warmup, sampler=sampler)
             self.add_query(x_next)
             iteration += 1
 
-    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> Tuple[Any, ...]:
+    def get_optimized_structure_and_energy(self, cutoff_distance: float = 1.1) -> tuple:
         """
         Args:
-            radius (float): Radius cutoff to identify reasonable structures.
-                When the radius is 0, any structures will be considered reasonable.
+            cutoff_distance (float): Cutoff distance of the allowed shortest atomic distance in reasonable structures.
+                When the cutoff_distance is 0, any structures will be considered reasonable.
         """
         optimized_structure = self.structure.copy()
         idx = 0
         for idx in np.argsort(self.space.target)[::-1]:
             optimized_structure = self.get_derived_structure(self.scaler.inverse_transform(self.space.params[idx]))
-            if not atoms_crowded(optimized_structure, radius=radius):
+            if not atoms_crowded(optimized_structure, cutoff_distance=cutoff_distance):
                 break
         return tuple((optimized_structure, -self.space.target[idx]))
 

@@ -12,7 +12,7 @@ packages such as scikit-learn and tensorflow for implementations of ML algorithm
 packages such as `pymatgen <http://pymatgen.org>`_ and `matminer <http://hackingmaterials.lbl.gov/matminer/>`_ for
 crystal/molecule manipulation and feature generation.
 
-Official documentation at http://maml.ai/
+Official documentation at https://materialsvirtuallab.github.io/maml
 
 Features
 --------
@@ -50,7 +50,8 @@ To run the potential energy surface (pes), lammps installation is required you c
 
     conda install -c conda-forge/label/cf202003 lammps
 
-The SNAP potential comes with this lammps installation. The GAP package for GAP and MLIP package for MTP are needed to run the corresponding potentials. For fitting NNP potential, the `n2p2` package is needed.
+The SNAP potential comes with this lammps installation. The GAP package for GAP and MLIP package for MTP are needed to
+run the corresponding potentials. For fitting NNP potential, the `n2p2` package is needed.
 
 Install all the libraries from requirement.txt file::
 
@@ -86,7 +87,7 @@ For the ML-IAP package (`maml.pes`), please cite::
 setup(
     name="maml",
     packages=find_packages(),
-    version="2022.8.12",
+    version="2022.9.20",
     install_requires=["numpy", "scipy", "monty", "scikit-learn", "pandas", "pymatgen", "tqdm"],
     extras_requires={
         "maml.apps.symbolic._selectors_cvxpy": ["cvxpy"],
@@ -98,7 +99,7 @@ setup(
     author_email="ongsp@eng.ucsd.edu",
     maintainer="Shyue Ping Ong",
     maintainer_email="ongsp@eng.ucsd.edu",
-    url="http://maml.ai/",
+    url="https://materialsvirtuallab.github.io/maml",
     license="BSD",
     description="maml is a machine learning library for materials science.",
     long_description=long_desc,
@@ -120,7 +121,8 @@ setup(
     package_data={
         "maml": [
             "describers/data/*.json",
-            "describers/data/megnet_models/*.json" "describers/data/megnet_mdoels/*.hdf5",
+            "describers/data/megnet_models/*.json",
+            "describers/data/megnet_mdoels/*.hdf5",
         ]
     },
 )

@@ -1,6 +1,24 @@
 Change log
 ==========
 
+v2022.9.20
+----------
+* Bug fix for BOWSR failing because of indexing in some instances.
+
+v2021.1.28
+----------
+* Fix SNAP stress components
+* Fix unexpected test outcome in BOWSR and symbolic regression
+
+v2021.12.13
+-----------
+* Update dependencies
+* Fix bugs
+
+v2021.10.13
+-----------
+* add bowsr
+
 v2021.3.2
 ---------
 * Set up namespace package architecture for maml.apps. The RFXAS package is now available as a separate package

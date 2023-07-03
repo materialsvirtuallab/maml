@@ -222,10 +222,10 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
         exe_command.append(f"atoms_filename={atoms_filename}")
 
         descriptor_command = ["soap"]
-        descriptor_command.append("cutoff" + "=" + f"{self.cutoff}")
-        descriptor_command.append("l_max" + "=" + f"{self.l_max}")
-        descriptor_command.append("n_max" + "=" + f"{self.n_max}")
-        descriptor_command.append("atom_sigma" + "=" + f"{self.atom_sigma}")
+        descriptor_command.append(f"cutoff={self.cutoff}")
+        descriptor_command.append(f"l_max={self.l_max}")
+        descriptor_command.append(f"n_max={self.n_max}")
+        descriptor_command.append(f"atom_sigma={self.atom_sigma}")
 
         atomic_numbers = [str(element.number) for element in sorted(np.unique(structure.species))]
         n_Z = len(atomic_numbers)
@@ -335,11 +335,12 @@ class BPSymmetryFunctions(BaseDescriber):
             }
             for specie in elements:
                 distances = np.array([nn_distance for _, nn_distance in temp_dict[specie]])[:, None, None]
-                g2 = np.sum(np.exp(-self.r_etas * (distances - self.r_shift) ** 2) * self._fc(distances), axis=0)
+                g2 = np.sum(
+                    np.exp(-self.r_etas * (distances - self.r_shift) ** 2) * self._fc(distances), axis=0  # type: ignore
+                )
                 site_symmfuncs.extend(g2.ravel().tolist())
 
             for specie1, specie2 in itertools.combinations_with_replacement(elements, 2):
-
                 group1, group2 = temp_dict[specie1], temp_dict[specie2]
 
                 c = (
@@ -362,7 +363,7 @@ class BPSymmetryFunctions(BaseDescriber):
                 cosines = np.sum((v1 - center) * (v2 - center), axis=1) / (d1 * d2)
                 cosines = cosines[:, None, None, None]
                 distances = np.stack((d1, d2, d3))
-                cutoffs = np.prod(self._fc(distances), axis=0)
+                cutoffs = np.prod(self._fc(distances), axis=0)  # type: ignore
                 cutoffs = np.atleast_1d(cutoffs)[:, None, None, None]
                 powers = np.sum(distances**2, axis=0)[:, None, None, None]
                 g4 = np.sum(

@@ -1,7 +1,9 @@
 """
-Module implemets the target space.
+Module implements the target space.
 """
-from typing import Callable, Dict, List, Union
+from __future__ import annotations
+
+from typing import Callable
 
 import numpy as np
 from numpy.random import RandomState
@@ -29,12 +31,12 @@ class TargetSpace:
     def __init__(
         self,
         target_func: Callable,
-        wps: List[WyckoffPerturbation],
+        wps: list[WyckoffPerturbation],
         abc_dim: int,
         angles_dim: int,
         relax_coords: bool,
         relax_lattice: bool,
-        scaler: Union[StandardScaler, DummyScaler],
+        scaler: StandardScaler | DummyScaler,
         random_state: RandomState,
     ):
         """
@@ -75,7 +77,7 @@ class TargetSpace:
 
         # Preallocated memory for x and y points.
         self._params = np.empty(shape=(0, self.dim))
-        self._target = np.empty(shape=(0))
+        self._target = np.empty(shape=0)
 
     def __len__(self):
         assert len(self._params) == len(self._target)
@@ -149,7 +151,7 @@ class TargetSpace:
         return params
 
     def set_bounds(
-        self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: Dict = None
+        self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: dict | None = None
     ) -> None:
         """
         Set the bound value of wyckoff perturbation and
@@ -195,7 +197,7 @@ class TargetSpace:
         Empty the param, target of the space.
         """
         self._params = np.empty(shape=(0, self.dim))
-        self._target = np.empty(shape=(0))
+        self._target = np.empty(shape=0)
 
     def __repr__(self):
         return (

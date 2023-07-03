@@ -10,10 +10,10 @@ import re
 import shutil
 import subprocess
 from collections import OrderedDict
+from shutil import which
 
 import numpy as np
 from monty.io import zopen
-from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.core import Lattice, Structure
@@ -167,9 +167,9 @@ class MTPotential(LammpsPotential):
                     recommended for large-scale MD run.
                 select_save_selected (str): Name of file for saving configurations with grade
                     exceeding select_threshold.
-                select_threshold (float): Configurations with extrapolation grade exceeding ths
+                select_threshold (float): Configurations with extrapolation grade exceeding the
                     value will be saved to the specified file.
-                select_threshold_break (float): The mlip executation will be interrupted if the
+                select_threshold_break (float): The mlip execution will be interrupted if the
                     extrapolation grade exceeds this value.
                 select_load_state (str): Name of file for loading the active learning state,
                     typically created by the mlp calc-grade command.
@@ -261,7 +261,7 @@ class MTPotential(LammpsPotential):
                             No logging if not specified. Default to None.
 
                     Write_cfgs (bool): File for writing all processed configurations.
-                        No confuguration recording if not specified. Default to None.
+                        No configuration recording if not specified. Default to None.
 
                         Skip_N (int): The number of configurations to skip while writing.
                             Default to 0.
@@ -302,7 +302,7 @@ class MTPotential(LammpsPotential):
                             decrease (linesearch stopping criterea). Default to 1.0e-3.
                         BFGS_Wolfe_C2 (float): Wolfe condition constant on the gradient
                             decrease (linesearch stopping criterea). Default to 0.7.
-                        Save_relaxed (str): Filename for output results of relxation.
+                        Save_relaxed (str): Filename for output results of relaxation.
                             No configuration will be saved if not specified.
                             Default to None.
                         Log (str): Filename to write relaxation log. No logging
@@ -564,7 +564,7 @@ class MTPotential(LammpsPotential):
             init_params (str): How to initialize parameters if a potential was not
                 pre-fitted. Choose from "same" and "random".
             scale_by_force (float): Default=0. If >0 then configurations near equilibrium
-               (with roughtly force < scale_by_force) get more weight.
+               (with roughly force < scale_by_force) get more weight.
             bfgs_conv_tol (float): Stop training if error dropped by a factor smaller than this
                 over 50 BFGS iterations.
             weighting (str): How to weight configuration with different sizes relative to each other.

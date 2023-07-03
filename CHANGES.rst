@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2022.9.20
+----------
+* Bug fix for BOWSR failing because of indexing in some instances.
+
 v2021.1.28
 ----------
 * Fix SNAP stress components

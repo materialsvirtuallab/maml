@@ -4,9 +4,10 @@ Sure Independence Screening
 https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
 
 """
+from __future__ import annotations
+
 import logging
 from itertools import combinations
-from typing import Dict, List, Optional
 
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -48,7 +49,7 @@ def _best_combination(x, y, find_sel, find_sel_new, metric: str = "neg_mean_abso
         score = _eval(d, y, coeff, metric)
         if score > score_best:
             score_best = score
-            comb_best = ind_comb
+            comb_best = ind_comb  # type: ignore
             coeff_best = coeff
     return comb_best, coeff_best, score_best
 
@@ -62,7 +63,7 @@ class SIS:
 
     """
 
-    def __init__(self, gamma=0.1, selector: Optional[BaseSelector] = None, verbose: bool = True):
+    def __init__(self, gamma=0.1, selector: BaseSelector | None = None, verbose: bool = True):
         """
         Sure independence screening
 
@@ -199,7 +200,7 @@ class ISIS:
         y: np.ndarray,
         max_p: int = 10,
         metric: str = "neg_mean_absolute_error",
-        options: Optional[Dict] = None,
+        options: dict | None = None,
         step: float = 0.5,
     ):
         """
@@ -230,7 +231,7 @@ class ISIS:
         new_y = self.sis.compute_residual(x, y)
         new_x = x[:, new_findex]
         while len(find_sel) < max_p:
-            find_sel_new: List[int] = []
+            find_sel_new: list[int] = []
             try:
                 find_sel_new = self.sis.run(new_x, new_y, options)
             except ValueError:

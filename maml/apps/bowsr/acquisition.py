@@ -1,7 +1,7 @@
 """
 Module implements the new candidate proposal.
 """
-from typing import Any, List, Tuple, Union
+from __future__ import annotations
 
 import numpy as np
 from numpy.random import RandomState
@@ -26,7 +26,7 @@ def _trunc(values: np.ndarray, decimals: int = 3):
     return np.trunc(values * 10**decimals) / 10**decimals
 
 
-def ensure_rng(seed: int = None) -> RandomState:
+def ensure_rng(seed: int | None = None) -> RandomState:
     """
     Create a random number generator based on an optional seed.
     This can be an integer for a seeded rng or None for an unseeded rng.
@@ -34,7 +34,7 @@ def ensure_rng(seed: int = None) -> RandomState:
     return np.random.RandomState(seed=seed)  # pylint: disable=E1101
 
 
-def predict_mean_std(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float) -> Tuple[Any, ...]:
+def predict_mean_std(x: list | np.ndarray, gpr: GaussianProcessRegressor, noise: float) -> tuple:
     """
     Speed up the gpr.predict method by manually computing the kernel operations.
 
@@ -52,7 +52,7 @@ def predict_mean_std(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, 
     # the dot product line. Please double check. I am disabling the cache for now
     if True:  # getattr(gpr, "_K_inv", None) is None:
         L_inv = solve_triangular(gpr.L_.T, np.eye(gpr.L_.shape[0]))
-        setattr(gpr, "_K_inv", L_inv.dot(L_inv.T))
+        gpr._K_inv = L_inv.dot(L_inv.T)
 
     K_trans = gpr.kernel_(X, gpr.X_train_)
     y_mean = K_trans.dot(gpr.alpha_) + gpr._y_train_mean
@@ -98,7 +98,7 @@ def propose_query_point(
             known data.
         y_max (float): The current maximum target value.
         noise (float): The noise added to the acquisition function if noisy-based
-            bayesian optimization was performed.
+            Bayesian optimization was performed.
         bounds (ndarray): The bounds of candidate points.
         random_state (RandomState): Random number generator.
         sampler (str): Sampler generating warmup points. "uniform" or "lhs".
@@ -119,12 +119,8 @@ def propose_query_point(
         # Minimize objective is the negative acquisition function
         return -acquisition(x.reshape(-1, dim), gpr=gpr, y_max=y_max, noise=noise)
 
-    # print(x_max.reshape(-1, dim))
-    # print(bounds)
-
-    x0 = x_max.reshape(-1, dim)
     # make sure that the initial conditions fall into the bounds
-    x0 = np.clip(x0, bounds[:, 0] + 3 * EPS, bounds[:, 1] - 3 * EPS)
+    x0 = np.clip(x_max, bounds[:, 0] + 3 * EPS, bounds[:, 1] - 3 * EPS)
 
     res = minimize(min_obj, x0=x0, bounds=bounds, method="L-BFGS-B")
     if -float(res.fun) >= acq_max:
@@ -151,15 +147,11 @@ class AcquisitionFunction:
         self.xi = xi
 
         if acq_type not in ["ucb", "ei", "poi", "gp-ucb"]:
-            err_msg = (
-                f"The utility function {acq_type} has not been implemented, " "please choose one of ucb, ei, or poi."
-            )
+            err_msg = f"The utility function {acq_type} has not been implemented, please choose one of ucb, ei, or poi."
             raise NotImplementedError(err_msg)
         self.acq_type = acq_type
 
-    def calculate(
-        self, x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, noise: float
-    ) -> np.ndarray:
+    def calculate(self, x: list | np.ndarray, gpr: GaussianProcessRegressor, y_max: float, noise: float) -> np.ndarray:
         """
         Calculate the value of acquisition function.
 
@@ -168,11 +160,11 @@ class AcquisitionFunction:
             gpr (GaussianProcessRegressor): A Gaussian process regressor fitted to
                 known data.
             y_max (float): The current maximum target value.
-            noise (float): Noise added to acquisition function if noisy-based bayesian
+            noise (float): Noise added to acquisition function if noisy-based Bayesian
                 optimization is performed, 0 otherwise.
         """
         if self.acq_type not in ["ucb", "ei", "poi", "gp-ucb"]:
-            raise ValueError("acq type not recognised")
+            raise ValueError("acq type not recognized")
         if self.acq_type == "ucb":
             return self._ucb(x, gpr, self.kappa, noise)
         if self.acq_type == "ei":
@@ -182,14 +174,12 @@ class AcquisitionFunction:
         return self._gpucb(x, gpr, noise)
 
     @staticmethod
-    def _ucb(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, kappa: float, noise: float) -> np.ndarray:
+    def _ucb(x: list | np.ndarray, gpr: GaussianProcessRegressor, kappa: float, noise: float) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
         return mean + kappa * std
 
     @staticmethod
-    def _ei(
-        x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float
-    ) -> np.ndarray:
+    def _ei(x: list | np.ndarray, gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
 
         imp = mean - y_max - xi
@@ -199,9 +189,7 @@ class AcquisitionFunction:
         return imp * cdf + std * pdf
 
     @staticmethod
-    def _poi(
-        x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float
-    ) -> np.ndarray:
+    def _poi(x: list | np.ndarray, gpr: GaussianProcessRegressor, y_max: float, xi: float, noise: float) -> np.ndarray:
         mean, std = predict_mean_std(x, gpr, noise)
 
         z = (mean - y_max - xi) / std
@@ -209,7 +197,7 @@ class AcquisitionFunction:
         return cdf
 
     @staticmethod
-    def _gpucb(x: Union[List, np.ndarray], gpr: GaussianProcessRegressor, noise: float) -> np.ndarray:
+    def _gpucb(x: list | np.ndarray, gpr: GaussianProcessRegressor, noise: float) -> np.ndarray:
         if not hasattr(gpr, "X_train_"):
             raise AttributeError("GP-UCB acquisition function can not be applued.")
         T = gpr.X_train_.shape[0]

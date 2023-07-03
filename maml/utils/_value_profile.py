@@ -30,7 +30,7 @@ class ValueProfile:
 
     def increment_step(self):
         """
-        increase step atttribute by one
+        increase step attribute by one
         """
         self.step += 1
         if self.step > self.max_steps:
@@ -76,7 +76,6 @@ class LinearProfile(ValueProfile):
     """
 
     def __init__(self, value_start: float, value_end: float = 0.0, max_steps: int = 100, **kwargs):
-
         """
 
         Args:

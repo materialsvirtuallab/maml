@@ -19,6 +19,7 @@ reset_timestep    0
 thermo            1
 thermo_style      custom pe cella cellb cellc cellalpha cellbeta cellgamma
 
+{change_box}
 {box_relax_settings}
 min_style         {min_style}
 minimize          {etol} {ftol} {maxiter} {maxeval}

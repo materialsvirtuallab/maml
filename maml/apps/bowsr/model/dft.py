@@ -1,6 +1,8 @@
 """
 DFT wrapper
 """
+from __future__ import annotations
+
 import os
 import subprocess
 
@@ -24,7 +26,7 @@ class DFT(EnergyModel):
     DFT static calculation wrapped as energy model.
     """
 
-    def __init__(self, exe_path: str = None):
+    def __init__(self, exe_path: str | None = None):
         """
         DFT wrapper
         Args:

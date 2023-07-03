@@ -254,8 +254,8 @@ class WeightedSet2Set(Layer):
                 a=tf.math.segment_sum(tf.transpose(a=exp, perm=[1, 0]), feature_graph_index), perm=[1, 0]
             )
             seg_sum = tf.expand_dims(seg_sum, axis=-1)
-            interm = tf.repeat(seg_sum, repeats=counts, axis=1)
-            a_i_t = exp / interm[..., 0]
+            intermediate = tf.repeat(seg_sum, repeats=counts, axis=1)
+            a_i_t = exp / intermediate[..., 0]
             r_t = tf.transpose(
                 a=tf.math.segment_sum(
                     tf.transpose(a=tf.multiply(m, a_i_t[:, :, None]), perm=[1, 0, 2]), feature_graph_index

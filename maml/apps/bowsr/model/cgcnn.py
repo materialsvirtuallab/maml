@@ -1,8 +1,9 @@
 """CGCNN Wrapper."""
+from __future__ import annotations
+
 import argparse
 import os
 import warnings
-from typing import Any, Dict, List, Tuple
 
 import numpy as np
 from monty.dev import requires
@@ -80,7 +81,6 @@ class CGCNNInput:
     atom_init_filename = pjoin(module_dir, "model_files", "cgcnn", "atom_init.json")
 
     def __init__(self, max_num_nbr: int = 12, radius: float = 8, dmin: float = 0, step: float = 0.2):
-
         """
         Init CGCNNInput.
 
@@ -102,7 +102,7 @@ class CGCNNInput:
         self.gdf = GaussianDistance(dmin=dmin, dmax=self.radius, step=step)
         self.ari = AtomCustomJSONInitializer(self.atom_init_filename)
 
-    def _get_nbr_fea(self, all_nbrs: list, cif_id: int) -> Tuple[np.ndarray, ...]:
+    def _get_nbr_fea(self, all_nbrs: list, cif_id: int) -> tuple[np.ndarray, ...]:
         nbr_fea_idx, nbr_fea = [], []
         for nbr in all_nbrs:
             if len(nbr) < self.max_num_nbr:
@@ -120,8 +120,7 @@ class CGCNNInput:
         nbr_fea = self.gdf.expand(nbr_fea)
         return tuple((nbr_fea_idx, nbr_fea))  # type: ignore
 
-    def generate_input(self, structure: Structure, cif_id: int = None) -> Tuple[Any, ...]:
-
+    def generate_input(self, structure: Structure, cif_id: int | None = None) -> tuple:
         """
         Generate cgcnn inputs for given structure.
 
@@ -146,7 +145,7 @@ class CGCNNInput:
         nbr_fea_idx = torch.LongTensor(nbr_fea_idx)  # type: ignore
         return tuple((atom_fea, nbr_fea, nbr_fea_idx))
 
-    def generate_inputs(self, structures: List[Structure], cif_ids: List[int] = None) -> List[Tuple[Any, ...]]:
+    def generate_inputs(self, structures: list[Structure], cif_ids: list[int] | None = None) -> list[tuple]:
         """
         Generate cgcnn inputs for given list of structures
         Args:
@@ -206,7 +205,7 @@ class CGCNNNormalizer:
         """
         return {"mean": self.mean, "std": self.std}
 
-    def load_state_dict(self, state_dict: Dict) -> None:
+    def load_state_dict(self, state_dict: dict) -> None:
         """
         Load the normalizer with mean and std.
 
