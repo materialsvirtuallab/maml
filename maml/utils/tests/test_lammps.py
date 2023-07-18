@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 import numpy as np
@@ -48,20 +50,20 @@ class TestLAMMPS(unittest.TestCase):
 
         # print(np.linalg.norm(checked_stress - new_stresses[0]))
         print(new_stresses[0], checked_stress)
-        self.assertTrue(np.linalg.norm(checked_force - new_forces[0]) < 1e-4)
-        self.assertTrue(np.linalg.norm(checked_stress - new_stresses[0]) < 1e-4)
+        assert np.linalg.norm(checked_force - new_forces[0]) < 0.0001
+        assert np.linalg.norm(checked_stress - new_stresses[0]) < 0.0001
 
         new_structures = check_structures_forces_stresses(structures=[s], return_none=False)
 
-        self.assertTrue(len(new_structures) == 1)
-        self.assertTrue(isinstance(new_structures[0], Structure))
+        assert len(new_structures) == 1
+        assert isinstance(new_structures[0], Structure)
 
         new_structures, new_forces, new_stresses = check_structures_forces_stresses(structures=[s, s], return_none=True)
 
-        self.assertTrue(len(new_forces) == 2)
-        self.assertTrue(new_forces[0] is None)
-        self.assertTrue(len(new_stresses) == 2)
-        self.assertTrue(new_stresses[0] is None)
+        assert len(new_forces) == 2
+        assert new_forces[0] is None
+        assert len(new_stresses) == 2
+        assert new_stresses[0] is None
 
     def test_write(self):
         s = Structure(
@@ -74,7 +76,7 @@ class TestLAMMPS(unittest.TestCase):
             lmp = LammpsData.from_file("test.data", atom_style="charge")
             lmp2 = LammpsData.from_structure(s)
             lmp2.write_file("test2.data")
-            self.assertTrue(str(lmp) == str(lmp2))
+            assert str(lmp) == str(lmp2)
 
 
 if __name__ == "__main__":

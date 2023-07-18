@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 import numpy as np
@@ -27,14 +29,14 @@ class DistinctSitePropertyTest(PymatgenTest):
         self.assertAlmostEqual(descriptor.iloc[0]["2c-Z"], 3)
         self.assertAlmostEqual(descriptor.iloc[0]["2c-atomic_radius"], 1.45)
         descriptor = self.describer.transform_one(self.na2o)
-        self.assertEqual(descriptor.iloc[0]["1a-Z"], 8)
-        self.assertEqual(descriptor.iloc[0]["1a-atomic_radius"], 0.6)
+        assert descriptor.iloc[0]["1a-Z"] == 8
+        assert descriptor.iloc[0]["1a-atomic_radius"] == 0.6
 
     def test_describe_all(self):
         df = pd.DataFrame(self.describer.transform([self.li2o, self.na2o]))
         # print(df)
-        self.assertEqual(df.iloc[0]["2c-Z"], 3)
-        self.assertEqual(df.iloc[0]["2c-atomic_radius"], 1.45)
+        assert df.iloc[0]["2c-Z"] == 3
+        assert df.iloc[0]["2c-atomic_radius"] == 1.45
 
     def test_wycoffs(self):
         describer = DistinctSiteProperty(properties=["Z", "atomic_radius"])
@@ -117,9 +119,9 @@ class CoulomMatrixTest(unittest.TestCase):
         na = Element("Na")
         cl = Element("Cl")
         dist = self.s1.distance_matrix
-        self.assertEqual(cmat[0][0], (na.Z**2.4) * 0.5)
-        self.assertEqual(cmat[4][4], (cl.Z**2.4) * 0.5)
-        self.assertEqual(cmat[0][1], (na.Z * na.Z) / dist[0][1])
+        assert cmat[0][0] == na.Z**2.4 * 0.5
+        assert cmat[4][4] == cl.Z**2.4 * 0.5
+        assert cmat[0][1] == na.Z * na.Z / dist[0][1]
 
     def test_sorted_coulomb_mat(self):
         cm = SortedCoulombMatrix()
@@ -127,7 +129,7 @@ class CoulomMatrixTest(unittest.TestCase):
         cmat = cm.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
         norm_order_ind = np.argsort(np.linalg.norm(c, axis=1))
         for i in range(cmat.shape[1]):
-            self.assertTrue(np.all(cmat[i] == c[norm_order_ind[i]]))
+            assert np.all(cmat[i] == c[norm_order_ind[i]])
 
     def test_random_coulom_mat(self):
         cm = RandomizedCoulombMatrix(random_seed=7)
@@ -135,29 +137,29 @@ class CoulomMatrixTest(unittest.TestCase):
         cmat = cm.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
         cm2 = RandomizedCoulombMatrix(random_seed=8)
         cmat2 = cm2.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
-        self.assertEqual(np.all(cmat == cmat2), False)
+        assert np.all(cmat == cmat2) is False
         for i in range(cmat.shape[1]):
-            self.assertTrue(cmat[i] in c[i])
+            assert cmat[i] in c[i]
 
     def test_transform(self):
         cm = CoulombMatrix()
         c = cm.transform([self.s1, self.s2])
         c1 = cm.transform_one(self.s1)
         c2 = cm.transform_one(self.s2)
-        self.assertTrue(np.allclose(c.xs(0, level="input_index"), c1))
-        self.assertTrue(np.allclose(c.xs(1, level="input_index"), c2))
+        assert np.allclose(c.xs(0, level="input_index"), c1)
+        assert np.allclose(c.xs(1, level="input_index"), c2)
 
     def test_eigenspectrum(self):
         ces = CoulombEigenSpectrum()
         f = ces.transform_one(self.s1)
 
         f2 = ces.transform([self.s1, self.s2])
-        self.assertTrue(f.shape == (8,))
-        self.assertTrue(f2.shape == (2, 8))
+        assert f.shape == (8,)
+        assert f2.shape == (2, 8)
 
         ces = CoulombEigenSpectrum(max_atoms=9)
         f2 = ces.transform([self.s1, self.s2])
-        self.assertTrue(f2.shape == (2, 9))
+        assert f2.shape == (2, 9)
 
         ces = CoulombEigenSpectrum(max_atoms=3)
         self.assertRaises(RuntimeError, ces.transform, [self.s1, self.s2])

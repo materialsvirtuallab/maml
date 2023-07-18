@@ -1,11 +1,9 @@
-"""
-Utils for describers
-"""
+"""Utils for describers."""
+from __future__ import annotations
 
 import logging
 from collections import Counter
 from functools import partial
-from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -16,7 +14,7 @@ logger.setLevel(logging.INFO)
 
 def _add_allowed_stats(cls):
     """
-    Decorate to add allowed_stats to the Stats class
+    Decorate to add allowed_stats to the Stats class.
 
     Args:
         cls: Stats class
@@ -29,7 +27,7 @@ def _add_allowed_stats(cls):
     for key in all_keys:
         if isinstance(cls.__dict__[key], staticmethod):
             allowed.append(key)
-    setattr(cls, "allowed_stats", allowed)
+    cls.allowed_stats = allowed
     return cls
 
 
@@ -45,12 +43,12 @@ class Stats:
     """
 
     @staticmethod
-    def max(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def max(data: list[float], weights: list[float] | None = None) -> float:
         """
         Max of value
         Args:31
             data (list): list of float data
-            weights (list): optional weights
+            weights (list): optional weights.
 
         Returns: maximum value
 
@@ -58,12 +56,12 @@ class Stats:
         return np.max(data)
 
     @staticmethod
-    def min(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def min(data: list[float], weights: list[float] | None = None) -> float:
         """
         min of value
         Args:
             data (list): list of float data
-            weights (list): optional weights
+            weights (list): optional weights.
 
         Returns: minimum value
 
@@ -71,12 +69,12 @@ class Stats:
         return np.min(data)
 
     @staticmethod
-    def range(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def range(data: list[float], weights: list[float] | None = None) -> float:
         """
         Range of values
         Args:
             data (list): list of float data
-            weights (list): optional weights
+            weights (list): optional weights.
 
         Returns: range of values, i.e., max - min
 
@@ -84,10 +82,10 @@ class Stats:
         return Stats.max(data) - Stats.min(data)
 
     @staticmethod
-    def mode(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def mode(data: list[float], weights: list[float] | None = None) -> float:
         """
         Mode of data, if multiple entries have equal counts,
-        compute the average of those
+        compute the average of those.
 
         Args:
             data (list): list of float data
@@ -96,7 +94,6 @@ class Stats:
         Returns: mode of values, i.e., max - min
 
         """
-
         if weights is None:
             counts = Counter(data)
             most_common = counts.most_common()
@@ -114,9 +111,9 @@ class Stats:
         return np.mean(max_data).item()
 
     @staticmethod
-    def mean_absolute_deviation(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def mean_absolute_deviation(data: list[float], weights: list[float] | None = None) -> float:
         """
-        mean absolute deviation
+        mean absolute deviation.
 
         Args:
             data (list): list of float data
@@ -129,9 +126,9 @@ class Stats:
         return Stats.mean(data_sub, weights)
 
     @staticmethod
-    def mean_absolute_error(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def mean_absolute_error(data: list[float], weights: list[float] | None = None) -> float:
         """
-        mean absolute error
+        mean absolute error.
 
         Args:
             data (list): list of float data
@@ -143,13 +140,13 @@ class Stats:
 
     @staticmethod
     def moment(
-        data: List[float],
-        weights: Optional[List[float]] = None,
-        order: Optional[int] = None,
-        max_order: Optional[int] = None,
+        data: list[float],
+        weights: list[float] | None = None,
+        order: int | None = None,
+        max_order: int | None = None,
     ):
         """
-        Moment of probability mass function
+        Moment of probability mass function.
 
         order = 1 means weighted mean
         order = 2 means standard deviation
@@ -185,9 +182,9 @@ class Stats:
         return stats[0]
 
     @staticmethod
-    def mean(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def mean(data: list[float], weights: list[float] | None = None) -> float:
         """
-        Weighted average
+        Weighted average.
 
         Args:
             data (list): list of float data
@@ -199,9 +196,9 @@ class Stats:
         return Stats.moment(data, weights=weights, order=1)
 
     @staticmethod
-    def inverse_mean(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def inverse_mean(data: list[float], weights: list[float] | None = None) -> float:
         """
-        inverse mean
+        inverse mean.
 
         Args:
             data (list): list of float data
@@ -213,9 +210,9 @@ class Stats:
         return Stats.mean([1.0 / x for x in data], weights=weights)
 
     @staticmethod
-    def average(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def average(data: list[float], weights: list[float] | None = None) -> float:
         """
-        Weighted average
+        Weighted average.
 
         Args:
             data (list): list of float data
@@ -227,9 +224,9 @@ class Stats:
         return Stats.mean(data, weights=weights)
 
     @staticmethod
-    def std(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def std(data: list[float], weights: list[float] | None = None) -> float:
         """
-        Standard deviation
+        Standard deviation.
 
         Args:
             data (list): list of float data
@@ -238,13 +235,12 @@ class Stats:
         Returns: Standard deviation
 
         """
-
         return Stats.moment(data, weights=weights, order=2)
 
     @staticmethod
-    def skewness(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def skewness(data: list[float], weights: list[float] | None = None) -> float:
         """
-        Skewness of the distribution
+        Skewness of the distribution.
 
         Args:
             data (list): list of float data
@@ -260,9 +256,9 @@ class Stats:
         return third**3 / std**3
 
     @staticmethod
-    def kurtosis(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def kurtosis(data: list[float], weights: list[float] | None = None) -> float:
         """
-        Kurtosis of the distribution
+        Kurtosis of the distribution.
 
         Args:
             data (list): list of float data
@@ -278,9 +274,9 @@ class Stats:
         return fourth**4 / std**4
 
     @staticmethod
-    def geometric_mean(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def geometric_mean(data: list[float], weights: list[float] | None = None) -> float:
         """
-        Geometric mean of the data
+        Geometric mean of the data.
 
         Args:
             data (list): list of float data
@@ -292,9 +288,9 @@ class Stats:
         return Stats.power_mean(data, weights, p=0)
 
     @staticmethod
-    def power_mean(data: List[float], weights: Optional[List[float]] = None, p: int = 1) -> float:
+    def power_mean(data: list[float], weights: list[float] | None = None, p: int = 1) -> float:
         """
-        power mean https://en.wikipedia.org/wiki/Generalized_mean
+        power mean https://en.wikipedia.org/wiki/Generalized_mean.
 
         Args:
             data (list): list of float data
@@ -304,15 +300,10 @@ class Stats:
         Returns: power mean of the distribution
 
         """
-
         if np.any(np.array(data) <= 0.0):
             raise ValueError("Not possible to calculate geometric means for negative values")
 
-        if weights is None:
-            weights = [1.0 / len(data)] * len(data)
-
-        else:
-            weights = [i / sum(weights) for i in weights]
+        weights = [1.0 / len(data)] * len(data) if weights is None else [(i / sum(weights)) for i in weights]
 
         assert abs(sum(weights) - 1) < 1e-3
 
@@ -323,11 +314,11 @@ class Stats:
         return s ** (1.0 / p)
 
     @staticmethod
-    def shifted_geometric_mean(data: List[float], weights: Optional[List[float]] = None, shift: float = 100) -> float:
+    def shifted_geometric_mean(data: list[float], weights: list[float] | None = None, shift: float = 100) -> float:
         """
         Since we cannot calculate the geometric means on negative or zero values,
         we can first shift all values to positive and then calculate the geometric mean
-        afterwards, we shift the computed geometric mean back by a shift value
+        afterwards, we shift the computed geometric mean back by a shift value.
 
         Args:
             data (list): list of float data
@@ -341,9 +332,9 @@ class Stats:
         return Stats.geometric_mean(data_new, weights=weights) - shift
 
     @staticmethod
-    def harmonic_mean(data: List[float], weights: Optional[List[float]] = None) -> float:
+    def harmonic_mean(data: list[float], weights: list[float] | None = None) -> float:
         """
-        harmonic mean of the data
+        harmonic mean of the data.
 
         Args:
             data (list): list of float data
@@ -352,16 +343,13 @@ class Stats:
         Returns: harmonic mean of the distribution
 
         """
-        if weights is None:
-            weights = [1.0 / len(data)] * len(data)
-        else:
-            weights = [i / sum(weights) for i in weights]
+        weights = [1.0 / len(data)] * len(data) if weights is None else [(i / sum(weights)) for i in weights]
         return np.sum(weights) / np.sum(np.array(weights) / np.array(data))
 
 
 def _root_moment(data, weights, order) -> float:
     """
-    Auxiliary function to compute moment
+    Auxiliary function to compute moment.
 
     Args:
         data (list): list of float data
@@ -381,14 +369,10 @@ def _root_moment(data, weights, order) -> float:
     moment = sum((i - mean) ** order * j for i, j in zip(data, pmf))
 
     # when order is odd, moment can be negative
-    if moment < 0:
-        sign = -1
-    else:
-        sign = 1
+    sign = -1 if moment < 0 else 1
 
     # avoid error like np.power(-0.001, 1./3.)
-    res = (sign * moment) ** (1.0 / order) * sign
-    return res
+    return (sign * moment) ** (1.0 / order) * sign
 
 
 def _convert_a_or_b(v: str, a=int, b=None):
@@ -409,11 +393,11 @@ def _moment_symbol_conversion(moment_symbol: str):
     return ["moment:0:None"]
 
 
-def stats_list_conversion(stats_list: List[str]) -> List[str]:
+def stats_list_conversion(stats_list: list[str]) -> list[str]:
     """
     Convert a list of stats str into a fully expanded list.
     This applies mainly to stats that can return a list of values, e.g.,
-    moment with max_order > 1
+    moment with max_order > 1.
 
     Args:
         stats_list (list): list of stats str
@@ -436,10 +420,10 @@ def stats_list_conversion(stats_list: List[str]) -> List[str]:
 STATS_KWARGS = {"moment": [{"order": int}, {"max_order": int}], "shifted_geometric_mean": [{"shift": float}]}
 
 
-def get_full_stats_and_funcs(stats: List) -> Tuple[List[str], List]:
+def get_full_stats_and_funcs(stats: list) -> tuple[list[str], list]:
     """
     Get expanded stats function name str and the corresponding
-    function callables
+    function callables.
 
     Args:
         stats (list): a list of stats names, e.g, ['mean', 'std', 'moment:1:None']

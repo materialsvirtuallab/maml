@@ -1,13 +1,9 @@
-"""
-Module defines feature objects for GB energy model
-"""
+"""Module defines feature objects for GB energy model."""
 from __future__ import annotations
 
 
 class my_quant:
-    """
-    An object to describe GB quantities
-    """
+    """An object to describe GB quantities."""
 
     def __init__(self, str_name: str, latex_name: str | None = None, latex_unit: str | None = None):
         """
@@ -15,7 +11,7 @@ class my_quant:
         Args:
             str_name (str): string rep of the quant
             latex_name (): latex rep of the quant
-            latex_unit (): latex rep of the quant unit
+            latex_unit (): latex rep of the quant unit.
         """
         self.str_name = str_name
         self.latex_name = latex_name
@@ -26,7 +22,7 @@ class my_quant:
         """
 
         Returns:
-            string rep of the quant
+            string rep of the quant.
         """
         return self.str_name
 
@@ -35,7 +31,7 @@ class my_quant:
         """
 
         Returns:
-            latex rep of the quant
+            latex rep of the quant.
         """
         return self.latex_name
 
@@ -44,7 +40,7 @@ class my_quant:
         """
 
         Returns:
-            latex rep of the quant unit
+            latex rep of the quant unit.
         """
         return self.latex_unit
 

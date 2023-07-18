@@ -1,6 +1,4 @@
-"""
-MAML models base classes
-"""
+"""MAML models base classes."""
 from __future__ import annotations
 
 from typing import Callable
@@ -23,7 +21,7 @@ class BaseModel:
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
-            describer (BaseDescriber): Describer that converts object into features
+            describer (BaseDescriber): Describer that converts object into features.
         """
         if describer is None:
             describer = DummyDescriber()
@@ -46,7 +44,7 @@ class BaseModel:
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
             val_features (list or np.ndarray): validation features
-            val_targets (list or np.ndarray): validation targets
+            val_targets (list or np.ndarray): validation targets.
 
         Returns:
             self
@@ -63,7 +61,7 @@ class BaseModel:
         **kwargs,
     ) -> BaseModel:
         """
-        Train the models from object, target pairs
+        Train the models from object, target pairs.
 
         Args:
             objs (list of objects): List of objects
@@ -111,12 +109,10 @@ class BaseModel:
 
 
 class SklearnMixin:
-    """
-    Sklearn models save and load functionality
-    """
+    """Sklearn models save and load functionality."""
 
     def save(self, filename: str):
-        """Save the models and describers
+        """Save the models and describers.
 
         Arguments:
             filename (str): filename for save
@@ -127,7 +123,7 @@ class SklearnMixin:
         """
         Load models parameters from filename
         Args:
-            filename (str): models file name
+            filename (str): models file name.
 
         Returns: None
 
@@ -159,7 +155,7 @@ class SklearnMixin:
         metric: str | Callable | None = None,
     ) -> np.ndarray:
         """
-        Evaluate objs, targets
+        Evaluate objs, targets.
 
         Args:
             eval_objs (list): objs for evaluation
@@ -167,7 +163,6 @@ class SklearnMixin:
             is_feature (bool): whether the input x is feature matrix
             metric (callable): metric for evaluation
         """
-
         from sklearn.metrics import check_scoring
 
         eval_features = eval_objs if is_feature else self.describer.transform(eval_objs)
@@ -176,12 +171,10 @@ class SklearnMixin:
 
 
 class KerasMixin:
-    """
-    keras models mixin with save and load functionality
-    """
+    """keras models mixin with save and load functionality."""
 
     def save(self, filename: str):
-        """Save the models and describers
+        """Save the models and describers.
 
         Arguments:
             filename (str): filename for save
@@ -193,7 +186,7 @@ class KerasMixin:
         """
         Load models parameters from filename
         Args:
-            filename (str): models file name
+            filename (str): models file name.
 
         Returns: None
 
@@ -222,7 +215,7 @@ class KerasMixin:
         self, eval_objs: list | np.ndarray, eval_targets: list | np.ndarray, is_feature: bool = False
     ) -> np.ndarray:
         """
-        Evaluate objs, targets
+        Evaluate objs, targets.
 
         Args:
             eval_objs (list): objs for evaluation
@@ -230,14 +223,13 @@ class KerasMixin:
             is_feature (bool): whether the input x is feature matrix
             metric (callable): metric for evaluation
         """
-
         eval_features = eval_objs if is_feature else self.describer.transform(eval_objs)
         return self.model.evaluate(to_array(eval_features), to_array(eval_targets))  # type: ignore
 
     @staticmethod
     def get_input_dim(describer: BaseDescriber | None = None, input_dim: int | None = None) -> int | None:
         """
-        Get feature dimension/input_dim from describers or input_dim
+        Get feature dimension/input_dim from describers or input_dim.
 
         Args:
             describer (Describer): describers
@@ -253,25 +245,25 @@ class KerasMixin:
 
 
 class SKLModel(BaseModel, SklearnMixin):
-    """MAML models with sklearn models as estimator"""
+    """MAML models with sklearn models as estimator."""
 
     def __init__(self, model, describer: BaseDescriber | None = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
-            describer (BaseDescriber): Describer that converts object into features
+            describer (BaseDescriber): Describer that converts object into features.
         """
         super().__init__(model=model, describer=describer, **kwargs)
 
 
 class KerasModel(BaseModel, KerasMixin):
-    """MAML models with keras models as estimators"""
+    """MAML models with keras models as estimators."""
 
     def __init__(self, model, describer: BaseDescriber | None = None, **kwargs):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
-            describer (BaseDescriber): Describer that converts object into features
+            describer (BaseDescriber): Describer that converts object into features.
         """
         super().__init__(model=model, describer=describer, **kwargs)
 
@@ -291,7 +283,7 @@ class KerasModel(BaseModel, KerasMixin):
             targets (list or np.ndarray): Numerical output target list, or
                 numpy array with dim (m, ).
             val_features (list or np.ndarray): validation features
-            val_targets (list or np.ndarray): validation targets
+            val_targets (list or np.ndarray): validation targets.
 
         Returns:
             self
@@ -324,7 +316,7 @@ class KerasModel(BaseModel, KerasMixin):
     def _get_validation_data(val_features, val_targets, **val_kwargs):
         """
         construct validation data, the default is just returning a list of
-        val_features and val_targets
+        val_features and val_targets.
         """
         return val_features, val_targets
 
@@ -334,7 +326,7 @@ def is_sklearn_model(model: BaseModel) -> bool:
     Check whether the model is sklearn
     Args:
         model (BaseModel): model
-    Returns: bool
+    Returns: bool.
     """
     from sklearn.base import BaseEstimator
 
@@ -346,7 +338,7 @@ def is_keras_model(model: BaseModel) -> bool:
     Check whether the model is keras
     Args:
         model (BaseModel): model
-    Returns: bool
+    Returns: bool.
     """
     from tensorflow.keras.models import Model
 

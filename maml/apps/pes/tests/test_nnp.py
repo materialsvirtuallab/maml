@@ -1,5 +1,6 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
+from __future__ import annotations
 
 import os
 import shutil
@@ -50,14 +51,14 @@ class NNPitentialTest(unittest.TestCase):
     def test_write_read_cfgs(self):
         self.potential.write_cfgs("input.data", cfg_pool=self.test_pool)
         datapool, df = self.potential.read_cfgs("input.data")
-        self.assertEqual(len(self.test_pool), len(datapool))
+        assert len(self.test_pool) == len(datapool)
         for data1, data2 in zip(self.test_pool, datapool):
             struct1 = data1["structure"]
             struct2 = Structure.from_dict(data2["structure"])
-            self.assertTrue(struct1 == struct2)
+            assert struct1 == struct2
             energy1 = data1["outputs"]["energy"]
             energy2 = data2["outputs"]["energy"]
-            self.assertTrue(abs(energy1 - energy2) < 1e-3)
+            assert abs(energy1 - energy2) < 0.001
             forces1 = np.array(data1["outputs"]["forces"])
             forces2 = data2["outputs"]["forces"]
             np.testing.assert_array_almost_equal(forces1, forces2)
@@ -77,10 +78,10 @@ class NNPitentialTest(unittest.TestCase):
             activations=activations,
             epochs=1,
         )
-        self.assertTrue(self.potential.train_energy_rmse is not None)
-        self.assertTrue(self.potential.train_forces_rmse is not None)
-        self.assertTrue(self.potential.validation_energy_rmse is not None)
-        self.assertTrue(self.potential.validation_forces_rmse is not None)
+        assert self.potential.train_energy_rmse is not None
+        assert self.potential.train_forces_rmse is not None
+        assert self.potential.validation_energy_rmse is not None
+        assert self.potential.validation_forces_rmse is not None
 
     @unittest.skipIf(not which("nnp-train"), "No nnp-train cmd found.")
     @unittest.skipIf(not which("nnp-predict"), "No nnp-train cmd found.")
@@ -101,7 +102,7 @@ class NNPitentialTest(unittest.TestCase):
             test_forces=self.test_forces,
             test_stresses=self.test_stresses,
         )
-        self.assertEqual(df_orig.shape[0], df_tar.shape[0])
+        assert df_orig.shape[0] == df_tar.shape[0]
 
     @unittest.skipIf(not which("nnp-train"), "No nnp-train cmd found.")
     @unittest.skipIf(not which("lmp_serial"), "No LAMMPS cmd found.")
@@ -116,14 +117,14 @@ class NNPitentialTest(unittest.TestCase):
             epochs=1,
         )
         energy, forces, stress = self.potential.predict_efs(self.test_struct)
-        self.assertEqual(len(forces), len(self.test_struct))
-        self.assertEqual(len(stress), 6)
+        assert len(forces) == len(self.test_struct)
+        assert len(stress) == 6
 
     def test_from_config(self):
         nnp = NNPotential.from_config(
             input_filename=input_file, scaling_filename=scaling_file, weights_filenames=[weights_file]
         )
-        self.assertTrue(nnp.fitted)
+        assert nnp.fitted
 
 
 if __name__ == "__main__":

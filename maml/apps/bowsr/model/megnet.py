@@ -1,15 +1,18 @@
-"""
-megnet model wrapper implementation
-"""
+"""megnet model wrapper implementation."""
+from __future__ import annotations
+
 import os
 import warnings
+from typing import TYPE_CHECKING
 
 import numpy as np
 from monty.dev import requires
 from pymatgen.core.periodic_table import Element
-from pymatgen.core.structure import Structure
 
 from maml.apps.bowsr.model.base import EnergyModel
+
+if TYPE_CHECKING:
+    from pymatgen.core.structure import Structure
 
 try:
     import megnet
@@ -29,9 +32,7 @@ model_filename = os.path.join(module_dir, "model_files", "megnet", "formation_en
 
 @requires(megnet is not None, "megnet package needs to be installed to use this module")
 class MEGNet(EnergyModel):
-    """
-    MEGNetModel wrapper.
-    """
+    """MEGNetModel wrapper."""
 
     def __init__(self, model=None, reconstruct=False, **kwargs):
         """
@@ -63,7 +64,7 @@ class MEGNet(EnergyModel):
         """
         Predict energy from structure
         Args:
-            structure: (pymatgen Structure)
+            structure: (pymatgen Structure).
 
         Returns: float
         """

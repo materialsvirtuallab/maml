@@ -1,7 +1,9 @@
 """
 Simple numba utility.
-Some functions can excelerated substantially with numba
+Some functions can excelerated substantially with numba.
 """
+from __future__ import annotations
+
 from typing import Callable
 
 try:
@@ -12,7 +14,7 @@ except ModuleNotFoundError:
         """
         Dummy decorator, returns the original function
         Args:
-            func (Callable): function to be wrapped
+            func (Callable): function to be wrapped.
 
         Returns: decorated function
 

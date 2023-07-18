@@ -1,6 +1,4 @@
-"""
-maml - materials machine learning
-"""
+"""maml - materials machine learning."""
 
 from __future__ import annotations
 

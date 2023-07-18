@@ -2,22 +2,23 @@
 Describer for converting (structural) objects into models-readable
 numeric vectors or tensors.
 """
+from __future__ import annotations
 
-from ._composition import ElementProperty, ElementStats  # noqa
-from ._site import SmoothOverlapAtomicPosition  # noqa
-from ._site import (  # noqa
+from ._composition import ElementProperty, ElementStats
+from ._site import (
     BispectrumCoefficients,
     BPSymmetryFunctions,
     MEGNetSite,
     SiteElementProperty,
+    SmoothOverlapAtomicPosition,
 )
-from ._structure import CoulombMatrix  # noqa
-from ._structure import SortedCoulombMatrix  # noqa
 from ._structure import (
     CoulombEigenSpectrum,
+    CoulombMatrix,
     DistinctSiteProperty,
     MEGNetStructure,
     RandomizedCoulombMatrix,
+    SortedCoulombMatrix,
 )
 
 __all__ = [

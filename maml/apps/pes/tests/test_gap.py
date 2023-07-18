@@ -1,5 +1,6 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
+from __future__ import annotations
 
 import os
 import shutil
@@ -46,11 +47,11 @@ class GAPotentialTest(unittest.TestCase):
     def test_write_read_cfgs(self):
         self.potential.write_cfgs("test.xyz", cfg_pool=self.test_pool)
         datapool, df = self.potential.read_cfgs("test.xyz")
-        self.assertEqual(len(self.test_pool), len(datapool))
+        assert len(self.test_pool) == len(datapool)
         for data1, data2 in zip(self.test_pool, datapool):
             struct1 = data1["structure"]
             struct2 = Structure.from_dict(data2["structure"])
-            self.assertTrue(struct1 == struct2)
+            assert struct1 == struct2
             energy1 = data1["outputs"]["energy"]
             energy2 = data2["outputs"]["energy"]
             self.assertAlmostEqual(energy1, energy2)
@@ -69,7 +70,7 @@ class GAPotentialTest(unittest.TestCase):
             train_forces=self.test_forces,
             train_stresses=self.test_stresses,
         )
-        self.assertTrue(self.potential.param)
+        assert self.potential.param
 
     @unittest.skipIf(not which("quip"), "No QUIP cmd found.")
     def test_evaluate(self):
@@ -85,7 +86,7 @@ class GAPotentialTest(unittest.TestCase):
             test_forces=self.test_forces,
             test_stresses=self.test_stresses,
         )
-        self.assertEqual(df_orig.shape[0], df_tar.shape[0])
+        assert df_orig.shape[0] == df_tar.shape[0]
 
     @unittest.skipIf(not which("gap_fit"), "No QUIP cmd found.")
     @unittest.skipIf(not which("lmp_serial"), "No LAMMPS cmd found.")
@@ -97,8 +98,8 @@ class GAPotentialTest(unittest.TestCase):
             train_stresses=self.test_stresses,
         )
         energy, forces, stress = self.potential.predict_efs(self.test_struct)
-        self.assertEqual(len(forces), len(self.test_struct))
-        self.assertEqual(len(stress), 6)
+        assert len(forces) == len(self.test_struct)
+        assert len(stress) == 6
 
 
 if __name__ == "__main__":

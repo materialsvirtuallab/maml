@@ -1,5 +1,7 @@
-"""Deep learning layers"""
-from typing import Optional, Sequence
+"""Deep learning layers."""
+from __future__ import annotations
+
+from typing import Sequence
 
 import tensorflow as tf
 import tensorflow.keras.backend as kb
@@ -9,7 +11,7 @@ from tensorflow.keras.layers import Layer
 
 class WeightedAverageLayer(Layer):
     r"""
-    Weight average the features using weights
+    Weight average the features using weights.
 
     result= \sum{w_i^a * value_i} / \sum{w_i^a}
 
@@ -18,23 +20,23 @@ class WeightedAverageLayer(Layer):
     def __init__(self, alpha: float = 1.0, **kwargs):
         """
         Args:
-            alpha (float): exponent in weighting
+            alpha (float): exponent in weighting.
         """
         super().__init__(**kwargs)
         self.alpha = alpha
 
     def build(self, input_shape: Sequence) -> None:
         """
-        Build the layer
+        Build the layer.
 
         Args:
             input_shape (tuple): input shape tuple
         """
         self.built = True
 
-    def call(self, inputs: Sequence, mask: Optional[tf.Tensor] = None) -> tf.Tensor:
+    def call(self, inputs: Sequence, mask: tf.Tensor | None = None) -> tf.Tensor:
         """
-        Core logic of the layer
+        Core logic of the layer.
 
         Args:
             inputs (tuple): input tuple of length 3
@@ -42,7 +44,7 @@ class WeightedAverageLayer(Layer):
         """
         # prop: [1, n, n_feature]
         # weight: [1, n]
-        # index： [1, n]
+        # index: [1, n]
         prop, weights, index = inputs
         expo_weights = weights**self.alpha
         prop = prop * expo_weights[:, :, None]
@@ -53,7 +55,7 @@ class WeightedAverageLayer(Layer):
     @staticmethod
     def reduce_sum(prop: tf.Tensor, index: tf.Tensor, perm: Sequence) -> tf.Tensor:
         """
-        Reduce sum the tensors using index
+        Reduce sum the tensors using index.
 
         Args:
             prop (tf.Tensor): tensor with shape [1, n, ...]
@@ -63,23 +65,20 @@ class WeightedAverageLayer(Layer):
         index = tf.reshape(index, (-1,))
         prop = tf.transpose(a=prop, perm=perm)
         out = tf.math.segment_sum(prop, index)
-        out = tf.transpose(a=out, perm=perm)
-        return out
+        return tf.transpose(a=out, perm=perm)
 
     @staticmethod
     def compute_output_shape(input_shape: Sequence) -> tuple:
         """
         Compute output shape from input shape
         Args:
-            input_shape (tuple/list): input shape list
+            input_shape (tuple/list): input shape list.
         """
         prop_shape = input_shape[0]
         return prop_shape[0], None, prop_shape[-1]
 
     def get_config(self) -> dict:
-        """
-        Get layer configuration
-        """
+        """Get layer configuration."""
         config = {"alpha": self.alpha}
         base_config = super().get_config()
         config.update(base_config)
@@ -91,7 +90,7 @@ class WeightedSet2Set(Layer):
     This is a modified version from megnet.layers.readout.Set2Set.
     Here, in addition to taking features and indices as inputs, we also
     take a weight tensor. The input to the core logic is
-    [features, weights, indices]
+    [features, weights, indices].
     """
 
     def __init__(
@@ -132,7 +131,7 @@ class WeightedSet2Set(Layer):
             kernel_constraint: (str or object) constraint for kernel weights
             recurrent_constraint: (str or object) constraint for recurrent weights
             bias_constraint:(str or object) constraint for biases
-            kwargs: other inputs for keras Layer class
+            kwargs: other inputs for keras Layer class.
         """
         super().__init__(**kwargs)
         self.activation = activations.get(activation)
@@ -158,7 +157,7 @@ class WeightedSet2Set(Layer):
         """
         Build the output shape from input shapes
         Args:
-            input_shape (tuple/list): input shape list
+            input_shape (tuple/list): input shape list.
         """
         feature_shape, weight_shape, index_shape = input_shape
         self.m_weight = self.add_weight(
@@ -215,7 +214,7 @@ class WeightedSet2Set(Layer):
         """
         Compute output shapes from input shapes
         Args:
-            input_shape (sequence of tuple): input shapes
+            input_shape (sequence of tuple): input shapes.
 
         Returns: sequence of tuples output shapes
 
@@ -225,7 +224,7 @@ class WeightedSet2Set(Layer):
 
     def call(self, inputs, mask=None):
         """
-        Core logic of the layer
+        Core logic of the layer.
 
         Args:
             inputs (tuple): input tuple of length 3
@@ -243,7 +242,7 @@ class WeightedSet2Set(Layer):
         self.h = tf.zeros(tf.stack([n_feature, n_count, self.n_hidden]))
         self.c = tf.zeros(tf.stack([n_feature, n_count, self.n_hidden]))
         q_star = tf.zeros(tf.stack([n_feature, n_count, 2 * self.n_hidden]))
-        for i in range(self.T):
+        for _i in range(self.T):
             self.h, c = self._lstm(q_star, self.c)
             e_i_t = tf.reduce_sum(input_tensor=m * tf.repeat(self.h, repeats=counts, axis=1), axis=-1)
             maxes = tf.math.segment_max(e_i_t[0], feature_graph_index)
@@ -286,7 +285,7 @@ class WeightedSet2Set(Layer):
         """
          Part of keras layer interface, where the signature is converted into a dict
         Returns:
-            configurational dictionary
+            configurational dictionary.
         """
         config = {
             "T": self.T,

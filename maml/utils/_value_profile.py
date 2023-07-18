@@ -4,7 +4,7 @@ example, one can design a linearly increasing value profile,
 a sinusoidal profile or a constant profile, depending on the
 step, and previous values.
 """
-from typing import Optional
+from __future__ import annotations
 
 import numpy as np
 
@@ -14,14 +14,14 @@ class ValueProfile:
     Base class for ValueProfile. The base class has the following methods
     methods:
         increment_step(self): add one to step
-        get_value(self): abstract method that return the value
+        get_value(self): abstract method that return the value.
     """
 
-    def __init__(self, max_steps: Optional[int] = None, **kwargs):
+    def __init__(self, max_steps: int | None = None, **kwargs):
         """
         Initializer for ValueProfile. It sets step to 0
         Args:
-            **kwargs: any kwargs
+            **kwargs: any kwargs.
         """
         self.step = 0
         if max_steps is None:
@@ -29,9 +29,7 @@ class ValueProfile:
         self.max_steps = max_steps
 
     def increment_step(self):
-        """
-        increase step attribute by one
-        """
+        """Increase step attribute by one."""
         self.step += 1
         if self.step > self.max_steps:
             raise RuntimeError("Step exceeding maximum")
@@ -39,16 +37,14 @@ class ValueProfile:
     def get_value(self) -> float:
         """
         abstract method that returns the current value
-        Returns: value float
+        Returns: value float.
 
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
 
 class ConstantValue(ValueProfile):
-    """
-    Return constant value
-    """
+    """Return constant value."""
 
     def __init__(self, value: float, **kwargs):
         """
@@ -61,10 +57,7 @@ class ConstantValue(ValueProfile):
         super().__init__(**kwargs)
 
     def get_value(self) -> float:
-        """
-        Return constant value
-        """
-
+        """Return constant value."""
         return self.value
 
 
@@ -72,7 +65,7 @@ class LinearProfile(ValueProfile):
     """
     LinearProfile by setting starting value and the rate of
     value change. The profile can be initialized either by
-    [value_start, value_end, max_step] or [value_start, rate]
+    [value_start, value_end, max_step] or [value_start, rate].
     """
 
     def __init__(self, value_start: float, value_end: float = 0.0, max_steps: int = 100, **kwargs):
@@ -83,9 +76,8 @@ class LinearProfile(ValueProfile):
             value_end (float): end value, optional
             max_step (int): number of steps, optional
             rate (float): rate of value change
-            **kwargs: captures anything else
+            **kwargs: captures anything else.
         """
-
         self.value_start = value_start
         rate = kwargs.get("rate", None)
         if rate is None:
@@ -98,6 +90,6 @@ class LinearProfile(ValueProfile):
     def get_value(self) -> float:
         """
         Get LinearProfile value
-        Returns: float
+        Returns: float.
         """
         return self.value_start + self.step * self.rate

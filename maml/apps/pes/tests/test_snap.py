@@ -1,5 +1,6 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
+from __future__ import annotations
 
 import os
 import shutil
@@ -65,7 +66,7 @@ class SNAPotentialTest(unittest.TestCase):
             train_forces=self.test_forces,
             train_stresses=self.test_stresses,
         )
-        self.assertEqual(len(self.potential1.model.model.coef_), len(self.describer1.subscripts) + 1)
+        assert len(self.potential1.model.model.coef_) == len(self.describer1.subscripts) + 1
         self.potential2.train(
             train_structures=self.test_structures,
             train_energies=self.test_energies,
@@ -73,7 +74,7 @@ class SNAPotentialTest(unittest.TestCase):
             train_stresses=self.test_stresses,
         )
         nss = len(self.describer2.subscripts)
-        self.assertEqual(len(self.potential2.model.model.coef_), nss + int((1 + nss) * nss / 2) + 1)
+        assert len(self.potential2.model.model.coef_) == nss + int((1 + nss) * nss / 2) + 1
 
     def test_evaluate(self):
         self.potential1.train(
@@ -88,7 +89,7 @@ class SNAPotentialTest(unittest.TestCase):
             test_forces=self.test_forces,
             test_stresses=self.test_stresses,
         )
-        self.assertEqual(df_orig.shape[0], df_tar.shape[0])
+        assert df_orig.shape[0] == df_tar.shape[0]
 
         self.potential2.train(
             train_structures=self.test_structures,
@@ -102,7 +103,7 @@ class SNAPotentialTest(unittest.TestCase):
             test_forces=self.test_forces,
             test_stresses=self.test_stresses,
         )
-        self.assertEqual(df_orig.shape[0], df_tar.shape[0])
+        assert df_orig.shape[0] == df_tar.shape[0]
 
     def test_predict_efs(self):
         self.potential1.train(
@@ -112,8 +113,8 @@ class SNAPotentialTest(unittest.TestCase):
             train_stresses=self.test_stresses,
         )
         energy, forces, stress = self.potential1.predict_efs(self.test_struct)
-        self.assertEqual(len(forces), len(self.test_struct))
-        self.assertEqual(len(stress), 6)
+        assert len(forces) == len(self.test_struct)
+        assert len(stress) == 6
         self.potential2.train(
             train_structures=self.test_structures,
             train_energies=self.test_energies,
@@ -121,12 +122,12 @@ class SNAPotentialTest(unittest.TestCase):
             train_stresses=self.test_stresses,
         )
         energy, forces, stress = self.potential2.predict_efs(self.test_struct)
-        self.assertEqual(len(forces), len(self.test_struct))
-        self.assertEqual(len(stress), 6)
+        assert len(forces) == len(self.test_struct)
+        assert len(stress) == 6
 
     def test_from_config(self):
         snap = SNAPotential.from_config(param_file, coeff_file)
-        self.assertTrue(getattr(snap.model.model, "coef_") is not None)
+        assert snap.model.model.coef_ is not None
 
 
 if __name__ == "__main__":

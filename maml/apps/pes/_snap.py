@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides SNAP interatomic potential class."""
+from __future__ import annotations
 
 import re
 from logging import getLogger
@@ -12,12 +13,7 @@ from sklearn.linear_model import LinearRegression
 
 from maml.base import SKLModel
 from maml.describers import BispectrumCoefficients
-from maml.utils import (
-    check_structures_forces_stresses,
-    convert_docs,
-    pool_from,
-    stress_format_change,
-)
+from maml.utils import check_structures_forces_stresses, convert_docs, pool_from, stress_format_change
 
 from ._lammps import LammpsPotential
 
@@ -25,9 +21,7 @@ logger = getLogger(__name__)
 
 
 class SNAPotential(LammpsPotential):
-    """
-    This class implements Spectral Neighbor Analysis Potential.
-    """
+    """This class implements Spectral Neighbor Analysis Potential."""
 
     pair_style = "pair_style        snap"
     pair_coeff = "pair_coeff        * * {coeff_file} {param_file} {elements}"
@@ -43,7 +37,6 @@ class SNAPotential(LammpsPotential):
                 atomic descriptos as features and properties as targets.
             name (str): Name of force field.
         """
-
         logger.warning(
             "Triclinic structures will be rotated to lammps format. "
             "Please be sure to rotate forces and stresses to get the "
@@ -139,9 +132,7 @@ class SNAPotential(LammpsPotential):
         return df_orig, df_predict
 
     def write_param(self):
-        """
-        Write parameter and coefficient file to perform lammps calculation.
-        """
+        """Write parameter and coefficient file to perform lammps calculation."""
         param_file = f"{self.name}.snapparam"
         coeff_file = f"{self.name}.snapcoeff"
         model = self.model
@@ -173,8 +164,7 @@ class SNAPotential(LammpsPotential):
         pair_coeff = self.pair_coeff.format(
             elements=" ".join(self.elements), coeff_file=coeff_file, param_file=param_file
         )
-        ff_settings = [pair_style, pair_coeff]
-        return ff_settings
+        return [pair_style, pair_coeff]
 
     @staticmethod
     def from_config(param_file, coeff_file, **kwargs):
@@ -223,5 +213,4 @@ class SNAPotential(LammpsPotential):
         )
         model.model.coef_ = coef
         model.model.intercept_ = 0
-        snap = SNAPotential(model=model)
-        return snap
+        return SNAPotential(model=model)

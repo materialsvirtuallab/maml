@@ -1,5 +1,5 @@
 """
-Sure Independence Screening
+Sure Independence Screening.
 
 https://orfe.princeton.edu/~jqfan/papers/06/SIS.pdf
 
@@ -59,13 +59,13 @@ class SIS:
     Sure independence screening method.
     The method consists of two steps:
         1. Screen
-        2. Select
+        2. Select.
 
     """
 
     def __init__(self, gamma=0.1, selector: BaseSelector | None = None, verbose: bool = True):
         """
-        Sure independence screening
+        Sure independence screening.
 
         Args:
             gamma (float): ratio between selected features and original feature sizes
@@ -85,7 +85,7 @@ class SIS:
             y (np.ndarray): M output targets
             select_options (dict): options in the optimizations provided
                 to scipy.optimize.minimize. If the selector is using cvxpy
-                optimization package, this option is fed into cp.Problem.solve
+                optimization package, this option is fed into cp.Problem.solve.
 
         Returns: selected feature indices
 
@@ -104,7 +104,7 @@ class SIS:
     def screen(self, x, y):
         """
         Simple screening method by comparing the correlation between features
-        and the target
+        and the target.
 
         Args:
             x (np.ndarray): input array
@@ -117,8 +117,7 @@ class SIS:
         omega = x.T.dot(y)
         sorted_omega = np.argsort(omega)[::-1]
         d = int(n * self.gamma)
-        top_indices = sorted_omega[:d]
-        return top_indices
+        return sorted_omega[:d]
 
     def select(self, x, y, options=None):
         """
@@ -126,7 +125,7 @@ class SIS:
         Args:
             x (np.ndarray): input array
             y (np.ndarray): target array
-            options (dict): options for the optimization
+            options (dict): options for the optimization.
 
         Returns:
 
@@ -138,7 +137,7 @@ class SIS:
         Compute residual
         Args:
             x (np.ndarray): input array
-            y (np.ndarray): target array
+            y (np.ndarray): target array.
 
         Returns: residual vector
 
@@ -149,7 +148,7 @@ class SIS:
         """
         Set new selector
         Args:
-            selector (BaseSelector): a feature selector
+            selector (BaseSelector): a feature selector.
 
         Returns:
 
@@ -158,7 +157,7 @@ class SIS:
 
     def set_gamma(self, gamma):
         """
-        Set gamma
+        Set gamma.
 
         Args:
             gamma (float): new gamma value
@@ -169,7 +168,7 @@ class SIS:
     def update_gamma(self, ratio: float = 0.5):
         """
         Update the sis object so that sis.select
-        return at least one feature
+        return at least one feature.
 
         Args:
             ratio (float): ratio to update the parameters
@@ -179,14 +178,14 @@ class SIS:
 
 
 class ISIS:
-    """Iterative SIS"""
+    """Iterative SIS."""
 
     def __init__(self, sis: SIS = SIS(gamma=0.1, selector=DantzigSelector(0.1)), l0_regulate: bool = True):
         """
 
         Args:
             sis(SIS): sis object
-            l0_regulate(bool): Whether to regulate features in each iteration, default True
+            l0_regulate(bool): Whether to regulate features in each iteration, default True.
         """
         self.sis = sis
         self.selector = sis.selector
@@ -212,7 +211,7 @@ class ISIS:
             metric (str): scorer function, used with
                 sklearn.metrics.get_scorer
             options:
-            step(float): step to update gamma with
+            step(float): step to update gamma with.
 
         Returns:
             find_sel(np.array): np.array of index of selected features

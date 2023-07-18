@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import itertools
 import os
 import tempfile
@@ -31,8 +33,8 @@ class BispectrumCoefficientsTest(unittest.TestCase):
         df_atom = bc_atom.transform(structures)
         for i, s in enumerate(structures):
             df_s = df_atom.xs(i, level="input_index")
-            self.assertEqual(df_s.shape, (len(s), 8))
-            self.assertTrue(df_s.equals(bc_atom.transform_one(s)))
+            assert df_s.shape == (len(s), 8)
+            assert df_s.equals(bc_atom.transform_one(s))
 
         bc_pot = BispectrumCoefficients(
             rcutfac=5, twojmax=3, element_profile=profile, quadratic=False, pot_fit=True, include_stress=True
@@ -40,8 +42,8 @@ class BispectrumCoefficientsTest(unittest.TestCase):
         df_pot = bc_pot.transform(structures)
         for i, s in enumerate(structures):
             df_s = df_pot.xs(i, level="input_index")
-            self.assertEqual(df_s.shape, (1 + len(s) * 3 + 6, 18))
-            self.assertTrue(df_s.equals(bc_pot.transform_one(s)))
+            assert df_s.shape == (1 + len(s) * 3 + 6, 18)
+            assert df_s.equals(bc_pot.transform_one(s))
             sna = df_s.iloc[0]
             for specie in ["Na", "Cl"]:
                 self.assertAlmostEqual(sna[specie, "n"], s.composition.fractional_composition[specie])
@@ -66,15 +68,15 @@ class SmoothOverlapAtomicPositionTest(unittest.TestCase):
     def test_transform_one(self):
         unary_descriptors = self.describer.transform_one(self.unary_struct)
         binary_descriptors = self.describer.transform_one(self.binary_struct)
-        self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct))
-        self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct))
+        assert unary_descriptors.shape[0] == len(self.unary_struct)
+        assert binary_descriptors.shape[0] == len(self.binary_struct)
 
     @unittest.skipIf(not which("quip"), "No quip cmd found.")
     def test_transform(self):
         unary_descriptors = self.describer.transform([self.unary_struct] * 3)
-        self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct) * 3)
+        assert unary_descriptors.shape[0] == len(self.unary_struct) * 3
         binary_descriptors = self.describer.transform([self.binary_struct] * 3)
-        self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct) * 3)
+        assert binary_descriptors.shape[0] == len(self.binary_struct) * 3
 
 
 class BPSymmetryFunctionsTest(unittest.TestCase):
@@ -108,48 +110,28 @@ class BPSymmetryFunctionsTest(unittest.TestCase):
         binary_descriptors = self.describer.transform_one(self.binary_struct)
         unary_elements = set(self.unary_struct.species)
         binary_elements = set(self.binary_struct.species)
-        self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct))
-        self.assertEqual(
-            unary_descriptors.shape[1],
-            len(self.r_etas) * len(self.r_shift) * len(unary_elements)
-            + len(self.a_etas)
-            * len(self.zetas)
-            * len(self.lambdas)
-            * len(list(itertools.combinations_with_replacement(unary_elements, 2))),
-        )
-        self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct))
-        self.assertEqual(
-            binary_descriptors.shape[1],
-            len(self.r_etas) * len(self.r_shift) * len(binary_elements)
-            + len(self.a_etas)
-            * len(self.zetas)
-            * len(self.lambdas)
-            * len(list(itertools.combinations_with_replacement(binary_elements, 2))),
-        )
+        assert unary_descriptors.shape[0] == len(self.unary_struct)
+        assert unary_descriptors.shape[1] == len(self.r_etas) * len(self.r_shift) * len(unary_elements) + len(
+            self.a_etas
+        ) * len(self.zetas) * len(self.lambdas) * len(list(itertools.combinations_with_replacement(unary_elements, 2)))
+        assert binary_descriptors.shape[0] == len(self.binary_struct)
+        assert binary_descriptors.shape[1] == len(self.r_etas) * len(self.r_shift) * len(binary_elements) + len(
+            self.a_etas
+        ) * len(self.zetas) * len(self.lambdas) * len(list(itertools.combinations_with_replacement(binary_elements, 2)))
 
     def test_transform(self):
         unary_descriptors = self.describer.transform([self.unary_struct] * 3)
         binary_descriptors = self.describer.transform([self.binary_struct] * 3)
         unary_elements = set(self.unary_struct.species)
         binary_elements = set(self.binary_struct.species)
-        self.assertEqual(unary_descriptors.shape[0], len(self.unary_struct) * 3)
-        self.assertEqual(
-            unary_descriptors.shape[1],
-            len(self.r_etas) * len(self.r_shift) * len(unary_elements)
-            + len(self.a_etas)
-            * len(self.zetas)
-            * len(self.lambdas)
-            * len(list(itertools.combinations_with_replacement(unary_elements, 2))),
-        )
-        self.assertEqual(binary_descriptors.shape[0], len(self.binary_struct) * 3)
-        self.assertEqual(
-            binary_descriptors.shape[1],
-            len(self.r_etas) * len(self.r_shift) * len(binary_elements)
-            + len(self.a_etas)
-            * len(self.zetas)
-            * len(self.lambdas)
-            * len(list(itertools.combinations_with_replacement(binary_elements, 2))),
-        )
+        assert unary_descriptors.shape[0] == len(self.unary_struct) * 3
+        assert unary_descriptors.shape[1] == len(self.r_etas) * len(self.r_shift) * len(unary_elements) + len(
+            self.a_etas
+        ) * len(self.zetas) * len(self.lambdas) * len(list(itertools.combinations_with_replacement(unary_elements, 2)))
+        assert binary_descriptors.shape[0] == len(self.binary_struct) * 3
+        assert binary_descriptors.shape[1] == len(self.r_etas) * len(self.r_shift) * len(binary_elements) + len(
+            self.a_etas
+        ) * len(self.zetas) * len(self.lambdas) * len(list(itertools.combinations_with_replacement(binary_elements, 2)))
 
 
 class TestSiteSpecieProperty(unittest.TestCase):
@@ -161,7 +143,7 @@ class TestSiteSpecieProperty(unittest.TestCase):
         udescriber2 = SiteElementProperty(feature_dict={16: [16, 16], 42: [42, 42]})
         np.testing.assert_array_almost_equal(udescriber2.transform_one(s), np.array([[42, 42], [16, 16]]))
 
-        self.assertTrue(udescriber.describer_type == "site")
+        assert udescriber.describer_type == "site"
 
         udescriber = SiteElementProperty(output_weights=True)
         vec, weight = udescriber.transform_one(s)

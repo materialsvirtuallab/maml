@@ -1,17 +1,18 @@
-"""
-Module implements the perturbation class for atomic and lattice relaxation.
-"""
+"""Module implements the perturbation class for atomic and lattice relaxation."""
 from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 import numpy as np
 from monty.serialization import loadfn
-from pymatgen.core.operations import SymmOp
-from pymatgen.core.sites import PeriodicSite, Site
 from pymatgen.core.structure import Lattice, Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.symmetry.groups import SpaceGroup, in_array_list
+
+if TYPE_CHECKING:
+    from pymatgen.core.operations import SymmOp
+    from pymatgen.core.sites import PeriodicSite, Site
 
 module_dir = os.path.dirname(__file__)
 
@@ -77,9 +78,7 @@ class WyckoffPerturbation:
             self.dim = wyckoff_dims[int_symbol][wyckoff_symbol]
             self.multiplicity = dict(zip(*wyckoff_nums[int_symbol]))[wyckoff_symbol]
             self.perturbation_mode = eval(perturbation_modes[int_symbol][wyckoff_symbol])
-            self.symmetry_ops = (
-                SpaceGroup.from_int_number(int_symbol).symmetry_ops if not symmetry_ops else symmetry_ops
-            )
+            self.symmetry_ops = symmetry_ops if symmetry_ops else SpaceGroup.from_int_number(int_symbol).symmetry_ops
         else:
             self.standard_mode = eval("lambda p: True")
             self.dim = 3
@@ -142,16 +141,12 @@ class WyckoffPerturbation:
 
     @property
     def site(self):
-        """
-        Returns the site.
-        """
+        """Returns the site."""
         return self._site
 
     @property
     def fit_site(self):
-        """
-        Returns whether the site fits any standard wyckoff position.
-        """
+        """Returns whether the site fits any standard wyckoff position."""
         return self._fit_site
 
     def __repr__(self):
@@ -206,9 +201,7 @@ def crystal_system(int_number: int) -> str:
 
 
 class LatticePerturbation:
-    """
-    Perturbation class for determining the standard lattice.
-    """
+    """Perturbation class for determining the standard lattice."""
 
     def __init__(self, spg_int_symbol: int, use_symmetry: bool = True):
         """
@@ -367,23 +360,17 @@ class LatticePerturbation:
 
     @property
     def fit_lattice(self) -> bool:
-        """
-        Returns whether the lattice fits any crystal system.
-        """
+        """Returns whether the lattice fits any crystal system."""
         return self._fit_lattice
 
     @property
     def lattice(self) -> Lattice:
-        """
-        Returns the lattice.
-        """
+        """Returns the lattice."""
         return self._lattice  # type: ignore
 
     @property
     def abc(self) -> list[float]:
-        """
-        Returns the lattice lengths.
-        """
+        """Returns the lattice lengths."""
         return self._abc  # type: ignore
 
     def __repr__(self):

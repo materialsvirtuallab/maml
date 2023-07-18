@@ -1,32 +1,31 @@
-"""
-Batch a list of features output by describers.transform method
-"""
-from typing import Any, Callable, List, Optional, Union
+"""Batch a list of features output by describers.transform method."""
+from __future__ import annotations
+
+from typing import Any, Callable
 
 import numpy as np
 import pandas as pd
 
 
-def pandas_concat(features: List[pd.DataFrame]) -> pd.DataFrame:
+def pandas_concat(features: list[pd.DataFrame]) -> pd.DataFrame:
     """
     Concatenate a list of pandas dataframe into a single one
     Args:
-        features (list): list of pandas dataframe
+        features (list): list of pandas dataframe.
 
     Returns: concatenated pandas dataframe
 
     """
-    concatenated = pd.concat(features, keys=range(len(features)), names=["input_index", None])
-    return concatenated
+    return pd.concat(features, keys=range(len(features)), names=["input_index", None])
 
 
-def stack_first_dim(features: List[np.ndarray]) -> np.ndarray:
+def stack_first_dim(features: list[np.ndarray]) -> np.ndarray:
     """
     Stack the first dimension. If the original features
     are a list of nxm array, the stacked features will be lxnxm,
     where l is the number of entries in the list
     Args:
-        features (list): list of numpy array features
+        features (list): list of numpy array features.
 
     Returns: stacked features
 
@@ -34,13 +33,13 @@ def stack_first_dim(features: List[np.ndarray]) -> np.ndarray:
     return np.stack(features)
 
 
-def stack_padded(features: List[np.ndarray]) -> np.ndarray:
+def stack_padded(features: list[np.ndarray]) -> np.ndarray:
     """
     Stack the first dimension. If the original features
     are a list of nxm array, the stacked features will be lxnxm,
     where l is the number of entries in the list
     Args:
-        features (list): list of numpy array features
+        features (list): list of numpy array features.
 
     Returns: stacked features
 
@@ -55,11 +54,8 @@ def stack_padded(features: List[np.ndarray]) -> np.ndarray:
     return res
 
 
-def no_action(features: List[Any]) -> List[Any]:
-    """
-    return original feature lists
-
-    """
+def no_action(features: list[Any]) -> list[Any]:
+    """Return original feature lists."""
     return features
 
 
@@ -71,12 +67,12 @@ AVAILABLE_FB_METHODS = {
 }
 
 
-def get_feature_batch(fb_name: Optional[Union[str, Callable]] = None) -> Callable:
+def get_feature_batch(fb_name: str | Callable | None = None) -> Callable:
     """
     Providing a feature batch name, returning the function callable
     Args:
         fb_name (str): name of the feature batch function
-    Returns: callable feature batch function
+    Returns: callable feature batch function.
     """
     if fb_name is None:
         return no_action

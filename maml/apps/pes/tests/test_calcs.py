@@ -1,6 +1,6 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
-
+from __future__ import annotations
 
 import json
 import os
@@ -60,20 +60,20 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         sna1, snad1, snav1, elem1 = calculator1.calculate([self.structure1])[0]
         n1 = calculator1.n_bs
         self.assertAlmostEqual(sna1[0][0], 585.920)
-        self.assertEqual(sna1.shape, (len(self.structure1), n1))
-        self.assertEqual(snad1.shape, (len(self.structure1), n1 * 3 * len(profile1)))
-        self.assertEqual(snav1.shape, (len(self.structure1), n1 * 6 * len(profile1)))
-        self.assertEqual(len(np.unique(elem1)), 1)
+        assert sna1.shape == (len(self.structure1), n1)
+        assert snad1.shape == (len(self.structure1), n1 * 3 * len(profile1))
+        assert snav1.shape == (len(self.structure1), n1 * 6 * len(profile1))
+        assert len(np.unique(elem1)) == 1
 
         calculator4 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm1, element_profile=profile1, quadratic=True)
         sna4, snad4, snav4, elem4 = calculator4.calculate([self.structure1])[0]
         n4 = calculator4.n_bs
         n4 += int((1 + n4) * n4 / 2)
         self.assertAlmostEqual(sna4[0][0], 585.920)
-        self.assertEqual(sna4.shape, (len(self.structure1), n4))
-        self.assertEqual(snad4.shape, (len(self.structure1), n4 * 3 * len(profile1)))
-        self.assertEqual(snav4.shape, (len(self.structure1), n4 * 6 * len(profile1)))
-        self.assertEqual(len(np.unique(elem4)), 1)
+        assert sna4.shape == (len(self.structure1), n4)
+        assert snad4.shape == (len(self.structure1), n4 * 3 * len(profile1))
+        assert snav4.shape == (len(self.structure1), n4 * 6 * len(profile1))
+        assert len(np.unique(elem4)) == 1
 
         profile2 = dict(Na=dict(r=0.3, w=0.9), Cl=dict(r=0.7, w=3.0))
         tjm2 = np.random.randint(1, 11)
@@ -81,20 +81,20 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         sna2, snad2, snav2, elem2 = calculator2.calculate([self.structure2])[0]
         n2 = calculator2.n_bs
         self.assertAlmostEqual(sna2[0][0], 525.858)
-        self.assertEqual(sna2.shape, (len(self.structure2), n2))
-        self.assertEqual(snad2.shape, (len(self.structure2), n2 * 3 * len(profile2)))
-        self.assertEqual(snav2.shape, (len(self.structure2), n2 * 6 * len(profile2)))
-        self.assertEqual(len(np.unique(elem2)), len(profile2))
+        assert sna2.shape == (len(self.structure2), n2)
+        assert snad2.shape == (len(self.structure2), n2 * 3 * len(profile2))
+        assert snav2.shape == (len(self.structure2), n2 * 6 * len(profile2))
+        assert len(np.unique(elem2)) == len(profile2)
 
         calculator5 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm2, element_profile=profile2, quadratic=True)
         sna5, snad5, snav5, elem5 = calculator5.calculate([self.structure2])[0]
         n5 = calculator5.n_bs
         n5 += int((1 + n5) * n5 / 2)
         self.assertAlmostEqual(sna5[0][0], 525.858)
-        self.assertEqual(sna5.shape, (len(self.structure2), n5))
-        self.assertEqual(snad5.shape, (len(self.structure2), n5 * 3 * len(profile2)))
-        self.assertEqual(snav5.shape, (len(self.structure2), n5 * 6 * len(profile2)))
-        self.assertEqual(len(np.unique(elem5)), len(profile2))
+        assert sna5.shape == (len(self.structure2), n5)
+        assert snad5.shape == (len(self.structure2), n5 * 3 * len(profile2))
+        assert snav5.shape == (len(self.structure2), n5 * 6 * len(profile2))
+        assert len(np.unique(elem5)) == len(profile2)
 
         profile3 = dict(Ca=dict(r=0.4, w=1.0), Ti=dict(r=0.3, w=1.5), O=dict(r=0.75, w=3.5))
         tjm3 = np.random.randint(1, 11)
@@ -102,20 +102,20 @@ class SpectralNeighborAnalysisTest(unittest.TestCase):
         sna3, snad3, snav3, elem3 = calculator3.calculate([self.structure3])[0]
         n3 = calculator3.n_bs
         self.assertAlmostEqual(sna3[0][0], 25506.3)
-        self.assertEqual(sna3.shape, (len(self.structure3), n3))
-        self.assertEqual(snad3.shape, (len(self.structure3), n3 * 3 * len(profile3)))
-        self.assertEqual(snav3.shape, (len(self.structure3), n3 * 6 * len(profile3)))
-        self.assertEqual(len(np.unique(elem3)), len(profile3))
+        assert sna3.shape == (len(self.structure3), n3)
+        assert snad3.shape == (len(self.structure3), n3 * 3 * len(profile3))
+        assert snav3.shape == (len(self.structure3), n3 * 6 * len(profile3))
+        assert len(np.unique(elem3)) == len(profile3)
 
         calculator6 = SpectralNeighborAnalysis(rcutfac=5, twojmax=tjm3, element_profile=profile3, quadratic=True)
         sna6, snad6, snav6, elem6 = calculator6.calculate([self.structure3])[0]
         n6 = calculator6.n_bs
         n6 += int((1 + n6) * n6 / 2)
         self.assertAlmostEqual(sna6[0][0], 25506.3)
-        self.assertEqual(sna6.shape, (len(self.structure3), n6))
-        self.assertEqual(snad6.shape, (len(self.structure3), n6 * 3 * len(profile3)))
-        self.assertEqual(snav6.shape, (len(self.structure3), n6 * 6 * len(profile3)))
-        self.assertEqual(len(np.unique(elem6)), len(profile3))
+        assert sna6.shape == (len(self.structure3), n6)
+        assert snad6.shape == (len(self.structure3), n6 * 3 * len(profile3))
+        assert snav6.shape == (len(self.structure3), n6 * 6 * len(profile3))
+        assert len(np.unique(elem6)) == len(profile3)
 
 
 class EnergyForceStressTest(unittest.TestCase):
@@ -156,9 +156,9 @@ class EnergyForceStressTest(unittest.TestCase):
     def test_calculate(self):
         calculator1 = EnergyForceStress(ff_settings=self.ff_settings1)
         energy1, forces1, stresses1 = calculator1.calculate([self.struct])[0]
-        self.assertTrue(abs(energy1 - (-23.1242962)) < 1e-2)
+        assert abs(energy1 - -23.1242962) < 0.01
         np.testing.assert_array_almost_equal(forces1, np.zeros((len(self.struct), 3)))
-        self.assertEqual(len(stresses1), 6)
+        assert len(stresses1) == 6
 
 
 class ElasticConstantTest(unittest.TestCase):
@@ -187,9 +187,9 @@ class ElasticConstantTest(unittest.TestCase):
     def test_calculate(self):
         calculator = ElasticConstant(ff_settings=self.ff_settings, lattice="fcc", alat=3.506)
         C11, C12, C44, bulkmodulus = calculator.calculate()
-        self.assertTrue(abs(C11 - 276) / 276 < 0.1)
-        self.assertTrue(abs(C12 - 159) / 159 < 0.1)
-        self.assertTrue(abs(C44 - 132) / 132 < 0.1)
+        assert abs(C11 - 276) / 276 < 0.1
+        assert abs(C12 - 159) / 159 < 0.1
+        assert abs(C44 - 132) / 132 < 0.1
 
 
 class LatticeConstantTest(unittest.TestCase):
@@ -295,11 +295,11 @@ class LMPTest(unittest.TestCase):
         init_lmp = get_default_lmp_exe()
         lc = LatticeConstant(["dummy setting"])
         lc.set_lmp_exe(init_lmp)
-        self.assertEqual(init_lmp, lc.LMP_EXE)
+        assert init_lmp == lc.LMP_EXE
 
         new_lmp = "It can be any directory"
         lc.set_lmp_exe(new_lmp)
-        self.assertEqual(new_lmp, lc.LMP_EXE)
+        assert new_lmp == lc.LMP_EXE
         lc.set_lmp_exe(init_lmp)
 
 

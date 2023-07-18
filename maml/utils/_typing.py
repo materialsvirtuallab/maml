@@ -1,4 +1,5 @@
-"""Define several typing for convenient use"""
+"""Define several typing for convenient use."""
+from __future__ import annotations
 
 from typing import Any, Callable, List, Optional, Union
 

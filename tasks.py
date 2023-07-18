@@ -3,6 +3,7 @@ Pyinvoke tasks.py file for automating releases and admin stuff.
 
 Author: Shyue Ping Ong
 """
+from __future__ import annotations
 
 import datetime
 import glob

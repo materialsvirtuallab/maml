@@ -1,23 +1,23 @@
-"""
-Symbolic learning
-"""
+"""Symbolic learning."""
+from __future__ import annotations
+
 try:
     import cvxpy as cp
 except ImportError:
     cp = None
 
 from ._feature_generator import FeatureGenerator, Operator  # noqa
-from ._selectors import SCAD  # noqa
-from ._selectors import L0BrutalForce  # noqa
-from ._sis import ISIS, SIS  # noqa
+from ._selectors import SCAD
+from ._selectors import L0BrutalForce
+from ._sis import ISIS, SIS
 
 if cp is None:
-    from ._selectors import AdaptiveLasso, DantzigSelector, Lasso  # noqa  # noqa
+    from ._selectors import AdaptiveLasso, DantzigSelector, Lasso
 else:
     # import from cvxpy alternatives
-    from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso  # noqa
-    from ._selectors_cvxpy import DantzigSelectorCP as DantzigSelector  # noqa
-    from ._selectors_cvxpy import LassoCP as Lasso  # noqa
+    from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso
+    from ._selectors_cvxpy import DantzigSelectorCP as DantzigSelector
+    from ._selectors_cvxpy import LassoCP as Lasso
 
 __all__ = [
     "DantzigSelector",

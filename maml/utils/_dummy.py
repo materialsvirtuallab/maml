@@ -1,6 +1,6 @@
-"""
-Dummy test systems
-"""
+"""Dummy test systems."""
+from __future__ import annotations
+
 from pymatgen.core import Composition, Lattice, Molecule, Structure
 
 from ._data_conversion import to_array
@@ -35,7 +35,7 @@ def get_describer_dummy_obj(instance):
 
 def feature_dim_from_test_system(describer):
     """
-    Get feature size from a test system
+    Get feature size from a test system.
 
     Args:
         describer (BaseDescriber): describers instance

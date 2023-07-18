@@ -1,28 +1,28 @@
-"""
-Feature Generator
-"""
+"""Feature Generator."""
+from __future__ import annotations
+
 import warnings
 from functools import partial
 from itertools import combinations_with_replacement
-from typing import Any, Callable, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable
 
 import numpy as np
-import pandas as pd
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def _update_df(df, op, fn1, fn2=None):
-    """Helper function to update the dataframe with new generated feature array"""
+    """Helper function to update the dataframe with new generated feature array."""
     fnames = df.columns
     if op.is_unary:
         new_fname = op.gen_name(fn1)
         if new_fname not in fnames:
-            if op.rep in ["sqrt", "log10"]:
-                if np.any(df[fn1] < 0):
-                    warnings.warn(
-                        f"Data {fn1} Contains negative number, "
-                        + "sqrt will return complex number. "
-                        + "Consider using abssqrt or abslog10"
-                    )
+            if op.rep in ["sqrt", "log10"] and np.any(df[fn1] < 0):
+                warnings.warn(
+                    f"Data {fn1} Contains negative number, sqrt will return complex number. "
+                    "Consider using abssqrt or abslog10"
+                )
             df[new_fname] = df[fn1].apply(op)
     elif op.is_binary:
         new_fname = op.gen_name(fn1, fn2)
@@ -32,7 +32,7 @@ def _update_df(df, op, fn1, fn2=None):
 
 def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
     """
-    Generate new features by applying operators to columns in feature_df
+    Generate new features by applying operators to columns in feature_df.
 
     Args:
         feature_df(pd.DataFrame): dataframe of original features
@@ -64,14 +64,14 @@ def generate_feature(feature_df: pd.DataFrame, operators: list) -> pd.DataFrame:
 
 
 class FeatureGenerator:
-    """FeatureGenerator class for feature augmentation before selection"""
+    """FeatureGenerator class for feature augmentation before selection."""
 
     def __init__(self, feature_df: pd.DataFrame, operators: list):
         """
 
         Args:
             feature_df(pd.DataFrame): original features
-            operators(list): list of operators(str)
+            operators(list): list of operators(str).
         """
         self.fdf = feature_df
         self.operators = operators
@@ -80,7 +80,7 @@ class FeatureGenerator:
         """
         Augment features
         Args:
-            n(int): number of rounds of iteration
+            n(int): number of rounds of iteration.
 
         Returns: augmented dataframe
 
@@ -119,25 +119,25 @@ class Operator:
         "sum_exp",
     ]
 
-    def __init__(self, operation: Union[Callable[..., Any]], rep: str, unary: bool, commutative: bool):
+    def __init__(self, operation: Callable[..., Any], rep: str, unary: bool, commutative: bool):
         """
         Args:
             operation(Callable): operation function
             rep(str): representations of the operator
             unary(bool): whether it is a unary operator
-            commutative(bool): whether it is a commutative operator
+            commutative(bool): whether it is a commutative operator.
         """
         self.opt = operation
         self.rep = rep
         self.unary = unary
         self.commutative = commutative
 
-    def compute(self, i1: np.ndarray, i2: Optional[np.ndarray] = None) -> np.ndarray:
+    def compute(self, i1: np.ndarray, i2: np.ndarray | None = None) -> np.ndarray:
         """
         Compute the results
         Args:
             i1(np.ndarray): first input array
-            i2(np.ndarray): second input array (for binary operators)
+            i2(np.ndarray): second input array (for binary operators).
 
         Returns: array of computed results
         """
@@ -145,12 +145,12 @@ class Operator:
             return self.opt(i1, i2)
         return self.opt(i1)
 
-    def gen_name(self, f1: str, f2: Optional[str] = None) -> str:
+    def gen_name(self, f1: str, f2: str | None = None) -> str:
         """
         Generate string representation for output
         Args:
             f1(str): name of the first input array
-            f2(str): name of the second input array
+            f2(str): name of the second input array.
 
         Returns: name of the output
 
@@ -167,7 +167,7 @@ class Operator:
         Operator from name of the operator
         Args:
             op_name(str): string representation of the operator,
-            check Operator.support_op_rep for reference
+            check Operator.support_op_rep for reference.
 
         Returns: Operator
 
@@ -177,10 +177,7 @@ class Operator:
 
     @property
     def is_unary(self) -> bool:
-        """
-        Returns: True if the operator takes one argument else False
-
-        """
+        """Returns: True if the operator takes one argument else False."""
         if not self.unary:
             if self.rep in ["^2", "^3", "sqrt", "abssqrt", "cbrt", "exp", "abs", "log10", "abslog10"]:
                 self.unary = True
@@ -190,33 +187,22 @@ class Operator:
 
     @property
     def is_binary(self) -> bool:
-        """
-        Returns: True if the operator takes two arguments else False
-
-        """
+        """Returns: True if the operator takes two arguments else False."""
         return not self.is_unary
 
     @property
     def is_commutative(self) -> bool:
-        """
-        Returns: True if the operator is commutative else False
-
-        """
+        """Returns: True if the operator is commutative else False."""
         if not self.commutative:
-            if self.is_unary:
-                self.commutative = False
-            elif self.rep in ["-", "/"]:
-                self.commutative = False
-            else:
-                self.commutative = True
+            self.commutative = not (self.is_unary or self.rep in ["-", "/"])
         return self.commutative
 
-    def __call__(self, i1: np.ndarray, i2: Optional[np.ndarray] = None) -> np.ndarray:
+    def __call__(self, i1: np.ndarray, i2: np.ndarray | None = None) -> np.ndarray:
         """
         Compute the results
         Args:
             i1(np.ndarray): first input array
-            i2(np.ndarray): second input array (for binary operators)
+            i2(np.ndarray): second input array (for binary operators).
 
         Returns: array of computed results
 
@@ -295,7 +281,7 @@ def _my_sum_exp(x, y):
 #     return np.exp(pow(x + y, 3))
 
 
-operation_dict: Dict[str, Any]
+operation_dict: dict[str, Any]
 operation_dict = {
     "^2": {
         "kwgs": {"operation": partial(_my_power, n=2), "rep": "^2", "unary": True, "commutative": False},

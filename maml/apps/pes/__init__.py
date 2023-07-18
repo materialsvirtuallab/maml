@@ -2,22 +2,25 @@
 # Distributed under the terms of the BSD License.
 
 """This package contains PotentialMixin classes representing Interatomic Potentials."""
+from __future__ import annotations
 
-from ._base import Potential, PotentialMixin  # noqa
-from ._gap import GAPotential  # noqa
-from ._lammps import DefectFormation  # noqa
-from ._lammps import ElasticConstant  # noqa
-from ._lammps import EnergyForceStress  # noqa
-from ._lammps import LatticeConstant  # noqa
-from ._lammps import LMPRelaxationCalculator  # noqa
-from ._lammps import LMPStaticCalculator  # noqa
-from ._lammps import NudgedElasticBand  # noqa
-from ._lammps import SpectralNeighborAnalysis  # noqa
-from ._lammps import SurfaceEnergy  # noqa
-from ._lammps import get_default_lmp_exe  # noqa; noqa
-from ._mtp import MTPotential  # noqa
-from ._nnp import NNPotential  # noqa
-from ._snap import SNAPotential  # noqa
+from ._base import Potential, PotentialMixin
+from ._gap import GAPotential
+from ._lammps import (
+    DefectFormation,
+    ElasticConstant,
+    EnergyForceStress,
+    LatticeConstant,
+    LMPRelaxationCalculator,
+    LMPStaticCalculator,
+    NudgedElasticBand,
+    SpectralNeighborAnalysis,
+    SurfaceEnergy,
+    get_default_lmp_exe,  # ; noqa
+)
+from ._mtp import MTPotential
+from ._nnp import NNPotential
+from ._snap import SNAPotential
 
 __all__ = [
     "Potential",

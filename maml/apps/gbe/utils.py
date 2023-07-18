@@ -1,14 +1,16 @@
-"""
-Module implements helper functions to retrieve data for GB energy prediction paper
-"""
+"""Module implements helper functions to retrieve data for GB energy prediction paper."""
+from __future__ import annotations
+
 import os
-from typing import Dict, List, Optional
+from typing import TYPE_CHECKING
 
 from monty.serialization import dumpfn, loadfn
-from pymatgen.core import Structure
 from pymatgen.ext.matproj import MPRester, MPRestError
 
 from maml.apps import gbe
+
+if TYPE_CHECKING:
+    from pymatgen.core import Structure
 
 pjoin = os.path.join
 module_dir = os.path.dirname(gbe.__file__)
@@ -16,12 +18,12 @@ REFS = pjoin(module_dir, "references")
 DATA = pjoin(module_dir, "data")
 
 
-def load_data(filename: Optional[str] = None) -> List:
+def load_data(filename: str | None = None) -> list:
     """
     Helper function to load the data
     Default is to load the 361 data
     Args:
-        filename (str): the filename of the data
+        filename (str): the filename of the data.
 
     Returns:
         data list
@@ -32,7 +34,7 @@ def load_data(filename: Optional[str] = None) -> List:
     return loadfn(pjoin(DATA, "gb_data.json"))
 
 
-def load_b0_dict() -> Dict:
+def load_b0_dict() -> dict:
     """
     Helper function to retrieve the b0 data.
     b0 is the bulk bond length.
@@ -51,7 +53,7 @@ def load_b0_dict() -> Dict:
     raise MPRestError("No MAPI_KEY found")
 
 
-def update_b0_dict(data_source: list, mp_api: Optional[str]) -> Dict:
+def update_b0_dict(data_source: list, mp_api: str | None) -> dict:
     """
     Helper function to update the b0 dictionary
     Requires api key to MP
@@ -59,12 +61,12 @@ def update_b0_dict(data_source: list, mp_api: Optional[str]) -> Dict:
         data_source (list): list of GB data
         mp_api (str): API key to MP
     Returns:
-         b0_dict (dict): {el: b0}
+         b0_dict (dict): {el: b0}.
     """
     rester = MPRester(mp_api)
 
     def get_b0(bulk_structure: Structure) -> float:
-        """b0 is the bond length of bulk metal"""
+        """b0 is the bond length of bulk metal."""
         _b0 = bulk_structure.get_distance(0, 0, jimage=1)
         return min(_b0, bulk_structure.lattice.a)
 
@@ -78,11 +80,11 @@ def update_b0_dict(data_source: list, mp_api: Optional[str]) -> Dict:
     return b0_dict
 
 
-def load_mean_delta_bl_dict(loc_algo: str = "crystalnn") -> Dict:
+def load_mean_delta_bl_dict(loc_algo: str = "crystalnn") -> dict:
     """
     Helper function to load the mean_delta_bl data
     Args:
-        loc_algo (str): name of the algorithm
+        loc_algo (str): name of the algorithm.
 
     Returns:
         {task_id (int): mean_delta_bl(float)}

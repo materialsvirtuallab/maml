@@ -1,5 +1,6 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
+from __future__ import annotations
 
 import os
 import shutil
@@ -42,27 +43,27 @@ class PorcessingTest(unittest.TestCase):
     def test_pool_from(self):
         test_pool = pool_from(self.test_structures, self.test_energies, self.test_forces, self.test_stresses)
         for p1, p2 in zip(test_pool, self.test_pool):
-            self.assertEqual(p1["outputs"]["energy"], p2["outputs"]["energy"])
-            self.assertEqual(p1["outputs"]["forces"], p2["outputs"]["forces"])
-            self.assertEqual(p1["outputs"]["virial_stress"], p2["outputs"]["virial_stress"])
+            assert p1["outputs"]["energy"] == p2["outputs"]["energy"]
+            assert p1["outputs"]["forces"] == p2["outputs"]["forces"]
+            assert p1["outputs"]["virial_stress"] == p2["outputs"]["virial_stress"]
 
     def test_convert_docs(self):
         _, df = convert_docs(self.test_pool, include_stress=False)
         test_energies = df[df["dtype"] == "energy"]["y_orig"]
-        self.assertFalse(np.any(test_energies - self.test_energies))
+        assert not np.any(test_energies - self.test_energies)
         test_forces = df[df["dtype"] == "force"]["y_orig"]
         for force1, force2 in zip(test_forces, np.array(self.test_forces).ravel()):
-            self.assertEqual(force1, force2)
+            assert force1 == force2
 
         _, df = convert_docs(self.test_pool, include_stress=True)
         test_energies = df[df["dtype"] == "energy"]["y_orig"]
-        self.assertFalse(np.any(test_energies - self.test_energies))
+        assert not np.any(test_energies - self.test_energies)
         test_forces = df[df["dtype"] == "force"]["y_orig"]
         for force1, force2 in zip(test_forces, np.array(self.test_forces).ravel()):
-            self.assertEqual(force1, force2)
+            assert force1 == force2
         test_stresses = df[df["dtype"] == "stress"]["y_orig"]
         for stress1, stress2 in zip(test_stresses, np.array(self.test_stresses).ravel()):
-            self.assertEqual(stress1, stress2)
+            assert stress1 == stress2
 
 
 if __name__ == "__main__":

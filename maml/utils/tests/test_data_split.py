@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 from maml.utils._data_split import ShuffleSplitter
@@ -8,15 +10,15 @@ class TestShuffleSplit(unittest.TestCase):
         ss = ShuffleSplitter()
         mat_ids = list(range(100))
         train, val, test = ss.split(mat_ids)
-        self.assertEqual(len(train), 80)
-        self.assertEqual(len(val), 10)
-        self.assertEqual(len(test), 10)
-        self.assertTrue(set(range(100)) == {*train, *val, *test})
+        assert len(train) == 80
+        assert len(val) == 10
+        assert len(test) == 10
+        assert set(range(100)) == {*train, *val, *test}
 
         ss2 = ShuffleSplitter(ratios="90/10")
         train, test = ss2.split(mat_ids)
-        self.assertEqual(len(train), 90)
-        self.assertEqual(len(test), 10)
+        assert len(train) == 90
+        assert len(test) == 10
 
         ss2 = ShuffleSplitter(ratios="80:10:5:5", delim=":")
         splitted_ids = ss2.split(mat_ids)

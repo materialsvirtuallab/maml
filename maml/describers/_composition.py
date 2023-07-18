@@ -1,9 +1,8 @@
-"""
-Compositional describers
-"""
+"""Compositional describers."""
+from __future__ import annotations
+
 import json
 import os
-from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -44,22 +43,22 @@ class ElementStats(BaseDescriber):
     """
     Element statistics. The allowed stats are accessed via ALLOWED_STATS class
     attributes. If the stats have multiple parameters, the positional arguments
-    are separated by ::, e.g., moment::1::None
+    are separated by ::, e.g., moment::1::None.
     """
 
-    ALLOWED_STATS = getattr(Stats, "allowed_stats")  # type: ignore
+    ALLOWED_STATS = Stats.allowed_stats  # type: ignore
     AVAILABLE_DATA = list(DATA_MAPPING.keys())
 
     def __init__(
         self,
-        element_properties: Dict,
-        stats: Optional[List[str]] = None,
-        property_names: Optional[List[str]] = None,
+        element_properties: dict,
+        stats: list[str] | None = None,
+        property_names: list[str] | None = None,
         feature_batch: str = "pandas_concat",
         **kwargs,
     ):
         """
-        Elemental stats for composition/str/structure
+        Elemental stats for composition/str/structure.
 
         Args:
             element_properties (dict): element properties, e.g.,
@@ -78,7 +77,6 @@ class ElementStats(BaseDescriber):
                 reduction_algo (str): dimensional reduction algorithm
                 reduction_params (dict): kwargs for dimensional reduction algorithm
         """
-
         num_dim = kwargs.pop("num_dim", None)
         reduction_algo = kwargs.pop("reduction_algo", "pca")
         reduction_params = kwargs.pop("reduction_params", {})
@@ -121,9 +119,9 @@ class ElementStats(BaseDescriber):
         self.stats_func = stats_func
         super().__init__(feature_batch=feature_batch, **kwargs)
 
-    def transform_one(self, obj: Union[Structure, str, Composition]) -> pd.DataFrame:
+    def transform_one(self, obj: Structure | str | Composition) -> pd.DataFrame:
         """
-        Transform one object, the object can be string, Compostion or Structure
+        Transform one object, the object can be string, Compostion or Structure.
 
         Args:
             obj (str/Composition/Structure): object to transform
@@ -151,7 +149,7 @@ class ElementStats(BaseDescriber):
         return pd.DataFrame([features], columns=self.all_property_names)
 
     @classmethod
-    def from_file(cls, filename: str, stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+    def from_file(cls, filename: str, stats: list[str] | None = None, **kwargs) -> ElementStats:
         """
         ElementStats from a json file of element property dictionary.
         The keys required are:
@@ -173,10 +171,7 @@ class ElementStats(BaseDescriber):
             d = json.load(f)
 
         property_names = d.get("property_names", None)
-        if "element_properties" in d:
-            element_properties = d.get("element_properties")
-        else:
-            element_properties = d
+        element_properties = d.get("element_properties") if "element_properties" in d else d
         is_element = _keys_are_elements(element_properties)
         if not is_element:
             raise ValueError("File is not in correct format")
@@ -187,7 +182,7 @@ class ElementStats(BaseDescriber):
         return cls(element_properties=element_properties, property_names=property_names, stats=stats, **kwargs)
 
     @classmethod
-    def from_data(cls, data_name: Union[List[str], str], stats: Optional[List[str]] = None, **kwargs) -> "ElementStats":
+    def from_data(cls, data_name: list[str] | str, stats: list[str] | None = None, **kwargs) -> ElementStats:
         """
         ElementalStats from existing data file.
 
@@ -205,7 +200,7 @@ class ElementStats(BaseDescriber):
         """
         if isinstance(data_name, str):
             if data_name not in ElementStats.AVAILABLE_DATA:
-                raise ValueError(f"Data name not found in the list {str(ElementStats.AVAILABLE_DATA)}")
+                raise ValueError(f"Data name not found in the list {ElementStats.AVAILABLE_DATA!s}")
 
             filename = os.path.join(CWD, DATA_MAPPING[data_name])
             return cls.from_file(filename, stats=stats, **kwargs)
@@ -225,7 +220,7 @@ class ElementStats(BaseDescriber):
         for e in elements[1:]:
             common_keys.intersection_update(e)
 
-        element_properties: Dict = {i: [] for i in common_keys}
+        element_properties: dict = {i: [] for i in common_keys}
 
         for index, instance in enumerate(instances):
             for k in common_keys:
@@ -239,12 +234,12 @@ class ElementStats(BaseDescriber):
     def _reduce_dimension(
         element_properties,
         property_names,
-        num_dim: Optional[int] = None,
-        reduction_algo: Optional[str] = "pca",
-        reduction_params: Optional[Dict] = None,
-    ) -> Tuple[Dict, List[str]]:
+        num_dim: int | None = None,
+        reduction_algo: str | None = "pca",
+        reduction_params: dict | None = None,
+    ) -> tuple[dict, list[str]]:
         """
-        Reduce the feature dimension by reduction_algo
+        Reduce the feature dimension by reduction_algo.
 
         Args:
             element_properties (dict): dictionary of elemental/specie propeprties
@@ -283,13 +278,10 @@ class ElementStats(BaseDescriber):
         return element_properties, property_names
 
 
-def _keys_are_elements(dic: Dict) -> bool:
+def _keys_are_elements(dic: dict) -> bool:
     keys = list(dic.keys())
 
-    for key in keys:
-        if not _is_element_or_specie(key):
-            return False
-    return True
+    return all(_is_element_or_specie(key) for key in keys)
 
 
 def _is_element_or_specie(s: str) -> bool:

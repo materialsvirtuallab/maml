@@ -1,13 +1,13 @@
-"""
-Inspect function args
-"""
+"""Inspect function args."""
+from __future__ import annotations
+
 from inspect import signature
-from typing import Callable, List
+from typing import Callable
 
 
-def get_full_args(func: Callable) -> List:
+def get_full_args(func: Callable) -> list:
     """
-    Get args from function
+    Get args from function.
 
     Args:
         func (callable): function to determine the args
@@ -18,7 +18,7 @@ def get_full_args(func: Callable) -> List:
 
 def get_param_types(func):
     """
-    Get param and type info
+    Get param and type info.
 
     Args:
         func (callable): function to determine the arg types

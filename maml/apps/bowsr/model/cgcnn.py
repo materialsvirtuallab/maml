@@ -4,12 +4,15 @@ from __future__ import annotations
 import argparse
 import os
 import warnings
+from typing import TYPE_CHECKING
 
 import numpy as np
 from monty.dev import requires
-from pymatgen.core.structure import Structure
 
 from maml.apps.bowsr.model.base import EnergyModel
+
+if TYPE_CHECKING:
+    from pymatgen.core.structure import Structure
 
 try:
     import cgcnn
@@ -34,13 +37,14 @@ class CGCNN(EnergyModel):
     def __init__(self, model_path: str = model_dir, orig_atom_fea_len: int = 92, nbr_fea_len: int = 41):
         """
         Init CGCNN.
+
         Args:
             model_path(str): path of model
             orig_atom_fea_len(int): Number of atom features in the input.
                                     i.e. Original atom feature length
                                     (default 92)
             nbr_fea_len(int): Number of bond features.
-                            i.e. Number of neighbors (default 41)
+                            i.e. Number of neighbors (default 41).
 
         """
         checkpoint = torch.load(model_path, map_location=lambda storage, loc: storage)
@@ -69,7 +73,7 @@ class CGCNN(EnergyModel):
         self.model.eval()
         input_generator = CGCNNInput()
         inp = input_generator.generate_input(structure)
-        inp = inp + ([torch.LongTensor(np.arange(structure.num_sites))],)  # type: ignore
+        inp = (*inp, [torch.LongTensor(np.arange(structure.num_sites))])  # type: ignore
         output = self.model(*inp)
         return self.normalizer.denorm(output).data.cpu().numpy()[0][0]
 
@@ -111,14 +115,14 @@ class CGCNNInput:
                     "If it happens frequently, consider increase "
                     "radius."
                 )
-                nbr_fea_idx.append(list(map(lambda x: x[2], nbr)) + [0] * (self.max_num_nbr - len(nbr)))
-                nbr_fea.append(list(map(lambda x: x[1], nbr)) + [self.radius + 1.0] * (self.max_num_nbr - len(nbr)))
+                nbr_fea_idx.append([x[2] for x in nbr] + [0] * (self.max_num_nbr - len(nbr)))
+                nbr_fea.append([x[1] for x in nbr] + [self.radius + 1.0] * (self.max_num_nbr - len(nbr)))
             else:
-                nbr_fea_idx.append(list(map(lambda x: x[2], nbr[: self.max_num_nbr])))
-                nbr_fea.append(list(map(lambda x: x[1], nbr[: self.max_num_nbr])))
+                nbr_fea_idx.append([x[2] for x in nbr[: self.max_num_nbr]])
+                nbr_fea.append([x[1] for x in nbr[: self.max_num_nbr]])
         nbr_fea_idx, nbr_fea = np.array(nbr_fea_idx), np.array(nbr_fea)  # type: ignore
         nbr_fea = self.gdf.expand(nbr_fea)
-        return tuple((nbr_fea_idx, nbr_fea))  # type: ignore
+        return (nbr_fea_idx, nbr_fea)  # type: ignore
 
     def generate_input(self, structure: Structure, cif_id: int | None = None) -> tuple:
         """
@@ -143,7 +147,7 @@ class CGCNNInput:
             nbr_fea_idx, nbr_fea = self._get_nbr_fea(all_nbrs, 0)
         nbr_fea = Tensor(nbr_fea)  # type: ignore
         nbr_fea_idx = torch.LongTensor(nbr_fea_idx)  # type: ignore
-        return tuple((atom_fea, nbr_fea, nbr_fea_idx))
+        return (atom_fea, nbr_fea, nbr_fea_idx)
 
     def generate_inputs(self, structures: list[Structure], cif_ids: list[int] | None = None) -> list[tuple]:
         """

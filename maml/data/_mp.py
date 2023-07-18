@@ -1,6 +1,4 @@
-"""
-Materials Project DataSource
-"""
+"""Materials Project DataSource."""
 from __future__ import annotations
 
 import pandas as pd
@@ -10,9 +8,7 @@ from maml.base import BaseDataSource
 
 
 class MaterialsProject(BaseDataSource):
-    """
-    Query the Materials Project for Data.
-    """
+    """Query the Materials Project for Data."""
 
     def __init__(self, api_key: str | None = None):
         """

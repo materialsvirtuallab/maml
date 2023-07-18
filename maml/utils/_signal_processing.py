@@ -1,6 +1,8 @@
-"""Signal processing utils"""
+"""Signal processing utils."""
+from __future__ import annotations
+
 from math import ceil, floor
-from typing import Callable, Tuple, Union
+from typing import Callable
 
 import numpy as np
 from monty.dev import requires
@@ -18,18 +20,18 @@ def fft_magnitude(z: np.ndarray) -> np.ndarray:
     the magnitude of the  coefficients
     Args:
         z (np.ndarray): 1D signal array
-    Returns: 1D magnitude
+    Returns: 1D magnitude.
     """
     return np.absolute(fft.fft(z))
 
 
-def spectrogram(z: np.ndarray, return_time_freq: bool = False) -> Union[Tuple, np.ndarray]:
+def spectrogram(z: np.ndarray, return_time_freq: bool = False) -> tuple | np.ndarray:
     """
     The spectrogram of the signal
     Args:
         z (np.ndarray): 1D signal array
         return_time_freq (bool): whether to return time and frequency
-    Returns: 2D spectrogram
+    Returns: 2D spectrogram.
     """
     nx = len(z)
     nsc = floor(nx / 4.5)  # use matlab values
@@ -41,31 +43,28 @@ def spectrogram(z: np.ndarray, return_time_freq: bool = False) -> Union[Tuple, n
     return s
 
 
-def cwt(z: np.ndarray, widths: np.ndarray, wavelet: Union[str, Callable] = "morlet2", **kwargs) -> np.ndarray:
+def cwt(z: np.ndarray, widths: np.ndarray, wavelet: str | Callable = "morlet2", **kwargs) -> np.ndarray:
     """
     The scalogram of the signal
     Args:
         z (np.ndarray): 1D signal array
         widths (np.ndarray): wavelet widths
         wavelet (str): wavelet name
-    Returns: 2D scalogram
+    Returns: 2D scalogram.
     """
-    if isinstance(wavelet, str):
-        wavelet_func = getattr(signal, wavelet)
-    else:
-        wavelet_func = wavelet
+    wavelet_func = getattr(signal, wavelet) if isinstance(wavelet, str) else wavelet
     return np.absolute(signal.cwt(z, wavelet_func, widths=widths, **kwargs))
 
 
 @requires(tftb is not None, "Requires installation of tftb package")
-def wvd(z: np.ndarray, return_all: bool = False) -> Union[Tuple, np.ndarray]:
+def wvd(z: np.ndarray, return_all: bool = False) -> tuple | np.ndarray:
     """
     Wigner Ville Distribution calculator
     Args:
         z (np.ndarray): signal 1D
         return_all (bool): whether to return time and freq info, default
             only return the wvd information
-    Returns: NxN wvd matrix
+    Returns: NxN wvd matrix.
     """
     tfr = tftb.processing.WignerVilleDistribution(z)
     (
@@ -81,17 +80,17 @@ def wvd(z: np.ndarray, return_all: bool = False) -> Union[Tuple, np.ndarray]:
 AVAILABLE_SP_METHODS = {"fft_magnitude": fft_magnitude, "spectrogram": spectrogram, "cwt": cwt, "wvd": wvd}
 
 
-def get_sp_method(sp_method: Union[str, Callable]) -> Callable:  # type: ignore
+def get_sp_method(sp_method: str | Callable) -> Callable:  # type: ignore
     """
     Providing a signal processing method name return the callable
     Args:
         sp_method (str): name of the sp function
-    Returns: callable for signal processing
+    Returns: callable for signal processing.
     """
     if isinstance(sp_method, str):
         try:
             return AVAILABLE_SP_METHODS[sp_method]
         except KeyError:
-            raise KeyError(f"{sp_method} is not in available methods: " f"{AVAILABLE_SP_METHODS.keys()}")
+            raise KeyError(f"{sp_method} is not in available methods: {AVAILABLE_SP_METHODS.keys()}")
     else:
         return sp_method

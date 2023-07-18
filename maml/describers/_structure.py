@@ -1,17 +1,18 @@
-"""
-Structure-wise describers. These describers include structural information.
-"""
+"""Structure-wise describers. These describers include structural information."""
 from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
-from pymatgen.core import Molecule, Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from maml.base import BaseDescriber, describer_type
 from maml.describers.megnet import MEGNetStructure
+
+if TYPE_CHECKING:
+    from pymatgen.core import Molecule, Structure
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -123,7 +124,7 @@ class DistinctSiteProperty(BaseDescriber):
             wyckoffs (list of wyckoff symbols):. E.g., ["48a", "24c"], if not provided,
                 will get from input structure when doing transform
             feature_batch (str): way to batch a list of features into one
-            **kwargs: keyword args to specify memory, verbose, and n_jobs
+            **kwargs: keyword args to specify memory, verbose, and n_jobs.
         """
         self.properties = properties
         self.symprec = symprec
@@ -134,7 +135,7 @@ class DistinctSiteProperty(BaseDescriber):
         """
 
         Args:
-            structure (pymatgen Structure): pymatgen structure for descriptor computation
+            structure (pymatgen Structure): pymatgen structure for descriptor computation.
 
         Returns:
             pd.DataFrame that contains the distinct position labeled features
@@ -157,7 +158,7 @@ class DistinctSiteProperty(BaseDescriber):
 @describer_type("structure")
 class CoulombMatrix(BaseDescriber):
     r"""
-    Coulomb Matrix to describe structure
+    Coulomb Matrix to describe structure.
 
     Reference:
     @article{rupp2012fast,
@@ -176,9 +177,8 @@ class CoulombMatrix(BaseDescriber):
             random_seed (int): random seed
             max_atoms (int): maximum number of atoms
             is_ravel (bool): whether to ravel the matrix to 1D
-            **kwargs: keyword args to specify memory, verbose, and n_jobs
+            **kwargs: keyword args to specify memory, verbose, and n_jobs.
         """
-
         self.max_atoms = max_atoms
         self.random_seed = random_seed
         self.is_ravel = is_ravel
@@ -191,7 +191,7 @@ class CoulombMatrix(BaseDescriber):
         """
         Args:
             s (Molecule/Structure): input Molecule or Structure. Structure
-                is not advised since the feature will depend on the supercell size
+                is not advised since the feature will depend on the supercell size.
 
         Returns:
             Coulomb matrix of the structure
@@ -212,7 +212,7 @@ class CoulombMatrix(BaseDescriber):
             s (Molecule/Structure): input Molecule or Structure. Structure
                 is not advised since the feature will depend on the supercell size
         Returns:
-            Coulomb matrix of the structure
+            Coulomb matrix of the structure.
 
         """
         c = self._get_columb_mat(s)
@@ -226,7 +226,7 @@ class CoulombMatrix(BaseDescriber):
         """
         Args:
             s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
-                advised since the features will depend on supercell size
+                advised since the features will depend on supercell size.
 
         Returns:
             pandas.DataFrame.
@@ -242,7 +242,7 @@ class CoulombMatrix(BaseDescriber):
 @describer_type("structure")
 class RandomizedCoulombMatrix(CoulombMatrix):
     r"""
-    Randomized CoulombMatrix
+    Randomized CoulombMatrix.
 
     Reference:
     @article{montavon2013machine,
@@ -261,7 +261,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         """
         Args:
             random_seed (int): random seed
-            **kwargs: keyword args to specify memory, verbose, and n_jobs
+            **kwargs: keyword args to specify memory, verbose, and n_jobs.
         """
         super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
 
@@ -273,7 +273,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         (iii) draw a zero-mean unit-variance noise vector ε of the same
             size as row_norms.
         (iv)  permute the rows and columns of C with the same permutation
-            that sorts row_norms + ε
+            that sorts row_norms + ε.
 
         Args:
             s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
@@ -297,7 +297,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         Transform one structure to descriptors
         Args:
             s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
-                advised since the features will depend on supercell size
+                advised since the features will depend on supercell size.
 
         Returns: pandas dataframe descriptors
 
@@ -308,7 +308,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
 @describer_type("structure")
 class SortedCoulombMatrix(CoulombMatrix):
     r"""
-    Sorted CoulombMatrix
+    Sorted CoulombMatrix.
 
     Reference:
     @inproceedings{montavon2012learning,
@@ -326,13 +326,13 @@ class SortedCoulombMatrix(CoulombMatrix):
         """
         Args:
             random_seed (int): random seed
-            **kwargs: keyword args to specify memory, verbose, and n_jobs
+            **kwargs: keyword args to specify memory, verbose, and n_jobs.
         """
         super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
 
     def get_sorted_coulomb_mat(self, s: Molecule | Structure) -> pd.DataFrame:
         """
-        Returns the matrix sorted by the row norm
+        Returns the matrix sorted by the row norm.
 
         Args:
             s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
@@ -352,7 +352,7 @@ class SortedCoulombMatrix(CoulombMatrix):
         Transform one structure into descriptor
         Args:
             s (Molecule/Structure): pymatgen Molecule or Structure, Structure is not
-                advised since the features will depend on supercell size
+                advised since the features will depend on supercell size.
 
         Returns: pd.DataFrame descriptors
 
@@ -363,7 +363,7 @@ class SortedCoulombMatrix(CoulombMatrix):
 @describer_type("structure")
 class CoulombEigenSpectrum(BaseDescriber):
     r"""
-    Get the Coulomb Eigen Spectrum describers
+    Get the Coulomb Eigen Spectrum describers.
 
     Reference:
     @article{rupp2012fast,
@@ -383,24 +383,20 @@ class CoulombEigenSpectrum(BaseDescriber):
         features for the molecule.
         When multiple molecules are converted at the same time, the
         describers will stack the results. If the number of atoms is
-        not the same for molecules, zeros will padded to the features
+        not the same for molecules, zeros will padded to the features.
 
         Args:
             max_atoms (int): maximum number of atoms
             **kwargs:
         """
-
-        if max_atoms is None:
-            feature_batch = "stack_padded"
-        else:
-            feature_batch = "stack_first_dim"
+        feature_batch = "stack_padded" if max_atoms is None else "stack_first_dim"
         self.max_atoms = max_atoms
         super().__init__(feature_batch=feature_batch, **kwargs)
 
     def transform_one(self, mol: Molecule) -> np.ndarray:
         """
         Args:
-            mol (Molecule): pymatgen molecule
+            mol (Molecule): pymatgen molecule.
 
         Returns: np.ndarray the eigen value vectors of Coulob matrix
 

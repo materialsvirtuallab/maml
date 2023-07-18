@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 import numpy as np
@@ -10,9 +12,9 @@ class TestFeatureBatch(unittest.TestCase):
     def test_get_feature_batch(self):
         x = [np.random.normal(size=(10, 20)), np.random.normal(size=(10, 20)), np.random.normal(size=(10, 20))]
         y = get_feature_batch("stack_first_dim")(x)
-        self.assertTrue(y.shape == (3, 10, 20))
+        assert y.shape == (3, 10, 20)
         y = get_feature_batch(stack_first_dim)(x)
-        self.assertTrue(y.shape == (3, 10, 20))
+        assert y.shape == (3, 10, 20)
         self.assertRaises(KeyError, get_feature_batch, fb_name="unknown_batch")
 
         y = get_feature_batch()(x)

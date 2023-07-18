@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import unittest
 
@@ -64,45 +66,45 @@ class TargetSpaceTest(unittest.TestCase):
 
     def test_attributes(self):
         self.space1.set_bounds()
-        self.assertTrue([wp.dim for wp in self.space1.wps] == self.wyckoff_dims)
-        self.assertTrue(self.space1.abc_dim == self.abc_dim)
-        self.assertTrue(self.space1.angles_dim == self.angles_dim)
-        self.assertTrue(self.space1.relax_lattice)
-        self.assertTrue(len(self.space1.bounds) == self.space1.dim)
-        self.assertFalse(np.all(abs(self.space1.bounds) <= 0.2))
-        self.assertTrue(self.space1.dim == 10)
-        self.assertTrue(len(self.space1) == 0)
-        self.assertTrue(isinstance(self.space1.scaler, DummyScaler))
+        assert [wp.dim for wp in self.space1.wps] == self.wyckoff_dims
+        assert self.space1.abc_dim == self.abc_dim
+        assert self.space1.angles_dim == self.angles_dim
+        assert self.space1.relax_lattice
+        assert len(self.space1.bounds) == self.space1.dim
+        assert not np.all(abs(self.space1.bounds) <= 0.2)
+        assert self.space1.dim == 10
+        assert len(self.space1) == 0
+        assert isinstance(self.space1.scaler, DummyScaler)
         self.space2.set_bounds()
-        self.assertFalse(self.space2.relax_lattice)
-        self.assertTrue(len(self.space2.bounds) == self.space2.dim)
-        self.assertTrue(np.all(abs(self.space2.bounds) <= 0.2))
-        self.assertTrue(self.space2.dim == 7)
-        self.assertTrue(len(self.space2) == 0)
-        self.assertTrue(isinstance(self.space2.scaler, DummyScaler))
+        assert not self.space2.relax_lattice
+        assert len(self.space2.bounds) == self.space2.dim
+        assert np.all(abs(self.space2.bounds) <= 0.2)
+        assert self.space2.dim == 7
+        assert len(self.space2) == 0
+        assert isinstance(self.space2.scaler, DummyScaler)
         self.space2.set_bounds(element_wise_wyckoff_bounds={"Fe": 1.0})
-        self.assertFalse(np.any(abs(self.space2.bounds) <= 0.1))
+        assert not np.any(abs(self.space2.bounds) <= 0.1)
         self.space3.set_bounds()
-        self.assertTrue(self.space3.relax_lattice)
-        self.assertTrue(len(self.space3.bounds) == self.space3.dim)
-        self.assertFalse(np.any(abs(self.space3.bounds) >= 20))
-        self.assertTrue(self.space3.dim == 10)
-        self.assertTrue(len(self.space3) == 0)
-        self.assertTrue(isinstance(self.space3.scaler, DummyScaler))
+        assert self.space3.relax_lattice
+        assert len(self.space3.bounds) == self.space3.dim
+        assert not np.any(abs(self.space3.bounds) >= 20)
+        assert self.space3.dim == 10
+        assert len(self.space3) == 0
+        assert isinstance(self.space3.scaler, DummyScaler)
         self.space3.set_bounds(abc_bound=15)
-        self.assertTrue(np.all(abs(self.space3.bounds) <= 15))
-        self.assertTrue(self.space3.dim == 10)
-        self.assertTrue(len(self.space3) == 0)
+        assert np.all(abs(self.space3.bounds) <= 15)
+        assert self.space3.dim == 10
+        assert len(self.space3) == 0
         self.space4.set_bounds()
-        self.assertTrue([wp.dim for wp in self.space4.wps] == self.wyckoff_dims)
-        self.assertTrue(self.space4.abc_dim == self.abc_dim)
-        self.assertTrue(self.space4.angles_dim == self.angles_dim)
-        self.assertTrue(self.space4.relax_lattice)
-        self.assertTrue(len(self.space4.bounds) == self.space4.dim)
-        self.assertFalse(np.all(abs(self.space4.bounds) <= 0.1))
-        self.assertTrue(self.space4.dim == 10)
-        self.assertTrue(len(self.space4) == 0)
-        self.assertTrue(isinstance(self.space4.scaler, StandardScaler))
+        assert [wp.dim for wp in self.space4.wps] == self.wyckoff_dims
+        assert self.space4.abc_dim == self.abc_dim
+        assert self.space4.angles_dim == self.angles_dim
+        assert self.space4.relax_lattice
+        assert len(self.space4.bounds) == self.space4.dim
+        assert not np.all(abs(self.space4.bounds) <= 0.1)
+        assert self.space4.dim == 10
+        assert len(self.space4) == 0
+        assert isinstance(self.space4.scaler, StandardScaler)
 
     def test_sample(self):
         self.space1.set_bounds()
@@ -112,20 +114,20 @@ class TargetSpaceTest(unittest.TestCase):
 
         for _ in range(10):
             sample = self.space1.uniform_sample()
-            self.assertEqual(len(sample), self.space1.dim)
-            self.assertFalse(np.any(abs(sample) > 1.2))
+            assert len(sample) == self.space1.dim
+            assert not np.any(abs(sample) > 1.2)
         for _ in range(10):
             sample = self.space2.uniform_sample()
-            self.assertEqual(len(sample), self.space2.dim)
-            self.assertTrue(np.all(abs(sample) <= 0.2))
+            assert len(sample) == self.space2.dim
+            assert np.all(abs(sample) <= 0.2)
         for _ in range(10):
             sample = self.space3.uniform_sample()
-            self.assertEqual(len(sample), self.space3.dim)
-            self.assertTrue(-20 <= sample[-1] <= 20)
+            assert len(sample) == self.space3.dim
+            assert -20 <= sample[-1] <= 20
         for _ in range(10):
             sample = self.space4.uniform_sample()
-            self.assertEqual(len(sample), self.space4.dim)
-            self.assertFalse(np.any(abs(sample) > 1.2))
+            assert len(sample) == self.space4.dim
+            assert not np.any(abs(sample) > 1.2)
 
     def test_register(self):
         self.space1.set_bounds()
@@ -140,33 +142,31 @@ class TargetSpaceTest(unittest.TestCase):
             sample = self.space1.uniform_sample()
             target = self.space1.target_func(sample)
             self.space1.register(sample, target)
-        self.assertEqual(len(self.space1), 10)
-        self.assertTrue(all(abs(np.sum(self.space1.params**2, axis=1) - self.space1.target) < 1e-2))
+        assert len(self.space1) == 10
+        assert all(abs(np.sum(self.space1.params**2, axis=1) - self.space1.target) < 0.01)
 
         for _ in range(20):
             sample = self.space2.uniform_sample()
             target = self.space2.target_func(sample)
             self.space2.register(sample, target)
-        self.assertEqual(len(self.space2), 20)
-        self.assertTrue(all(abs(np.sum(self.space2.params * 2, axis=1) - self.space2.target) < 1e-2))
+        assert len(self.space2) == 20
+        assert all(abs(np.sum(self.space2.params * 2, axis=1) - self.space2.target) < 0.01)
 
         for _ in range(15):
             sample = self.space3.uniform_sample()
             target = self.space3.target_func(sample)
             self.space3.register(sample, target)
-        self.assertEqual(len(self.space3), 15)
-        self.assertTrue(all(abs(np.mean(self.space3.params * 3, axis=1) - self.space3.target) < 1e-2))
+        assert len(self.space3) == 15
+        assert all(abs(np.mean(self.space3.params * 3, axis=1) - self.space3.target) < 0.01)
 
         for _ in range(10):
             sample = self.space4.uniform_sample()
             target = self.space4.target_func(sample)
             self.space4.register(sample, target)
-        self.assertEqual(len(self.space4), 10)
-        self.assertTrue(
-            all(
-                abs(np.mean(self.space4.scaler.inverse_transform(self.space4.params) * 3, axis=1) - self.space4.target)
-                < 1e-2
-            )
+        assert len(self.space4) == 10
+        assert all(
+            abs(np.mean(self.space4.scaler.inverse_transform(self.space4.params) * 3, axis=1) - self.space4.target)
+            < 0.01
         )
 
     def test_probe(self):
@@ -182,36 +182,36 @@ class TargetSpaceTest(unittest.TestCase):
             sample = self.space1.uniform_sample()
             target1 = self.space1.target_func(sample)
             self.space1.register(sample, target1)
-            self.assertEqual(len(self.space1), i + 1)
+            assert len(self.space1) == i + 1
             target2 = self.space1.probe(sample)
-            self.assertEqual(len(self.space1), i + 2)
+            assert len(self.space1) == i + 2
             self.assertAlmostEqual(target1, target2)
 
         for i in np.arange(0, 20, 2):
             sample = self.space2.uniform_sample()
             target1 = self.space2.target_func(sample)
             self.space2.register(sample, target1)
-            self.assertEqual(len(self.space2), i + 1)
+            assert len(self.space2) == i + 1
             target2 = self.space2.probe(sample)
-            self.assertEqual(len(self.space2), i + 2)
+            assert len(self.space2) == i + 2
             self.assertAlmostEqual(target1, target2)
 
         for i in range(0, 20, 2):
             sample = self.space3.uniform_sample()
             target1 = self.space3.target_func(sample)
             self.space3.register(sample, target1)
-            self.assertEqual(len(self.space3), i + 1)
+            assert len(self.space3) == i + 1
             target2 = self.space3.probe(sample)
-            self.assertEqual(len(self.space3), i + 2)
+            assert len(self.space3) == i + 2
             self.assertAlmostEqual(target1, target2)
 
         for i in range(0, 10, 2):
             sample = self.space4.uniform_sample()
             target1 = self.space4.target_func(sample)
             self.space4.register(sample, target1)
-            self.assertEqual(len(self.space4), i + 1)
+            assert len(self.space4) == i + 1
             target2 = self.space4.probe(sample)
-            self.assertEqual(len(self.space4), i + 2)
+            assert len(self.space4) == i + 2
             self.assertAlmostEqual(target1, target2)
 
     def test_set_empty(self):
@@ -226,30 +226,30 @@ class TargetSpaceTest(unittest.TestCase):
         for i in range(10):
             sample = self.space1.uniform_sample()
             self.space1.probe(sample)
-            self.assertEqual(len(self.space1), i + 1)
+            assert len(self.space1) == i + 1
         self.space1.set_empty()
-        self.assertEqual(len(self.space1), 0)
+        assert len(self.space1) == 0
 
         for i in range(20):
             sample = self.space2.uniform_sample()
             self.space2.probe(sample)
-            self.assertEqual(len(self.space2), i + 1)
+            assert len(self.space2) == i + 1
         self.space2.set_empty()
-        self.assertEqual(len(self.space2), 0)
+        assert len(self.space2) == 0
 
         for i in range(15):
             sample = self.space3.uniform_sample()
             self.space3.probe(sample)
-            self.assertEqual(len(self.space3), i + 1)
+            assert len(self.space3) == i + 1
         self.space3.set_empty()
-        self.assertEqual(len(self.space3), 0)
+        assert len(self.space3) == 0
 
         for i in range(10):
             sample = self.space4.uniform_sample()
             self.space4.probe(sample)
-            self.assertEqual(len(self.space4), i + 1)
+            assert len(self.space4) == i + 1
         self.space4.set_empty()
-        self.assertEqual(len(self.space4), 0)
+        assert len(self.space4) == 0
 
 
 if __name__ == "__main__":

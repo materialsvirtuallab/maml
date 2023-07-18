@@ -1,6 +1,8 @@
 """
 Test models
 """
+from __future__ import annotations
+
 from unittest import TestCase, main
 
 from maml.describers import ElementStats
@@ -14,7 +16,7 @@ class TestAtomSets(TestCase):
 
     def test_train(self):
         self.model.train(self.x, self.y, epochs=0)
-        self.assertTrue(self.model.predict_objs(["H2O"]).shape == (1, 1))
+        assert self.model.predict_objs(["H2O"]).shape == (1, 1)
 
 
 if __name__ == "__main__":

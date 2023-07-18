@@ -1,22 +1,22 @@
-"""Model mixins"""
+"""Model mixins."""
+from __future__ import annotations
 
-from typing import List, Optional, Union
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 from maml.utils import DummyScaler
 
-from ._model import BaseModel
+if TYPE_CHECKING:
+    from ._model import BaseModel
 
 
 class TargetScalerMixin:
-    """
-    Mixin class for models with target scaler
-    """
+    """Mixin class for models with target scaler."""
 
     def __init__(self, *args, **kwargs):
         """
-        Mixin with target scaler, required kwarg target_scaler
+        Mixin with target scaler, required kwarg target_scaler.
 
         Args:
             *args: input args for model constructor
@@ -28,14 +28,14 @@ class TargetScalerMixin:
 
     def train(
         self,
-        objs: Union[List, np.ndarray],
-        targets: Optional[Union[List, np.ndarray]] = None,
-        val_objs: Optional[Union[List, np.ndarray]] = None,
-        val_targets: Optional[Union[List, np.ndarray]] = None,
+        objs: list | np.ndarray,
+        targets: list | np.ndarray | None = None,
+        val_objs: list | np.ndarray | None = None,
+        val_targets: list | np.ndarray | None = None,
         **kwargs,
-    ) -> "BaseModel":
+    ) -> BaseModel:
         """
-        Train the models from object, target pairs
+        Train the models from object, target pairs.
 
         Args:
             objs (list of objects): List of objects
@@ -58,7 +58,7 @@ class TargetScalerMixin:
         super().train(objs, targets, val_objs, val_targets, **kwargs)  # type: ignore
         return self  # type: ignore
 
-    def predict_objs(self, objs: Union[List, np.ndarray]) -> np.ndarray:
+    def predict_objs(self, objs: list | np.ndarray) -> np.ndarray:
         """
         Predict the values given a set of objects. Usually Pymatgen
             Structure objects.

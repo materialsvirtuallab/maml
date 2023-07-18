@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides NNP interatomic potential class."""
+from __future__ import annotations
 
 import itertools
 import os
@@ -26,9 +27,7 @@ NNinput_params = loadfn(os.path.join(module_dir, "params", "NNinput.json"))
 
 
 class NNPotential(LammpsPotential):
-    """
-    This class implements Neural Network Potential.
-    """
+    """This class implements Neural Network Potential."""
 
     bohr_to_angstrom = units.bohr_to_angstrom
     eV_to_Ha = units.eV_to_Ha
@@ -90,7 +89,7 @@ class NNPotential(LammpsPotential):
                 lines.append(f"lattice {vec[0]:>15.6f}{vec[1]:>15.6f}{vec[2]:>15.6f}")
         if "AtomData" in inputs:
             format_float = "atom{:>16.9f}{:>16.9f}{:>16.9f}{:>4s}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}"
-            for i, (site, force) in enumerate(zip(structure, forces)):
+            for _i, (site, force) in enumerate(zip(structure, forces)):
                 lines.append(
                     format_float.format(
                         *site.coords / self.bohr_to_angstrom,
@@ -457,7 +456,7 @@ class NNPotential(LammpsPotential):
                 for _, _ in itertools.combinations_with_replacement(self.elements, 2)
             )
 
-            self.layer_sizes = [self.num_symm_functions] + self.param.get("hidden_layers")
+            self.layer_sizes = [self.num_symm_functions, *self.param.get("hidden_layers")]
 
         with open(filename, "w") as f:
             f.write("\n".join(lines))
@@ -572,14 +571,14 @@ class NNPotential(LammpsPotential):
             len(list(itertools.product(a_etas, lambdas, zetas)))
             for _, _ in itertools.combinations_with_replacement(self.elements, 2)
         )
-        self.layer_sizes = [self.num_symm_functions] + hidden_layers
+        self.layer_sizes = [self.num_symm_functions, *hidden_layers]
         self.param = param
 
     def load_weights(self, weights_filename, specie):
         """
         Load weights file of trained Neural Network Potential.
 
-        Args
+        Args:
             weights_filename (str): The weights file.
             specie (str): The name of specie.
         """
@@ -666,9 +665,7 @@ class NNPotential(LammpsPotential):
         return data_pool, df
 
     def write_param(self):
-        """
-        Write optimized weights file to perform energy and force prediction.
-        """
+        """Write optimized weights file to perform energy and force prediction."""
         if self.weight_param is None or self.scaling_param is None:
             raise RuntimeError("The parameters should be provided.")
         for specie in self.elements:
@@ -695,9 +692,7 @@ class NNPotential(LammpsPotential):
 
         self.write_input()
 
-        ff_settings = [self.pair_style, self.pair_coeff.format(self.param.get("r_cut") + 1e-2)]
-
-        return ff_settings
+        return [self.pair_style, self.pair_coeff.format(self.param.get("r_cut") + 1e-2)]
 
     def train(self, train_structures, train_energies, train_forces, train_stresses=None, **kwargs):
         """
@@ -743,10 +738,9 @@ class NNPotential(LammpsPotential):
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
-            with open(output, "w") as f:
-                with subprocess.Popen(["nnp-train"], stdout=f, stderr=subprocess.PIPE) as p_train:
-                    stdout, stderr = p_train.communicate()
-                    rc = p_train.returncode
+            with open(output, "w") as f, subprocess.Popen(["nnp-train"], stdout=f, stderr=subprocess.PIPE) as p_train:
+                stdout, stderr = p_train.communicate()
+                rc = p_train.returncode
 
             if rc != 0:
                 error_msg = f"n2p2 exited with return code {rc}"

@@ -1,20 +1,21 @@
-"""
-DFT wrapper
-"""
+"""DFT wrapper."""
 from __future__ import annotations
 
 import os
 import subprocess
+from typing import TYPE_CHECKING
 
 from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
-from pymatgen.core.structure import Structure
 from pymatgen.entries.compatibility import MaterialsProjectCompatibility
 from pymatgen.io.vasp.outputs import Vasprun
 from pymatgen.io.vasp.sets import MPStaticSet
 
 from maml.apps.bowsr.model.base import EnergyModel
+
+if TYPE_CHECKING:
+    from pymatgen.core.structure import Structure
 
 module_dir = os.path.dirname(__file__)
 elements_filename = os.path.join(module_dir, "..", "regularization", "elements.json")
@@ -22,15 +23,13 @@ elements = loadfn(elements_filename)
 
 
 class DFT(EnergyModel):
-    """
-    DFT static calculation wrapped as energy model.
-    """
+    """DFT static calculation wrapped as energy model."""
 
     def __init__(self, exe_path: str | None = None):
         """
         DFT wrapper
         Args:
-            exe_path: VASP executable path
+            exe_path: VASP executable path.
         """
         if not exe_path:
             if not which("vasp_std"):
@@ -42,8 +41,9 @@ class DFT(EnergyModel):
     def predict_energy(self, structure: Structure):
         """
         Predict energy from structure.
+
         Args:
-            structure: (pymatgen Structure)
+            structure: (pymatgen Structure).
 
         Returns: float
         """
@@ -69,8 +69,6 @@ class DFT(EnergyModel):
             compat = MaterialsProjectCompatibility()
             vrun = Vasprun("vasprun.xml")
             entry = compat.process_entry(vrun.get_computed_entry())
-            energy = (
-                entry.energy - sum(elements[el]["energy_per_atom"] * amt for el, amt in el_amt_dict.items())
-            ) / len(structure)
-
-        return energy
+            return (entry.energy - sum(elements[el]["energy_per_atom"] * amt for el, amt in el_amt_dict.items())) / len(
+                structure
+            )

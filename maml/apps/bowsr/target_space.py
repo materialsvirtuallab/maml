@@ -1,23 +1,22 @@
-"""
-Module implements the target space.
-"""
+"""Module implements the target space."""
 from __future__ import annotations
 
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 import numpy as np
-from numpy.random import RandomState
 from pymatgen.core.periodic_table import _pt_data as pt_data
 
 from maml.apps.bowsr.acquisition import lhs_sample
-from maml.apps.bowsr.perturbation import WyckoffPerturbation
-from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
+
+if TYPE_CHECKING:
+    from numpy.random import RandomState
+
+    from maml.apps.bowsr.perturbation import WyckoffPerturbation
+    from maml.apps.bowsr.preprocessing import DummyScaler, StandardScaler
 
 
 def _hashable(x):
-    """
-    Ensure that an point is hashable by a python dict.
-    """
+    """Ensure that an point is hashable by a python dict."""
     return tuple(map(float, x))
 
 
@@ -85,28 +84,23 @@ class TargetSpace:
 
     @property
     def params(self) -> np.ndarray:
-        """
-        Returns the parameters in target space.
-        """
+        """Returns the parameters in target space."""
         return self._params
 
     @property
     def target(self) -> np.ndarray:
-        """
-        Returns the target (i.e., formation energy) in target space.
-        """
+        """Returns the target (i.e., formation energy) in target space."""
         return self._target
 
     @property
     def bounds(self) -> np.ndarray:
-        """
-        Returns the search space of parameters.
-        """
+        """Returns the search space of parameters."""
         return self._bounds
 
     def register(self, x, target) -> None:
         """
         Append a point and its target value to the known data.
+
         Args:
             x (ndarray): A single query point.
             target (float): Target value.
@@ -132,9 +126,7 @@ class TargetSpace:
         return target
 
     def uniform_sample(self) -> np.ndarray:
-        """
-        Creates random points within the bounds of the space.
-        """
+        """Creates random points within the bounds of the space."""
         data = np.empty((1, self.dim))
         for col, (lower, upper) in enumerate(self.bounds):
             data.T[col] = np.round(self.random_state.uniform(lower, upper, size=1), decimals=3)
@@ -147,8 +139,7 @@ class TargetSpace:
         Args:
             n_intervals (int): Number of intervals.
         """
-        params = lhs_sample(n_intervals, self.bounds, self.random_state)
-        return params
+        return lhs_sample(n_intervals, self.bounds, self.random_state)
 
     def set_bounds(
         self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: dict | None = None
@@ -193,9 +184,7 @@ class TargetSpace:
             self._bounds = np.concatenate((abc_bounds, angles_bounds))
 
     def set_empty(self) -> None:
-        """
-        Empty the param, target of the space.
-        """
+        """Empty the param, target of the space."""
         self._params = np.empty(shape=(0, self.dim))
         self._target = np.empty(shape=0)
 

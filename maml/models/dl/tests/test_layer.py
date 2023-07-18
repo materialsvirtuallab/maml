@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 import numpy as np
@@ -19,8 +21,8 @@ class TestLayer(unittest.TestCase):
         exp_weights = weights**alpha
         out_np = np.sum(x * exp_weights[:, None], axis=0) / np.sum(exp_weights)
         np.testing.assert_array_almost_equal(out.numpy()[0][0], out_np)
-        self.assertTrue(wal.get_config().get("alpha") == alpha)
-        self.assertTrue(wal.compute_output_shape([[1, 5, 2], [1, 5], [1, 5]]) == (1, None, 2))
+        assert wal.get_config().get("alpha") == alpha
+        assert wal.compute_output_shape([[1, 5, 2], [1, 5], [1, 5]]) == (1, None, 2)
 
     def test_weighted_set2set(self):
         maml_set = WeightedSet2Set(T=2, n_hidden=2)
@@ -29,7 +31,7 @@ class TestLayer(unittest.TestCase):
         weights = np.array([0.5, 0.5, 1], dtype=np.float64).reshape((1, -1))
         indices = np.array([0, 0, 0], dtype="int32").reshape((1, -1))
         res = maml_set([x, weights, indices])
-        self.assertTrue(res.shape == (1, 1, 4))
+        assert res.shape == (1, 1, 4)
 
 
 if __name__ == "__main__":

@@ -1,8 +1,7 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
-"""
-Base classes for potentials
-"""
+"""Base classes for potentials."""
+from __future__ import annotations
 
 import abc
 
@@ -10,9 +9,7 @@ from maml.base import BaseModel
 
 
 class PotentialMixin:
-    """
-    Abstract base class for a Interatomic Potential.
-    """
+    """Abstract base class for a Interatomic Potential."""
 
     @abc.abstractmethod
     def train(self, train_structures, train_energies, train_forces, train_stresses, **kwargs):
@@ -72,14 +69,12 @@ class PotentialMixin:
 
     @abc.abstractmethod
     def from_config(self, **kwargs):
-        """
-        Initialize potentials with parameters file.
-        """
+        """Initialize potentials with parameters file."""
         raise NotImplementedError
 
 
 class Potential(PotentialMixin, BaseModel):  # type: ignore
     """
     Potential models that can be used to fit structure-[energy, force, stress]
-    pairs
+    pairs.
     """

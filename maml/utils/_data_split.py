@@ -1,7 +1,5 @@
-"""
-Data split
-"""
-from typing import Optional, Tuple
+"""Data split."""
+from __future__ import annotations
 
 import numpy as np
 from monty.json import MSONable
@@ -9,9 +7,7 @@ from sklearn.utils import shuffle
 
 
 class DataSplitter(MSONable):
-    """
-    Data splitter base class
-    """
+    """Data splitter base class."""
 
     def split(self, mat_ids, **kwargs):
         """
@@ -29,22 +25,22 @@ class DataSplitter(MSONable):
 class ShuffleSplitter(DataSplitter):
     """
     Randomly shuffe the material ids and split the ids
-    into given ratios
+    into given ratios.
     """
 
-    def __init__(self, ratios: str = "80/10/10", delim: str = "/", random_seed: Optional[int] = None):
+    def __init__(self, ratios: str = "80/10/10", delim: str = "/", random_seed: int | None = None):
         """
         Random shuffle split of material ids
         Args:
             ratios (str): ratios
             delim (str): deliminators for separate ratios
-            random_seed (int): random seed
+            random_seed (int): random seed.
         """
         self.random_seed = random_seed
         int_ratios = [float(i) for i in ratios.strip().split(delim)]
         self.ratios = [i / sum(int_ratios) for i in int_ratios]
 
-    def split(self, mat_ids, **kwargs) -> Tuple:
+    def split(self, mat_ids, **kwargs) -> tuple:
         """
         Randomly split the mat_ids
         Args:
@@ -54,5 +50,5 @@ class ShuffleSplitter(DataSplitter):
         """
         mat_id_copy = shuffle(mat_ids, random_state=self.random_seed)
         n = len(mat_ids)
-        end_points = [0] + np.cumsum([int(n * i) for i in self.ratios[:-1]]).tolist() + [n]
+        end_points = [0, *np.cumsum([int(n * i) for i in self.ratios[:-1]]).tolist(), n]
         return tuple(mat_id_copy[i:j] for i, j in zip(end_points[:-1], end_points[1:]))

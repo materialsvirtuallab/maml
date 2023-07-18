@@ -1,14 +1,16 @@
-"""
-Module implements the new candidate proposal.
-"""
+"""Module implements the new candidate proposal."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
-from numpy.random import RandomState
 from scipy.linalg import solve_triangular
 from scipy.optimize import minimize
 from scipy.special import erfc
-from sklearn.gaussian_process import GaussianProcessRegressor
+
+if TYPE_CHECKING:
+    from numpy.random import RandomState
+    from sklearn.gaussian_process import GaussianProcessRegressor
 
 EPS = np.finfo(float).eps
 
@@ -18,7 +20,7 @@ def _trunc(values: np.ndarray, decimals: int = 3):
     Truncate values to decimal places
     Args:
         values (np.ndarray): input array
-        decimals (int): number of decimals to keep
+        decimals (int): number of decimals to keep.
 
     Returns: truncated array
 
@@ -59,7 +61,7 @@ def predict_mean_std(x: list | np.ndarray, gpr: GaussianProcessRegressor, noise:
     y_var = gpr.kernel_.diag(X)
     y_var = y_var - np.einsum("ij,ij->i", np.dot(K_trans, gpr._K_inv), K_trans)
     y_var += noise**2
-    return tuple((y_mean, np.sqrt(y_var)))
+    return (y_mean, np.sqrt(y_var))
 
 
 def lhs_sample(n_intervals: int, bounds: np.ndarray, random_state: RandomState) -> np.ndarray:
@@ -78,8 +80,7 @@ def lhs_sample(n_intervals: int, bounds: np.ndarray, random_state: RandomState) 
     lower = linspace[:n_intervals, :]
     upper = linspace[1 : n_intervals + 1, :]
     _center = (lower + upper) / 2
-    params = np.stack([random_state.permutation(_center[:, i]) for i in range(dim)]).T
-    return params
+    return np.stack([random_state.permutation(_center[:, i]) for i in range(dim)]).T
 
 
 def propose_query_point(
@@ -129,9 +130,7 @@ def propose_query_point(
 
 
 class AcquisitionFunction:
-    """
-    An object to compute the acquisition functions.
-    """
+    """An object to compute the acquisition functions."""
 
     def __init__(self, acq_type: str, kappa: float, xi: float):
         """
@@ -193,8 +192,7 @@ class AcquisitionFunction:
         mean, std = predict_mean_std(x, gpr, noise)
 
         z = (mean - y_max - xi) / std
-        cdf = 0.5 * erfc(-z / np.sqrt(2))
-        return cdf
+        return 0.5 * erfc(-z / np.sqrt(2))
 
     @staticmethod
     def _gpucb(x: list | np.ndarray, gpr: GaussianProcessRegressor, noise: float) -> np.ndarray:

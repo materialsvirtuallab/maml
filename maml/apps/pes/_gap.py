@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides SOAP-GAP interatomic potential class."""
+from __future__ import annotations
 
 import os
 import re
@@ -27,9 +28,7 @@ soap_params = loadfn(os.path.join(module_dir, "params", "GAP.json"))
 
 
 class GAPotential(LammpsPotential):
-    """
-    This class implements Smooth Overlap of Atomic Position potentials.
-    """
+    """This class implements Smooth Overlap of Atomic Position potentials."""
 
     pair_style = "pair_style        quip"
     pair_coeff = "pair_coeff        * * {} {} {}"
@@ -89,16 +88,16 @@ class GAPotential(LammpsPotential):
         if "Energy" in inputs:
             description.append("dft_energy=" + str(inputs["Energy"]))
         if "Stress" in inputs:
-            description.append("dft_virial={%s}" % "\t".join(list(map(lambda f: str(f), inputs["Stress"]))))
+            description.append("dft_virial={%s}" % "\t".join([str(f) for f in inputs["Stress"]]))
         if "SuperCell" in inputs:
-            super_cell_str = list(map(lambda f: str(f), inputs["SuperCell"].matrix.ravel()))
+            super_cell_str = [str(f) for f in inputs["SuperCell"].matrix.ravel()]
             description.append(f'Lattice="{"     ".join(super_cell_str)}"')
         description.append("Properties=species:S:1:pos:R:3:Z:I:1:dft_force:R:3")
         lines.append(" ".join(description))
 
         if "AtomData" in inputs:
             format_str = "{:<10s}{:>16f}{:>16f}{:>16f}{:>8d}{:>16f}{:>16f}{:>16f}"
-            for i, (site, force) in enumerate(zip(structure, forces)):
+            for _i, (site, force) in enumerate(zip(structure, forces)):
                 lines.append(format_str.format(site.species_string, *site.coords, site.specie.Z, *force))
         return "\n".join(lines)
 
@@ -161,11 +160,11 @@ class GAPotential(LammpsPotential):
             d = {"outputs": {}}
             size = int(size)
             lattice_str = lattice_pattern.findall(block)[0]
-            lattice = Lattice(list(map(lambda s: float(s), lattice_str.split())))
+            lattice = Lattice([float(s) for s in lattice_str.split()])
             energy_str = energy_pattern.findall(block)[-1]
             energy = float(energy_str)
             stress_str = stress_pattern.findall(block)[0][1]
-            virial_stress = np.array(list(map(lambda s: float(s), stress_str.split())))
+            virial_stress = np.array([float(s) for s in stress_str.split()])
             virial_stress = [virial_stress[i] for i in [0, 4, 8, 1, 5, 6]]
             properties = properties_pattern.findall(block)[0].split(":")
             labels_columns = OrderedDict()
@@ -182,10 +181,7 @@ class GAPotential(LammpsPotential):
             struct = Structure(
                 lattice=lattice, species=labels["species"].ravel(), coords=labels["pos"], coords_are_cartesian=True
             )
-            if predict:
-                forces = labels["force"]
-            else:
-                forces = labels["dft_force"]
+            forces = labels["force"] if predict else labels["dft_force"]
             d["structure"] = struct.as_dict()
             d["outputs"]["energy"] = energy
             assert size == struct.num_sites
@@ -203,7 +199,7 @@ class GAPotential(LammpsPotential):
         train_energies,
         train_forces,
         train_stresses=None,
-        default_sigma=[0.0005, 0.1, 0.05, 0.01],
+        default_sigma=(0.0005, 0.1, 0.05, 0.01),
         use_energies=True,
         use_forces=True,
         use_stress=False,
@@ -380,7 +376,7 @@ class GAPotential(LammpsPotential):
         root = tree.getroot()
         element_param = self.param.get("element_param")
         atomic_numbers = []
-        for i, gpcoordinates in enumerate(list(root.iter("gpCoordinates"))):
+        for _i, gpcoordinates in enumerate(list(root.iter("gpCoordinates"))):
             gp_descriptor = list(gpcoordinates.iter("descriptor"))[0]
             gp_descriptor_text = gp_descriptor.findtext(".")
             Z_pattern = re.compile(" Z=(.*?) ", re.S)
@@ -394,8 +390,7 @@ class GAPotential(LammpsPotential):
         pair_coeff = self.pair_coeff.format(
             xml_filename, f'"Potential xml_label={self.param.get("potential_label")}"', " ".join(atomic_numbers)
         )
-        ff_settings = [self.pair_style, pair_coeff]
-        return ff_settings
+        return [self.pair_style, pair_coeff]
 
     def evaluate(
         self,
@@ -452,9 +447,8 @@ class GAPotential(LammpsPotential):
             if predict_stress:
                 exe_command.append("virial=T")
 
-            with open(predict_file, "w") as f:
-                with subprocess.Popen(exe_command, stdout=f) as p:
-                    _ = p.communicate()[0]
+            with open(predict_file, "w") as f, subprocess.Popen(exe_command, stdout=f) as p:
+                _ = p.communicate()[0]
 
             _, df_predict = self.read_cfgs(predict_file, predict=True)
 
@@ -480,7 +474,7 @@ class GAPotential(LammpsPotential):
         """
         Initialize potentials with parameters file.
 
-        ARgs:
+        Args:
             filename (str): The file storing parameters of potentials,
                 filename should ends with ".xml".
 

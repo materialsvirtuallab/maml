@@ -1,7 +1,5 @@
-"""
-Multi-layer perceptron models
-"""
-from typing import Optional
+"""Multi-layer perceptron models."""
+from __future__ import annotations
 
 from maml.base import BaseDescriber, KerasModel
 
@@ -17,7 +15,7 @@ def construct_mlp(
     compile_metrics: tuple = (),
 ):
     """
-    Constructor for multi-layer perceptron models
+    Constructor for multi-layer perceptron models.
 
     Args:
         input_dim (int): input dimension, i.e., feature dimension
@@ -38,7 +36,7 @@ def construct_mlp(
         out_ = Dense(n_neuron, activation=activation)(out_)
 
     if is_classification:
-        final_act: Optional[str] = "sigmoid"
+        final_act: str | None = "sigmoid"
     else:
         final_act = None
     out = Dense(n_targets, activation=final_act)(out_)
@@ -49,14 +47,12 @@ def construct_mlp(
 
 
 class MLP(KerasModel):
-    """
-    This class implements the multi-layer perceptron models
-    """
+    """This class implements the multi-layer perceptron models."""
 
     def __init__(
         self,
-        input_dim: Optional[int] = None,
-        describer: Optional[BaseDescriber] = None,
+        input_dim: int | None = None,
+        describer: BaseDescriber | None = None,
         n_neurons: tuple = (64, 64),
         activation: str = "relu",
         n_targets: int = 1,
@@ -67,7 +63,7 @@ class MLP(KerasModel):
         **kwargs,
     ):
         """
-        Constructor for multi-layer perceptron models
+        Constructor for multi-layer perceptron models.
 
         Args:
             input_dim (int): input dimension, i.e., feature dimension

@@ -1,29 +1,32 @@
 """
 Radial distribution functions for site features.
-This was originally written in pymatgen-diffusion
+This was originally written in pymatgen-diffusion.
 """
+from __future__ import annotations
+
 from math import ceil
-from typing import Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING
 
 import numpy as np
-from pymatgen.core import Structure
 from scipy.ndimage import gaussian_filter1d
+
+if TYPE_CHECKING:
+    from pymatgen.core import Structure
 
 
 class RadialDistributionFunction:
-    """
-    Calculator for radial distribution function
-    """
+    """Calculator for radial distribution function."""
 
     def __init__(self, r_min: float = 0.0, r_max: float = 10.0, n_grid: int = 101, sigma: float = 0.0):
         """
         Fast radial distribution analysis. This method calculates
         rdf on `np.linspace(r_min, r_max, n_grid)` points.
+
         Args:
             r_min (float): minimal radius
             r_max (float): maximal radius
             n_grid (int): number of grid points, defaults to 101
-            sigma (float): smooth parameter
+            sigma (float): smooth parameter.
         """
         self.r_min = r_min
         self.r_max = r_max
@@ -37,7 +40,7 @@ class RadialDistributionFunction:
         self.volumes = 4.0 * np.pi * self.r**2 * self.dr
         self.volumes[self.volumes < 1e-8] = 1e8  # avoid divide by zero
 
-    def get_site_rdf(self, structure: Structure) -> Tuple[np.ndarray, List[Dict]]:
+    def get_site_rdf(self, structure: Structure) -> tuple[np.ndarray, list[dict]]:
         """
         Args:
             structure (Structure): pymatgen structure
@@ -45,14 +48,14 @@ class RadialDistributionFunction:
             r, rdfs, r is the radial points, and rdfs are a list of rdf dicts
             rdfs[0] is the rdfs of the first site. It is a dictionary of {atom_pair: pair_rdf}
             e.g.,
-                {"Sr:O": [0, 0, 0.1, 0.2, ..]}
+                {"Sr:O": [0, 0, 0.1, 0.2, ..]}.
         """
         pair_distances = get_pair_distances(structure, self.cutoff)
         density = self._get_specie_density(structure)
 
         # return full rdf information for site
 
-        rdfs: List[Dict] = [{}] * len(structure)
+        rdfs: list[dict] = [{}] * len(structure)
         for i, neighbors in enumerate(pair_distances):
             if len(neighbors["neighbors"]) == 0:
                 continue
@@ -73,8 +76,8 @@ class RadialDistributionFunction:
         return self.r, rdfs
 
     def get_species_rdf(
-        self, structure: Structure, ref_species: Optional[List] = None, species: Optional[List] = None
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        self, structure: Structure, ref_species: list | None = None, species: list | None = None
+    ) -> tuple[np.ndarray, np.ndarray]:
         """
         Get specie-wise rdf
         Args:
@@ -83,6 +86,7 @@ class RadialDistributionFunction:
                 The rdfs are calculated with these species at the center
             species (list of species or just single specie str): the species that we are interested in.
                 The rdfs are calculated on these species.
+
         Returns:
         """
         all_species = list({str(i.specie) for i in structure.sites})
@@ -95,7 +99,7 @@ class RadialDistributionFunction:
 
         pair_distances = get_pair_distances(structure, self.cutoff)
         all_distances = []
-        for i, neighbors in enumerate(pair_distances):
+        for _i, neighbors in enumerate(pair_distances):
             if neighbors["specie"] not in ref_species:
                 continue
 
@@ -116,19 +120,18 @@ class RadialDistributionFunction:
             rdf_temp = gaussian_filter1d(rdf_temp, self.sigma)
         return self.r, rdf_temp
 
-    def get_site_coordination(self, structure: Structure) -> Tuple[np.ndarray, List[Dict]]:
+    def get_site_coordination(self, structure: Structure) -> tuple[np.ndarray, list[dict]]:
         """
         Get site wise coordination
         Args:
-            structure (Structure): pymatgen Structure
+            structure (Structure): pymatgen Structure.
 
         Returns: r, cns where cns is a list of dictionary with specie_pair: pair_cn key:value pairs
 
         """
-
         _, rdfs = self.get_site_rdf(structure)
         density = self._get_specie_density(structure)
-        cns: List[Dict] = [{}] * len(structure)
+        cns: list[dict] = [{}] * len(structure)
         for i, rdf in enumerate(rdfs):
             if len(rdf) == 0:
                 continue
@@ -138,8 +141,8 @@ class RadialDistributionFunction:
         return self.r, cns
 
     def get_species_coordination(
-        self, structure: Structure, ref_species: Optional[List] = None, species: Optional[List] = None
-    ) -> Tuple[np.ndarray, np.ndarray]:
+        self, structure: Structure, ref_species: list | None = None, species: list | None = None
+    ) -> tuple[np.ndarray, np.ndarray]:
         """
         Get specie-wise coordination number
         Args:
@@ -148,6 +151,7 @@ class RadialDistributionFunction:
                 The rdfs are calculated with these species at the center
             species (list of species or just single specie str): the species that we are interested in.
                 The rdfs are calculated on these species.
+
         Returns:
         """
         all_species = list({str(i.specie) for i in structure.sites})
@@ -181,9 +185,8 @@ def _dist_to_counts(d: np.ndarray, r_min: float = 0.0, r_max: float = 8.0, n_gri
         r_min (float): minimal radius
         r_max (float): maximum radius
     Returns:
-        1D array of counts in the bins centered on grid
+        1D array of counts in the bins centered on grid.
     """
-
     counts = np.zeros((n_grid,))
     dr = (r_max - r_min) / (n_grid - 1)  # end points are on grid
     indices = np.array(np.floor((d - r_min + 0.5 * dr) / dr), dtype=int)
@@ -193,7 +196,7 @@ def _dist_to_counts(d: np.ndarray, r_min: float = 0.0, r_max: float = 8.0, n_gri
     return counts
 
 
-def get_pair_distances(structure: Structure, r_max: float = 8.0) -> List[dict]:
+def get_pair_distances(structure: Structure, r_max: float = 8.0) -> list[dict]:
     """
     Get pair distances from structure.
     The output will be a list of of dictionary, for example
@@ -202,7 +205,7 @@ def get_pair_distances(structure: Structure, r_max: float = 8.0) -> List[dict]:
     {"specie": "Fe",
     "neighbors": {"Mo": [1.0, 3.0, ...]}}]
     it will be fairly easy to construct radial distribution func, etc
-    from here
+    from here.
 
     Args:
         structure (Structure): pymatgen Structure
@@ -216,6 +219,6 @@ def get_pair_distances(structure: Structure, r_max: float = 8.0) -> List[dict]:
     neighbor_species = species[index2]
     tuples = np.array(list(zip(index1, neighbor_species)), dtype=[("index", "i4"), ("specie", "<U10")])
     unique_tuples, indices = np.unique(tuples, return_inverse=True)
-    for index, unique_tuple in enumerate(unique_tuples):
+    for _index, unique_tuple in enumerate(unique_tuples):
         res[unique_tuple[0]]["neighbors"][unique_tuple[1]] = distances[tuples == unique_tuple]
     return res

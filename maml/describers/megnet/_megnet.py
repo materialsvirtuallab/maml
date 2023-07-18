@@ -1,19 +1,21 @@
-"""
-MEGNet-based describers
-"""
+"""MEGNet-based describers."""
+from __future__ import annotations
+
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import TYPE_CHECKING
 
 import pandas as pd
-from pymatgen.core import Molecule, Structure
 
 from maml.base import BaseDescriber, describer_type
 from maml.utils import get_full_stats_and_funcs
 
+if TYPE_CHECKING:
+    from pymatgen.core import Molecule, Structure
+
 DEFAULT_MODEL = Path(__file__).parent / "../data/megnet_models/formation_energy.hdf5"
 
 
-def _load_model(name: Optional[Union[str, object]] = None):
+def _load_model(name: str | object | None = None):
     try:
         from megnet.utils.descriptor import MEGNetDescriptor
         from megnet.utils.models import MODEL_MAPPING, load_model
@@ -34,8 +36,7 @@ def _load_model(name: Optional[Union[str, object]] = None):
 @describer_type("site")
 class MEGNetSite(BaseDescriber):
     """
-    Use megnet pre-trained models as featurizer to get
-    atomic features
+    Use megnet pre-trained models as featurizer to get atomic features.
 
     Reference:
     @article{chen2019graph,title={Graph networks as a universal machine
@@ -46,15 +47,15 @@ class MEGNetSite(BaseDescriber):
             pages={3564--3572}, year={2019},publisher={ACS Publications}}
     """
 
-    def __init__(self, name: Optional[Union[str, object]] = None, level: Optional[int] = None, **kwargs):
+    def __init__(self, name: str | object | None = None, level: int | None = None, **kwargs):
         """
 
         Args:
             name (str or megnet.models.GraphModel): models name keys, megnet models
                 path or a MEGNet GraphModel, if no name is provided, the models will be Eform_MP_2019.
-            level (int): megnet graph layer level
+            level (int): megnet graph layer level.
+            **kwargs: passthrough.
         """
-
         self.describer_model = _load_model(name)
 
         if level is None:
@@ -64,9 +65,9 @@ class MEGNetSite(BaseDescriber):
         self.level = level
         super().__init__(**kwargs)
 
-    def transform_one(self, obj: Union[Structure, Molecule]):
+    def transform_one(self, obj: Structure | Molecule):
         """
-        Get megnet site features from structure object
+        Get megnet site features from structure object.
 
         Args:
             obj (structure or molecule): pymatgen structure or molecules
@@ -80,7 +81,7 @@ class MEGNetSite(BaseDescriber):
     def __getstate__(self):
         """
         Get state for pickle
-        Returns: dictionary
+        Returns: dictionary.
         """
         d = self.__dict__.copy()
         d["describer_model"] = None
@@ -122,10 +123,10 @@ class MEGNetStructure(BaseDescriber):
 
     def __init__(
         self,
-        name: Optional[Union[str, object]] = None,
+        name: str | object | None = None,
         mode: str = "site_stats",
-        level: Optional[int] = None,
-        stats: Optional[List] = None,
+        level: int | None = None,
+        stats: list | None = None,
         **kwargs,
     ):
         """
@@ -139,15 +140,13 @@ class MEGNetStructure(BaseDescriber):
                 'site_readout': Use the atomic features at the readout stage
                 'state': Use the state attributes
                 'final': Use the concatenated atom, bond and global features
-            level (int): megnet graph layer level
+            level (int): megnet graph layer level.
+            **kwargs: passthrough.
         """
-
         self.describer_model = _load_model(name)
 
         if level is None:
-            n_layers = (
-                sum(i.startswith("meg_net") or i.startswith("megnet") for i in self.describer_model.valid_names) // 3
-            )
+            n_layers = sum(i.startswith(("meg_net", "megnet")) for i in self.describer_model.valid_names) // 3
             level = n_layers
 
         self.name = name
@@ -161,11 +160,11 @@ class MEGNetStructure(BaseDescriber):
         self.stats_func = stats_func
         super().__init__(**kwargs)
 
-    def transform_one(self, obj: Union[Structure, Molecule]):
+    def transform_one(self, obj: Structure | Molecule):
         """
         Transform structure/molecule objects into features
         Args:
-            obj (Structure/Molecule): target object structure or molecule
+            obj (Structure/Molecule): target object structure or molecule.
 
         Returns: pd.DataFrame features
 
@@ -191,7 +190,7 @@ class MEGNetStructure(BaseDescriber):
     def __getstate__(self):
         """
         Get state for pickle
-        Returns: dictionary
+        Returns: dictionary.
         """
         d = self.__dict__.copy()
         d["describer_model"] = None
@@ -210,14 +209,10 @@ class MEGNetStructure(BaseDescriber):
 
 
 class MEGNetNotFound(Exception):
-    """
-    MEGNet not found exception
-    """
+    """MEGNet not found exception."""
 
     def __init__(self):
-        """
-        MEGNet not found exception
-        """
+        """MEGNet not found exception."""
         super().__init__(
             "This module requires installation of megnet, "
             "which is not found in your current environment."

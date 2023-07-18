@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides MTP interatomic potential class."""
+from __future__ import annotations
 
 import itertools
 import json
@@ -33,8 +34,9 @@ def feed(attribute, kwargs, dictionary, tab="\t"):
         kwargs (dict): Generic parameters.
         dictionary (dict): The default parameters dictionary.
         tab (str): '\t' or '\t\t', depend on orders of attribute.
+
     Return:
-        (str)
+        (str).
     """
     tmp = kwargs.get(attribute) if kwargs.get(attribute) else dictionary.get(attribute).get("value")
     return tab + dictionary.get(attribute).get("name"), str(tmp), dictionary.get(attribute).get("comment")
@@ -44,7 +46,7 @@ class MTPotential(LammpsPotential):
     """
     This class implements moment tensor potentials.
     Installation of the mlip package is needed.
-    Please refer to https://mlip.skoltech.ru
+    Please refer to https://mlip.skoltech.ru.
     """
 
     pair_style = "pair_style        mlip {}"
@@ -77,7 +79,6 @@ class MTPotential(LammpsPotential):
             virial_stress (list): stress should has 6 distinct
                 elements arranged in order [xx, yy, zz, yz, xz, xy].
         """
-
         inputs = OrderedDict(
             Size=structure.num_sites,
             SuperCell=structure.lattice,
@@ -125,7 +126,7 @@ class MTPotential(LammpsPotential):
         Write configurations to file
         Args:
             filename (str): filename
-            cfg_pool (list): list of configurations
+            cfg_pool (list): list of configurations.
 
         Returns:
 
@@ -155,7 +156,7 @@ class MTPotential(LammpsPotential):
         Write mlip.ini file for mlip packages of version mlip-2 or mlip-dev.
         Supported keyword arguments are parallel with options stated in the mlip manuals.
         mlip-2 is recommended, as it is the only officially supported version by mlip.
-        Please refer to https://mlip.skoltech.ru
+        Please refer to https://mlip.skoltech.ru.
 
         Args:
             mlip-2:
@@ -593,9 +594,8 @@ class MTPotential(LammpsPotential):
             MTP_file_path = os.path.join(module_dir, "params", unfitted_mtp)
             shutil.copyfile(MTP_file_path, os.path.join(os.getcwd(), unfitted_mtp))
 
-            with open("min_dist", "w") as f:
-                with subprocess.Popen(["mlp", "mindist", atoms_filename], stdout=f) as p:
-                    p.communicate()[0]
+            with open("min_dist", "w") as f, subprocess.Popen(["mlp", "mindist", atoms_filename], stdout=f) as p:
+                p.communicate()[0]
 
             with open("min_dist") as f:
                 lines = f.readlines()
@@ -673,8 +673,7 @@ class MTPotential(LammpsPotential):
         with open(fitted_mtp, "w") as f:
             f.write("\n".join(lines))
         ini_file = self.write_ini(load_from=fitted_mtp, Calculate_EFS=True, **kwargs)
-        ff_settings = [self.pair_style.format(ini_file), self.pair_coeff]
-        return ff_settings
+        return [self.pair_style.format(ini_file), self.pair_coeff]
 
     def evaluate(self, test_structures, test_energies, test_forces, test_stresses=None, **kwargs):
         """
@@ -735,7 +734,7 @@ class MTPotential(LammpsPotential):
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
             if not os.path.exists(predict_file):
-                predict_file = "_".join([predict_file, "0"])
+                predict_file = f"{predict_file}_0"
             _, df_predict = self.read_cfgs(predict_file)
         return df_orig, df_predict
 

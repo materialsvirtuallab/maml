@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 import numpy as np
@@ -20,9 +22,9 @@ class TestStats(unittest.TestCase):
         self.assertAlmostEqual(Stats.mean(self.x, self.weights), Stats.average(self.x, self.weights))
 
     def test_max_min_range(self):
-        self.assertEqual(Stats.max(self.x), 5)
-        self.assertEqual(Stats.min(self.x), 1)
-        self.assertEqual(Stats.range(self.x), 4)
+        assert Stats.max(self.x) == 5
+        assert Stats.min(self.x) == 1
+        assert Stats.range(self.x) == 4
 
     def test_moment(self):
         np.testing.assert_almost_equal(Stats.moment(self.x, max_order=2), [np.mean(self.x), np.std(self.x)])
@@ -50,8 +52,8 @@ class TestStats(unittest.TestCase):
         )
 
     def test_allowed_stats(self):
-        self.assertNotIn("best", Stats.allowed_stats)
-        self.assertIn("average", Stats.allowed_stats)
+        assert "best" not in Stats.allowed_stats
+        assert "average" in Stats.allowed_stats
 
     def test_power_mean(self):
         p1 = Stats.power_mean(self.x, self.weights, p=0)

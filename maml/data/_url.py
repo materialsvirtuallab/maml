@@ -1,6 +1,6 @@
-"""
-Get data from url
-"""
+"""Get data from url."""
+from __future__ import annotations
+
 from io import StringIO
 
 import pandas as pd
@@ -10,9 +10,7 @@ from maml.base import BaseDataSource
 
 
 class URLSource(BaseDataSource):
-    """
-    Load raw data from a URL, e.g., figshare.
-    """
+    """Load raw data from a URL, e.g., figshare."""
 
     def __init__(self, fmt: str = "csv", read_kwargs=None):
         """
@@ -27,7 +25,7 @@ class URLSource(BaseDataSource):
 
     def get(self, url: str) -> pd.DataFrame:  # type: ignore
         """
-        Get url data source
+        Get url data source.
 
         Args:
             url: URL to obtain raw data from.
@@ -41,19 +39,16 @@ class URLSource(BaseDataSource):
 
 
 class FigshareSource(URLSource):
-    """
-    Load data from figshare.
-    """
+    """Load data from figshare."""
 
     def get(self, file_id: str) -> pd.DataFrame:  # type: ignore
         """
         Get data from Figshare
         Args:
-            file_id: file id
+            file_id: file id.
 
         Returns:
             data frame
         """
-
         url = f"https://ndownloader.figshare.com/files/{file_id}"
         return super().get(url)

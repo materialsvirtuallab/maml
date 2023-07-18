@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 from maml.utils import ConstantValue, LinearProfile
@@ -7,7 +9,7 @@ class TestValueProfile(unittest.TestCase):
     def test_constant(self):
         constant_profile = ConstantValue(0.1)
         constant_profile.increment_step()
-        self.assertEqual(constant_profile.step, 1)
+        assert constant_profile.step == 1
         self.assertAlmostEqual(constant_profile.get_value(), 0.1)
 
     def test_linearprofile(self):

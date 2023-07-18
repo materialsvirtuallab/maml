@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides basic LAMMPS calculator classes."""
+from __future__ import annotations
 
 import abc
 import io
@@ -17,11 +18,7 @@ from pymatgen.core import Element, Lattice, Structure
 from pymatgen.io.lammps.data import LammpsData
 
 from maml.apps.pes._base import Potential
-from maml.utils import (
-    get_lammps_lattice_and_rotation,
-    stress_list_to_matrix,
-    stress_matrix_to_list,
-)
+from maml.utils import get_lammps_lattice_and_rotation, stress_list_to_matrix, stress_matrix_to_list
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -31,9 +28,8 @@ logger.setLevel(logging.INFO)
 def get_default_lmp_exe():
     """
     Get lammps executable
-    Returns: Lammps executable name
+    Returns: Lammps executable name.
     """
-
     for lmp_exe in ["lmp_serial", "lmp_mpi", "lmp_g++_serial", "lmp_g++_mpich", "lmp_intel_cpu_intelmpi"]:
         lmp_exe_detected = which(lmp_exe)
         if lmp_exe_detected is not None:
@@ -43,15 +39,15 @@ def get_default_lmp_exe():
 
 
 def _pretty_input(lines):
-    def prettify(l):
+    def prettify(line):
         return (
-            l.split()[0].ljust(width) + " ".join(l.split()[1:])
-            if not (len(l.split()) == 0 or l.strip().startswith("#"))
-            else l
+            line.split()[0].ljust(width) + " ".join(line.split()[1:])
+            if not (len(line.split()) == 0 or line.strip().startswith("#"))
+            else line
         )
 
-    clean_lines = [l.strip("\n") for l in lines]
-    commands = [l for l in clean_lines if len(l.strip()) > 0]
+    clean_lines = [line.strip("\n") for line in lines]
+    commands = [line for line in clean_lines if len(line.strip()) > 0]
     keys = [c.split()[0] for c in commands if not c.split()[0].startswith("#")]
     width = max(len(k) for k in keys) + 4
     new_lines = map(prettify, clean_lines)
@@ -77,7 +73,7 @@ class LMPStaticCalculator:
     def __init__(self, **kwargs):
         """
         Initializer for lammps calculator
-        Allowed keyword args are lmp_exe string
+        Allowed keyword args are lmp_exe string.
 
         """
         lmp_exe = kwargs.pop("lmp_exe", None)
@@ -88,31 +84,22 @@ class LMPStaticCalculator:
         self.LMP_EXE = lmp_exe
         for i, j in kwargs.items():
             if i not in self.allowed_kwargs:
-                raise TypeError(f"{str(i)} not in supported kwargs {str(self.allowed_kwargs)}")
+                raise TypeError(f"{i!s} not in supported kwargs {self.allowed_kwargs!s}")
             setattr(self, i, j)
 
     @abc.abstractmethod
     def _setup(self):
-        """
-        Setup a calculation, writing input files, etc.
-
-        """
+        """Setup a calculation, writing input files, etc."""
         return
 
     @abc.abstractmethod
     def _sanity_check(self, structure):
-        """
-        Check if the structure is valid for this calculation.
-
-        """
+        """Check if the structure is valid for this calculation."""
         return
 
     @abc.abstractmethod
     def _parse(self):
-        """
-        Parse results from dump files.
-
-        """
+        """Parse results from dump files."""
         return
 
     def calculate(self, structures):
@@ -131,12 +118,12 @@ class LMPStaticCalculator:
             assert self._sanity_check(struct) is True, "Incompatible structure found"
         ff_elements = None
         if hasattr(self, "element_profile"):
-            element_profile = getattr(self, "element_profile")
+            element_profile = self.element_profile
             ff_elements = element_profile.keys()
         if hasattr(self, "ff_settings"):
-            ff_settings = getattr(self, "ff_settings")
+            ff_settings = self.ff_settings
             if hasattr(ff_settings, "elements"):
-                ff_elements = getattr(ff_settings, "elements")
+                ff_elements = ff_settings.elements
 
         with ScratchDir("."):
             input_file = self._setup()
@@ -172,9 +159,7 @@ class LMPStaticCalculator:
 
 
 class EnergyForceStress(LMPStaticCalculator):
-    """
-    Calculate energy, forces and virial stress of structures.
-    """
+    """Calculate energy, forces and virial stress of structures."""
 
     def __init__(self, ff_settings, **kwargs):
         """
@@ -193,10 +178,7 @@ class EnergyForceStress(LMPStaticCalculator):
 
         input_file = "in.efs"
 
-        if isinstance(self.ff_settings, Potential):
-            ff_settings = self.ff_settings.write_param()
-        else:
-            ff_settings = self.ff_settings
+        ff_settings = self.ff_settings.write_param() if isinstance(self.ff_settings, Potential) else self.ff_settings
 
         with open(input_file, "w") as f:
             f.write(input_template.format(ff_settings="\n".join(ff_settings)))
@@ -319,7 +301,6 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
             List of all subscripts [2j1, 2j2, 2j].
 
         """
-
         subs = itertools.product(range(twojmax + 1), repeat=3)
 
         filters = [lambda x: x[0] >= x[1], lambda x: x[2] >= x[0]]
@@ -331,15 +312,12 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
 
     @property
     def n_bs(self):
-        """
-        Returns No. of bispectrum components to be calculated.
-
-        """
+        """Returns No. of bispectrum components to be calculated."""
         return len(self.get_bs_subscripts(self.twojmax))
 
     def _setup(self):
-        def add_args(l):
-            return l + compute_args if l.startswith("compute") else l
+        def add_args(line):
+            return line + compute_args if line.startswith("compute") else line
 
         compute_args = f"1 0.99363 {self.twojmax} "
         el_in_seq = sorted(self.element_profile.keys(), key=lambda x: Element(x))
@@ -375,9 +353,7 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
 
 
 class ElasticConstant(LMPStaticCalculator):
-    """
-    Elastic constant calculator.
-    """
+    """Elastic constant calculator."""
 
     _RESTART_CONFIG = {
         "internal": {"write_command": "write_restart", "read_command": "read_restart", "restart_file": "restart.equil"},
@@ -439,10 +415,7 @@ class ElasticConstant(LMPStaticCalculator):
             displace_template = f.read()
 
         input_file = "in.elastic"
-        if isinstance(self.ff_settings, Potential):
-            ff_settings = self.ff_settings.write_param()
-        else:
-            ff_settings = self.ff_settings
+        ff_settings = self.ff_settings.write_param() if isinstance(self.ff_settings, Potential) else self.ff_settings
 
         with open(input_file, "w") as f:
             f.write(input_template.format(write_restart=self.write_command, restart_file=self.restart_file))
@@ -463,29 +436,20 @@ class ElasticConstant(LMPStaticCalculator):
         return input_file
 
     def _sanity_check(self, structure):
-        """
-        Check if the structure is valid for this calculation.
-
-        """
+        """Check if the structure is valid for this calculation."""
         return True
 
     def _parse(self):
-        """
-        Parse results from dump files.
-
-        """
+        """Parse results from dump files."""
         if self.full_matrix:
-            voigt = np.loadtxt("voigt_tensor.txt")
-            return voigt
+            return np.loadtxt("voigt_tensor.txt")
 
         C11, C12, C44, bulkmodulus = np.loadtxt("elastic.txt")
         return C11, C12, C44, bulkmodulus
 
 
 class NudgedElasticBand(LMPStaticCalculator):
-    """
-    NudgedElasticBand migration energy calculator.
-    """
+    """NudgedElasticBand migration energy calculator."""
 
     def __init__(self, ff_settings, specie, lattice, alat, num_replicas=7, **kwargs):
         """
@@ -510,7 +474,7 @@ class NudgedElasticBand(LMPStaticCalculator):
         """
         Get the unit cell from specie, lattice type and lattice constant.
 
-        Args
+        Args:
             specie (str): Name of specie.
             lattice (str): The lattice type of structure. e.g. bcc or diamond.
             alat (float): The lattice constant of specific lattice and specie.
@@ -643,9 +607,7 @@ class NudgedElasticBand(LMPStaticCalculator):
         return input_file
 
     def calculate(self):
-        """
-        Calculate the NEB barrier given Potential class.
-        """
+        """Calculate the NEB barrier given Potential class."""
         with ScratchDir("."):
             input_file = self._setup()
             with subprocess.Popen(
@@ -673,31 +635,21 @@ class NudgedElasticBand(LMPStaticCalculator):
                     logger.info(f"NudgedElasticBand error with message {msg}")
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
-            result = self._parse()
-        return result
+            return self._parse()
 
     def _sanity_check(self, structure):
-        """
-        Check if the structure is valid for this calculation.
-
-        """
+        """Check if the structure is valid for this calculation."""
         return True
 
     def _parse(self):
-        """
-        Parse results from dump files.
-
-        """
+        """Parse results from dump files."""
         with open("log.lammps") as f:
             lines = f.readlines()[-1:]
-        migration_barrier = float(lines[0].split()[6])
-        return migration_barrier
+        return float(lines[0].split()[6])
 
 
 class DefectFormation(LMPStaticCalculator):
-    """
-    Defect formation energy calculator.
-    """
+    """Defect formation energy calculator."""
 
     def __init__(self, ff_settings, specie, lattice, alat, **kwargs):
         """
@@ -720,7 +672,7 @@ class DefectFormation(LMPStaticCalculator):
         """
         Get the unit cell from specie, lattice type and lattice constant.
 
-        Args
+        Args:
             specie (str): Name of specie.
             lattice (str): The lattice type of structure. e.g. bcc or diamond.
             alat (float): The lattice constant of specific lattice and specie.
@@ -788,9 +740,7 @@ class DefectFormation(LMPStaticCalculator):
         return input_file, energy_per_atom, len(super_cell) - 1
 
     def calculate(self):
-        """
-        Calculate the vacancy formation given Potential class.
-        """
+        """Calculate the vacancy formation given Potential class."""
         with ScratchDir("."):
             input_file, energy_per_atom, num_atoms = self._setup()
             with subprocess.Popen([self.LMP_EXE, "-in", input_file], stdout=subprocess.PIPE) as p:
@@ -806,9 +756,7 @@ class DefectFormation(LMPStaticCalculator):
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
             defect_energy, _, _ = self._parse()
-        defect_formation_energy = defect_energy - energy_per_atom * num_atoms
-
-        return defect_formation_energy
+        return defect_energy - energy_per_atom * num_atoms
 
     def _sanity_check(self, structure):
         return True
@@ -821,9 +769,7 @@ class DefectFormation(LMPStaticCalculator):
 
 
 class LMPRelaxationCalculator(LMPStaticCalculator):
-    """
-    Structural Relaxation Calculator.
-    """
+    """Structural Relaxation Calculator."""
 
     def __init__(
         self,
@@ -874,10 +820,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
 
         input_file = "in.relax"
 
-        if isinstance(self.ff_settings, Potential):
-            ff_settings = self.ff_settings.write_param()
-        else:
-            ff_settings = self.ff_settings
+        ff_settings = self.ff_settings.write_param() if isinstance(self.ff_settings, Potential) else self.ff_settings
 
         box_relax_settings = ""
         if self.box_relax:
@@ -902,17 +845,11 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
         return input_file
 
     def _sanity_check(self, structure):
-        """
-        Check if the structure is valid for this calculation.
-
-        """
+        """Check if the structure is valid for this calculation."""
         return True
 
     def _parse(self):
-        """
-        Parse results from dump files.
-
-        """
+        """Parse results from dump files."""
         ld = LammpsData.from_file("data.relaxed", atom_style="charge")
         final_structure = ld.structure
         efs_calculator = EnergyForceStress(ff_settings=self.ff_settings)
@@ -921,9 +858,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
 
 
 class LatticeConstant(LMPRelaxationCalculator):
-    """
-    Lattice Constant Relaxation Calculator.
-    """
+    """Lattice Constant Relaxation Calculator."""
 
     def calculate(self, structures):
         """
@@ -938,9 +873,7 @@ class LatticeConstant(LMPRelaxationCalculator):
         """
         results = super().calculate(structures)
         structures_relaxed = [r[0] for r in results]
-        lattice_constants = [list(struct.lattice.abc) for struct in structures_relaxed]
-
-        return lattice_constants
+        return [list(struct.lattice.abc) for struct in structures_relaxed]
 
 
 class SurfaceEnergy(LMPRelaxationCalculator):
@@ -996,7 +929,6 @@ class SurfaceEnergy(LMPRelaxationCalculator):
             box_relax (bool): Whether to allow the box size and shape of the slab structures to vary
                 during the minimization. Normally, this should be turned off.
         """
-
         super().__init__(ff_settings=ff_settings, box_relax=True, **kwargs)
         bulk_structure_relaxed, bulk_energy, _, _ = super().calculate([bulk_structure])[0]
         self.bulk_energy_per_atom = bulk_energy / bulk_structure_relaxed.num_sites
@@ -1027,7 +959,7 @@ class SurfaceEnergy(LMPRelaxationCalculator):
     def calculate(self):
         """
         Calculate surface energies with the formula:
-        E(Surface) = (E(Slab) - E(bulk)) / Area(surface). (J/m^2)
+        E(Surface) = (E(Slab) - E(bulk)) / Area(surface). (J/m^2).
 
         Returns:
             List of miller_indexes with their respective relaxed slab structures and surface energies in J/m^2.
@@ -1055,7 +987,7 @@ class SurfaceEnergy(LMPRelaxationCalculator):
 class LammpsPotential(Potential, abc.ABC):  # type: ignore
     """
     Lammps compatible potentials that call lammps executable for
-    energy/force/stress calculations
+    energy/force/stress calculations.
     """
 
     def predict_efs(self, structure):

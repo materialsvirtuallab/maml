@@ -1,14 +1,12 @@
-"""
-Materials utils
-"""
-from typing import Union
+"""Materials utils."""
+from __future__ import annotations
 
 from pymatgen.core import Composition, Molecule, Structure
 
 
-def to_composition(obj: Union[Composition, Molecule, Structure, str]) -> Composition:
+def to_composition(obj: Composition | Molecule | Structure | str) -> Composition:
     """
-    Convert str/structure or composition to compositions
+    Convert str/structure or composition to compositions.
 
     Args:
         obj (str/structure/composition): object to convert

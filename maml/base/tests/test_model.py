@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 from monty.tempfile import ScratchDir
@@ -24,8 +26,8 @@ class TestBaseModel(unittest.TestCase):
             model2 = SKLModel.from_file("test_model.sav")
             self.assertAlmostEqual(model2.predict_objs([[4, 5]])[0], 9)
             self.assertAlmostEqual(model2.evaluate([[4, 8], [8, 5]], [12, 13]), 1.0)
-        self.assertTrue(is_sklearn_model(model))
-        self.assertFalse(is_keras_model(model))
+        assert is_sklearn_model(model)
+        assert not is_keras_model(model)
 
     def test_keras_model(self):
         import numpy as np
@@ -49,8 +51,8 @@ class TestBaseModel(unittest.TestCase):
             model2 = KerasModel.from_file("test_model.sav")
             self.assertAlmostEqual(model2.predict_objs([[4, 5]])[0], 9)
             self.assertAlmostEqual(model2.evaluate([[4, 8], [8, 5]], [12, 13]), 0.0)
-        self.assertFalse(is_sklearn_model(model))
-        self.assertTrue(is_keras_model(model))
+        assert not is_sklearn_model(model)
+        assert is_keras_model(model)
 
 
 if __name__ == "__main__":

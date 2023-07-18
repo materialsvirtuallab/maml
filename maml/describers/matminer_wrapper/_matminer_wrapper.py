@@ -1,10 +1,9 @@
-"""
-Wrapper for matminer_wrapper featurizers
-"""
+"""Wrapper for matminer_wrapper featurizers."""
+from __future__ import annotations
 
 import logging
 from inspect import signature
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 import pandas as pd
 
@@ -16,24 +15,23 @@ logger.setLevel(logging.INFO)
 
 
 def wrap_matminer_describer(
-    cls_name: str, wrapped_class: Any, obj_conversion: Callable, describer_type: Optional[Any] = None
+    cls_name: str, wrapped_class: Any, obj_conversion: Callable, describer_type: Any | None = None
 ):
     """
     Wrapper of matminer_wrapper describers.
+
     Args:
         cls_name (str): new class name
         wrapped_class (class object): matminer_wrapper BaseFeaturizer
         obj_conversion (callable): function to convert objects into desired
             object type within transform_one
-        describer_type (object): object type
+        describer_type (object): object type.
 
     Returns: maml describers class
     """
 
     def constructor(self, *args, **kwargs):
-        """
-        Wrapped __init__ constructor
-        """
+        """Wrapped __init__ constructor."""
         n_jobs = kwargs.pop("n_jobs", 0)
         memory = kwargs.pop("memory", None)
         verbose = kwargs.pop("verbose", False)
@@ -48,13 +46,10 @@ def wrap_matminer_describer(
         return wrapped_class._get_param_names()
 
     def get_params(self, deep=False):
-        params = wrapped_class.get_params(self, deep=deep)
-        return params
+        return wrapped_class.get_params(self, deep=deep)
 
     def transform_one(self, obj: Any):
-        """
-        featurize to transform_one
-        """
+        """Featurize to transform_one."""
         obj = obj_conversion(obj)
         results = wrapped_class.featurize(self, obj)
         labels = wrapped_class.feature_labels(self)
@@ -62,9 +57,7 @@ def wrap_matminer_describer(
 
     @classmethod  # type: ignore
     def from_preset(cls, name: str, **kwargs):  # type: ignore
-        """
-        Wrap matminer_wrapper's from_preset function
-        """
+        """Wrap matminer_wrapper's from_preset function."""
         instance = wrapped_class.from_preset(name)
         sig = signature(wrapped_class.__init__)
         args = list(sig.parameters.keys())[1:]
@@ -74,7 +67,7 @@ def wrap_matminer_describer(
         instance_new.__dict__.update(instance.__dict__)
         return instance_new
 
-    new_klass = type(
+    return type(
         cls_name,
         (BaseDescriber,),
         {
@@ -92,5 +85,3 @@ def wrap_matminer_describer(
             "describer_type": describer_type,
         },
     )
-
-    return new_klass

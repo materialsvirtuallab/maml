@@ -1,12 +1,11 @@
-"""
-MAML describers base classes
-"""
+"""MAML describers base classes."""
+from __future__ import annotations
+
 import abc
 import logging
 import tempfile
-from typing import Any, List, Union
+from typing import TYPE_CHECKING, Any
 
-import numpy as np
 from joblib import Parallel, cpu_count, delayed
 from monty.json import MSONable
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -17,6 +16,9 @@ from tqdm import tqdm
 from maml.utils import feature_dim_from_test_system
 
 from ._feature_batch import get_feature_batch
+
+if TYPE_CHECKING:
+    import numpy as np
 
 _ALLOWED_DATA = ("number", "structure", "molecule", "spectrum")
 
@@ -37,7 +39,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
 
     def __init__(self, **kwargs):
         """
-        Base estimator with the following allowed keyword args
+        Base estimator with the following allowed keyword args.
 
             memory (bool/str/joblib.Memory): The path or Memory for caching the computational
                 results, default None means no cache.
@@ -53,7 +55,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         allowed_kwargs = ["memory", "verbose", "n_jobs", "feature_batch"]
 
-        for k, v in kwargs.items():
+        for k, _v in kwargs.items():
             if k not in allowed_kwargs:
                 raise TypeError(f"{k} not allowed as kwargs")
         memory = kwargs.get("memory", None)
@@ -72,9 +74,9 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         self.n_jobs = n_jobs
         self.feature_batch = get_feature_batch(kwargs.get("feature_batch", None))
 
-    def fit(self, x: Any, y: Any = None) -> "BaseDescriber":
+    def fit(self, x: Any, y: Any = None) -> BaseDescriber:
         """
-        Place holder for fit API
+        Place holder for fit API.
 
         Args:
             x: Any inputs
@@ -85,19 +87,18 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         return self
 
-    def transform_one(self, obj: Any) -> Union[List[np.ndarray], np.ndarray]:
-        """
-        Transform an object.
-        """
+    def transform_one(self, obj: Any) -> list[np.ndarray] | np.ndarray:
+        """Transform an object."""
         raise NotImplementedError
 
-    def transform(self, objs: List[Any]) -> Any:
+    def transform(self, objs: list[Any]) -> Any:
         """
         Transform a list of objs. If the return data is DataFrame,
         use df.xs(index, level='input_index') to get the result for the i-th object.
 
         Args:
             objs (list): A list of objects.
+
         Returns:
             One or a list of pandas data frame/numpy ndarray
         """
@@ -120,13 +121,10 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
 
     def _is_multi_output(self) -> bool:
         tags = self._get_tags()
-        multi_output = tags["multioutput"]  # this is from BaseEstimator
-        return multi_output
+        return tags["multioutput"]  # this is from BaseEstimator
 
     def clear_cache(self):
-        """
-        Clear cache
-        """
+        """Clear cache."""
         if self.memory.location is not None:
             self.memory.clear()
 
@@ -139,7 +137,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         return feature_dim_from_test_system(self)
 
 
-def _transform_one(describer: BaseDescriber, obj: Any) -> Union[List[np.ndarray], np.ndarray]:
+def _transform_one(describer: BaseDescriber, obj: Any) -> list[np.ndarray] | np.ndarray:
     """
     A wrapper to make a pure function.
 
@@ -153,13 +151,11 @@ def _transform_one(describer: BaseDescriber, obj: Any) -> Union[List[np.ndarray]
 
 
 class DummyDescriber(BaseDescriber):
-    """
-    Dummy Describer that does nothing
-    """
+    """Dummy Describer that does nothing."""
 
     def transform_one(self, obj: Any):
         """
-        Does nothing but return the original features
+        Does nothing but return the original features.
 
         Args:
             obj: Any inputs
@@ -171,11 +167,9 @@ class DummyDescriber(BaseDescriber):
 
 
 class SequentialDescriber(Pipeline):
-    """
-    A thin wrapper of sklearn Pipeline
-    """
+    """A thin wrapper of sklearn Pipeline."""
 
-    def __init__(self, describers: List, **kwargs):
+    def __init__(self, describers: list, **kwargs):
         """
         Put a list of describers into one pipeline
         Args:
@@ -189,7 +183,7 @@ class SequentialDescriber(Pipeline):
 
 def describer_type(dtype: str):
     """
-    Decorate to set describers class type
+    Decorate to set describers class type.
 
     Args:
         dtype (str): describers type, e.g., site, composition, structure etc.

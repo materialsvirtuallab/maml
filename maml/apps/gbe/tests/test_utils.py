@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import unittest
 
@@ -14,12 +16,12 @@ DATA = pjoin(module_dir, "data")
 class TestUtil(PymatgenTest):
     def test_load_data(self):
         data = load_data()
-        self.assertEqual(len(data), 361)
+        assert len(data) == 361
 
     def test_b0(self):
         b0_dict = load_b0_dict()
-        self.assertTrue(os.path.isfile(pjoin(REFS, "el2b0.json")))
-        self.assertEqual(b0_dict["W"], 2.7603814963781725)
+        assert os.path.isfile(pjoin(REFS, "el2b0.json"))
+        assert b0_dict["W"] == 2.7603814963781725
         els = [
             "Ac",
             "Ag",
@@ -80,13 +82,13 @@ class TestUtil(PymatgenTest):
             "Zn",
             "Zr",
         ]
-        self.assertEqual(sorted(b0_dict.keys()), els)
+        assert sorted(b0_dict.keys()) == els
 
     def test_mean_delta_bl(self):
         mean_delta_bl = load_mean_delta_bl_dict()
-        self.assertTrue(os.path.isfile(pjoin(REFS, "mean_bl_chg_crystalnn.json")))
-        self.assertEqual(mean_delta_bl["5094"], -0.004265041421307773)
-        self.assertEqual(len(mean_delta_bl), 361)
+        assert os.path.isfile(pjoin(REFS, "mean_bl_chg_crystalnn.json"))
+        assert mean_delta_bl["5094"] == -0.004265041421307773
+        assert len(mean_delta_bl) == 361
 
 
 if __name__ == "__main__":
