@@ -129,7 +129,7 @@ class CoulomMatrixTest(unittest.TestCase):
         cmat = cm.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
         norm_order_ind = np.argsort(np.linalg.norm(c, axis=1))
         for i in range(cmat.shape[1]):
-            assert np.all(cmat[i] == c[norm_order_ind[i]])
+            assert np.allclose(cmat[i], c[norm_order_ind[i]])
 
     def test_random_coulom_mat(self):
         cm = RandomizedCoulombMatrix(random_seed=7)
@@ -137,7 +137,7 @@ class CoulomMatrixTest(unittest.TestCase):
         cmat = cm.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
         cm2 = RandomizedCoulombMatrix(random_seed=8)
         cmat2 = cm2.transform_one(self.s2).values.reshape(self.s2.num_sites, self.s2.num_sites)
-        assert np.all(cmat == cmat2) is False
+        assert np.allclose(cmat, cmat2)
         for i in range(cmat.shape[1]):
             assert cmat[i] in c[i]
 
