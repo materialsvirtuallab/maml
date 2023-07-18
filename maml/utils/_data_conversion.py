@@ -66,6 +66,7 @@ def convert_docs(docs, include_stress=False, **kwargs):
         docs ([dict]): List of docs. Each doc should have the same
             format as one returned from .dft.parse_dir.
         include_stress (bool): Whether to include stress components.
+        **kwargs: Passthrough.
 
     Returns:
         A list of structures, and a DataFrame with energy and force
@@ -106,7 +107,7 @@ def to_array(x):
     return np.ndarray.
     """
     if isinstance(x, pd.DataFrame):
-        return x.values
+        return x.to_numpy()
     if isinstance(x, list):
         return np.array([to_array(i) for i in x])
     if isinstance(x, np.ndarray):

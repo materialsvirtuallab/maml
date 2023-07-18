@@ -73,7 +73,7 @@ class BispectrumCoefficients(BaseDescriber):
                 Default to False.
             pot_fit (bool): Whether combine the dataframe for potential fitting.
             include_stress (bool): Whether to include stress components.
-            way to batch together a list of features
+            feature_batch: way to batch together a list of features
             **kwargs: keyword args to specify memory, verbose, and n_jobs.
         """
         from maml.apps.pes import SpectralNeighborAnalysis
@@ -388,9 +388,10 @@ class SiteElementProperty(BaseDescriber):
     def __init__(self, feature_dict: dict | None = None, output_weights: bool = False, **kwargs):
         """
         Args:
-            element_features (dict): mapping from atomic number of feature vectors
+            feature_dict (dict): mapping from atomic number of feature vectors
             output_weights (bool): whether to output the site fraction,
                 used in disordered compositions.
+            **kwargs: passthrough.
         """
         self.feature_dict = feature_dict
         self.output_weights = output_weights
@@ -430,10 +431,8 @@ class SiteElementProperty(BaseDescriber):
             keys, weights = self._get_keys(comp)
 
         n = len(keys)
-        if self.feature_dict is not None:
-            features = [self.feature_dict[i] for i in keys]
-        else:
-            features = keys  # type: ignore
+
+        features = [self.feature_dict[i] for i in keys] if self.feature_dict is not None else keys  # type: ignore
         features = np.reshape(features, (n, -1))  # type: ignore
         weights = np.reshape(weights, (n,))  # type: ignore
         if self.output_weights:

@@ -126,9 +126,6 @@ class SIS:
             x (np.ndarray): input array
             y (np.ndarray): target array
             options (dict): options for the optimization.
-
-        Returns:
-
         """
         return self.selector.select(x, y, options)
 
@@ -149,9 +146,6 @@ class SIS:
         Set new selector
         Args:
             selector (BaseSelector): a feature selector.
-
-        Returns:
-
         """
         self.selector = selector
 
@@ -180,15 +174,15 @@ class SIS:
 class ISIS:
     """Iterative SIS."""
 
-    def __init__(self, sis: SIS = SIS(gamma=0.1, selector=DantzigSelector(0.1)), l0_regulate: bool = True):
+    def __init__(self, sis: SIS | None = None, l0_regulate: bool = True):
         """
 
         Args:
             sis(SIS): sis object
             l0_regulate(bool): Whether to regulate features in each iteration, default True.
         """
-        self.sis = sis
-        self.selector = sis.selector
+        self.sis = sis if sis is not None else SIS(gamma=0.1, selector=DantzigSelector(0.1))
+        self.selector = sis.selector  # type: ignore
         self.l0_regulate = l0_regulate
         self.coeff = []  # type: ignore
         self.find_sel = []  # type: ignore
@@ -250,12 +244,13 @@ class ISIS:
 
     def evaluate(self, x: np.ndarray, y: np.ndarray, metric: str = "neg_mean_absolute_error") -> float:
         """
-        Evaluate the linear models using x, and y test data
+        Evaluate the linear models using x, and y test data.
+
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
             metric (str): scorer function, used with
                 sklearn.metrics.get_scorer
-        Returns:
+        Returns: float.
         """
         return _eval(x[:, self.find_sel], y, self.coeff, metric)

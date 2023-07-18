@@ -100,7 +100,8 @@ class BaseSelector:
 
     def evaluate(self, x: np.ndarray, y: np.ndarray, metric: str = "neg_mean_absolute_error") -> float:
         """
-        Evaluate the linear models using x, and y test data
+        Evaluate the linear models using x, and y test data.
+
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -123,23 +124,26 @@ class BaseSelector:
 
     def get_feature_indices(self) -> np.ndarray | None:
         """
-        Get selected feature indices
-        Returns:
+        Get selected feature indices.
+
+        Returns: ndarray
         """
         return self.indices
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
-        Predict the results using sparsified coefficients
+        Predict the results using sparsified coefficients.
+
         Args:
             x (np.ndarray): design matrix
-        Returns:
+        Returns: ndarray
         """
         return x[:, self.indices].dot(self.coef_[self.indices])  # type: ignore
 
     def compute_residual(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
-        Compute
+        Compute.
+
         Args:
             x (np.ndarray): design matrix
             y (np.ndarray): target vector
@@ -226,10 +230,12 @@ class DantzigSelector(BaseSelector):
 
     def __init__(self, lambd, sigma=1.0, **kwargs):
         """
-        Dantzig selector
+        Dantzig selector.
+
         Args:
-            lamb: tunable parameter
+            lambd: tunable parameter
             sigma: standard deviation of the error.
+            **kwargs: passthrough.
         """
         self.lambd = lambd
         self.sigma = sigma
@@ -237,7 +243,8 @@ class DantzigSelector(BaseSelector):
 
     def construct_loss(self, x, y, beta) -> float:
         """
-        Get loss function from data and tentative coefficients beta
+        Get loss function from data and tentative coefficients beta.
+
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -248,11 +255,12 @@ class DantzigSelector(BaseSelector):
 
     def construct_jac(self, x: np.ndarray, y: np.ndarray) -> Callable:
         """
-        Jacobian of cost functions
+        Jacobian of cost functions.
+
         Args:
-            x:
-            y:
-        Returns:
+            x: ndarray
+            y: ndarray
+        Returns: callable
         """
 
         def _jac(beta):
@@ -365,6 +373,7 @@ class SCAD(PenalizedLeastSquares):
         Args:
             lambd (float or list of floats): The weights for the penalty
             a (float): hyperparameter in SCAD penalty.
+            **kwargs: passthrough
         """
         self.lambd = lambd
         self.a = a
@@ -403,17 +412,19 @@ class Lasso(PenalizedLeastSquares):
 
     def __init__(self, lambd, **kwargs):
         """
-        Lasso regression with lambda * norm_1(beta) as penalty
+        Lasso regression with lambda * norm_1(beta) as penalty.
+
         Args:
             lambd (float): weights for the penalty
-            **kwargs:
+            **kwargs: passthrough
         """
         self.lambd = lambd
         super().__init__(**kwargs)
 
     def penalty(self, beta: np.ndarray, x: np.ndarray | None = None, y: np.ndarray | None = None) -> float:
         """
-        Calculate the penalty from input x, output y and coefficient beta
+        Calculate the penalty from input x, output y and coefficient beta.
+
         Args:
             beta (np.ndarray): N coefficients
             x (np.ndarray): MxN input data array
@@ -430,18 +441,16 @@ class Lasso(PenalizedLeastSquares):
 
 
 class AdaptiveLasso(PenalizedLeastSquares):
-    """
-    Adaptive lasso regression using OLS coefficients
-    as the root-n estimator coefficients.
-    """
+    """Adaptive lasso regression using OLS coefficients as the root-n estimator coefficients."""
 
     def __init__(self, lambd, gamma, **kwargs):
         """
-        Adaptive lasso regression
+        Adaptive lasso regression.
+
         Args:
-            lambd (float or list of floats):
+            lambd (float or list of floats): lambda values
             gamma (float): exponential for hat(beta)
-            **kwargs:
+            **kwargs: passthrough
         """
         self.lambd = lambd
         self.gamma = gamma
@@ -450,7 +459,8 @@ class AdaptiveLasso(PenalizedLeastSquares):
 
     def select(self, x, y, options=None) -> np.ndarray | None:
         """
-        Select feature indices from x
+        Select feature indices from x.
+
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -463,7 +473,8 @@ class AdaptiveLasso(PenalizedLeastSquares):
 
     def get_w(self, x, y) -> np.ndarray:
         """
-        Get adaptive weights from data
+        Get adaptive weights from data.
+
         Args:
             x (np.ndarray): MxN input data array
             y (np.ndarray): M output targets
@@ -474,7 +485,8 @@ class AdaptiveLasso(PenalizedLeastSquares):
 
     def penalty(self, beta: np.ndarray, x: np.ndarray | None = None, y: np.ndarray | None = None) -> float:
         """
-        Calculate the penalty from input x, output y and coefficient beta
+        Calculate the penalty from input x, output y and coefficient beta.
+
         Args:
             beta (np.ndarray): N coefficients
             x (np.ndarray): MxN input data array
@@ -499,21 +511,23 @@ class L0BrutalForce(BaseSelector):
 
     def __init__(self, lambd: float, **kwargs):
         """
-        Initialization of L0 optimization
+        Initialization of L0 optimization.
+
         Args:
             lambd (float): penalty term
-            **kwargs:
+            **kwargs: passthrough
         """
         self.lambd = lambd
         super().__init__(**kwargs)
 
     def select(self, x: np.ndarray, y: np.ndarray, options: dict | None = None, n_job: int = 1) -> np.ndarray | None:
         """
-        L0 combinatorial optimization
+        L0 combinatorial optimization.
+
         Args:
             x (np.ndarray): design matrix
             y (np.ndarray): target vector
-            options:
+            options: Dict of options.
             n_job (int): number of cpu
         Returns:
         """
@@ -530,8 +544,7 @@ class L0BrutalForce(BaseSelector):
 
         indices = []
         for p_temp in range(1, p + 1):
-            for comb in combinations(index_array, p_temp):
-                indices.append(comb)
+            indices.extend(list(combinations(index_array, p_temp)))
         loss = Parallel(n_jobs=n_job)(delayed(_lstsq)(comb) for comb in indices)
         argmin = np.argmin(loss)
         self.indices = np.array(indices[argmin])
