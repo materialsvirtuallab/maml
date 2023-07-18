@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import os
 import unittest
 
 import numpy as np
+import pytest
 from pymatgen.core import Structure
 from pymatgen.util.testing import PymatgenTest
 
@@ -42,9 +45,9 @@ class TestDescriber(PymatgenTest):
         self.b0_dict = load_b0_dict()
 
     def test_convert_hcp(self):
-        self.assertArrayEqual(convert_hcp_plane((2, -1, -1, 0)), (2, -1, 0))
-        self.assertArrayEqual(convert_hcp_direction((2, -1, -1, 0), "hexagonal"), (1, 0, 0))
-        self.assertArrayEqual(convert_hcp_direction((-1, -1, 2, 0), "hexagonal"), (-1, -1, 0))
+        assert convert_hcp_plane((2, -1, -1, 0)) == (2, -1, 0)
+        assert convert_hcp_direction((2, -1, -1, 0), "hexagonal") == (1, 0, 0)
+        assert convert_hcp_direction((-1, -1, 2, 0), "hexagonal") == (-1, -1, 0)
 
     @unittest.skipUnless(os.getenv("MAPI_KEY"), "skip")
     def test_elemental_feature(self):
@@ -61,7 +64,7 @@ class TestDescriber(PymatgenTest):
             bdensity: 18.854007561757314,
         }
         for k, v in ans_dict.items():
-            self.assertAlmostEqual(df[k.str_name][0], v, places=6)
+            assert df[k.str_name][0] == pytest.approx(v, places=6)
 
     def test_structural_feature(self):
         df = get_structural_feature(self.db_entries[0])
@@ -72,7 +75,7 @@ class TestDescriber(PymatgenTest):
             cos_theta: -0.33333333333333315,
         }
         for k, v in ans_dict.items():
-            self.assertAlmostEqual(df[k.str_name][0], v, places=6)
+            assert df[k.str_name][0] == pytest.approx(v, places=6)
 
     @unittest.skipUnless(os.getenv("MAPI_KEY"), "skip")
     def test_describer(self):
@@ -96,9 +99,9 @@ class TestDescriber(PymatgenTest):
         }
         for k, v in ans_dict.items():
             if k == "task_id":
-                self.assertEqual(df_gb["task_id"][0], 5094)
+                assert df_gb["task_id"][0] == 5094
             else:
-                self.assertAlmostEqual(df_gb[k.str_name][0], v, places=6)
+                assert df_gb[k.str_name][0] == pytest.approx(v, places=6)
 
         ans_dict_bulk = {
             e_coh: 8.301059,
@@ -116,9 +119,9 @@ class TestDescriber(PymatgenTest):
         }
         for k, v in ans_dict_bulk.items():
             if k == "task_id":
-                self.assertEqual(df_bulk["task_id"][0], 5094)
+                assert df_bulk["task_id"][0] == 5094
             else:
-                self.assertAlmostEqual(df_bulk[k.str_name][0], v, places=6)
+                assert df_bulk[k.str_name][0] == pytest.approx(v, places=6)
 
 
 class TestGBBond(PymatgenTest):
@@ -129,7 +132,7 @@ class TestGBBond(PymatgenTest):
         self.gbond = GBBond(self.gb, loc_algo="crystalnn")
 
     def test_loc_algo(self):
-        self.assertEqual(len(self.gbond.loc_algo.get_nn_shell_info(structure=self.bulk, site_idx=0, shell=1)), 8)
+        assert len(self.gbond.loc_algo.get_nn_shell_info(structure=self.bulk, site_idx=0, shell=1)) == 8
         # With a warning of 'cannot locate an appropriate radius' "
 
     def test_bond_mat(self):
@@ -765,16 +768,16 @@ class TestGBBond(PymatgenTest):
         self.assertArrayAlmostEqual(bond_mat, ans)
         dist_mat = self.gb.distance_matrix
         min_bl = (dist_mat[dist_mat > 0]).min()
-        self.assertEqual(self.gbond.min_bl, min_bl)
+        assert self.gbond.min_bl == min_bl
 
     def test_mean_bl_chg(self):
         b0 = load_b0_dict()["W"]
-        self.assertEqual(self.gbond.get_mean_bl_chg(b0=b0), -0.004265041421307773)
+        assert self.gbond.get_mean_bl_chg(b0=b0) == -0.004265041421307773
 
     def testSerialization(self):
         test = GBBond.from_dict(self.gbond.as_dict())
-        self.assertEqual(test.max_bl, self.gbond.max_bl)
-        self.assertEqual(test.min_bl, self.gbond.min_bl)
+        assert test.max_bl == self.gbond.max_bl
+        assert test.min_bl == self.gbond.min_bl
         self.assertArrayAlmostEqual(test.bond_mat, self.gbond.bond_mat)
 
 
