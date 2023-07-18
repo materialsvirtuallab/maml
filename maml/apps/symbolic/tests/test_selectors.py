@@ -18,7 +18,7 @@ try:
     )
 
 except ImportError:
-    cp = None  # noqa
+    cp = None
 
 from maml.apps.symbolic._selectors import (
     SCAD,
@@ -53,10 +53,10 @@ class TestSelectors(PymatgenTest):
         np.testing.assert_almost_equal(dt.get_feature_indices(), selected)
         self.assertTrue(dt.compute_residual(self.x, self.y).shape == self.y.shape)
 
-        self.assertArrayEqual(dt._get_param_names(), ["lambd", "sigma"])
-        self.assertArrayEqual(dt.get_params(), {"lambd": 1, "sigma": 1.0})
+        assert dt._get_param_names() == ["lambd", "sigma"]
+        assert dt.get_params() == {"lambd": 1, "sigma": 1.0}
         dt.set_params(**{"lambd": 0.1})
-        self.assertArrayEqual(dt.get_params(), {"lambd": 0.1, "sigma": 1.0})
+        assert dt.get_params() == {"lambd": 0.1, "sigma": 1.0}
 
     @unittest.skipIf(cp is None, "cvxpy not installed")
     def test_dantzigcp(self):

@@ -45,9 +45,9 @@ class TestDescriber(PymatgenTest):
         self.b0_dict = load_b0_dict()
 
     def test_convert_hcp(self):
-        assert convert_hcp_plane((2, -1, -1, 0)) == (2, -1, 0)
-        assert convert_hcp_direction((2, -1, -1, 0), "hexagonal") == (1, 0, 0)
-        assert convert_hcp_direction((-1, -1, 2, 0), "hexagonal") == (-1, -1, 0)
+        assert np.allclose(convert_hcp_plane((2, -1, -1, 0)), (2, -1, 0))
+        assert np.allclose(convert_hcp_direction((2, -1, -1, 0), "hexagonal"), (1, 0, 0))
+        assert np.allclose(convert_hcp_direction((-1, -1, 2, 0), "hexagonal"), (-1, -1, 0))
 
     @unittest.skipUnless(os.getenv("MAPI_KEY"), "skip")
     def test_elemental_feature(self):
@@ -64,7 +64,7 @@ class TestDescriber(PymatgenTest):
             bdensity: 18.854007561757314,
         }
         for k, v in ans_dict.items():
-            assert df[k.str_name][0] == pytest.approx(v, places=6)
+            assert df[k.str_name][0] == pytest.approx(v, 6)
 
     def test_structural_feature(self):
         df = get_structural_feature(self.db_entries[0])
@@ -75,7 +75,7 @@ class TestDescriber(PymatgenTest):
             cos_theta: -0.33333333333333315,
         }
         for k, v in ans_dict.items():
-            assert df[k.str_name][0] == pytest.approx(v, places=6)
+            assert df[k.str_name][0] == pytest.approx(v, 6)
 
     @unittest.skipUnless(os.getenv("MAPI_KEY"), "skip")
     def test_describer(self):
@@ -101,7 +101,7 @@ class TestDescriber(PymatgenTest):
             if k == "task_id":
                 assert df_gb["task_id"][0] == 5094
             else:
-                assert df_gb[k.str_name][0] == pytest.approx(v, places=6)
+                assert df_gb[k.str_name][0] == pytest.approx(v, 6)
 
         ans_dict_bulk = {
             e_coh: 8.301059,
@@ -121,7 +121,7 @@ class TestDescriber(PymatgenTest):
             if k == "task_id":
                 assert df_bulk["task_id"][0] == 5094
             else:
-                assert df_bulk[k.str_name][0] == pytest.approx(v, places=6)
+                assert df_bulk[k.str_name][0] == pytest.approx(v, 6)
 
 
 class TestGBBond(PymatgenTest):
@@ -765,20 +765,20 @@ class TestGBBond(PymatgenTest):
                 ],
             ]
         )
-        self.assertArrayAlmostEqual(bond_mat, ans)
+        assert np.allclose(bond_mat, ans)
         dist_mat = self.gb.distance_matrix
         min_bl = (dist_mat[dist_mat > 0]).min()
         assert self.gbond.min_bl == min_bl
 
     def test_mean_bl_chg(self):
         b0 = load_b0_dict()["W"]
-        assert self.gbond.get_mean_bl_chg(b0=b0) == -0.004265041421307773
+        assert self.gbond.get_mean_bl_chg(b0=b0) == pytest.approx(-0.004265041421307773)
 
     def testSerialization(self):
         test = GBBond.from_dict(self.gbond.as_dict())
         assert test.max_bl == self.gbond.max_bl
         assert test.min_bl == self.gbond.min_bl
-        self.assertArrayAlmostEqual(test.bond_mat, self.gbond.bond_mat)
+        assert np.allclose(test.bond_mat, self.gbond.bond_mat)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 import unittest
+
+import numpy as np
 
 from maml.describers.matminer_wrapper import wrap_matminer_describer
 from maml.utils import to_composition
@@ -22,8 +26,8 @@ class TestWrapper(PymatgenTest):
             "ElementProperty", composition.ElementProperty, to_composition, describer_type="composition"
         )
         ep = ElementProperty.from_preset("magpie")
-        self.assertArrayAlmostEqual(ep.transform_one(self.s_li2o).values, ep.transform_one("Li2O").values)
-        self.assertListEqual(ep._get_param_names(), ["data_source", "features", "stats"])
+        assert np.allclose(ep.transform_one(self.s_li2o).values, ep.transform_one("Li2O").values)
+        assert ep._get_param_names() == ["data_source", "features", "stats"]
 
     def test_atomic_orbitals(self):
         AtomicOrbitals = wrap_matminer_describer(
@@ -31,8 +35,8 @@ class TestWrapper(PymatgenTest):
         )
         ao = AtomicOrbitals()
         for i, j in zip(ao.transform_one("LiFePO4").values, ao.transform_one(self.s_lfp).values):
-            for k, l in zip(i, j):
-                self.assertEqual(k, l)
+            for k, li in zip(i, j):
+                assert k == li
 
 
 if __name__ == "__main__":
