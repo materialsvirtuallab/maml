@@ -76,7 +76,6 @@ class LinearProfile(ValueProfile):
     """
 
     def __init__(self, value_start: float, value_end: float = 0.0, max_steps: int = 100, **kwargs):
-
         """
 
         Args:

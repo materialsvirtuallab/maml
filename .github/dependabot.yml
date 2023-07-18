@@ -7,7 +7,6 @@ updates:
     time: "13:00"
   open-pull-requests-limit: 10
   reviewers:
-  - chc273
   - shyuep
   ignore:
   - dependency-name: black

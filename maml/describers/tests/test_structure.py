@@ -44,7 +44,6 @@ class DistinctSitePropertyTest(PymatgenTest):
 
 class CoulomMatrixTest(unittest.TestCase):
     def setUp(self):
-
         self.s1 = Structure.from_spacegroup(225, Lattice.cubic(5.69169), ["Na", "Cl"], [[0, 0, 0], [0, 0, 0.5]])
         self.s2 = Structure.from_dict(
             {

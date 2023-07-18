@@ -91,17 +91,17 @@ def struct2perturbation(
     return tuple((wps, indices, mapping, lp))  # type: ignore
 
 
-def atoms_crowded(structure: Structure, radius: float = 1.1) -> bool:
+def atoms_crowded(structure: Structure, cutoff_distance: float = 1.1) -> bool:
     """
     Identify whether structure is unreasonable because the atoms are "too close".
 
     Args:
         structure (Structure): Pymatgen Structure object.
-        radius (float): Radius cutoff.
+        cutoff_distance (float): The minimum allowed atomic distance.
     """
     distance_matrix = copy(structure.distance_matrix)
     distance_matrix[distance_matrix == 0] = np.inf
-    return np.min(distance_matrix) < radius
+    return np.min(distance_matrix) < cutoff_distance
 
 
 class BayesianOptimizer:
@@ -346,17 +346,17 @@ class BayesianOptimizer:
             self.add_query(x_next)
             iteration += 1
 
-    def get_optimized_structure_and_energy(self, radius: float = 1.1) -> tuple:
+    def get_optimized_structure_and_energy(self, cutoff_distance: float = 1.1) -> tuple:
         """
         Args:
-            radius (float): Radius cutoff to identify reasonable structures.
-                When the radius is 0, any structures will be considered reasonable.
+            cutoff_distance (float): Cutoff distance of the allowed shortest atomic distance in reasonable structures.
+                When the cutoff_distance is 0, any structures will be considered reasonable.
         """
         optimized_structure = self.structure.copy()
         idx = 0
         for idx in np.argsort(self.space.target)[::-1]:
             optimized_structure = self.get_derived_structure(self.scaler.inverse_transform(self.space.params[idx]))
-            if not atoms_crowded(optimized_structure, radius=radius):
+            if not atoms_crowded(optimized_structure, cutoff_distance=cutoff_distance):
                 break
         return tuple((optimized_structure, -self.space.target[idx]))
 

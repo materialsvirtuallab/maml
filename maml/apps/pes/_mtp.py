@@ -10,10 +10,10 @@ import re
 import shutil
 import subprocess
 from collections import OrderedDict
+from shutil import which
 
 import numpy as np
 from monty.io import zopen
-from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.core import Lattice, Structure

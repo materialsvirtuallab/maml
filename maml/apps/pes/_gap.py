@@ -8,10 +8,10 @@ import re
 import subprocess
 import xml.etree.ElementTree as ET
 from collections import OrderedDict, defaultdict
+from shutil import which
 
 import numpy as np
 from monty.io import zopen
-from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.core import Element, Lattice, Structure
@@ -157,7 +157,7 @@ class GAPotential(LammpsPotential):
         position_pattern = re.compile("\n(.+?)(?=\nE.*|\n\n.*|$)", re.S)
         # formatify = lambda string: [float(s) for s in string.split()]
 
-        for (size, block) in block_pattern.findall(lines):
+        for size, block in block_pattern.findall(lines):
             d = {"outputs": {}}
             size = int(size)
             lattice_str = lattice_pattern.findall(block)[0]

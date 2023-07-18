@@ -1,2 +1,2 @@
-tensorflow==2.10.1
-torch==1.13.0
+tensorflow==2.13.0
+torch==2.0.1
