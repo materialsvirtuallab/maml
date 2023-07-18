@@ -40,9 +40,9 @@ class TestRDF(PymatgenTest):
 
     def test_get_site_cn(self):
         r, cns = self.rdf_instance.get_site_coordination(self.structure)
-        assert cns[0]["Sr2+:O2-"][-1].item() == 12
-        assert cns[0]["Sr2+:Ti4+"][-1].item() == 8
-        assert cns[0]["Sr2+:Sr2+"][-1].item() == 6
+        assert cns[0]["Sr2+:O2-"][-1].item() == pytest.approx(12)
+        assert cns[0]["Sr2+:Ti4+"][-1].item() == pytest.approx(8)
+        assert cns[0]["Sr2+:Sr2+"][-1].item() == pytest.approx(6)
 
     def test_get_specie_cn(self):
         r, cn = self.rdf_instance.get_species_coordination(self.structure)

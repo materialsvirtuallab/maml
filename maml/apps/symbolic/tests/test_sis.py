@@ -49,7 +49,7 @@ class testISIS(PymatgenTest):
         isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)), l0_regulate=False)
         _ = isis.run(self.x.values, self.y, max_p=4)
         mae = isis.evaluate(self.x.values, self.y)
-        assert mae == 0
+        assert mae == pytest.approx(0)
 
     def test_best_combination(self):
         isis = ISIS(SIS(gamma=0.5, selector=L0BrutalForce(1e-4)), l0_regulate=False)
@@ -59,7 +59,7 @@ class testISIS(PymatgenTest):
         )
         assert np.allclose(comb_best, [10, 11, 12])
         assert np.allclose(coeff_best, [1, 1, 1])
-        assert score_best == 0
+        assert score_best == pytest.approx(0)
 
     def test_isis(self):
         # Test update gamma
