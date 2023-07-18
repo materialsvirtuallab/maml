@@ -125,6 +125,7 @@ class BayesianOptimizer:
                 (predictive GP posterior).
             seed (int): Seeded rng for random number generator. None
                 for an unseeded rng.
+            **kwargs: Passthrough.
         """
         random_state = ensure_rng(seed)
         self.model = model
@@ -157,7 +158,7 @@ class BayesianOptimizer:
             angles_dim=angles_dim,
             relax_coords=relax_coords,
             relax_lattice=relax_lattice,
-            scaler=scaler,
+            scaler=scaler,  # type: ignore
             random_state=random_state,
         )
         self.wps = wps
@@ -302,6 +303,7 @@ class BayesianOptimizer:
                 point for minimization.
             is_continue (bool): whether to continue previous run without resetting GPR
             sampler (str): Sampler generating initial points. "uniform" or "lhs".
+            **gpr_params: Passthrough.
         """
         # print('Optimize begins!')
         self.set_gpr_params(**gpr_params)
@@ -317,7 +319,7 @@ class BayesianOptimizer:
                 params = np.concatenate(
                     ([np.zeros(self.space.dim)], [self.space.uniform_sample() for _ in range(n_init)])
                 )
-            self.scaler.fit(params)
+            self.scaler.fit(params)  # type: ignore
 
             for x in params:
                 self.add_query(x)
@@ -337,7 +339,9 @@ class BayesianOptimizer:
         optimized_structure = self.structure.copy()
         idx = 0
         for idx in np.argsort(self.space.target)[::-1]:
-            optimized_structure = self.get_derived_structure(self.scaler.inverse_transform(self.space.params[idx]))
+            optimized_structure = self.get_derived_structure(
+                self.scaler.inverse_transform(self.space.params[idx])  # type: ignore
+            )
             if not atoms_crowded(optimized_structure, cutoff_distance=cutoff_distance):
                 break
         return (optimized_structure, -self.space.target[idx])
@@ -387,9 +391,10 @@ class BayesianOptimizer:
 
         def serialize(t) -> tuple:
             """
-            serialize the object
+            serialize the object.
+
             Args:
-                t:
+                t: object
             Returns:
 
             """
