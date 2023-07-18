@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: |
+  If you use maml in your research, please consider citing the following.
+authors:
+- family-names: Chen
+  given-names: Chi
+- family-names: Zuo
+  given-names: Yunxing
+- family-names: Ye
+  given-names: Weike
+- family-names: Ji
+  given-names: Qi
+- family-names: Ong
+  given-names: Shyue Ping
+  orcid: https://orcid.org/0000-0001-5726-2587
+title: 'Materials Machine Learning (maml)'
+version: 2022.9.20 # replace with whatever version you use
+date-released: 2022-09-20
+url: https://github.com/materialsvirtuallab/maml
