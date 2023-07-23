@@ -4,7 +4,9 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.decomposition import PCA
 
 
-class PrincipleComponentAnalysis(BaseEstimator, TransformerMixin):
+class PrincipalComponentAnalysis(BaseEstimator, TransformerMixin):
+    """Wrap around PCA in scikit-learn to support weighting PCs."""
+
     def __init__(self, weighting_PCs=True):
         """
         Args:

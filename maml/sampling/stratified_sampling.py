@@ -27,7 +27,7 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
             )
         if "label_centers" not in clustering_data.keys():
             warnings.warn(
-                "Centriod location is not provided, so random selection from each cluster will be performed, "
+                "Centroid location is not provided, so random selection from each cluster will be performed, "
                 "which will likely still significantly outperform manual sampling in terms of feature coverage. "
             )
 

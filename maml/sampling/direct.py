@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from maml.describers.m3gnet import M3GNetStructure
 
 from .clustering import BirchClustering
-from .pca import PrincipleComponentAnalysis
+from .pca import PrincipalComponentAnalysis
 from .stratified_sampling import SelectKFromClusters
 
 
@@ -20,7 +20,7 @@ class DIRECTSampler(Pipeline):
         self,
         structure_encoder="M3GNet",
         scaler="StandardScaler",
-        pca="PrincipleComponentAnalysis",
+        pca="PrincipalComponentAnalysis",
         weighting_PCs=True,
         clustering="Birch",
         select_k_from_clusters="select_k_from_clusters",
@@ -41,7 +41,7 @@ class DIRECTSampler(Pipeline):
         """
         self.structure_encoder = M3GNetStructure() if structure_encoder == "M3GNet" else structure_encoder
         self.scaler = StandardScaler() if scaler == "StandardScaler" else scaler
-        self.pca = PrincipleComponentAnalysis() if pca == "PrincipleComponentAnalysis" else scaler
+        self.pca = PrincipalComponentAnalysis() if pca == "PrincipalComponentAnalysis" else scaler
         self.pca.weighting_PCs = weighting_PCs
         self.weighting_PCs = weighting_PCs
         self.clustering = BirchClustering() if clustering == "Birch" else clustering
