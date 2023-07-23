@@ -55,7 +55,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         """
         allowed_kwargs = ["memory", "verbose", "n_jobs", "feature_batch"]
 
-        for k, _v in kwargs.items():
+        for k in kwargs:
             if k not in allowed_kwargs:
                 raise TypeError(f"{k} not allowed as kwargs")
         memory = kwargs.get("memory", None)

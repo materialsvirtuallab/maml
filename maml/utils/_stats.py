@@ -446,8 +446,8 @@ def get_full_stats_and_funcs(stats: list) -> tuple[list[str], list]:
             args = splits[1:]
             arg_dict = {}
             for name_dict, arg in zip(STATS_KWARGS[stat_name], args):  # type: ignore
-                name = list(name_dict.keys())[0]
-                value_type = list(name_dict.values())[0]
+                name = next(iter(name_dict.keys()))
+                value_type = next(iter(name_dict.values()))
                 try:
                     value = value_type(arg)
                 except ValueError:
