@@ -731,7 +731,7 @@ class NNPotential(LammpsPotential):
                 error_msg = f"n2p2 exited with return code {rc}"
                 msg = stderr.decode("utf-8").split("\n")[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                    error_line = next(i for i, m in enumerate(msg) if m.startswith("ERROR"))
                     error_msg += ", ".join(msg[error_line:])
                 except Exception:
                     error_msg += ", "
@@ -746,7 +746,7 @@ class NNPotential(LammpsPotential):
                 error_msg = f"n2p2 exited with return code {rc}"
                 msg = stderr.decode("utf-8").split("\n")[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                    error_line = next(i for i, m in enumerate(msg) if m.startswith("ERROR"))
                     error_msg += ", ".join(msg[error_line:])
                 except Exception:
                     error_msg += ", "
@@ -821,7 +821,7 @@ class NNPotential(LammpsPotential):
                     error_msg = f"n2p2 exited with return code {rc}"
                     msg = stderr.decode("utf-8").split("\n")[:-1]
                     try:
-                        error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                        error_line = next(i for i, m in enumerate(msg) if m.startswith("ERROR"))
                         error_msg += ", ".join(msg[error_line:])
                     except Exception:
                         error_msg += ", "

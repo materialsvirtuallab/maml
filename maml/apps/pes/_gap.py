@@ -335,7 +335,7 @@ class GAPotential(LammpsPotential):
                 error_msg = f"gap_fit exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                    error_line = next(i for i, m in enumerate(msg) if m.startswith("ERROR"))
                     error_msg += ", ".join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
@@ -347,7 +347,7 @@ class GAPotential(LammpsPotential):
                 potential_label = root.tag
                 element_param = {}
                 for gpcoordinates in list(root.iter("gpCoordinates")):
-                    gp_descriptor = list(gpcoordinates.iter("descriptor"))[0]
+                    gp_descriptor = next(iter(gpcoordinates.iter("descriptor")))
                     gp_descriptor_text = gp_descriptor.findtext(".")
                     Z_pattern = re.compile(" Z=(.*?) ", re.S)
                     element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
@@ -377,7 +377,7 @@ class GAPotential(LammpsPotential):
         element_param = self.param.get("element_param")
         atomic_numbers = []
         for _i, gpcoordinates in enumerate(list(root.iter("gpCoordinates"))):
-            gp_descriptor = list(gpcoordinates.iter("descriptor"))[0]
+            gp_descriptor = next(iter(gpcoordinates.iter("descriptor")))
             gp_descriptor_text = gp_descriptor.findtext(".")
             Z_pattern = re.compile(" Z=(.*?) ", re.S)
             element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))
@@ -489,7 +489,7 @@ class GAPotential(LammpsPotential):
             element_param = {}
 
             for gpcoordinates in list(root.iter("gpCoordinates")):
-                gp_descriptor = list(gpcoordinates.iter("descriptor"))[0]
+                gp_descriptor = next(iter(gpcoordinates.iter("descriptor")))
                 gp_descriptor_text = gp_descriptor.findtext(".")
                 Z_pattern = re.compile(" Z=(.*?) ", re.S)
                 element = str(get_el_sp(int(Z_pattern.findall(gp_descriptor_text)[0])))

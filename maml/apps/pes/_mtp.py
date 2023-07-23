@@ -635,7 +635,7 @@ class MTPotential(LammpsPotential):
                 error_msg = f"MLP exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                    error_line = next(i for i, m in enumerate(msg) if m.startswith("ERROR"))
                     error_msg += ", ".join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
@@ -728,7 +728,7 @@ class MTPotential(LammpsPotential):
                 error_msg = f"mlp exited with return code {rc}"
                 msg = stdout.decode("utf-8").split("\n")[:-1]
                 try:
-                    error_line = [i for i, m in enumerate(msg) if m.startswith("ERROR")][0]
+                    error_line = next(i for i, m in enumerate(msg) if m.startswith("ERROR"))
                     error_msg += ", ".join(msg[error_line:])
                 except Exception:
                     error_msg += msg[-1]
