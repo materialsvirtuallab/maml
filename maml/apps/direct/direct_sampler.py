@@ -17,13 +17,13 @@ class DIRECTSampler(Pipeline):
     """
 
     def __init__(
-        self,
-        structure_encoder=M3GNetStructure(),
-        scaler=StandardScaler(),
-        pca=PrincipleComponentAnalysis(),
-        weighting_PCs=True,
-        clustering=BirchClustering(),
-        select_k_from_clusters=SelectKFromClusters(),
+            self,
+            structure_encoder="M3GNet",
+            scaler="StandardScaler",
+            pca="PrincipleComponentAnalysis",
+            weighting_PCs=True,
+            clustering="Birch",
+            select_k_from_clusters="select_k_from_clusters",
     ):
         """
         Args:
@@ -39,21 +39,21 @@ class DIRECTSampler(Pipeline):
         select_k_from_clusters: Straitified sampling of k structures from
             each cluster.
         """
-        self.structure_encoder = structure_encoder
-        self.scaler = scaler
-        pca.weighting_PCs = weighting_PCs
-        self.pca = pca
+        self.structure_encoder = M3GNetStructure() if structure_encoder == "M3GNet" else structure_encoder
+        self.scaler = StandardScaler() if scaler == "StandardScaler" else scaler
+        self.pca = PrincipleComponentAnalysis() if pca=="PrincipleComponentAnalysis" else scaler
+        self.pca.weighting_PCs = weighting_PCs
         self.weighting_PCs = weighting_PCs
-        self.clustering = clustering
-        self.select_k_from_clusters = select_k_from_clusters
+        self.clustering = BirchClustering() if clustering == "Birch" else clustering
+        self.select_k_from_clusters = SelectKFromClusters() if select_k_from_clusters == "select_k_from_clusters" else select_k_from_clusters
         steps = [
             (i.__class__.__name__, i)
             for i in [
-                structure_encoder,
-                scaler,
-                pca,
-                clustering,
-                select_k_from_clusters,
+                self.structure_encoder,
+                self.scaler,
+                self.pca,
+                self.clustering,
+                self.select_k_from_clusters,
             ]
             if i
         ]
