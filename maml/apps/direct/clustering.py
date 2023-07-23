@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cluster import Birch
 
@@ -23,29 +25,15 @@ class BirchClustering(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, PCAfeatures):
-        model = Birch(
-            n_clusters=self.n, threshold=self.threshold_init, **self.kwargs
-        ).fit(PCAfeatures)
-        while (
-            len(model.subcluster_labels_) < self.n
-        ):  # decrease threshold until desired n clusters is achieved
-            print(
-                f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters."
-            )
-            self.threshold_init = (
-                self.threshold_init / self.n * len(model.subcluster_labels_)
-            )
-            model = Birch(
-                n_clusters=self.n, threshold=self.threshold_init, **self.kwargs
-            ).fit(PCAfeatures)
+        model = Birch(n_clusters=self.n, threshold=self.threshold_init, **self.kwargs).fit(PCAfeatures)
+        while len(model.subcluster_labels_) < self.n:  # decrease threshold until desired n clusters is achieved
+            print(f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters.")
+            self.threshold_init = self.threshold_init / self.n * len(model.subcluster_labels_)
+            model = Birch(n_clusters=self.n, threshold=self.threshold_init, **self.kwargs).fit(PCAfeatures)
         labels = model.predict(PCAfeatures)
         self.model = model
-        print(
-            f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters."
-        )
-        label_centers = {
-            l: c for l, c in zip(model.subcluster_labels_, model.subcluster_centers_)
-        }
+        print(f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters.")
+        label_centers = dict(zip(model.subcluster_labels_, model.subcluster_centers_))
         return {
             "labels": labels,
             "label_centers": label_centers,

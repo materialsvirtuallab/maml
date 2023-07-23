@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.decomposition import PCA
 
@@ -18,9 +20,7 @@ class PrincipleComponentAnalysis(BaseEstimator, TransformerMixin):
     def transform(self, normalized_features):
         m = len([e for e in self.pca.explained_variance_ if e > 1])
         explained_variance = self.pca.explained_variance_ratio_
-        print(
-            f"Selected first {m} PCs, explaining {100 * sum(explained_variance[:m]):.2f}% variance"
-        )
+        print(f"Selected first {m} PCs, explaining {100 * sum(explained_variance[:m]):.2f}% variance")
         if not self.weighting_PCs:
             return self.pca.transform(normalized_features)[:, :m]
         return self.pca.transform(normalized_features)[:, :m] * explained_variance[:m]

@@ -1,11 +1,10 @@
-import numpy as np
-from pymatgen.core import Molecule, Structure
-from sklearn.base import BaseEstimator, TransformerMixin
+from __future__ import annotations
+
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-import warnings
 
 from maml.describers.m3gnet import M3GNetStructure
+
 from .clustering import BirchClustering
 from .pca import PrincipleComponentAnalysis
 from .stratified_sampling import SelectKFromClusters
@@ -14,7 +13,7 @@ from .stratified_sampling import SelectKFromClusters
 class DIRECTSampler(Pipeline):
     """
     DImensionality REduction-Clustering-sTratified (DIRECT)
-    sampling Pipeline
+    sampling Pipeline.
     """
 
     def __init__(
