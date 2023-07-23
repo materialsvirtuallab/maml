@@ -17,13 +17,13 @@ class DIRECTSampler(Pipeline):
     """
 
     def __init__(
-            self,
-            structure_encoder="M3GNet",
-            scaler="StandardScaler",
-            pca="PrincipleComponentAnalysis",
-            weighting_PCs=True,
-            clustering="Birch",
-            select_k_from_clusters="select_k_from_clusters",
+        self,
+        structure_encoder="M3GNet",
+        scaler="StandardScaler",
+        pca="PrincipleComponentAnalysis",
+        weighting_PCs=True,
+        clustering="Birch",
+        select_k_from_clusters="select_k_from_clusters",
     ):
         """
         Args:
@@ -41,11 +41,13 @@ class DIRECTSampler(Pipeline):
         """
         self.structure_encoder = M3GNetStructure() if structure_encoder == "M3GNet" else structure_encoder
         self.scaler = StandardScaler() if scaler == "StandardScaler" else scaler
-        self.pca = PrincipleComponentAnalysis() if pca=="PrincipleComponentAnalysis" else scaler
+        self.pca = PrincipleComponentAnalysis() if pca == "PrincipleComponentAnalysis" else scaler
         self.pca.weighting_PCs = weighting_PCs
         self.weighting_PCs = weighting_PCs
         self.clustering = BirchClustering() if clustering == "Birch" else clustering
-        self.select_k_from_clusters = SelectKFromClusters() if select_k_from_clusters == "select_k_from_clusters" else select_k_from_clusters
+        self.select_k_from_clusters = (
+            SelectKFromClusters() if select_k_from_clusters == "select_k_from_clusters" else select_k_from_clusters
+        )
         steps = [
             (i.__class__.__name__, i)
             for i in [
