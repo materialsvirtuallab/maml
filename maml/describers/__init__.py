@@ -12,7 +12,6 @@ from ._rdf import RadialDistributionFunction
 from ._site import (
     BispectrumCoefficients,
     BPSymmetryFunctions,
-    MEGNetSite,
     SiteElementProperty,
     SmoothOverlapAtomicPosition,
 )
@@ -20,7 +19,6 @@ from ._structure import (
     CoulombEigenSpectrum,
     CoulombMatrix,
     DistinctSiteProperty,
-    MEGNetStructure,
     RandomizedCoulombMatrix,
     SortedCoulombMatrix,
 )
