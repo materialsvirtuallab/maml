@@ -71,7 +71,11 @@ def check_structures_forces_stresses(
         new_latt_matrix, symmop, rot_matrix = get_lammps_lattice_and_rotation(s, (0, 0, 0))
         coords = symmop.operate_multi(s.cart_coords)
         new_s = Structure(
-            Lattice(new_latt_matrix), s.species, coords, site_properties=s.site_properties, coords_are_cartesian=True
+            Lattice(new_latt_matrix),  # type: ignore
+            s.species,  # type: ignore
+            coords,  # type: ignore
+            site_properties=s.site_properties,
+            coords_are_cartesian=True,
         )
         new_structures.append(new_s)
 
