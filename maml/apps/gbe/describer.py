@@ -1,4 +1,4 @@
-"""Module implements the describer for GB entry."""
+"""Module implements the describers for GB entry."""
 from __future__ import annotations
 
 from functools import reduce
@@ -85,7 +85,7 @@ def convert_hcp_plane(plane: list) -> np.ndarray:
 
 class GBDescriber(BaseDescriber):
     """
-    The describer that describes the grain boundary db entry
+    The describers that describes the grain boundary db entry
     with selected structural and elemental features.
     """
 

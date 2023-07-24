@@ -9,7 +9,7 @@ jobs:
       max-parallel: 20
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     runs-on: ${{ matrix.os }}
 
@@ -46,7 +46,7 @@ jobs:
       env:
         PMG_MAPI_KEY: ${{ secrets.PMG_MAPI_KEY }}
       run: |
-        pytest maml --cov=maml
+        pytest tests --cov=maml
     - name: Coveralls Python
       continue-on-error: true
       if: matrix.os == 'ubuntu-latest'

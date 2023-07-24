@@ -441,7 +441,7 @@ class SiteElementProperty(BaseDescriber):
         int_weights = weights.astype(int)  # type: ignore
         if not np.allclose(int_weights, weights):
             raise ValueError(
-                "Number of atoms are not integers and the describer"
+                "Number of atoms are not integers and the describers"
                 " cannot output single feature matrix. Try set "
                 "output_weights = True"
             )

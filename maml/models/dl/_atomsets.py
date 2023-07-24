@@ -250,7 +250,7 @@ class AtomSets(KerasModel):
         if not os.path.isdir(dirname):
             os.mkdir(dirname)
 
-        joblib.dump(self.describer, os.path.join(dirname, "describer.sav"))
+        joblib.dump(self.describer, os.path.join(dirname, "describers.sav"))
 
         def _to_json_type(d):
             if isinstance(d, dict):
@@ -299,7 +299,7 @@ class AtomSets(KerasModel):
         symmetry_kwargs = kwarg_dict.pop("symmetry_func_kwargs")
         kwarg_dict.update(**symmetry_kwargs)
 
-        describer = joblib.load(os.path.join(dirname, "describer.sav"))
+        describer = joblib.load(os.path.join(dirname, "describers.sav"))
         instance = cls(describer=describer, **kwarg_dict)
         instance.model.load_weights(os.path.join(dirname, "model_weights.hdf5"))
         return instance
