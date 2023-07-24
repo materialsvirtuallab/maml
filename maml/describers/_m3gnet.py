@@ -13,7 +13,7 @@ from maml.base import BaseDescriber
 if TYPE_CHECKING:
     from pymatgen.core import Molecule, Structure
 
-DEFAULT_MODEL = Path(__file__).parent / "../data/m3gnet_models/matbench_mp_e_form/0/m3gnet/"
+DEFAULT_MODEL = Path(__file__).parent / "data/m3gnet_models/matbench_mp_e_form/0/m3gnet/"
 
 
 class M3GNetStructure(BaseDescriber):
