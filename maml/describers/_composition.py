@@ -10,8 +10,9 @@ from pymatgen.core import Composition, Element, Species, Structure
 from sklearn.decomposition import PCA, KernelPCA
 
 from maml.base import BaseDescriber, describer_type
-from maml.describers.matminer_wrapper import wrap_matminer_describer
 from maml.utils import Stats, get_full_stats_and_funcs, to_composition
+
+from ._matminer_wrapper import wrap_matminer_describer
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 
@@ -150,8 +151,8 @@ class ElementStats(BaseDescriber):
 
     @classmethod
     def from_file(cls, filename: str, stats: list[str] | None = None, **kwargs) -> ElementStats:
-        """
-        ElementStats from a json file of element property dictionary.
+        """ElementStats from a json file of element property dictionary.
+
         The keys required are:
 
             element_properties
@@ -164,6 +165,7 @@ class ElementStats(BaseDescriber):
                 Keyword args, use ':' to separate the args. For example,
                 'moment:0:None' will calculate moment stats with order=0,
                 and max_order=None.
+            **kwargs: Passthrough to class init.
 
         Returns: ElementStats class
         """
@@ -189,14 +191,11 @@ class ElementStats(BaseDescriber):
         Args:
             data_name (str of list of str): data name. Current supported data are
                 available from ElementStats.AVAILABLE_DATA
-
             stats (list): list of stats, use ElementStats.ALLOWED_STATS to
                 check available stats
-
-            **kwargs:
+            **kwargs: Passthrough to class init.
 
         Returns: ElementStats instance
-
         """
         if isinstance(data_name, str):
             if data_name not in ElementStats.AVAILABLE_DATA:
