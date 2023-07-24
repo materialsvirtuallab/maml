@@ -9,7 +9,7 @@ try:
 except ImportError:
     MEGNetModel = None
 
-from maml.describers.megnet import MEGNetSite, MEGNetStructure
+from maml.describers import MEGNetSite, MEGNetStructure
 
 
 @unittest.skipIf(MEGNetModel is None, "MEGNet package is required")

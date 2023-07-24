@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from pymatgen.util.testing import PymatgenTest
 
-from maml.describers.rdf import RadialDistributionFunction
+from maml.describers import RadialDistributionFunction
 
 
 class TestRDF(PymatgenTest):

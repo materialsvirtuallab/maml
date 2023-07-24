@@ -12,7 +12,7 @@ from sklearn.decomposition import PCA, KernelPCA
 from maml.base import BaseDescriber, describer_type
 from maml.utils import Stats, get_full_stats_and_funcs, to_composition
 
-from ._matminer_wrapper import wrap_matminer_describer
+from ._matminer import wrap_matminer_describer
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 

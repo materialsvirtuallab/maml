@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from maml.describers.matminer_wrapper import wrap_matminer_describer
+from maml.describers import wrap_matminer_describer
 from maml.utils import to_composition
 
 try:

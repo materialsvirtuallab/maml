@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from ._composition import ElementProperty, ElementStats
 from ._m3gnet import M3GNetStructure
-from ._matminer_wrapper import wrap_matminer_describer
+from ._matminer import wrap_matminer_describer
 from ._megnet import MEGNetSite, MEGNetStructure
 from ._rdf import RadialDistributionFunction
 from ._site import BispectrumCoefficients, BPSymmetryFunctions, SiteElementProperty, SmoothOverlapAtomicPosition
