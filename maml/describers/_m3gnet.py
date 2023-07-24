@@ -4,9 +4,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import numpy as np
-from m3gnet.graph import Index, tf_compute_distance_angle
-from m3gnet.layers import polynomial
-from m3gnet.models import M3GNet
 
 from maml.base import BaseDescriber
 
@@ -30,6 +27,7 @@ class M3GNetStructure(BaseDescriber):
             Please refer to the M3GNet paper:
             https://doi.org/10.1038/s43588-022-00349-3.
         """
+        from m3gnet.models import M3GNet
         if model_path:
             self.describer_model = M3GNet.from_dir(model_path)
         else:
@@ -45,6 +43,8 @@ class M3GNetStructure(BaseDescriber):
         Returns: np.array features.
 
         """
+        from m3gnet.graph import Index, tf_compute_distance_angle
+        from m3gnet.layers import polynomial
         graph = self.describer_model.graph_converter.convert(structure).as_list()
         graph = tf_compute_distance_angle(graph)
         three_basis = self.describer_model.basis_expansion(graph)

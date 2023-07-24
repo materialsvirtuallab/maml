@@ -12,7 +12,7 @@ from maml.utils import get_full_stats_and_funcs
 if TYPE_CHECKING:
     from pymatgen.core import Molecule, Structure
 
-DEFAULT_MODEL = Path(__file__).parent / "../data/megnet_models/formation_energy.hdf5"
+DEFAULT_MODEL = Path(__file__).parent / "data/megnet_models/formation_energy.hdf5"
 
 
 def _load_model(name: str | object | None = None):
