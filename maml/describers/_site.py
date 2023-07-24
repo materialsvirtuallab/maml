@@ -15,8 +15,9 @@ from pymatgen.core import Composition, Element, Molecule, Structure
 from pymatgen.core.periodic_table import get_el_sp
 
 from maml.base import BaseDescriber, describer_type
-from maml.describers.megnet import MEGNetSite
 from maml.utils import pool_from, to_composition
+
+from ._megnet import MEGNetSite
 
 __all__ = [
     "MEGNetSite",
