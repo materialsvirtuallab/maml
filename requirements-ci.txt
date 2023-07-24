@@ -5,3 +5,4 @@ mypy
 pydocstyle
 black
 ruff
+m3gnet
