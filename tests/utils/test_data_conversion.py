@@ -13,7 +13,7 @@ from monty.serialization import loadfn
 from maml.utils._data_conversion import convert_docs, pool_from
 
 CWD = os.getcwd()
-test_datapool = loadfn(os.path.join(os.path.dirname(__file__), "../../apps/pes/tests/datapool.json"))
+test_datapool = loadfn(os.path.join(os.path.dirname(__file__), "../apps/pes/datapool.json"))
 
 
 class PorcessingTest(unittest.TestCase):
