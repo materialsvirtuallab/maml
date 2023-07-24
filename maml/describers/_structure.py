@@ -9,7 +9,8 @@ import pandas as pd
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from maml.base import BaseDescriber, describer_type
-from maml.describers.megnet import MEGNetStructure
+
+from ._megnet import MEGNetStructure
 
 if TYPE_CHECKING:
     from pymatgen.core import Molecule, Structure
@@ -261,6 +262,7 @@ class RandomizedCoulombMatrix(CoulombMatrix):
         """
         Args:
             random_seed (int): random seed
+            is_ravel (bool): Passthrough to is_ravel for CoulombMatrix. Defaults to True.
             **kwargs: keyword args to specify memory, verbose, and n_jobs.
         """
         super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
@@ -326,6 +328,7 @@ class SortedCoulombMatrix(CoulombMatrix):
         """
         Args:
             random_seed (int): random seed
+            is_ravel (bool): Passthrough to is_ravel for CoulombMatrix. Defaults to True.
             **kwargs: keyword args to specify memory, verbose, and n_jobs.
         """
         super().__init__(random_seed=random_seed, is_ravel=is_ravel, **kwargs)
@@ -387,7 +390,7 @@ class CoulombEigenSpectrum(BaseDescriber):
 
         Args:
             max_atoms (int): maximum number of atoms
-            **kwargs:
+            **kwargs: Passthrough to parent class __init__.
         """
         feature_batch = "stack_padded" if max_atoms is None else "stack_first_dim"
         self.max_atoms = max_atoms
