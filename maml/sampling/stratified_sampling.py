@@ -1,3 +1,4 @@
+"""Implementation of stratefied sampling approaches."""
 from __future__ import annotations
 
 import warnings
@@ -7,6 +8,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 
 class SelectKFromClusters(BaseEstimator, TransformerMixin):
+    """Wrapper around selection of K data from each cluster."""
+
     def __init__(self, k: int = 1, allow_duplicate=False):
         """
         Args:
@@ -18,14 +21,27 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
         self.allow_duplicate = allow_duplicate
 
     def fit(self, X, y=None):
+        """
+        Fit the model.
+
+        Args:
+            X: Input features
+            y: Target.
+        """
         return self
 
     def transform(self, clustering_data: dict):
-        if any(key not in clustering_data.keys() for key in ["labels", "PCAfeatures"]):
+        """
+        Perform clustering.
+
+        Args:
+            clustering_data: Data to cluster.
+        """
+        if any(key not in clustering_data for key in ["labels", "PCAfeatures"]):
             raise Exception(
                 "The data returned by clustering step should at least provide label and feature information."
             )
-        if "label_centers" not in clustering_data.keys():
+        if "label_centers" not in clustering_data:
             warnings.warn(
                 "Centroid location is not provided, so random selection from each cluster will be performed, "
                 "which will likely still significantly outperform manual sampling in terms of feature coverage. "
