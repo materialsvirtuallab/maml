@@ -4,8 +4,8 @@
     :target: https://github.com/materialsvirtuallab/maml
 .. image:: https://github.com/materialsvirtuallab/maml/workflows/Linting/badge.svg
     :target: https://github.com/materialsvirtuallab/maml
-.. image:: https://coveralls.io/repos/github/materialsvirtuallab/maml/badge.svg?branch=master&service=github
-    :target: https://coveralls.io/github/materialsvirtuallab/maml?branch=master
+.. image:: https://codecov.io/gh/materialsvirtuallab/maml/branch/master/graph/badge.svg?token=QNL1CRLVVL
+    :target: https://codecov.io/gh/materialsvirtuallab/maml
 .. image:: https://static.pepy.tech/badge/maml
     :target: https://static.pepy.tech/badge/maml
 
