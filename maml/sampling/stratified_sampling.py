@@ -21,11 +21,11 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, clustering_data: dict):
-        if any(key not in clustering_data.keys() for key in ["labels", "PCAfeatures"]):
+        if any(key not in clustering_data for key in ["labels", "PCAfeatures"]):
             raise Exception(
                 "The data returned by clustering step should at least provide label and feature information."
             )
-        if "label_centers" not in clustering_data.keys():
+        if "label_centers" not in clustering_data:
             warnings.warn(
                 "Centroid location is not provided, so random selection from each cluster will be performed, "
                 "which will likely still significantly outperform manual sampling in terms of feature coverage. "

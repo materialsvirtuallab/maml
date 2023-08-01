@@ -10,10 +10,10 @@ from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from maml.base import BaseDescriber, describer_type
 
-from ._megnet import MEGNetStructure
-
 if TYPE_CHECKING:
     from pymatgen.core import Molecule, Structure
+
+    from ._megnet import MEGNetStructure
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
