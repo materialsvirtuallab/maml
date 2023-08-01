@@ -17,7 +17,7 @@ for materials science as easy as possible.
 
 The goal of maml is not to duplicate functionality already available in other packages. maml relies on well-established
 packages such as scikit-learn and tensorflow for implementations of ML algorithms, as well as other materials science
-packages such as `pymatgen <http://pymatgen.org>`_ and `matminer <http://hackingmaterials.lbl.gov/matminer/>`_ for
+packages such as [pymatgen](http://pymatgen.org) and [matminer](http://hackingmaterials.lbl.gov/matminer/) for
 crystal/molecule manipulation and feature generation.
 
 Official documentation at https://materialsvirtuallab.github.io/maml/
@@ -81,24 +81,12 @@ pip install -r requirements.txt
 
 # Usage
 
-Many Jupyter notebooks are available on usage. See `notebooks </notebooks>`_. We also have a tool and tutorial lecture
-at nanoHUB `https://nanohub.org/resources/maml <https://nanohub.org/resources/maml>`_.
+Many Jupyter notebooks are available on usage. See [notebooks](/notebooks). We also have a tool and tutorial lecture
+at [nanoHUB](https://nanohub.org/resources/maml).
 
 # API documentation
 
-See `API docs <https://guide.materialsvirtuallab.org/maml/modules.html>`_.
-
-Machine learning (ML) is the study of computer algorithms that improve automatically through experience.[1][2] It is
-seen as a subset of artificial intelligence. Machine learning algorithms build a mathematical model based on sample
-data, known as "training data", in order to make predictions or decisions without being explicitly programmed to do
-so.[3] Machine learning algorithms are used in a wide variety of applications, such as email filtering and computer
-vision, where it is difficult or infeasible to develop conventional algorithms to perform the needed tasks.
-
-Machine learning is closely related to computational statistics, which focuses on making predictions using computers.
-The study of mathematical optimization delivers methods, theory and application domains to the field of machine
-learning. Data mining is a related field of study, focusing on exploratory data analysis through unsupervised
-learning.[5][6] In its application across business problems, machine learning is also referred to as predictive
-analytics.
+See [API docs](https://materialsvirtuallab.github.io/maml/maml.html).
 
 # Citing
 
@@ -129,7 +117,7 @@ Zuo, Y.; Qin, M.; Chen, C.; Ye, W.; Li, X.; Luo, J.; Ong, S. P. Accelerating Mat
 Optimization and Graph Deep Learning. Materials Today 2021, 51, 126–135.
 https://doi.org/10.1016/j.mattod.2021.08.012.
 ```
-    
+
 For the AtomSets model (`maml.models.AtomSets`), please cite::
 
 ```txt
