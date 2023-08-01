@@ -24,35 +24,40 @@ def make_doc(ctx):
     :param ctx:
     """
 
-    # ctx.run("cp README.rst api-docs-source/index.rst")
-    ctx.run("cp CHANGES.rst api-docs-source/changelog.rst")
-
-    with cd("api-docs-source"):
-        ctx.run("rm maml.*.rst", warn=True)
-        ctx.run("sphinx-apidoc --separate -P -d 7 -o . -f ../maml")
-        ctx.run("rm maml*.tests.*rst", warn=True)
-        for f in glob.glob("maml*.rst"):
-            newoutput = []
-            with open(f) as fid:
-                for line in fid:
-                    if re.search(r"maml.*\._.*", line):
-                        continue
-                    else:
-                        newoutput.append(line)
-
-            with open(f, "w") as fid:
-                fid.write("".join(newoutput))
-        ctx.run("rm maml*._*.rst")
-
-    ctx.run("rm -r docs", warn=True)
-
-    ctx.run("sphinx-build -b html api-docs-source docs")
-
     with cd("docs"):
-        ctx.run("rm -r .doctrees", warn=True)
+        ctx.run("rm maml.*.rst", warn=True)
+        ctx.run("touch index.rst", warn=True)
+        ctx.run("sphinx-apidoc -P -M -d 6 -o . -f ../maml")
+        ctx.run("rm maml*.tests.*rst", warn=True)
+        ctx.run("sphinx-build -M markdown . .")
+        ctx.run("rm *.rst", warn=True)
+        ctx.run("cp markdown/maml*.md .")
+        for fn in glob.glob("maml*.md"):
+            with open(fn) as f:
+                lines = [line.rstrip() for line in f if "Submodules" not in line]
+            if fn == "maml.md":
+                preamble = ["---", "layout: default", "title: API Documentation", "nav_order: 5", "---", ""]
+            else:
+                preamble = ["---", "layout: default", "title: " + fn, "nav_exclude: true", "---", ""]
+            with open(fn, "w") as f:
+                f.write("\n".join(preamble + lines))
 
-        # Avoid the use of jekyll so that _dir works as intended.
-        ctx.run("touch .nojekyll")
+        ctx.run("rm -r markdown", warn=True)
+        ctx.run("cp ../*.md .")
+        ctx.run("mv README.md index.md")
+        ctx.run("rm -rf *.orig doctrees", warn=True)
+
+        with open("index.md") as f:
+            contents = f.read()
+        with open("index.md", "w") as f:
+            contents = re.sub(
+                r"\n## Official Documentation[^#]*",
+                "{: .no_toc }\n\n## Table of contents\n{: .no_toc .text-delta }\n* TOC\n{:toc}\n\n",
+                contents
+            )
+            contents = "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
+
+            f.write(contents)
 
 
 @task
