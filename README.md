@@ -80,7 +80,7 @@ at [nanoHUB](https://nanohub.org/resources/maml).
 
 # API documentation
 
-See [API docs](https://guide.materialsvirtuallab.org/maml/modules.html).
+See [API docs](https://materialsvirtuallab.github.io/maml/maml.html).
 
 # Citing
 
