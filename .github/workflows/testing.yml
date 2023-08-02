@@ -47,7 +47,8 @@ jobs:
         PMG_MAPI_KEY: ${{ secrets.PMG_MAPI_KEY }}
       run: |
         pytest tests --cov=maml
-    - name: Coveralls Python
-      continue-on-error: true
+    - name: Upload coverage reports to Codecov
       if: matrix.os == 'ubuntu-latest'
-      uses: AndreMiras/coveralls-python-action@v20201129
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

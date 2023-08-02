@@ -1,0 +1,23 @@
+title: MAML
+email: ongsp@ucsd.edu
+description: >- # this means to ignore newlines until "baseurl:"
+  Materials Machine Learning Package.
+#baseurl: ""
+#url: "https://materialsvirtuallab.github.io/maml"
+# twitter_username: jekyllrb
+github_username:  materialsvirtuallab
+
+# Build settings
+remote_theme: just-the-docs/just-the-docs
+plugins:
+  - jekyll-feed
+
+# favicon_ico: "/assets/favicon.ico"
+
+nav_external_links:
+  - title: "MatGL on GitHub"
+    url: "https://github.com/materialsvirtuallab/maml"
+
+aux_links:
+  "Materials Virtual Lab":
+    - "https://materialsvirtuallab.org"

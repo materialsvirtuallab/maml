@@ -8,7 +8,9 @@
 *.pyd
 dist
 _build
+_site
 build
+Gemfile.lock
 .project
 .pydevproject
 .settings

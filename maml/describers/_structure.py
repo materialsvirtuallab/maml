@@ -13,8 +13,6 @@ from maml.base import BaseDescriber, describer_type
 if TYPE_CHECKING:
     from pymatgen.core import Molecule, Structure
 
-    from ._megnet import MEGNetStructure
-
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -22,7 +20,6 @@ logger.setLevel(logging.INFO)
 
 __all__ = [
     "DistinctSiteProperty",
-    "MEGNetStructure",
     "CoulombMatrix",
     "RandomizedCoulombMatrix",
     "SortedCoulombMatrix",

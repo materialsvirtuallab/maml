@@ -107,7 +107,7 @@ class LMPStaticCalculator:
         Perform the calculation on a series of structures.
 
         Args:
-            structures [Structure]: Input structures in a list.
+            structures: Input structures in a list.
 
         Returns:
             List of computed data corresponding to each structure,
@@ -150,7 +150,8 @@ class LMPStaticCalculator:
 
     def set_lmp_exe(self, lmp_exe: str) -> None:
         """
-        Set lammps executable for the instance
+        Set lammps executable for the instance.
+
         Args:
             lmp_exe (str): lammps executable path
         Returns:
@@ -167,6 +168,7 @@ class EnergyForceStress(LMPStaticCalculator):
             ff_settings (list/Potential): Configure the force field settings for LAMMPS
                 calculation, if given a Potential object, should apply
                 Potential.write_param method to get the force field setting.
+            **kwargs: Passthrough to init.
         """
         self.ff_settings = ff_settings
         super().__init__(**kwargs)
@@ -280,7 +282,7 @@ class SpectralNeighborAnalysis(LMPStaticCalculator):
                  'Cl': {'r': 4.8, 'w': 3.0}}
             quadratic (bool): Whether including quadratic terms.
                 Default to False.
-
+            **kwargs: Passthrough to init.
         """
         self.rcutfac = rcutfac
         self.twojmax = twojmax
@@ -387,7 +389,7 @@ class ElasticConstant(LMPStaticCalculator):
             maxeval (float): The maximum number of evaluation. Default to 1000.
             full_matrix (bool): If False, only c11, c12, c44 and bulk modulus are returned.
                 If True, 6 x 6 elastic matrices in the Voigt notation are returned.
-
+            **kwargs: Passthrough to init.
         """
         self.ff_settings = ff_settings
         self.write_command = self._RESTART_CONFIG[potential_type]["write_command"]
@@ -461,6 +463,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             lattice (str): The lattice type of structure. e.g. bcc or diamond.
             alat (float): The lattice constant of specific lattice and specie.
             num_replicas (int): Number of replicas to use.
+            **kwargs: Passthrough to init.
         """
         self.ff_settings = ff_settings
         self.specie = specie
@@ -586,8 +589,6 @@ class NudgedElasticBand(LMPStaticCalculator):
                 idx = final_relaxed_struct.num_sites
             elif idx == start_idx:
                 idx = final_idx
-            else:
-                idx = idx
             lines.append(f"{idx + 1}  {site.x:.3f}  {site.y:.3f}  {site.z:.3f}")
 
         with open("data.final_replica", "w") as f:
@@ -660,6 +661,7 @@ class DefectFormation(LMPStaticCalculator):
             specie (str): Name of specie.
             lattice (str): The lattice type of structure. e.g. bcc or diamond.
             alat (float): The lattice constant of specific lattice and specie.
+            **kwargs: Passthrough to init.
         """
         self.ff_settings = ff_settings
         self.specie = specie
@@ -800,6 +802,7 @@ class LMPRelaxationCalculator(LMPStaticCalculator):
             ftol (float): The stopping tolerance for force during the minimization.
             maxiter (int): The max iterations of minimizer.
             maxeval (int): The max number of force/energy evaluations.
+            **kwargs: Passthrough to init.
         """
         self.ff_settings = ff_settings
         self.box_relax = box_relax
@@ -862,10 +865,10 @@ class LatticeConstant(LMPRelaxationCalculator):
 
     def calculate(self, structures):
         """
-        Calculate the relaxed lattice parameters of a list of structures:
+        Calculate the relaxed lattice parameters of a list of structures.
 
         Args:
-            structures [Structure]: Input structures in a list.
+            structures ([Structure]): Input structures in a list.
 
         Returns:
             List of relaxed lattice constants (a, b, c in Å) of the input structures.
@@ -903,6 +906,8 @@ class SurfaceEnergy(LMPRelaxationCalculator):
         **kwargs,
     ):
         """
+        Init.
+
         Args:
             ff_settings (list/Potential): Configure the force field settings for
                 LAMMPS calculation, if given a Potential object, should apply
@@ -916,18 +921,19 @@ class SurfaceEnergy(LMPRelaxationCalculator):
                 the SlabGenerator in pymatgen.
             min_slab_size (float): Minimum size in angstroms of layers containing atoms.
             min_vacuum_size (float): Minimize size in angstroms of layers containing vacuum.
-            lll_reduce (bool): Whether or not the slabs will be orthogonalized.
-            center_slab (bool): Whether or not the slabs will be centered between the vacuum layer.
+            lll_reduce (bool): Whether the slabs will be orthogonalized.
+            center_slab (bool): Whether the slabs will be centered between the vacuum layer.
             in_unit_planes (bool): Whether to set min_slab_size and min_vac_size in units
                 of hkl planes (True) or Angstrom (False/default).
             primitive (bool): Whether to reduce any generated slabs to a primitive cell.
             max_normal_search (int): If set to a positive integer, the code will conduct a search
                 for a normal lattice vector that is as perpendicular to the surface as possible by
                 considering multiples linear combinations of lattice vectors up to max_normal_search.
-            reorient_lattice (bool): Whether or not to reorient the lattice parameters such that
+            reorient_lattice (bool): Whether to reorient the lattice parameters such that
                 the c direction is the third vector of the lattice matrix.
             box_relax (bool): Whether to allow the box size and shape of the slab structures to vary
                 during the minimization. Normally, this should be turned off.
+            **kwargs: Passthrough to init.
         """
         super().__init__(ff_settings=ff_settings, box_relax=True, **kwargs)
         bulk_structure_relaxed, bulk_energy, _, _ = super().calculate([bulk_structure])[0]
