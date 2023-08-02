@@ -5,6 +5,7 @@ import itertools
 import logging
 import re
 import subprocess
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
@@ -17,7 +18,8 @@ from pymatgen.core.periodic_table import get_el_sp
 from maml.base import BaseDescriber, describer_type
 from maml.utils import pool_from, to_composition
 
-from ._megnet import MEGNetSite
+if TYPE_CHECKING:
+    from ._megnet import MEGNetSite
 
 __all__ = [
     "MEGNetSite",
