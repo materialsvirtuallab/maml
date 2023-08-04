@@ -13,7 +13,6 @@ from maml.base import BaseDescriber, describer_type
 if TYPE_CHECKING:
     from pymatgen.core import Molecule, Structure
 
-
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
