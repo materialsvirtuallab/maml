@@ -13,6 +13,7 @@ feature_file_path = os.path.join(
 )
 with open(feature_file_path, "rb") as f:
     MPF_2021_2_8_first10_features_test = pickle.load(f)
+
 label_centers_file_path = os.path.join(
     os.path.dirname(__file__),
     "data",
