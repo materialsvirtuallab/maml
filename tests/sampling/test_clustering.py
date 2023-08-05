@@ -1,18 +1,19 @@
 from __future__ import annotations
 
+import numpy as np
 import os
 import pickle
 import unittest
 
 from maml.sampling.clustering import BirchClustering
 
-feature_file_path = os.path.join(
+PC_weighted_file_path = os.path.join(
     os.path.dirname(__file__),
     "data",
-    "M3GNet_features_MPF_2021_2_8_first10_features_test.pickle",
+    "MPF_2021_2_8_first10_test_PC_weighted.pickle",
 )
-with open(feature_file_path, "rb") as f:
-    MPF_2021_2_8_first10_features_test = pickle.load(f)
+with open(PC_weighted_file_path, "rb") as f:
+    PC_weighted = pickle.load(f)
 
 label_centers_file_path = os.path.join(
     os.path.dirname(__file__),
@@ -28,19 +29,15 @@ class BirchClusteringTest(unittest.TestCase):
         self.Birch = BirchClustering(n=2, threshold_init=0.01)
 
     def test_fit(self):
-        assert self.Birch == self.Birch.fit(
-            MPF_2021_2_8_first10_features_test["M3GNet_features"]
-        )
+        assert self.Birch == self.Birch.fit(PC_weighted)
 
     def test_transform(self):
-        clustering_results = self.Birch.transform(
-            MPF_2021_2_8_first10_features_test["M3GNet_features"]
-        )
+        clustering_results = self.Birch.transform(PC_weighted)
         assert "labels" in clustering_results.keys()
         assert "label_centers" in clustering_results.keys()
         assert "PCAfeatures" in clustering_results.keys()
         assert (
-            clustering_results["labels"] == np.array([1, 1, 1, 1, 1, 1, 0, 0, 0, 1])
+            clustering_results["labels"] == np.array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0])
         ).all()
         assert all(
             (
@@ -48,10 +45,7 @@ class BirchClusteringTest(unittest.TestCase):
                 for k, v in MPF_2021_2_8_first10_label_centers.items()
             )
         )
-        assert (
-            MPF_2021_2_8_first10_features_test["M3GNet_features"]
-            == clustering_results["PCAfeatures"]
-        ).all()
+        assert (PC_weighted == clustering_results["PCAfeatures"]).all()
 
 
 if __name__ == "__main__":
