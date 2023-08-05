@@ -3,7 +3,7 @@ from __future__ import annotations
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from maml.describers.m3gnet import M3GNetStructure
+from maml.describers import M3GNetStructure
 
 from .clustering import BirchClustering
 from .pca import PrincipalComponentAnalysis
