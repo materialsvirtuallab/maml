@@ -6,8 +6,6 @@ import unittest
 
 from maml.sampling.pca import PrincipalComponentAnalysis
 
-PC_weighted_file_path = "/Users/qiji/repos/maml/tests/sampling/data/MPF_2021_2_8_first10_test_PC_weighted.pickle"
-PC_unweighted_file_path = "/Users/qiji/repos/maml/tests/sampling/data/MPF_2021_2_8_first10_test_PC_unweighted.pickle"
 feature_file_path = os.path.join(
     os.path.dirname(__file__),
     "data",
