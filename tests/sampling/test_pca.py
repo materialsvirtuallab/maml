@@ -16,19 +16,13 @@ class TestPrincipalComponentAnalysis:
             MPF_2021_2_8_first10_features_test["M3GNet_features_normalized"]
         )
 
-    def test_transform(
-        self, MPF_2021_2_8_first10_features_test, PC_unweighted, PC_weighted
-    ):
+    def test_transform(self, MPF_2021_2_8_first10_features_test, PC_unweighted, PC_weighted):
         assert (
-            self.pca_weightedPC.fit_transform(
-                MPF_2021_2_8_first10_features_test["M3GNet_features_normalized"]
-            )
+            self.pca_weightedPC.fit_transform(MPF_2021_2_8_first10_features_test["M3GNet_features_normalized"])
             == PC_weighted
         ).all
         assert (
-            self.pca_unweightedPC.fit_transform(
-                MPF_2021_2_8_first10_features_test["M3GNet_features_normalized"]
-            )
+            self.pca_unweightedPC.fit_transform(MPF_2021_2_8_first10_features_test["M3GNet_features_normalized"])
             == PC_unweighted
         ).all
 
