@@ -15,7 +15,7 @@ with open(feature_file_path, "rb") as f:
     MPF_2021_2_8_first10_features_test = pickle.load(f)
 
 
-class DIRECTSamplerTest(unittest.TestCase):
+class TestDIRECTSampler(unittest.TestCase):
     def setUp(self):
         self.direct = DIRECTSampler(structure_encoder=None)
 

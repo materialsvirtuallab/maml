@@ -24,7 +24,7 @@ with open(Birch_result_file_path, "rb") as f:
     Birch_results = pickle.load(f)
 
 
-class BirchClusteringTest(unittest.TestCase):
+class TestBirchClustering(unittest.TestCase):
     def setUp(self):
         self.Birch = BirchClustering(n=2, threshold_init=0.01)
 

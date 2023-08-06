@@ -31,7 +31,7 @@ with open(PC_unweighted_file_path, "rb") as f:
     PC_unweighted = pickle.load(f)
 
 
-class PrincipalComponentAnalysisTest(unittest.TestCase):
+class TestPrincipalComponentAnalysis(unittest.TestCase):
     def setUp(self):
         self.pca_weightedPC = PrincipalComponentAnalysis(weighting_PCs=True)
         self.pca_unweightedPC = PrincipalComponentAnalysis(weighting_PCs=False)

@@ -15,7 +15,7 @@ with open(Birch_result_file_path, "rb") as f:
     Birch_results = pickle.load(f)
 
 
-class SelectKFromClustersTest(unittest.TestCase):
+class TestSelectKFromClusters(unittest.TestCase):
     def setUp(self):
         self.selector_uni = SelectKFromClusters(k=2, allow_duplicate=False)
         self.selector_dup = SelectKFromClusters(k=2, allow_duplicate=True)
