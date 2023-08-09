@@ -89,7 +89,7 @@ class MultiScratchDir:
                 [os.symlink(tempdir, f"{MultiScratchDir.SCR_LINK}_{i}") for i, tempdir in enumerate(tempdirs)]
         return tempdirs
 
-    def __exit__(self, exc_type: object, exc_val: str, exc_tb: str):
+    def __exit__(self, exc_type: object, exc_val: object, exc_tb: object):
         if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
                 # First copy files over
