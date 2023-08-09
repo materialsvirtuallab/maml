@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import os
 import subprocess
+from shutil import which
 from typing import TYPE_CHECKING
 
-from monty.os.path import which
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
 from pymatgen.entries.compatibility import MaterialsProjectCompatibility
@@ -52,7 +52,9 @@ class DFT(EnergyModel):
         static = MPStaticSet(structure)
         with ScratchDir("."):
             static.write_input(".")
-            with subprocess.Popen([self.vasp_exe], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p_exe:
+            with subprocess.Popen(
+                [self.vasp_exe], stdout=subprocess.PIPE, stderr=subprocess.PIPE  # type: ignore
+            ) as p_exe:
                 stdout, stderr = p_exe.communicate()
                 rc = p_exe.returncode
             if rc != 0:

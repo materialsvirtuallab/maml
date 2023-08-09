@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 import numpy as np
-from monty.os.path import which
+from shutil import which
 from pymatgen.core import Lattice, Structure
 from sklearn.linear_model import LinearRegression
 

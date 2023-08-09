@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 import numpy as np
-from monty.os.path import which
+from shutil import which
 from monty.serialization import loadfn
 from pymatgen.core import Structure
 

@@ -5,11 +5,11 @@ import itertools
 import logging
 import re
 import subprocess
+from shutil import which
 
 import numpy as np
 import pandas as pd
 from monty.io import zopen
-from monty.os.path import which
 from monty.tempfile import ScratchDir
 from pymatgen.core import Composition, Element, Molecule, Structure
 from pymatgen.core.periodic_table import get_el_sp
