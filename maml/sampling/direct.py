@@ -13,7 +13,8 @@ from .stratified_sampling import SelectKFromClusters
 class DIRECTSampler(Pipeline):
     """
     DImensionality REduction-Clustering-sTratified (DIRECT)
-    sampling Pipeline.
+    sampling Pipeline. For more details, please refer to our
+    manuscript: https://arxiv.org/abs/2307.13710.
     """
 
     def __init__(
@@ -39,14 +40,22 @@ class DIRECTSampler(Pipeline):
         select_k_from_clusters: Straitified sampling of k structures from
             each cluster.
         """
-        self.structure_encoder = M3GNetStructure() if structure_encoder == "M3GNet" else structure_encoder
+        self.structure_encoder = (
+            M3GNetStructure() if structure_encoder == "M3GNet" else structure_encoder
+        )
         self.scaler = StandardScaler() if scaler == "StandardScaler" else scaler
-        self.pca = PrincipalComponentAnalysis() if pca == "PrincipalComponentAnalysis" else scaler
+        self.pca = (
+            PrincipalComponentAnalysis()
+            if pca == "PrincipalComponentAnalysis"
+            else scaler
+        )
         self.pca.weighting_PCs = weighting_PCs
         self.weighting_PCs = weighting_PCs
         self.clustering = BirchClustering() if clustering == "Birch" else clustering
         self.select_k_from_clusters = (
-            SelectKFromClusters() if select_k_from_clusters == "select_k_from_clusters" else select_k_from_clusters
+            SelectKFromClusters()
+            if select_k_from_clusters == "select_k_from_clusters"
+            else select_k_from_clusters
         )
         steps = [
             (i.__class__.__name__, i)
