@@ -52,9 +52,7 @@ class PrincipalComponentAnalysis(BaseEstimator, TransformerMixin):
         """
         m = len([e for e in self.pca.explained_variance_ if e > 1])
         explained_variance = self.pca.explained_variance_ratio_
-        logger.info(
-            f"Selected first {m} PCs, explaining {100 * sum(explained_variance[:m]):.2f}% variance"
-        )
+        logger.info(f"Selected first {m} PCs, explaining {100 * sum(explained_variance[:m]):.2f}% variance")
         if not self.weighting_PCs:
             return self.pca.transform(normalized_features)[:, :m]
         return self.pca.transform(normalized_features)[:, :m] * explained_variance[:m]
