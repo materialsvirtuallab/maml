@@ -1,14 +1,19 @@
 """Implementation of stratefied sampling approaches."""
 from __future__ import annotations
 
+import logging
 import warnings
 
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 class SelectKFromClusters(BaseEstimator, TransformerMixin):
-    """Wrapper around selection of K data from each cluster."""
+    """Wrapper around selection of k data from each cluster."""
 
     def __init__(self, k: int = 1, allow_duplicate=False):
         """
@@ -32,10 +37,21 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
 
     def transform(self, clustering_data: dict):
         """
-        Perform clustering.
+        Perform stratified sampling of data from each cluster
+        based on clustering results.
 
         Args:
-            clustering_data: Data to cluster.
+            clustering_data: Results from clustering in a dict. The dict
+                should at least contain "PCAfeatures" and their respective
+                "labels" of belonged clusters. The positions of centroid
+                for each cluster should also be provided with "label_centers",
+                with which data in each cluster can be ranked according to
+                their Euclidean distance to centroid and then selected by
+                interval for optimal coverage.
+
+        Returns:
+            A dict with "PCAfeatures" used in clustering and "selected_indexes"
+                as the indexes of DIRECT sampled structures.
         """
         if any(key not in clustering_data for key in ["labels", "PCAfeatures"]):
             raise Exception(
@@ -70,7 +86,7 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
             selected_indexes = list(set(selected_indexes))
         elif self.allow_duplicate and n_duplicate > 0:
             warnings.warn(f"There are {n_duplicate} duplicated selections.")
-        print(f"Finally selected {len(selected_indexes)} configurations.")
+        logger.info(f"Finally selected {len(selected_indexes)} configurations.")
         return {
             "PCAfeatures": clustering_data["PCAfeatures"],
             "selected_indexes": selected_indexes,

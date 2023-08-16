@@ -13,7 +13,8 @@ from .stratified_sampling import SelectKFromClusters
 class DIRECTSampler(Pipeline):
     """
     DImensionality REduction-Clustering-sTratified (DIRECT)
-    sampling Pipeline.
+    sampling Pipeline. For more details, please refer to our
+    manuscript: https://arxiv.org/abs/2307.13710.
     """
 
     def __init__(

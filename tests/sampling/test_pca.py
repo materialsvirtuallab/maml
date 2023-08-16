@@ -25,7 +25,3 @@ class TestPrincipalComponentAnalysis:
             self.pca_unweightedPC.fit_transform(MPF_2021_2_8_first10_features_test["M3GNet_features_normalized"])
             == PC_unweighted
         ).all
-
-
-if __name__ == "__main__":
-    unittest.main()
