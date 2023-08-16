@@ -1,8 +1,14 @@
 """Clustering methods."""
 from __future__ import annotations
 
+import logging
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cluster import Birch
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class BirchClustering(BaseEstimator, TransformerMixin):
@@ -54,7 +60,7 @@ class BirchClustering(BaseEstimator, TransformerMixin):
         while (
             len(model.subcluster_labels_) < self.n
         ):  # decrease threshold until desired n clusters is achieved
-            print(
+            logger.info(
                 f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters."
             )
             self.threshold_init = (
@@ -65,7 +71,7 @@ class BirchClustering(BaseEstimator, TransformerMixin):
             ).fit(PCAfeatures)
         labels = model.predict(PCAfeatures)
         self.model = model
-        print(
+        logger.info(
             f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters."
         )
         label_centers = dict(zip(model.subcluster_labels_, model.subcluster_centers_))

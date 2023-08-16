@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+import logging
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.decomposition import PCA
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class PrincipalComponentAnalysis(BaseEstimator, TransformerMixin):
@@ -46,7 +52,7 @@ class PrincipalComponentAnalysis(BaseEstimator, TransformerMixin):
         """
         m = len([e for e in self.pca.explained_variance_ if e > 1])
         explained_variance = self.pca.explained_variance_ratio_
-        print(
+        logger.info(
             f"Selected first {m} PCs, explaining {100 * sum(explained_variance[:m]):.2f}% variance"
         )
         if not self.weighting_PCs:

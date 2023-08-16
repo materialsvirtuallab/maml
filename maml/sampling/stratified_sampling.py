@@ -1,10 +1,15 @@
 """Implementation of stratefied sampling approaches."""
 from __future__ import annotations
 
+import logging
 import warnings
 
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class SelectKFromClusters(BaseEstimator, TransformerMixin):
@@ -86,7 +91,7 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
             selected_indexes = list(set(selected_indexes))
         elif self.allow_duplicate and n_duplicate > 0:
             warnings.warn(f"There are {n_duplicate} duplicated selections.")
-        print(f"Finally selected {len(selected_indexes)} configurations.")
+        logger.info(f"Finally selected {len(selected_indexes)} configurations.")
         return {
             "PCAfeatures": clustering_data["PCAfeatures"],
             "selected_indexes": selected_indexes,
