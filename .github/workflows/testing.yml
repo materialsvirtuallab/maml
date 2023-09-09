@@ -2,9 +2,9 @@ name: Testing
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
   release:
     types: [published]
   workflow_dispatch:
