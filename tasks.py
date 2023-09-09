@@ -90,16 +90,6 @@ def publish(ctx):
 @task
 def set_ver(ctx, version):
     lines = []
-    with open("maml/__init__.py") as f:
-        for l in f:
-            if "__version__" in l:
-                lines.append('__version__ = "%s"' % version)
-            else:
-                lines.append(l.rstrip())
-    with open("maml/__init__.py", "w") as f:
-        f.write("\n".join(lines) + "\n")
-
-    lines = []
     with open("setup.py") as f:
         for l in f:
             lines.append(re.sub(r"version=([^,]+),", 'version="%s",' % version, l.rstrip()))
@@ -113,7 +103,7 @@ def release(ctx, version=datetime.datetime.now().strftime("%Y.%-m.%-d"), notest=
     ctx.run("rm -r dist build maml.egg-info", warn=True)
     if not notest:
         ctx.run("pytest maml")
-    with open("CHANGES.rst") as f:
+    with open("CHANGES.md") as f:
         contents = f.read()
     toks = re.split(r"\-+", contents)
     desc = toks[1].strip()

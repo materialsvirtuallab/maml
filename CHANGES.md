@@ -1,5 +1,8 @@
 # Change log
 
+## v2023.9.9
+* Added DIRECT sampling approach in `maml.sampling`.
+
 ## v2022.9.20
 * Bug fix for BOWSR failing because of indexing in some instances.
 
