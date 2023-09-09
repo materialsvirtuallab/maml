@@ -70,14 +70,12 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
             n_same_label = len(features_same_label)
             if "label_centers" in clustering_data:
                 center_same_label = clustering_data["label_centers"][label]
-                distance_to_center = np.sqrt(np.sum((features_same_label - center_same_label) ** 2, axis=1)).reshape(
-                    len(indexes_same_label), 1
+                distance_to_center = np.linalg.norm(features_same_label - center_same_label, axis=1).reshape(
+                    len(indexes_same_label)
                 )
                 select_k_indexes = [int(i) for i in np.linspace(0, n_same_label - 1, self.k)]
                 selected_indexes.extend(
-                    indexes_same_label[
-                        np.argpartition(distance_to_center.sum(axis=1), select_k_indexes)[select_k_indexes]
-                    ]
+                    indexes_same_label[np.argpartition(distance_to_center, select_k_indexes)[select_k_indexes]]
                 )
             else:
                 selected_indexes.extend(indexes_same_label[np.random.randint(n_same_label, size=self.k)])
