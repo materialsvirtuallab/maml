@@ -53,9 +53,12 @@ jobs:
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  build_sdist:
+  release:
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      # For pypi trusted publishing
+      id-token: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -65,46 +68,9 @@ jobs:
       - run: |
           python -m pip install build
           pip install -e .
+          pip wheel -w dist .
       - name: Build sdist
         run: python -m build --sdist
-      - uses: actions/upload-artifact@v3
-        with:
-          path: dist/*.tar.gz
-
-  build_wheels:
-    needs: test
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["39", "310", "311"]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v2.15.0
-        env:
-          CIBW_BUILD: cp${{ matrix.python-version }}-*
-      - name: Save artifact
-        uses: actions/upload-artifact@v3
-        with:
-          path: ./wheelhouse/*.whl
-
-  release:
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-latest
-    permissions:
-      # For pypi trusted publishing
-      id-token: write
-    steps:
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-      - name: Get build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact
-          path: dist
       - name: Publish to PyPi
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
