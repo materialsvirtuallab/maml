@@ -96,7 +96,8 @@ class MultiScratchDir:
                 [_copy_r_with_suffix(tempdir, self.cwd, i) for i, tempdir in enumerate(self.tempdirs)]
 
             os.chdir(self.cwd)
-            [remove(tempdir) for tempdir in self.tempdirs]
+            for tempdir in self.tempdirs:
+                remove(tempdir)
 
 
 def _copy_r_with_suffix(src: str, dst: str, suffix: Any | None = None):

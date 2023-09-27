@@ -248,7 +248,7 @@ class SmoothOverlapAtomicPosition(BaseDescriber):
                     error_msg += msg[-1]
                 raise RuntimeError(error_msg)
 
-            with zopen(descriptor_output, "rt") as f:
+            with zopen(descriptor_output, "rt") as f:  # type: ignore
                 lines = f.read()
 
             descriptor_pattern = re.compile("DESC(.*?)\n", re.S)
