@@ -42,7 +42,7 @@ class DIRECTSampler(Pipeline):
         """
         self.structure_encoder = M3GNetStructure() if structure_encoder == "M3GNet" else structure_encoder
         self.scaler = StandardScaler() if scaler == "StandardScaler" else scaler
-        self.pca = PrincipalComponentAnalysis() if pca == "PrincipalComponentAnalysis" else scaler
+        self.pca = PrincipalComponentAnalysis() if pca == "PrincipalComponentAnalysis" else pca
         self.pca.weighting_PCs = weighting_PCs
         self.weighting_PCs = weighting_PCs
         self.clustering = BirchClustering() if clustering == "Birch" else clustering
