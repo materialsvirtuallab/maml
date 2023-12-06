@@ -1,2 +1,2 @@
-tensorflow==2.14.0
+tensorflow==2.15.0.post1
 torch==2.1.0
