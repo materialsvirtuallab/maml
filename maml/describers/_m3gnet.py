@@ -141,4 +141,4 @@ class M3GNetSite(BaseDescriber):
         atom_fea_dict = {k: v for k, v in atom_fea.items() if k in self.output_layers}
         if self.return_type == dict:
             return atom_fea_dict
-        return pd.DataFrame(np.concatenate(list(atom_fea_dict.values())))
+        return pd.DataFrame(np.concatenate(list(atom_fea_dict.values()), axis=1))
