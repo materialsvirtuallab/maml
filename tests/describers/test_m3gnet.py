@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+import tensorflow as tf
 import unittest
 
 from pymatgen.core import Lattice, Structure
@@ -37,6 +38,8 @@ class M3GNetTest(unittest.TestCase):
     def test_m3gnet_structure_transform(self):
         struct_feat_2s = M3GNetStructure().transform([self.s] * 2)
         self.assertListEqual(list(np.array(struct_feat_2s).shape), [2, 128])
+        # Tensorflow is tricky, as the M3GNet loaded here affects layers names of MEGNet loaded in MEGNet tests
+        tf.keras.backend.clear_session()
 
 
 if __name__ == "__main__":

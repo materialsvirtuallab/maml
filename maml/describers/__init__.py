@@ -39,6 +39,6 @@ __all__ = [
     "SiteElementProperty",
     "wrap_matminer_describer",
     "M3GNetStructure",
-    "MEGNetStructure",
+    "M3GNetSite",
     "RadialDistributionFunction",
 ]
