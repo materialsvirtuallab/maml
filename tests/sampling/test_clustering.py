@@ -20,10 +20,7 @@ class TestBirchClustering:
         assert "PCAfeatures" in clustering_results.keys()
         assert (clustering_results["labels"] == Birch_results["labels"]).all()
         assert all(
-            (
-                (clustering_results["label_centers"].get(k) == v).all()
-                for k, v in Birch_results["label_centers"].items()
-            )
+            ((clustering_results["label_centers"].get(k) == v).all() for k, v in Birch_results["label_centers"].items())
         )
         assert (clustering_results["PCAfeatures"] == Birch_results["PCAfeatures"]).all()
         clustering_results_t002 = self.Birch_t002.transform(PC_weighted)
