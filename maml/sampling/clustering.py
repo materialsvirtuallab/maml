@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 
 
 class BirchClustering(BaseEstimator, TransformerMixin):
-    """ "Birch Clustering as one step of the DIRECT pipeline."""
+    """Birch Clustering as one step of the DIRECT pipeline."""
 
     def __init__(self, n=None, threshold_init=0.5, **kwargs):
         """
@@ -27,6 +27,7 @@ class BirchClustering(BaseEstimator, TransformerMixin):
                 Users may tune this value for desired performance of birch, while 0.5
                 is generally a good starting point, and some automatic tuning is done
                 with our built-in codes to achieve n clusters if given.
+            **kwargs: Pass to BIRCH.
         """
         self.n = n
         self.threshold_init = threshold_init
@@ -56,28 +57,16 @@ class BirchClustering(BaseEstimator, TransformerMixin):
             PCA feature, centroid positions of each cluster in PCA feature s
             pace, and the array of input PCA features.
         """
-        model = Birch(
-            n_clusters=self.n, threshold=self.threshold_init, **self.kwargs
-        ).fit(PCAfeatures)
+        model = Birch(n_clusters=self.n, threshold=self.threshold_init, **self.kwargs).fit(PCAfeatures)
         if self.n is not None:
-            while (
-                len(model.subcluster_labels_) < self.n
-            ):  # decrease threshold until desired n clusters is achieved
-                logger.info(
-                    f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters."
-                )
-                self.threshold_init = (
-                    self.threshold_init / self.n * len(model.subcluster_labels_)
-                )
-                model = Birch(
-                    n_clusters=self.n, threshold=self.threshold_init, **self.kwargs
-                ).fit(PCAfeatures)
+            while len(model.subcluster_labels_) < self.n:  # decrease threshold until desired n clusters is achieved
+                logger.info(f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters.")
+                self.threshold_init = self.threshold_init / self.n * len(model.subcluster_labels_)
+                model = Birch(n_clusters=self.n, threshold=self.threshold_init, **self.kwargs).fit(PCAfeatures)
 
         labels = model.predict(PCAfeatures)
         self.model = model
-        logger.info(
-            f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters."
-        )
+        logger.info(f"Birch threshold of {self.threshold_init} gives {len(model.subcluster_labels_)} clusters.")
         label_centers = dict(zip(model.subcluster_labels_, model.subcluster_centers_))
         return {
             "labels": labels,

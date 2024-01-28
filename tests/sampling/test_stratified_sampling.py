@@ -9,9 +9,7 @@ class TestSelectKFromClusters:
     def setup(self):
         self.selector_uni = SelectKFromClusters(k=2, allow_duplicate=False)
         self.selector_dup = SelectKFromClusters(k=2, allow_duplicate=True)
-        self.selector_rand = SelectKFromClusters(
-            k=2, allow_duplicate=False, selection_criteria="random"
-        )
+        self.selector_rand = SelectKFromClusters(k=2, allow_duplicate=False, selection_criteria="random")
         self.selector_small = SelectKFromClusters(
             k=2,
             allow_duplicate=False,
@@ -30,9 +28,7 @@ class TestSelectKFromClusters:
             SelectKFromClusters(selection_criteria="whatever")
         with pytest.raises(ValueError, match="n_sites must be provided"):
             SelectKFromClusters(selection_criteria="smallest")
-        with pytest.raises(
-            ValueError, match="n_sites must have same length as features"
-        ):
+        with pytest.raises(ValueError, match="n_sites must have same length as features"):
             self.selector_small_wrong_n_sites.transform(Birch_results)
 
     def test_fit(self, Birch_results):
