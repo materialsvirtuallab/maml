@@ -41,9 +41,13 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
         self.allow_duplicate = allow_duplicate
         allowed_selection_criterion = ["random", "smallest", "center"]
         if selection_criteria not in allowed_selection_criterion:
-            raise ValueError(f"Invalid selection_criteria, it must be one of {allowed_selection_criterion}.")
+            raise ValueError(
+                f"Invalid selection_criteria, it must be one of {allowed_selection_criterion}."
+            )
         if selection_criteria == "smallest" and not n_sites:
-            raise ValueError('n_sites must be provided when selection_criteria="smallest."')
+            raise ValueError(
+                'n_sites must be provided when selection_criteria="smallest."'
+            )
         self.selection_criteria = selection_criteria
         self.n_sites = n_sites
 
@@ -79,7 +83,10 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
             raise Exception(
                 "The data returned by clustering step should at least provide label and feature information."
             )
-        if self.selection_criteria == "center" and "label_centers" not in clustering_data:
+        if (
+            self.selection_criteria == "center"
+            and "label_centers" not in clustering_data
+        ):
             warnings.warn(
                 "Centroid location is not provided, so random selection from each cluster will be performed, "
                 "which likely will still outperform manual sampling in terms of feature coverage. "
@@ -88,21 +95,32 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
             try:
                 assert len(self.n_sites) == len(clustering_data["PCAfeatures"])
             except Exception:
-                raise ValueError("n_sites must have same length as features processed in clustering.")
+                raise ValueError(
+                    "n_sites must have same length as features processed in clustering."
+                )
 
         selected_indexes = []
         for label in set(clustering_data["labels"]):
             indexes_same_label = np.where(label == clustering_data["labels"])[0]
             features_same_label = clustering_data["PCAfeatures"][indexes_same_label]
             n_same_label = len(features_same_label)
-            if "label_centers" in clustering_data and self.selection_criteria == "center":
+            if (
+                "label_centers" in clustering_data
+                and self.selection_criteria == "center"
+            ):
                 center_same_label = clustering_data["label_centers"][label]
-                distance_to_center = np.linalg.norm(features_same_label - center_same_label, axis=1).reshape(
-                    len(indexes_same_label)
+                distance_to_center = np.linalg.norm(
+                    features_same_label - center_same_label, axis=1
+                ).reshape(len(indexes_same_label))
+                select_k_indexes = np.array(
+                    [int(i) for i in np.linspace(0, n_same_label - 1, self.k)]
                 )
-                select_k_indexes = np.array([int(i) for i in np.linspace(0, n_same_label - 1, self.k)])
                 selected_indexes.extend(
-                    indexes_same_label[np.argpartition(distance_to_center, select_k_indexes)[select_k_indexes]]
+                    indexes_same_label[
+                        np.argpartition(distance_to_center, select_k_indexes)[
+                            select_k_indexes
+                        ]
+                    ]
                 )
             elif self.selection_criteria == "smallest":
                 if self.k >= n_same_label:
@@ -118,7 +136,9 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
                         ]
                     )
             else:
-                selected_indexes.extend(indexes_same_label[np.random.randint(n_same_label, size=self.k)])
+                selected_indexes.extend(
+                    indexes_same_label[np.random.randint(n_same_label, size=self.k)]
+                )
         n_duplicate = len(selected_indexes) - len(set(selected_indexes))
         if not self.allow_duplicate and n_duplicate > 0:
             selected_indexes = list(set(selected_indexes))
