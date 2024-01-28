@@ -1,4 +1,5 @@
 """Multi-layer perceptron models."""
+
 from __future__ import annotations
 
 from maml.base import BaseDescriber, KerasModel
@@ -67,12 +68,15 @@ class MLP(KerasModel):
 
         Args:
             input_dim (int): input dimension, i.e., feature dimension
+            describer: a BaseDescriber featurizer.
+            n_neurons: number of neurons in each layer of MLP.
             activation (str): activation function
             n_targets (int): number of targets
             is_classification (bool): whether the target is a classification problem
             optimizer (str): optimizer
             loss (str): loss function
             compile_metrics (tuple): metrics to evaluate during epochs
+            **kwargs: pass to constructor of KerasModel.
         """
         input_dim = self.get_input_dim(describer, input_dim)
         if input_dim is None:

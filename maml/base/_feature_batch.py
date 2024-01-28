@@ -1,4 +1,5 @@
 """Batch a list of features output by describers.transform method."""
+
 from __future__ import annotations
 
 from typing import Any, Callable

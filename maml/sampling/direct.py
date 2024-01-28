@@ -1,4 +1,5 @@
 """DIRECT sampling."""
+
 from __future__ import annotations
 
 from sklearn.pipeline import Pipeline

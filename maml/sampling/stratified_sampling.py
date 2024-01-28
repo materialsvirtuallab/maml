@@ -1,4 +1,5 @@
 """Implementation of stratified sampling approaches."""
+
 from __future__ import annotations
 
 import logging
@@ -99,7 +100,7 @@ class SelectKFromClusters(BaseEstimator, TransformerMixin):
                 distance_to_center = np.linalg.norm(features_same_label - center_same_label, axis=1).reshape(
                     len(indexes_same_label)
                 )
-                select_k_indexes = [int(i) for i in np.linspace(0, n_same_label - 1, self.k)]
+                select_k_indexes = np.array([int(i) for i in np.linspace(0, n_same_label - 1, self.k)])
                 selected_indexes.extend(
                     indexes_same_label[np.argpartition(distance_to_center, select_k_indexes)[select_k_indexes]]
                 )
