@@ -2,6 +2,7 @@
 Radial distribution functions for site features.
 This was originally written in pymatgen-diffusion.
 """
+
 from __future__ import annotations
 
 from math import ceil

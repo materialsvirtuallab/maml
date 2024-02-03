@@ -1,4 +1,5 @@
 """Utilities package."""
+
 from __future__ import annotations
 
 from ._data_conversion import convert_docs, pool_from, to_array

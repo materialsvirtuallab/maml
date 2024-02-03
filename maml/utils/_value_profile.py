@@ -4,6 +4,7 @@ example, one can design a linearly increasing value profile,
 a sinusoidal profile or a constant profile, depending on the
 step, and previous values.
 """
+
 from __future__ import annotations
 
 import numpy as np

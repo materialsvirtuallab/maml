@@ -665,9 +665,11 @@ class MTPotential(LammpsPotential):
         if not self.param:
             raise RuntimeError("The parameters should be provided.")
         lines = [
-            " = ".join([key, json.dumps(value).replace("[", "{").replace("]", "}")])
-            if key != "safe"
-            else "\n".join(value)
+            (
+                " = ".join([key, json.dumps(value).replace("[", "{").replace("]", "}")])
+                if key != "safe"
+                else "\n".join(value)
+            )
             for key, value in self.param.items()
         ]
         with open(fitted_mtp, "w") as f:

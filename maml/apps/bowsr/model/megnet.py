@@ -1,4 +1,5 @@
 """megnet model wrapper implementation."""
+
 from __future__ import annotations
 
 import os

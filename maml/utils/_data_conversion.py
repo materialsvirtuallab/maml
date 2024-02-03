@@ -1,4 +1,5 @@
 """Convert data list to docs or pool existing data lists for training."""
+
 from __future__ import annotations
 
 import numpy as np

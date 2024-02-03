@@ -1,4 +1,5 @@
 """Module defines feature objects for GB energy model."""
+
 from __future__ import annotations
 
 

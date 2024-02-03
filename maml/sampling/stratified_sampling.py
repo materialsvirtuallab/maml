@@ -1,4 +1,5 @@
 """Implementation of stratefied sampling approaches."""
+
 from __future__ import annotations
 
 import logging

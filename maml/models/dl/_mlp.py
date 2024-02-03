@@ -1,4 +1,5 @@
 """Multi-layer perceptron models."""
+
 from __future__ import annotations
 
 from maml.base import BaseDescriber, KerasModel

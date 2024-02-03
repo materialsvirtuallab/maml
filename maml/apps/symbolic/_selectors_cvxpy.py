@@ -2,6 +2,7 @@
 This module implements more robust optimization
 using the cvxpy package.
 """
+
 from __future__ import annotations
 
 import numpy as np

@@ -3,6 +3,7 @@ Pyinvoke tasks.py file for automating releases and admin stuff.
 
 Author: Shyue Ping Ong
 """
+
 from __future__ import annotations
 
 import datetime
@@ -53,7 +54,7 @@ def make_doc(ctx):
             contents = re.sub(
                 r"\n## Official Documentation[^#]*",
                 "{: .no_toc }\n\n## Table of contents\n{: .no_toc .text-delta }\n* TOC\n{:toc}\n\n",
-                contents
+                contents,
             )
             contents = "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
 

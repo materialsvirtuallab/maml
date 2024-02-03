@@ -2,6 +2,7 @@
 Describer for converting (structural) objects into models-readable
 numeric vectors or tensors.
 """
+
 from __future__ import annotations
 
 from ._composition import ElementProperty, ElementStats

@@ -1,4 +1,5 @@
 """Module implements the perturbation class for atomic and lattice relaxation."""
+
 from __future__ import annotations
 
 import os
