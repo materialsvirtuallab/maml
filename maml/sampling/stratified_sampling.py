@@ -1,4 +1,4 @@
-"""Implementation of stratified sampling approaches."""
+"""Implementation of stratefied sampling approaches."""
 
 from __future__ import annotations
 

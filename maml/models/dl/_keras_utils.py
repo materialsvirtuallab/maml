@@ -1,4 +1,4 @@
-"""Keras utils for deserialize activations and optimizers."""
+"""Keras utils for deserialize activations and otpimizers."""
 
 from __future__ import annotations
 
