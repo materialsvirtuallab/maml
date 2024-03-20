@@ -6,7 +6,7 @@ numeric vectors or tensors.
 from __future__ import annotations
 
 from ._composition import ElementProperty, ElementStats
-from ._m3gnet import M3GNetStructure
+from ._m3gnet import M3GNetSite, M3GNetStructure
 from ._matminer import wrap_matminer_describer
 from ._megnet import MEGNetSite, MEGNetStructure
 from ._rdf import RadialDistributionFunction
@@ -35,7 +35,6 @@ __all__ = [
     "SiteElementProperty",
     "wrap_matminer_describer",
     "M3GNetStructure",
-    "MEGNetSite",
-    "MEGNetStructure",
+    "M3GNetSite",
     "RadialDistributionFunction",
 ]

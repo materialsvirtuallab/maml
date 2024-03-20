@@ -18,7 +18,7 @@ test_lfpo = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_st
 test_lco = Structure.from_file(os.path.join(os.path.dirname(__file__), "test_structures", "test_lco.cif"))
 
 
-@unittest.skipIf(megnet is None, " megnet is reuqired to run this test")
+@unittest.skipIf(megnet is None, " megnet is required to run this test")
 class BayesianOptimizerTest(unittest.TestCase):
     def setUp(self):
         self.test_lfpo = test_lfpo
@@ -26,16 +26,32 @@ class BayesianOptimizerTest(unittest.TestCase):
         self.test_refined_lco = get_standardized_structure(self.test_lco)
         model = MEGNet()
         self.optimizer_fixed_latt_lfpo = BayesianOptimizer(
-            model=model, structure=self.test_lfpo, relax_coords=True, relax_lattice=False, use_scaler=False
+            model=model,
+            structure=self.test_lfpo,
+            relax_coords=True,
+            relax_lattice=False,
+            use_scaler=False,
         )
         self.optimizer_relaxed_latt_lfpo = BayesianOptimizer(
-            model=model, structure=self.test_lfpo, relax_coords=True, relax_lattice=True, use_scaler=False
+            model=model,
+            structure=self.test_lfpo,
+            relax_coords=True,
+            relax_lattice=True,
+            use_scaler=False,
         )
         self.optimizer_scaler_lfpo = BayesianOptimizer(
-            model=model, structure=self.test_lfpo, relax_coords=True, relax_lattice=True, use_scaler=True
+            model=model,
+            structure=self.test_lfpo,
+            relax_coords=True,
+            relax_lattice=True,
+            use_scaler=True,
         )
         self.optimizer_fixed_position_lfpo = BayesianOptimizer(
-            model=model, structure=self.test_lfpo, relax_coords=False, relax_lattice=True, use_scaler=True
+            model=model,
+            structure=self.test_lfpo,
+            relax_coords=False,
+            relax_lattice=True,
+            use_scaler=True,
         )
 
     def test_struct2perturbation(self):
@@ -118,7 +134,9 @@ class BayesianOptimizerTest(unittest.TestCase):
             coords=self.test_lfpo.frac_coords,
         )
         self.assertAlmostEqual(
-            formation_energy_per_atom, -self.optimizer_fixed_latt_lfpo.model.predict_energy(struct), places=5
+            formation_energy_per_atom,
+            -self.optimizer_fixed_latt_lfpo.model.predict_energy(struct),
+            places=5,
         )
         x2 = np.array([0.05] * 11)
         x3 = np.array([0.05] * 11 + [0] * 3)

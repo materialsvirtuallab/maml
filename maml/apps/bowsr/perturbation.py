@@ -37,10 +37,10 @@ def perturbation_mapping(x, fixed_indices):
     Perturbation mapping.
 
     Args:
-        x:
-        fixed_indices:
+        x: Perturbation mapping for unfixed lattice.
+        fixed_indices: indices to fix.
 
-    Returns:
+    Returns: Perturbation mapping.
 
     """
     return np.array(
@@ -58,7 +58,11 @@ class WyckoffPerturbation:
     """
 
     def __init__(
-        self, int_symbol: int, wyckoff_symbol: str, symmetry_ops: list[SymmOp] | None = None, use_symmetry: bool = True
+        self,
+        int_symbol: int,
+        wyckoff_symbol: str,
+        symmetry_ops: list[SymmOp] | None = None,
+        use_symmetry: bool = True,
     ):
         """
         Args:

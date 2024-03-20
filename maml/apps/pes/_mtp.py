@@ -39,7 +39,11 @@ def feed(attribute, kwargs, dictionary, tab="\t"):
         (str).
     """
     tmp = kwargs.get(attribute) if kwargs.get(attribute) else dictionary.get(attribute).get("value")
-    return tab + dictionary.get(attribute).get("name"), str(tmp), dictionary.get(attribute).get("comment")
+    return (
+        tab + dictionary.get(attribute).get("name"),
+        str(tmp),
+        dictionary.get(attribute).get("comment"),
+    )
 
 
 class MTPotential(LammpsPotential):
@@ -100,10 +104,26 @@ class MTPotential(LammpsPotential):
             format_str = "{:>14s}{:>5s}{:>15s}{:>14s}{:>14s}{:>13s}{:>13s}{:>13s}"
             format_float = "{:>14d}{:>5d}{:>15f}{:>14f}{:>14f}{:>13f}{:>13f}{:>13f}"
             lines.append(
-                format_str.format("AtomData:  id", "type", "cartes_x", "cartes_y", "cartes_z", "fx", "fy", "fz")
+                format_str.format(
+                    "AtomData:  id",
+                    "type",
+                    "cartes_x",
+                    "cartes_y",
+                    "cartes_z",
+                    "fx",
+                    "fy",
+                    "fz",
+                )
             )
             for i, (site, force) in enumerate(zip(structure, forces)):
-                lines.append(format_float.format(i + 1, self.elements.index(str(site.specie)), *site.coords, *force))
+                lines.append(
+                    format_float.format(
+                        i + 1,
+                        self.elements.index(str(site.specie)),
+                        *site.coords,
+                        *force,
+                    )
+                )
         if "Energy" in inputs:
             lines.append(" Energy")
             lines.append(f"{inputs['Energy']:>24.12f}")
@@ -128,7 +148,7 @@ class MTPotential(LammpsPotential):
             filename (str): filename
             cfg_pool (list): list of configurations.
 
-        Returns:
+        Returns: filename.
 
         """
         if not self.elements:
@@ -151,7 +171,7 @@ class MTPotential(LammpsPotential):
 
         return filename
 
-    def write_ini(self, mtp_filename="fitted.mtp", select=False, **kwargs):
+    def write_ini(self, mtp_filename="fitted.mtp", **kwargs):
         """
         Write mlip.ini file for mlip packages of version mlip-2 or mlip-dev.
         Supported keyword arguments are parallel with options stated in the mlip manuals.
@@ -159,8 +179,10 @@ class MTPotential(LammpsPotential):
         Please refer to https://mlip.skoltech.ru.
 
         Args:
+            mtp_filename (str): Name of file with MTP to be loaded.
+            **kwargs: Different kwargs for mlip-2 and mlip-dev.
             mlip-2:
-                mtp_filename (str): Name of file with MTP to be loaded.
+
                 write_cfgs (str): Name of file for mlp processed configurations to be written to.
                 write_cfgs_skip (int): Skipped number of processed configurations before writing.
                 select (bool): activates or deactivates calculation of extrapolation grades and
@@ -300,9 +322,9 @@ class MTPotential(LammpsPotential):
                             lattice vectors in Cartesian coordinates (in Angstroms).
                             Default to 1.0e-8.
                         BFGS_Wolfe_C1 (float): Wolfe condition constant on the function
-                            decrease (linesearch stopping criterea). Default to 1.0e-3.
+                            decrease (linesearch stopping criteria). Default to 1.0e-3.
                         BFGS_Wolfe_C2 (float): Wolfe condition constant on the gradient
-                            decrease (linesearch stopping criterea). Default to 0.7.
+                            decrease (linesearch stopping criteria). Default to 0.7.
                         Save_relaxed (str): Filename for output results of relaxation.
                             No configuration will be saved if not specified.
                             Default to None.
@@ -317,9 +339,9 @@ class MTPotential(LammpsPotential):
                 lines.append(format_str.format("write-cfgs", kwargs.get("write_cfgs")))
             if kwargs.get("write_cfgs_skip"):
                 lines.append(format_str.format("write-cfgs:skip", kwargs.get("write_cfgs_skip")))
-            if select is False:
+            if not kwargs.get("select"):
                 lines.append(format_str.format("select", "FALSE"))
-            elif select is True:
+            else:
                 lines.append(format_str.format("select", "TRUE"))
                 select_identifiers = [
                     "select:save-selected",
@@ -413,7 +435,9 @@ class MTPotential(LammpsPotential):
             if MLIP:
                 lines.append(
                     format_str.format(
-                        MTini_params.get("MLIP").get("name"), "mtpr", MTini_params.get("MLIP").get("comment")
+                        MTini_params.get("MLIP").get("name"),
+                        "mtpr",
+                        MTini_params.get("MLIP").get("comment"),
                     )
                 )
                 mlip = MTini_params.get("MLIP")
@@ -421,7 +445,9 @@ class MTPotential(LammpsPotential):
                     load_from = mlip.get("load_from")
                     lines.append(
                         format_str.format(
-                            "\t" + load_from.get("name"), kwargs.get("load_from"), load_from.get("comment")
+                            "\t" + load_from.get("name"),
+                            kwargs.get("load_from"),
+                            load_from.get("comment"),
                         )
                     )
                 if kwargs.get("Calculate_EFS"):
@@ -443,14 +469,18 @@ class MTPotential(LammpsPotential):
                     write_cfgs = mlip.get("Write_cfgs")
                     lines.append(
                         format_str.format(
-                            "\t" + write_cfgs.get("name"), kwargs.get("Write_cfgs"), write_cfgs.get("comment")
+                            "\t" + write_cfgs.get("name"),
+                            kwargs.get("Write_cfgs"),
+                            write_cfgs.get("comment"),
                         )
                     )
 
             if Driver:
                 lines.append(
                     format_str.format(
-                        MTini_params.get("Driver").get("name"), str(Driver), MTini_params.get("Driver").get("comment")
+                        MTini_params.get("Driver").get("name"),
+                        str(Driver),
+                        MTini_params.get("Driver").get("comment"),
                     )
                 )
                 driver = MTini_params.get("Driver").get(str(Driver))
@@ -510,7 +540,12 @@ class MTPotential(LammpsPotential):
                 .tolist()
             )
             virial_stress = [virial_stress[self.mtp_stress_order.index(n)] for n in self.vasp_stress_order]
-            struct = Structure(lattice=lattice, species=species, coords=position, coords_are_cartesian=True)
+            struct = Structure(
+                lattice=lattice,
+                species=species,
+                coords=position,
+                coords_are_cartesian=True,
+            )
             d["structure"] = struct.as_dict()
             d["outputs"]["energy"] = energy
             assert size == struct.num_sites
@@ -577,9 +612,11 @@ class MTPotential(LammpsPotential):
                 "Please refer to https://mlip.skoltech.ru",
                 "for further detail.",
             )
-        train_structures, train_forces, train_stresses = check_structures_forces_stresses(
-            train_structures, train_forces, train_stresses
-        )
+        (
+            train_structures,
+            train_forces,
+            train_stresses,
+        ) = check_structures_forces_stresses(train_structures, train_forces, train_stresses)
         train_pool = pool_from(train_structures, train_energies, train_forces, train_stresses)
         elements = sorted(set(itertools.chain(*[struct.species for struct in train_structures])))
         self.elements = [str(element) for element in elements]
@@ -661,6 +698,7 @@ class MTPotential(LammpsPotential):
 
         Args:
             fitted_mtp (str): Filename to store xml formatted parameters.
+            **kwargs: pass to write_ini method.
         """
         if not self.param:
             raise RuntimeError("The parameters should be provided.")

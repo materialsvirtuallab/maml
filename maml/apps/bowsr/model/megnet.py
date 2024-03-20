@@ -39,10 +39,10 @@ class MEGNet(EnergyModel):
         """
 
         Args:
-            model:  MEGNet energy model
+            model:  MEGNet energy model.
             reconstruct: Whether to reconstruct the model (used in
-                disordered model)
-            **kwargs:
+                disordered model).
+            **kwargs: "gaussian_cutoff", "radius_cutoff", and "npass".
         """
         model = model or MEGNetModel.from_file(model_filename)
         gaussian_cutoff = kwargs.get("gaussian_cutoff", 6)
@@ -53,7 +53,8 @@ class MEGNet(EnergyModel):
         self.embedding = weights[0]
         if reconstruct:
             cg = CrystalGraph(
-                bond_converter=GaussianDistance(np.linspace(0, gaussian_cutoff, 100), 0.5), cutoff=radius_cutoff
+                bond_converter=GaussianDistance(np.linspace(0, gaussian_cutoff, 100), 0.5),
+                cutoff=radius_cutoff,
             )
             model_new = MEGNetModel(100, 2, 16, npass=npass, graph_converter=cg)
             model_new.set_weights(weights[1:])
