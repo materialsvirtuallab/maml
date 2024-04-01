@@ -58,9 +58,7 @@ class BirchClustering(BaseEstimator, TransformerMixin):
             PCA feature, centroid positions of each cluster in PCA feature s
             pace, and the array of input PCA features.
         """
-        model = Birch(
-            n_clusters=self.n, threshold=self.threshold_init, **self.kwargs
-        ).fit(PCAfeatures)
+        model = Birch(n_clusters=self.n, threshold=self.threshold_init, **self.kwargs).fit(PCAfeatures)
         if self.n is not None:
             while (
                 len(set(model.subcluster_labels_)) < self.n
@@ -69,12 +67,8 @@ class BirchClustering(BaseEstimator, TransformerMixin):
                     f"BirchClustering with threshold_init={self.threshold_init} and n={self.n} "
                     f"gives {len(set(model.subcluster_labels_))} clusters.",
                 )
-                self.threshold_init = (
-                    self.threshold_init / self.n * len(set(model.subcluster_labels_))
-                )
-                model = Birch(
-                    n_clusters=self.n, threshold=self.threshold_init, **self.kwargs
-                ).fit(PCAfeatures)
+                self.threshold_init = self.threshold_init / self.n * len(set(model.subcluster_labels_))
+                model = Birch(n_clusters=self.n, threshold=self.threshold_init, **self.kwargs).fit(PCAfeatures)
 
         labels = model.predict(PCAfeatures)
         self.model = model
