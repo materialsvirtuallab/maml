@@ -18,7 +18,7 @@ class BaseModel:
     transparent conversion of arbitrary input and outputs.
     """
 
-    def __init__(self, model, describer: BaseDescriber | None = None, **kwargs):
+    def __init__(self, model, describer: BaseDescriber | None = None):
         """
         Args:
             model (Any): ML models, for example, sklearn models or keras models
@@ -46,6 +46,7 @@ class BaseModel:
                 numpy array with dim (m, ).
             val_features (list or np.ndarray): validation features
             val_targets (list or np.ndarray): validation targets.
+            **kwargs: pass to the fit method of the respective ML model.
 
         Returns:
             self
@@ -69,7 +70,7 @@ class BaseModel:
             targets (list): list of float or np.ndarray
             val_objs (list of objects): list of validation objects
             val_targets (list): list of validation targets
-            **kwargs:
+            **kwargs: pass to the fit method of this BaseModel.
 
         Returns: self
 
@@ -86,7 +87,11 @@ class BaseModel:
             val_features = None
             val_targets = None
         return self.fit(
-            features=features, targets=targets, val_features=val_features, val_targets=val_targets, **kwargs
+            features=features,
+            targets=targets,
+            val_features=val_features,
+            val_targets=val_targets,
+            **kwargs,
         )
 
     def _predict(self, features: np.ndarray, **kwargs) -> np.ndarray:
@@ -95,6 +100,7 @@ class BaseModel:
 
         Args:
             features (np.ndarray): array-like input features.
+            **kwargs: pass to the predict method of the respective ML model.
 
         Returns:
             List of output objects.
@@ -136,10 +142,11 @@ class SklearnMixin:
     @classmethod
     def from_file(cls, filename: str, **kwargs):
         """
-        Load the models from file
+        Load the models from file.
+
         Args:
             filename (str): filename
-            **kwargs:
+            **kwargs: pass to the SklearnMixin
 
         Returns: object instance
 
@@ -185,9 +192,12 @@ class KerasMixin:
 
     def load(self, filename: str, custom_objects: list | None = None):
         """
-        Load models parameters from filename
+        Load models parameters from filename.
+
         Args:
             filename (str): models file name.
+            custom_objects: Optional dictionary mapping names (strings) to custom classes or functions to be
+                considered during deserialization.
 
         Returns: None
 
@@ -200,10 +210,11 @@ class KerasMixin:
     @classmethod
     def from_file(cls, filename: str, **kwargs):
         """
-        Load the models from file
+        Load the models from file.
+
         Args:
             filename (str): filename
-            **kwargs:
+            **kwargs: pass to the KerasMixin
 
         Returns: object instance
 
@@ -213,7 +224,10 @@ class KerasMixin:
         return instance
 
     def evaluate(
-        self, eval_objs: list | np.ndarray, eval_targets: list | np.ndarray, is_feature: bool = False
+        self,
+        eval_objs: list | np.ndarray,
+        eval_targets: list | np.ndarray,
+        is_feature: bool = False,
     ) -> np.ndarray:
         """
         Evaluate objs, targets.
@@ -253,6 +267,7 @@ class SKLModel(BaseModel, SklearnMixin):
         Args:
             model (Any): ML models, for example, sklearn models or keras models
             describer (BaseDescriber): Describer that converts object into features.
+            **kwargs: pass to super class (BaseModel) construct the model.
         """
         super().__init__(model=model, describer=describer, **kwargs)
 
@@ -263,8 +278,9 @@ class KerasModel(BaseModel, KerasMixin):
     def __init__(self, model, describer: BaseDescriber | None = None, **kwargs):
         """
         Args:
-            model (Any): ML models, for example, sklearn models or keras models
+            model (Any): ML models, for example, sklearn models or keras models.
             describer (BaseDescriber): Describer that converts object into features.
+            **kwargs: pass to BaseModel to construct KerasModel.
         """
         super().__init__(model=model, describer=describer, **kwargs)
 
@@ -285,6 +301,7 @@ class KerasModel(BaseModel, KerasMixin):
                 numpy array with dim (m, ).
             val_features (list or np.ndarray): validation features
             val_targets (list or np.ndarray): validation targets.
+            **kwargs: pass to the fit method of the ML model in KerasModel.
 
         Returns:
             self

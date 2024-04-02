@@ -23,7 +23,14 @@ if TYPE_CHECKING:
 
 _ALLOWED_DATA = ("number", "structure", "molecule", "spectrum")
 
-_DESCRIBER_TYPES = ["composition", "site", "structure", "general", "band_structure", "spectrum"]
+_DESCRIBER_TYPES = [
+    "composition",
+    "site",
+    "structure",
+    "general",
+    "band_structure",
+    "spectrum",
+]
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -144,6 +151,7 @@ def _transform_one(describer: BaseDescriber, obj: Any) -> list[np.ndarray] | np.
 
     Args:
         describer (BaseDescriber): a describers
+        obj: an object (structure/molecule) to transform.
 
     Returns:
         np.ndarray
@@ -161,7 +169,7 @@ class DummyDescriber(BaseDescriber):
         Args:
             obj: Any inputs
 
-        Returns: Any outputs
+        Returns: Any outputs.
 
         """
         return obj
@@ -172,11 +180,12 @@ class SequentialDescriber(Pipeline):
 
     def __init__(self, describers: list, **kwargs):
         """
-        Put a list of describers into one pipeline
+        Put a list of describers into one pipeline.
+
         Args:
             describers (list): a list of describers that will be applied
                 consecutively
-            **kwargs:
+            **kwargs: pass to pipeline.
         """
         steps = [(i.__class__.__name__, i) for i in describers]
         super().__init__(steps, **kwargs)

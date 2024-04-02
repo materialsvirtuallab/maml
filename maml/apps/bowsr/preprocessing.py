@@ -12,7 +12,11 @@ class StandardScaler(MSONable):
     dictionary representation.
     """
 
-    def __init__(self, mean: list | np.ndarray | None = None, std: list | np.ndarray | None = None):
+    def __init__(
+        self,
+        mean: list | np.ndarray | None = None,
+        std: list | np.ndarray | None = None,
+    ):
         """
         Args:
             mean: np.ndarray, mean values
@@ -119,10 +123,15 @@ class DummyScaler(MSONable):
 
     def as_dict(self):
         """
-        Serialize the instance into dictionary
-        Returns:
+        Serialize the instance into dictionary.
+
+        Returns: dict.
         """
-        return {"@module": self.__class__.__module__, "@class": self.__class__.__name__, "params": {}}
+        return {
+            "@module": self.__class__.__module__,
+            "@class": self.__class__.__name__,
+            "params": {},
+        }
 
     @classmethod
     def from_dict(cls, d):
@@ -131,7 +140,7 @@ class DummyScaler(MSONable):
         Args:
             d: Dict, dictionary contain class initialization parameters.
 
-        Returns:
+        Returns: DummyScaler.
 
         """
         return cls()

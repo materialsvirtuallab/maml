@@ -18,7 +18,13 @@ if TYPE_CHECKING:
 class RadialDistributionFunction:
     """Calculator for radial distribution function."""
 
-    def __init__(self, r_min: float = 0.0, r_max: float = 10.0, n_grid: int = 101, sigma: float = 0.0):
+    def __init__(
+        self,
+        r_min: float = 0.0,
+        r_max: float = 10.0,
+        n_grid: int = 101,
+        sigma: float = 0.0,
+    ):
         """
         Fast radial distribution analysis. This method calculates
         rdf on `np.linspace(r_min, r_max, n_grid)` points.
@@ -65,7 +71,10 @@ class RadialDistributionFunction:
 
             rdfs[i] = {
                 f"{c_specie}:{specie}": _dist_to_counts(
-                    temp_neighbors[specie], r_min=self.r_min, r_max=self.r_max, n_grid=self.n_grid
+                    temp_neighbors[specie],
+                    r_min=self.r_min,
+                    r_max=self.r_max,
+                    n_grid=self.n_grid,
                 )
                 / self.volumes
                 / density[specie]
@@ -77,7 +86,10 @@ class RadialDistributionFunction:
         return self.r, rdfs
 
     def get_species_rdf(
-        self, structure: Structure, ref_species: list | None = None, species: list | None = None
+        self,
+        structure: Structure,
+        ref_species: list | None = None,
+        species: list | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """
         Get specie-wise rdf
@@ -88,7 +100,7 @@ class RadialDistributionFunction:
             species (list of species or just single specie str): the species that we are interested in.
                 The rdfs are calculated on these species.
 
-        Returns:
+        Returns: 2-D array of distances and rdf intensities.
         """
         all_species = list({str(i.specie) for i in structure.sites})
         density = self._get_specie_density(structure)
@@ -142,7 +154,10 @@ class RadialDistributionFunction:
         return self.r, cns
 
     def get_species_coordination(
-        self, structure: Structure, ref_species: list | None = None, species: list | None = None
+        self,
+        structure: Structure,
+        ref_species: list | None = None,
+        species: list | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """
         Get specie-wise coordination number
@@ -153,7 +168,7 @@ class RadialDistributionFunction:
             species (list of species or just single specie str): the species that we are interested in.
                 The rdfs are calculated on these species.
 
-        Returns:
+        Returns: 2-D array of distances and respective specie-wise coordination number.
         """
         all_species = list({str(i.specie) for i in structure.sites})
         if ref_species is None:
@@ -200,7 +215,7 @@ def _dist_to_counts(d: np.ndarray, r_min: float = 0.0, r_max: float = 8.0, n_gri
 def get_pair_distances(structure: Structure, r_max: float = 8.0) -> list[dict]:
     """
     Get pair distances from structure.
-    The output will be a list of of dictionary, for example
+    The output will be a list of dictionary, for example
     [{"specie": "Mo",
     "neighbors": {"S": [1.0, 2.0, ...], "Fe": [1.2, 3.0, ...]}},
     {"specie": "Fe",
@@ -212,7 +227,7 @@ def get_pair_distances(structure: Structure, r_max: float = 8.0) -> list[dict]:
         structure (Structure): pymatgen Structure
         r_max (float): maximum radius to consider
 
-    Returns:
+    Returns: a list of dictionary with pair distance information of each specie.
     """
     index1, index2, _, distances = structure.get_neighbor_list(r_max)
     species = np.array([str(i.specie) for i in structure.sites])

@@ -73,7 +73,7 @@ class MEGNetSite(BaseDescriber):
         Args:
             obj (structure or molecule): pymatgen structure or molecules
 
-        Returns:
+        Returns: A pandas dataframe of MEGNet atom features.
 
         """
         features = self.describer_model.get_atom_features(obj, level=self.level)
@@ -90,10 +90,12 @@ class MEGNetSite(BaseDescriber):
 
     def __setstate__(self, state):
         """
-        Set state of object
+        Set state of object.
+
         Args:
-            state:
-        Returns:
+            state: a dict of all attributes of the MEGNetSite.
+
+        Returns: None.
         """
         for i, j in state.items():
             setattr(self, i, j)
@@ -190,7 +192,7 @@ class MEGNetStructure(BaseDescriber):
 
     def __getstate__(self):
         """
-        Get state for pickle
+        Get state for pickle.
         Returns: dictionary.
         """
         d = self.__dict__.copy()
@@ -199,10 +201,12 @@ class MEGNetStructure(BaseDescriber):
 
     def __setstate__(self, state):
         """
-        Set state of object
+        Set state of object.
+
         Args:
-            state:
-        Returns:
+            state: a dict of attributes of MEGNetStructure.
+
+        Returns: None.
         """
         for i, j in state.items():
             setattr(self, i, j)

@@ -51,6 +51,7 @@ def construct_atom_sets(
         optimizer (str): optimizer for the models
         loss (str): loss function for the models
         compile_metrics (tuple): metrics for validation
+        is_classification (bool): Whether to construct a classification model.
         symmetry_func_kwargs (dict): kwargs for symmetry function
     """
     from tensorflow.keras.layers import Concatenate, Dense, Embedding, Input
@@ -145,6 +146,8 @@ class AtomSets(KerasModel):
                 'max', 'min', 'prod']
             optimizer (str): optimizer for the models
             loss (str): loss function for the models
+            compile_metrics (tuple): metrics for validation
+            is_classification (bool): Whether to construct a classification model.
             symmetry_func_kwargs (dict): kwargs for symmetry function.
 
         """
@@ -200,7 +203,13 @@ class AtomSets(KerasModel):
         is_embedding = self.is_embedding
 
         class _DataGenerator(KerasSequence):
-            def __init__(self, features=features, targets=targets, batch_size=batch_size, is_shuffle=is_shuffle):
+            def __init__(
+                self,
+                features=features,
+                targets=targets,
+                batch_size=batch_size,
+                is_shuffle=is_shuffle,
+            ):
                 if isinstance(features[0], list) and len(features[0]) == 2:
                     self.features = [i[0] for i in features]
                     self.weights = [i[1] for i in features]
@@ -322,6 +331,7 @@ class AtomSets(KerasModel):
                 numpy array with dim (m, ).
             val_features (list or np.ndarray): validation features
             val_targets (list or np.ndarray): validation targets.
+            **kwargs: pass to the fit method of BaseModel.
 
         """
         batch_size = kwargs.pop("batch_size", 128)
@@ -338,6 +348,7 @@ class AtomSets(KerasModel):
 
         Args:
             features (np.ndarray): array-like input features.
+            **kwargs: pass to the _get_data_generator method.
 
         Returns:
             List of output objects.

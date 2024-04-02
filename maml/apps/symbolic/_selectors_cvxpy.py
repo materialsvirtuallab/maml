@@ -145,7 +145,10 @@ class PenalizedLeastSquaresCP(BaseSelectorCP):
         return 1.0 / (2 * n) * cp.sum_squares(y - x @ beta) + self.penalty(beta, x=x, y=y)
 
     def penalty(
-        self, beta: cp.Variable, x: np.ndarray | None = None, y: np.ndarray | None = None
+        self,
+        beta: cp.Variable,
+        x: np.ndarray | None = None,
+        y: np.ndarray | None = None,
     ) -> Expression | float:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
@@ -164,16 +167,20 @@ class LassoCP(PenalizedLeastSquaresCP):
     @requires(cp is not None, "cvxpy not installed")
     def __init__(self, lambd, **kwargs):
         """
-        Lasso regression with lambda * norm_1(beta) as penalty
+        Lasso regression with lambda * norm_1(beta) as penalty.
+
         Args:
-            lambd (float): weights for the penalty
-            **kwargs:
+            lambd (float): weights for the penalty.
+            **kwargs: pass to parent class PenalizedLeastSquaresCP.
         """
         self.lambd = lambd
         super().__init__(**kwargs)
 
     def penalty(
-        self, beta: cp.Variable, x: np.ndarray | None = None, y: np.ndarray | None = None
+        self,
+        beta: cp.Variable,
+        x: np.ndarray | None = None,
+        y: np.ndarray | None = None,
     ) -> Expression | float:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta
@@ -196,11 +203,12 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
     @requires(cp is not None, "cvxpy not installed")
     def __init__(self, lambd, gamma, **kwargs):
         """
-        Adaptive lasso regression
+        Adaptive lasso regression.
+
         Args:
-            lambd (float or list of floats):
+            lambd (float or list of floats): the regularization parameter lambda.
             gamma (float): exponential for hat(beta)
-            **kwargs:
+            **kwargs: pass to parent class PenalizedLeastSquaresCP.
         """
         self.lambd = lambd
         self.gamma = gamma
@@ -231,7 +239,10 @@ class AdaptiveLassoCP(PenalizedLeastSquaresCP):
         return 1.0 / np.abs(beta_hat) ** self.gamma
 
     def penalty(
-        self, beta: cp.Variable, x: np.ndarray | None = None, y: np.ndarray | None = None
+        self,
+        beta: cp.Variable,
+        x: np.ndarray | None = None,
+        y: np.ndarray | None = None,
     ) -> Expression | float:  # type: ignore
         """
         Calculate the penalty from input x, output y and coefficient beta

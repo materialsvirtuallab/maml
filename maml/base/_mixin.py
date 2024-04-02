@@ -43,7 +43,7 @@ class TargetScalerMixin:
             targets (list): list of float or np.ndarray
             val_objs (list of objects): list of validation objects
             val_targets (list): list of validation targets
-            **kwargs:
+            **kwargs: kwargs for the train method.
 
         Returns: self
 

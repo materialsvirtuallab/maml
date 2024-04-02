@@ -10,7 +10,7 @@ from sklearn.utils import shuffle
 class DataSplitter(MSONable):
     """Data splitter base class."""
 
-    def split(self, mat_ids, **kwargs):
+    def split(self, mat_ids):
         """
         Split the mat_ids, optionally one can provide
         targets. This is useful in stratified split.
@@ -31,7 +31,8 @@ class ShuffleSplitter(DataSplitter):
 
     def __init__(self, ratios: str = "80/10/10", delim: str = "/", random_seed: int | None = None):
         """
-        Random shuffle split of material ids
+        Random shuffle split of material ids.
+
         Args:
             ratios (str): ratios
             delim (str): deliminators for separate ratios
@@ -41,12 +42,13 @@ class ShuffleSplitter(DataSplitter):
         int_ratios = [float(i) for i in ratios.strip().split(delim)]
         self.ratios = [i / sum(int_ratios) for i in int_ratios]
 
-    def split(self, mat_ids, **kwargs) -> tuple:
+    def split(self, mat_ids) -> tuple:
         """
-        Randomly split the mat_ids
+        Randomly split the mat_ids.
+
         Args:
             mat_ids (list): material ids
-        Returns:
+        Returns: split ids.
 
         """
         mat_id_copy = shuffle(mat_ids, random_state=self.random_seed)
