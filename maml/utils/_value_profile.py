@@ -4,6 +4,7 @@ example, one can design a linearly increasing value profile,
 a sinusoidal profile or a constant profile, depending on the
 step, and previous values.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -48,10 +49,11 @@ class ConstantValue(ValueProfile):
 
     def __init__(self, value: float, **kwargs):
         """
-        Initialize constant profile
+        Initialize constant profile.
+
         Args:
             value (float): constant value
-            **kwargs:
+            **kwargs: pass to ValueProfile.
         """
         self.value = value
         super().__init__(**kwargs)
@@ -74,7 +76,7 @@ class LinearProfile(ValueProfile):
         Args:
             value_start (float):  start value
             value_end (float): end value, optional
-            max_step (int): number of steps, optional
+            max_steps (int): number of steps, optional
             rate (float): rate of value change
             **kwargs: captures anything else.
         """

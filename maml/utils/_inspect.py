@@ -1,4 +1,5 @@
 """Inspect function args."""
+
 from __future__ import annotations
 
 from inspect import signature

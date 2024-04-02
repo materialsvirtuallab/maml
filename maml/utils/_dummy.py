@@ -1,4 +1,5 @@
 """Dummy test systems."""
+
 from __future__ import annotations
 
 from pymatgen.core import Composition, Lattice, Molecule, Structure

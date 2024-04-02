@@ -1,4 +1,5 @@
 """Module implements helper functions to retrieve data for GB energy prediction paper."""
+
 from __future__ import annotations
 
 import os

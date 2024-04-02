@@ -1,4 +1,5 @@
 """Module implements the BayesianOptimizer."""
+
 from __future__ import annotations
 
 import warnings

@@ -1,4 +1,5 @@
 """Module implements the describers for GB entry."""
+
 from __future__ import annotations
 
 from functools import reduce
@@ -89,7 +90,12 @@ class GBDescriber(BaseDescriber):
     with selected structural and elemental features.
     """
 
-    def __init__(self, structural_features: list | None = None, elemental_features: list | None = None, **kwargs):
+    def __init__(
+        self,
+        structural_features: list | None = None,
+        elemental_features: list | None = None,
+        **kwargs,
+    ):
         """
 
         Args:
@@ -98,15 +104,31 @@ class GBDescriber(BaseDescriber):
             **kwargs (dict): parameters for BaseDescriber.
         """
         if not elemental_features:
-            elemental_features = [preset.e_coh, preset.G, preset.a0, preset.ar, preset.mean_delta_bl, preset.mean_bl]
+            elemental_features = [
+                preset.e_coh,
+                preset.G,
+                preset.a0,
+                preset.ar,
+                preset.mean_delta_bl,
+                preset.mean_bl,
+            ]
         if not structural_features:
-            structural_features = [preset.d_gb, preset.d_rot, preset.sin_theta, preset.cos_theta]
+            structural_features = [
+                preset.d_gb,
+                preset.d_rot,
+                preset.sin_theta,
+                preset.cos_theta,
+            ]
         self.elem_features = elemental_features
         self.struc_features = structural_features
         super().__init__(**kwargs)
 
     def transform_one(
-        self, db_entry: dict, inc_target: bool = True, inc_bulk_ref: bool = True, mp_api: str | None = None
+        self,
+        db_entry: dict,
+        inc_target: bool = True,
+        inc_bulk_ref: bool = True,
+        mp_api: str | None = None,
     ) -> pd.DataFrame:
         """
         Describe gb with selected structural and elemental features
@@ -201,7 +223,10 @@ def get_structural_feature(db_entry: dict, features: list | None = None) -> pd.D
 
 
 def get_elemental_feature(
-    db_entry: dict, loc_algo: str = "crystalnn", features: list | None = None, mp_api: str | None = None
+    db_entry: dict,
+    loc_algo: str = "crystalnn",
+    features: list | None = None,
+    mp_api: str | None = None,
 ) -> pd.DataFrame:
     """
     Function to get the elemental features
@@ -302,7 +327,13 @@ class GBBond(MSONable):
         ]
     }
 
-    def __init__(self, gb: GrainBoundary, loc_algo: str = "crystalnn", bond_mat: np.ndarray | None = None, **kwargs):
+    def __init__(
+        self,
+        gb: GrainBoundary,
+        loc_algo: str = "crystalnn",
+        bond_mat: np.ndarray | None = None,
+        **kwargs,
+    ):
         """
 
         Args:
@@ -311,7 +342,7 @@ class GBBond(MSONable):
                     See options: GBBond.NNDict.keys()
                     Default: crystalnn
             bond_mat (np.ndarray): optional.
-
+            **kwargs: pass to loc_algo.
         """
         self.loc_algo = self.NNDict[loc_algo](**kwargs)
         self.gb = gb

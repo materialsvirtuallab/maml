@@ -1,4 +1,5 @@
 """Deep learning module."""
+
 from __future__ import annotations
 
 from ._atomsets import AtomSets

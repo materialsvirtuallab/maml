@@ -1,4 +1,5 @@
 """Base class that expose a predict_energy method."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

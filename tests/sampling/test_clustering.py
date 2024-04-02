@@ -8,6 +8,7 @@ from maml.sampling.clustering import BirchClustering
 class TestBirchClustering:
     def setup(self):
         self.Birch = BirchClustering(n=2, threshold_init=0.01)
+        self.Birch_t002 = BirchClustering(n=10, threshold_init=0.1)
 
     def test_fit(self, PC_weighted):
         assert self.Birch == self.Birch.fit(PC_weighted)
@@ -22,3 +23,5 @@ class TestBirchClustering:
             ((clustering_results["label_centers"].get(k) == v).all() for k, v in Birch_results["label_centers"].items())
         )
         assert (clustering_results["PCAfeatures"] == Birch_results["PCAfeatures"]).all()
+        clustering_results_t002 = self.Birch_t002.transform(PC_weighted)
+        assert len(set(clustering_results_t002["labels"])) == 10

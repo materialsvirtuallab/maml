@@ -1,4 +1,5 @@
 """Wrapper for matminer_wrapper featurizers."""
+
 from __future__ import annotations
 
 import logging

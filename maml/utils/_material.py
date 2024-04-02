@@ -1,4 +1,5 @@
 """Materials utils."""
+
 from __future__ import annotations
 
 from pymatgen.core import Composition, Molecule, Structure

@@ -1,4 +1,5 @@
 """Symbolic learning."""
+
 from __future__ import annotations
 
 try:

@@ -2,6 +2,7 @@
 Simple numba utility.
 Some functions can excelerated substantially with numba.
 """
+
 from __future__ import annotations
 
 from typing import Callable

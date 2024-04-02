@@ -1,4 +1,5 @@
 """Get data from various sources."""
+
 from __future__ import annotations
 
 from ._mp import MaterialsProject

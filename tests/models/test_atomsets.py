@@ -1,6 +1,7 @@
 """
 Test models
 """
+
 from __future__ import annotations
 
 from unittest import TestCase, main

@@ -1,4 +1,5 @@
 """Structure-wise describers. These describers include structural information."""
+
 from __future__ import annotations
 
 import logging
@@ -46,6 +47,7 @@ class DistinctSiteProperty(BaseDescriber):
             year={2018},
             publisher={Nature Publishing Group}}
     """
+
     # todo: generalize to multiple sites with the same Wyckoff.
     supported_properties = [
         "mendeleev_no",
