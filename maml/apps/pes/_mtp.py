@@ -813,7 +813,10 @@ class MTPotential(LammpsPotential):
         if default_element_ordering:
             ordered_elements = [str(x) for x in sorted([Element(x) for x in elements])]
             if elements != ordered_elements:
-                warnings.warn(f"Order for the elements has been altered from {elements} to {ordered_elements} to ensure consistency with default element ordering in maml during MTP fitting. Change the 'default_element_ordering' argument to keep original order.", ImportWarning)
+                warnings.warn(
+                    f"Order for the elements has been altered from {elements} to {ordered_elements} to ensure consistency with default element ordering in maml during MTP fitting. Change the 'default_element_ordering' argument to keep original order.",
+                    ImportWarning,
+                )
                 elements = ordered_elements
         mtp.elements = elements
 
