@@ -787,7 +787,7 @@ class MTPotential(LammpsPotential):
             filename (str): The file storing parameters of potentials, filename should
                 ends with ".mtp".
             elements (list): The list of elements.
-            default_element_ordering (bool): If True, elements argument is ordered following the 
+            default_element_ordering (bool): If True, elements argument is ordered following the
                 convention of Pauling electronegativity. If False, given order is kept.
 
         Returns:
