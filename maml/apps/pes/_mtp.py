@@ -10,6 +10,7 @@ import os
 import re
 import shutil
 import subprocess
+import warnings
 from collections import OrderedDict
 from shutil import which
 
@@ -17,7 +18,7 @@ import numpy as np
 from monty.io import zopen
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
-from pymatgen.core import Lattice, Structure
+from pymatgen.core import Lattice, Structure, Element
 
 from maml.utils import check_structures_forces_stresses, convert_docs, pool_from
 
