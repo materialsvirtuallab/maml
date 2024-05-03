@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from math import ceil, floor
-from typing import Callable, Any
+from typing import Any, Callable
 
 import numpy as np
 from monty.dev import requires
