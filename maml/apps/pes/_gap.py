@@ -88,7 +88,7 @@ class GAPotential(LammpsPotential):
         if "Energy" in inputs:
             description.append("dft_energy=" + str(inputs["Energy"]))
         if "Stress" in inputs:
-            description.append("dft_virial={%s}" % "\t".join([str(f) for f in inputs["Stress"]]))
+            description.append("dft_virial=" + "\t".join([str(f) for f in inputs["Stress"]]))
         if "SuperCell" in inputs:
             super_cell_str = [str(f) for f in inputs["SuperCell"].matrix.ravel()]
             description.append(f'Lattice="{"     ".join(super_cell_str)}"')
