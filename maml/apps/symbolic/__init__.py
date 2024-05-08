@@ -15,9 +15,9 @@ if cp is None:
     from ._selectors import AdaptiveLasso, DantzigSelector, Lasso
 else:
     # import from cvxpy alternatives
-    from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso
-    from ._selectors_cvxpy import DantzigSelectorCP as DantzigSelector
-    from ._selectors_cvxpy import LassoCP as Lasso
+    from ._selectors_cvxpy import AdaptiveLassoCP as AdaptiveLasso  # type: ignore
+    from ._selectors_cvxpy import DantzigSelectorCP as DantzigSelector  # type: ignore
+    from ._selectors_cvxpy import LassoCP as Lasso  # type: ignore
 
 __all__ = [
     "DantzigSelector",

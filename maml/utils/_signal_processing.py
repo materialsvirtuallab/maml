@@ -90,7 +90,7 @@ def get_sp_method(sp_method: str | Callable) -> Callable:  # type: ignore
     """
     if isinstance(sp_method, str):
         try:
-            return AVAILABLE_SP_METHODS[sp_method]
+            return AVAILABLE_SP_METHODS[sp_method]  # type: ignore
         except KeyError:
             raise KeyError(f"{sp_method} is not in available methods: {AVAILABLE_SP_METHODS.keys()}")
     else:
