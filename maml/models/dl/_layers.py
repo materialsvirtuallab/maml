@@ -224,13 +224,12 @@ class WeightedSet2Set(Layer):
         feature_shape, index_shape = input_shape
         return feature_shape[0], None, 2 * self.n_hidden
 
-    def call(self, inputs, mask=None):
+    def call(self, inputs):
         """
         Core logic of the layer.
 
         Args:
             inputs (tuple): input tuple of length 3
-            mask (tf.Tensor): not used here
         """
         features, weights, feature_graph_index = inputs
         feature_graph_index = tf.reshape(feature_graph_index, (-1,))
