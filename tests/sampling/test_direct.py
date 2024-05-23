@@ -5,7 +5,7 @@ from maml.sampling.clustering import BirchClustering
 
 
 class TestDIRECTSampler:
-    def setup(self):
+    def setup_method(self):
         self.direct_fixed_n = DIRECTSampler(structure_encoder=None, clustering=BirchClustering(n=1))
         self.direct_fixed_t = DIRECTSampler(
             structure_encoder=None,
