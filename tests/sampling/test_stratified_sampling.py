@@ -6,7 +6,7 @@ import pytest
 
 
 class TestSelectKFromClusters:
-    def setup(self):
+    def setup_method(self):
         self.selector_uni = SelectKFromClusters(k=2, allow_duplicate=False)
         self.selector_dup = SelectKFromClusters(k=2, allow_duplicate=True)
         self.selector_rand = SelectKFromClusters(k=2, allow_duplicate=False, selection_criteria="random")
