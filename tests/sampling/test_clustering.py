@@ -6,7 +6,7 @@ from maml.sampling.clustering import BirchClustering
 
 
 class TestBirchClustering:
-    def setup(self):
+    def setup_method(self):
         self.Birch = BirchClustering(n=2, threshold_init=0.01)
         self.Birch_t002 = BirchClustering(n=10, threshold_init=0.1)
 

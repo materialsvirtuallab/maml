@@ -291,7 +291,7 @@ def _is_element_or_specie(s: str) -> bool:
         _ = Element(s)
     except ValueError:
         try:
-            _ = Species.from_string(s)
+            _ = Species.from_str(s)
         except ValueError:
             print(s)
             return False
