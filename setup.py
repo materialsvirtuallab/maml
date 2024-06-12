@@ -122,8 +122,8 @@ setup(
     package_data={
         "maml": [
             "describers/data/*.json",
-            "describers/data/megnet_models/*.json",
-            "describers/data/megnet_mdoels/*.hdf5",
+            "describers/data/megnet_models/*",
+            "describers/data/m3gnet_models/matbench_mp_e_form/0/m3gnet/*",
         ]
     },
 )
