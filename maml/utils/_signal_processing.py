@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from math import ceil, floor
-from typing import Callable
+from typing import Any, Callable
 
 import numpy as np
 from monty.dev import requires
@@ -81,7 +81,7 @@ def wvd(z: np.ndarray, return_all: bool = False) -> tuple | np.ndarray:
 AVAILABLE_SP_METHODS = {"fft_magnitude": fft_magnitude, "spectrogram": spectrogram, "cwt": cwt, "wvd": wvd}
 
 
-def get_sp_method(sp_method: str | Callable) -> Callable:  # type: ignore
+def get_sp_method(sp_method: str | Callable[..., Any]) -> Callable[..., Any]:  # type: ignore
     """
     Providing a signal processing method name return the callable
     Args:

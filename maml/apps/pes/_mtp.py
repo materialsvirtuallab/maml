@@ -10,6 +10,7 @@ import os
 import re
 import shutil
 import subprocess
+import warnings
 from collections import OrderedDict
 from shutil import which
 
@@ -17,7 +18,7 @@ import numpy as np
 from monty.io import zopen
 from monty.serialization import loadfn
 from monty.tempfile import ScratchDir
-from pymatgen.core import Lattice, Structure
+from pymatgen.core import Element, Lattice, Structure
 
 from maml.utils import check_structures_forces_stresses, convert_docs, pool_from
 
@@ -779,7 +780,7 @@ class MTPotential(LammpsPotential):
         return df_orig, df_predict
 
     @staticmethod
-    def from_config(filename, elements):
+    def from_config(filename, elements, default_element_ordering=True):
         """
         Initialize potentials with parameters file.
 
@@ -787,6 +788,8 @@ class MTPotential(LammpsPotential):
             filename (str): The file storing parameters of potentials, filename should
                 ends with ".mtp".
             elements (list): The list of elements.
+            default_element_ordering (bool): If True, elements argument is ordered following the
+                convention of Pauling electronegativity. If False, given order is kept.
 
         Returns:
             MTPotential
@@ -799,8 +802,25 @@ class MTPotential(LammpsPotential):
             key = line.rstrip().split(" = ")[0]
             value = json.loads(line.rstrip().split(" = ")[1].replace("{", "[").replace("}", "]"))
             param[key] = value
+        num_species = -1
+        for line in lines:
+            if "species_count" in line:
+                num_species = int(line.split()[2])
+                break
+        if len(set(elements)) != num_species:
+            raise ValueError("Inconsistent number of species between the provided .mtp file and the elements argument")
 
         mtp = MTPotential(param=param)
+        if default_element_ordering:
+            ordered_elements = [str(x) for x in sorted([Element(x) for x in elements])]
+            if elements != ordered_elements:
+                warnings.warn(
+                    f"Order for the elements has been altered from {elements} to {ordered_elements} to ensure "
+                    "consistency with default element ordering in maml during MTP fitting. Change the "
+                    "'default_element_ordering' argument to keep original order.",
+                    ImportWarning,
+                )
+                elements = ordered_elements
         mtp.elements = elements
 
         return mtp

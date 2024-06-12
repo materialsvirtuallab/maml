@@ -17,6 +17,7 @@ from maml.apps.pes import MTPotential
 CWD = os.getcwd()
 test_datapool = loadfn(os.path.join(os.path.abspath(os.path.dirname(__file__)), "datapool.json"))
 config_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), "MTP", "fitted.mtp")
+config_file_4 = os.path.join(os.path.abspath(os.path.dirname(__file__)), "MTP", "fitted_4.mtp")
 
 
 class MTPotentialTest(unittest.TestCase):
@@ -112,6 +113,10 @@ class MTPotentialTest(unittest.TestCase):
     def test_from_config(self):
         mtp = MTPotential.from_config(config_file, elements=["Mo"])
         assert mtp.param is not None
+        mtp = MTPotential.from_config(config_file_4, elements=["Nb", "O", "Li", "Cl"])
+        assert mtp.param is not None and mtp.elements == ["Li", "Nb", "Cl", "O"]
+        mtp = MTPotential.from_config(config_file_4, elements=["Nb", "O", "Li", "Cl"], default_element_ordering=False)
+        assert mtp.param is not None and mtp.elements == ["Nb", "O", "Li", "Cl"]
 
 
 if __name__ == "__main__":
