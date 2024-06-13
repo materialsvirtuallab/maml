@@ -28,7 +28,7 @@ def make_doc(ctx):
     with cd("docs"):
         ctx.run("rm maml.*.rst", warn=True)
         ctx.run("touch index.rst", warn=True)
-        ctx.run("sphinx-apidoc -P -M -d 6 -o . -f ../maml")
+        ctx.run("sphinx-apidoc -P -M -d 6 -o . -f ../src/maml")
         ctx.run("rm maml*.tests.*rst", warn=True)
         ctx.run("sphinx-build -M markdown . .")
         ctx.run("rm *.rst", warn=True)
