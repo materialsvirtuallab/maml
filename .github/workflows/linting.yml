@@ -31,10 +31,10 @@ jobs:
     - name: black
       run: |
         black --version
-        black --check --diff --color maml
+        black --check --diff --color src
 
     - name: mypy
       run: |
         mypy --version
         rm -rf .mypy_cache
-        mypy maml
+        mypy src
