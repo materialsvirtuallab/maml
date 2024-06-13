@@ -20,7 +20,7 @@ authors = [
 ]
 description = "MAterials Machine Learning (maml) is a machine learning library for materials science."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = [
     "materials",
     "interatomic potential",
