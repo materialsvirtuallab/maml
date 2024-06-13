@@ -54,6 +54,11 @@ dependencies = [
 ]
 version = "2023.9.9"
 
+[project.optional-dependencies]
+symbolic = ["cvxpy"]
+deep = ["tensorflow>=2"]
+deep_gpu = ["tensorflow-gpu>=2"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
