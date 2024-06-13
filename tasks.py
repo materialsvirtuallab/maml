@@ -93,7 +93,7 @@ def set_ver(ctx, version):
     lines = []
     with open("pyproject.toml") as f:
         for l in f:
-            lines.append(re.sub(r"version = ([^,]+)", f'version = "{version}"', l.rstrip()))
+            lines.append(re.sub(r"^version = ([^,]+)", f'version = "{version}"', l.rstrip()))
     with open("pyproject.toml", "w") as f:
         f.write("\n".join(lines) + "\n")
 
