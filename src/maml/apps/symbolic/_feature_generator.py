@@ -5,11 +5,13 @@ from __future__ import annotations
 import warnings
 from functools import partial
 from itertools import combinations_with_replacement
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import pandas as pd
 
 

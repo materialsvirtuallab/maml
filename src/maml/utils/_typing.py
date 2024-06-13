@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable, List, Optional, Union
+from collections.abc import Callable
+from typing import Any, Optional, Union
 
 import numpy as np
 from pymatgen.core import Molecule, Structure
 
-OptStrOrCallable = Optional[Union[str, Callable[..., Any]]]
+OptStrOrCallable = Optional[str | Callable[..., Any]]
 StructureOrMolecule = Union[Structure, Molecule]
-VectorLike = Union[List[float], np.ndarray]
+VectorLike = Union[list[float], np.ndarray]

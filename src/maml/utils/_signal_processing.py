@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 from math import ceil, floor
-from typing import Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
 from monty.dev import requires
 from scipy import fft, signal
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 try:
     import tftb

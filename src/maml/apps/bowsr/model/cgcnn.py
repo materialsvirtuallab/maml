@@ -160,7 +160,7 @@ class CGCNNInput:
         """
         if not cif_ids:
             cif_ids = list(range(len(structures)))
-        return [self.generate_input(s, id) for s, id in zip(structures, cif_ids)]
+        return [self.generate_input(s, id) for s, id in zip(structures, cif_ids, strict=False)]
 
 
 @requires(cgcnn is not None and torch is not None, "cgcnn and torch are needed to use the CGCNN evaluator.")

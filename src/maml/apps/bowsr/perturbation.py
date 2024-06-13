@@ -81,7 +81,7 @@ class WyckoffPerturbation:
         if self.use_symmetry:
             self.standard_mode = eval(standard_modes[int_symbol][wyckoff_symbol])
             self.dim = wyckoff_dims[int_symbol][wyckoff_symbol]
-            self.multiplicity = dict(zip(*wyckoff_nums[int_symbol]))[wyckoff_symbol]
+            self.multiplicity = dict(zip(*wyckoff_nums[int_symbol], strict=False))[wyckoff_symbol]
             self.perturbation_mode = eval(perturbation_modes[int_symbol][wyckoff_symbol])
             self.symmetry_ops = symmetry_ops if symmetry_ops else SpaceGroup.from_int_number(int_symbol).symmetry_ops
         else:
@@ -234,7 +234,7 @@ class LatticePerturbation:
         angles = list(lattice.angles)
 
         def check(param, ref, tolerance):
-            return all(abs(i - j) < tolerance for i, j in zip(param, ref) if j is not None)
+            return all(abs(i - j) < tolerance for i, j in zip(param, ref, strict=False) if j is not None)
 
         if not self.use_symmetry:
             self.dims = (3, 3)

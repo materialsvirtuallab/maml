@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import logging
 from inspect import signature
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
 from maml.base import BaseDescriber
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -54,7 +57,7 @@ def wrap_matminer_describer(
         obj = obj_conversion(obj)
         results = wrapped_class.featurize(self, obj)
         labels = wrapped_class.feature_labels(self)
-        return pd.DataFrame({i: [j] for i, j in zip(labels, results)})
+        return pd.DataFrame({i: [j] for i, j in zip(labels, results, strict=False)})
 
     @classmethod  # type: ignore
     def from_preset(cls, name: str, **kwargs):  # type: ignore

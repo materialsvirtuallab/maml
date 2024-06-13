@@ -417,7 +417,7 @@ class SiteElementProperty(BaseDescriber):
         Returns:
             features array
         """
-        if isinstance(obj, (Structure, Molecule)):
+        if isinstance(obj, Structure | Molecule):
             keys = []
             weights = []
             for i in obj:

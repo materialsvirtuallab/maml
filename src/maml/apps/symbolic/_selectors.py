@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 from collections import defaultdict
 from itertools import combinations
-from typing import Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
 from joblib import Parallel, delayed
@@ -13,6 +13,9 @@ from scipy.linalg import lstsq
 from scipy.optimize import NonlinearConstraint, minimize
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import get_scorer
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class BaseSelector:

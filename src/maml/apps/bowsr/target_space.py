@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
 from pymatgen.core.periodic_table import _pt_data as pt_data
@@ -10,6 +10,8 @@ from pymatgen.core.periodic_table import _pt_data as pt_data
 from maml.apps.bowsr.acquisition import lhs_sample
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from numpy.random import RandomState
 
     from maml.apps.bowsr.perturbation import WyckoffPerturbation

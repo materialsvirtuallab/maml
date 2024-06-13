@@ -54,4 +54,4 @@ class ShuffleSplitter(DataSplitter):
         mat_id_copy = shuffle(mat_ids, random_state=self.random_seed)
         n = len(mat_ids)
         end_points = [0, *np.cumsum([int(n * i) for i in self.ratios[:-1]]).tolist(), n]
-        return tuple(mat_id_copy[i:j] for i, j in zip(end_points[:-1], end_points[1:]))
+        return tuple(mat_id_copy[i:j] for i, j in zip(end_points[:-1], end_points[1:], strict=False))

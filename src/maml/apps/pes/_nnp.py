@@ -89,7 +89,7 @@ class NNPotential(LammpsPotential):
                 lines.append(f"lattice {vec[0]:>15.6f}{vec[1]:>15.6f}{vec[2]:>15.6f}")
         if "AtomData" in inputs:
             format_float = "atom{:>16.9f}{:>16.9f}{:>16.9f}{:>4s}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}{:>15.9f}"
-            for _i, (site, force) in enumerate(zip(structure, forces)):
+            for _i, (site, force) in enumerate(zip(structure, forces, strict=False)):
                 lines.append(
                     format_float.format(
                         *site.coords / self.bohr_to_angstrom,
@@ -521,7 +521,9 @@ class NNPotential(LammpsPotential):
         )
 
         atom_energy = {}
-        for atom, energy in zip(np.array(df[df[0] == "atom_energy"])[:, 1], np.array(df[df[0] == "atom_energy"])[:, 2]):
+        for atom, energy in zip(
+            np.array(df[df[0] == "atom_energy"])[:, 1], np.array(df[df[0] == "atom_energy"])[:, 2], strict=False
+        ):
             atom_energy[atom] = float(energy)
         param.update({"atom_energy": atom_energy})
         for tag in PARAMS.get("general"):
@@ -852,7 +854,7 @@ class NNPotential(LammpsPotential):
         nnp.load_scaler(scaling_filename)
         if len(nnp.elements) != len(weights_filenames):
             raise ValueError(f"{len(nnp.elements)} weights files should be given to " + " ".join(nnp.elements))
-        for weights_filename, specie in zip(weights_filenames, nnp.elements):
+        for weights_filename, specie in zip(weights_filenames, nnp.elements, strict=False):
             nnp.load_weights(weights_filename, specie)
         nnp.fitted = True
 

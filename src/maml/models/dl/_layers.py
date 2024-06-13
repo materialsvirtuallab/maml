@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-from typing import Sequence
+from typing import TYPE_CHECKING
 
 import tensorflow as tf
 import tensorflow.keras.backend as kb
 from tensorflow.keras import activations, constraints, initializers, regularizers
 from tensorflow.keras.layers import Layer
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class WeightedAverageLayer(Layer):
