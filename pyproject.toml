@@ -52,7 +52,7 @@ dependencies = [
     "scipy",
     "pymatgen",
 ]
-version = "2023.9.9"
+version = "2024.6.13"
 
 [project.optional-dependencies]
 symbolic = ["cvxpy"]
