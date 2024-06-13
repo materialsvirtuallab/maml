@@ -84,7 +84,7 @@ def publish(ctx):
     :param ctx:
     """
     ctx.run("rm dist/*.*", warn=True)
-    ctx.run("python setup.py sdist bdist_wheel")
+    ctx.run("python -m build")
     ctx.run("twine upload dist/*")
 
 
