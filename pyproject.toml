@@ -10,6 +10,60 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "maml"
+authors = [
+    { name = "Chi Chen", email = "t1ko@ucsd.edu" },
+    { name = "Yunxing Zuo", email = "marcel.nassar@intel.com" },
+    { name = "Ji Qi", email = "j1qi@ucsd.edu" },
+    { name = "Shyue Ping Ong", email = "ongsp@ucsd.edu" },
+]
+description = "MAterials Machine Learning (maml) is a machine learning library for materials science."
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = [
+    "materials",
+    "interatomic potential",
+    "force field",
+    "science",
+    "property prediction",
+    "AI",
+    "machine learning",
+    "graph",
+    "deep learning",
+]
+license = { text = "BSD-3-Clause" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "pymatgen",
+]
+version = "2023.9.9"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"maml" = [
+            "describers/data/*.json",
+            "describers/data/megnet_models/*",
+            "describers/data/m3gnet_models/matbench_mp_e_form/0/m3gnet/*",
+        ]
+
 [tool.black]
 line-length = 120
 
