@@ -58,17 +58,17 @@ def struct2perturbation(
     wyckoffs = sd["wyckoffs"]
     symm_ops = [
         SymmOp.from_rotation_and_translation(rotation, translation, tol=0.1)
-        for rotation, translation in zip(sd["rotations"], sd["translations"])
+        for rotation, translation in zip(sd["rotations"], sd["translations"], strict=False)
     ]
 
     if use_symmetry:
         equivalent_atoms = sd["equivalent_atoms"]
-        mapping = dict(zip(range(structure.num_sites), equivalent_atoms))
+        mapping = dict(zip(range(structure.num_sites), equivalent_atoms, strict=False))
         symmetrically_distinct_indices = np.unique(equivalent_atoms)
         indices = symmetrically_distinct_indices.tolist()
     else:
         indices = list(range(structure.num_sites))
-        mapping = dict(zip(indices, indices))
+        mapping = dict(zip(indices, indices, strict=False))
 
     wps = []
     for i in indices:
@@ -195,7 +195,7 @@ class BayesianOptimizer:
                 ]
             )
 
-            for i, (idx, wp) in enumerate(zip(self.indices, self.wps)):
+            for i, (idx, wp) in enumerate(zip(self.indices, self.wps, strict=False)):
                 p = wp.standardize(frac_coords[idx]) + x_wyckoff[i * 3 : (i + 1) * 3]
                 orbit = wp.get_orbit(p)
 
@@ -524,7 +524,7 @@ class BayesianOptimizer:
         scaler = getattr(preprocessing, d["scaler"]["@class"])(**d["scaler"]["params"])
         optimizer.scaler = scaler
         optimizer._space.scaler = scaler
-        for x, target in zip(space_params, space_target):
+        for x, target in zip(space_params, space_target, strict=False):
             optimizer._space._params = np.concatenate([optimizer._space._params, x.reshape(1, -1)])
             optimizer._space._target = np.concatenate([optimizer._space._target, [target]])
         optimizer._space._bounds = space_bounds

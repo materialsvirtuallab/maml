@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def pandas_concat(features: list[pd.DataFrame]) -> pd.DataFrame:

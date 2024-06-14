@@ -124,7 +124,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         multi_output = self._is_multi_output()
         if not multi_output:
             features = [features]
-        batched_features = [self.feature_batch(i) for i in list(*zip(features))]  # type: ignore
+        batched_features = [self.feature_batch(i) for i in list(*zip(features, strict=False))]  # type: ignore
         return batched_features if multi_output else batched_features[0]
 
     def _is_multi_output(self) -> bool:

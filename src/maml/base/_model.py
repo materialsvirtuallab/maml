@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Callable
+from typing import TYPE_CHECKING
 
 import joblib
 import numpy as np
 
 from maml.base import BaseDescriber, DummyDescriber
 from maml.utils import get_full_args, to_array
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class BaseModel:

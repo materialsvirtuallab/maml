@@ -203,7 +203,7 @@ class EnergyForceStress(LMPStaticCalculator):
         """
         results = super().calculate(structures=structures)
         final_results = []
-        for res, s in zip(results, structures):
+        for res, s in zip(results, structures, strict=False):
             new_forces, new_stresses = self._rotate_force_stress(s, res[1], res[2])
             final_results.append((res[0], new_forces, new_stresses))
         return final_results
@@ -987,7 +987,7 @@ class SurfaceEnergy(LMPRelaxationCalculator):
             for surface_energy in surface_energies
         ]
 
-        return list(zip(self.miller_indexes, slabs_relaxed, surface_energies))
+        return list(zip(self.miller_indexes, slabs_relaxed, surface_energies, strict=False))
 
 
 class LammpsPotential(Potential, abc.ABC):  # type: ignore

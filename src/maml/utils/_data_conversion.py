@@ -54,7 +54,7 @@ def pool_from(structures, energies=None, forces=None, stresses=None):
     stresses = stresses if stresses is not None else [None] * len(structures)
     return [
         doc_from(structure, energy, force, stress)
-        for structure, energy, force, stress in zip(structures, energies, forces, stresses)
+        for structure, energy, force, stress in zip(structures, energies, forces, stresses, strict=False)
     ]
 
 
@@ -113,6 +113,6 @@ def to_array(x):
         return np.array([to_array(i) for i in x])
     if isinstance(x, np.ndarray):
         return x
-    if isinstance(x, (str, int, float)):
+    if isinstance(x, str | int | float):
         return x
     raise ValueError("Not recognized data type")

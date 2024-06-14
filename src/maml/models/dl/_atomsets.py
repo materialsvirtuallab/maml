@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import math
 import os
-from typing import Sequence
+from typing import TYPE_CHECKING
 
 import joblib
 import numpy as np
@@ -13,6 +13,9 @@ import numpy as np
 from maml.base import BaseDescriber, BaseModel, KerasModel
 
 from ._keras_utils import deserialize_keras_activation, deserialize_keras_optimizer
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 def construct_atom_sets(
@@ -269,7 +272,7 @@ class AtomSets(KerasModel):
                 return float(d)
             if isinstance(d, np.int32):
                 return int(d)
-            if isinstance(d, (list, tuple)):
+            if isinstance(d, list | tuple):
                 return [_to_json_type(i) for i in d]
             return d
 

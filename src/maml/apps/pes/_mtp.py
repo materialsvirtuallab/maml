@@ -115,7 +115,7 @@ class MTPotential(LammpsPotential):
                     "fz",
                 )
             )
-            for i, (site, force) in enumerate(zip(structure, forces)):
+            for i, (site, force) in enumerate(zip(structure, forces, strict=False)):
                 lines.append(
                     format_float.format(
                         i + 1,

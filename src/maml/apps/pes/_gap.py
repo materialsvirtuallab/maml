@@ -97,7 +97,7 @@ class GAPotential(LammpsPotential):
 
         if "AtomData" in inputs:
             format_str = "{:<10s}{:>16f}{:>16f}{:>16f}{:>8d}{:>16f}{:>16f}{:>16f}"
-            for _i, (site, force) in enumerate(zip(structure, forces)):
+            for _i, (site, force) in enumerate(zip(structure, forces, strict=False)):
                 lines.append(format_str.format(site.species_string, *site.coords, site.specie.Z, *force))
         return "\n".join(lines)
 

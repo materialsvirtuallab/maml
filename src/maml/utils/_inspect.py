@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from inspect import signature
-from typing import Callable
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def get_full_args(func: Callable) -> list:

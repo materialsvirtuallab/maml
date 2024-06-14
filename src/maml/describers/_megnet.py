@@ -174,7 +174,7 @@ class MEGNetStructure(BaseDescriber):
         """
         if self.mode == "site_stats":
             features = self.describer_model.get_atom_features(obj, level=self.level)
-            features_transpose = list(zip(*features))
+            features_transpose = list(zip(*features, strict=False))
             column_names = []
             final_features = []
             for i, f in enumerate(features_transpose):
