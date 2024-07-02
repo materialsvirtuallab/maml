@@ -64,7 +64,7 @@ Install all the libraries from requirement.txt file::
 pip install -r requirements.txt
 ```
 
-For all the requirements above::
+For all the requirements above:
 
 ```bash
 pip install -r requirements-ci.txt
