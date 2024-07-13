@@ -134,6 +134,6 @@ class M3GNetSite(BaseDescriber):
             g = self.describer_model.graph_layers[i](g)
             atom_fea[f"gc_{i + 1}"] = g[Index.ATOMS]
         atom_fea_dict = {k: v for k, v in atom_fea.items() if k in self.output_layers}
-        if self.return_type == dict:
+        if self.return_type is dict:
             return atom_fea_dict
         return pd.DataFrame(np.concatenate(list(atom_fea_dict.values()), axis=1))
