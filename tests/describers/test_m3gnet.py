@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 import pytest
 import tensorflow as tf
 import unittest
@@ -31,8 +32,7 @@ class M3GNetTest(unittest.TestCase):
         )
         self.assertListEqual(list(np.array(atom_feat_2s_2l).shape), [16, 128])
         atom_feat_dict = M3GNetSite(return_type=dict).transform_one(self.s)
-        print("debug by kenko", type(atom_feat_dict))
-        assert isinstance(atom_feat_dict, dict)
+        assert isinstance(atom_feat_dict, pd.DataFrame)
 
     def test_m3gnet_structure_transform(self):
         struct_feat_2s = M3GNetStructure().transform([self.s] * 2)
