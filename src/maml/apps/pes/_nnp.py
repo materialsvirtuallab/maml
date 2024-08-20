@@ -42,6 +42,9 @@ class NNPotential(LammpsPotential):
 
         Args:
             name (str): Name of force field.
+            param (str): Input parameters.
+            weight_param (dict): Atomic neural networks weights.
+            scaling_param (dict): Scaling parameters for symmetry functions.
         """
         self.name = name if name else "NNPotential"
         self.elements = None

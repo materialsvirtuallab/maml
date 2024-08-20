@@ -74,7 +74,8 @@ class SNAPotential(LammpsPotential):
             train_stresses (list): List of (6, ) virial stresses of each
                 structure in structures list.
             include_stress (bool): Whether to include stress components.
-            stress_format (string): stress format, default to VASP
+            stress_format (string): stress format, default to VASP.
+            **kwargs: additional keywords that can be added in the future.
         """
         train_structures, train_forces, train_stresses = check_structures_forces_stresses(
             train_structures, train_forces, train_stresses, stress_format=stress_format
@@ -174,6 +175,7 @@ class SNAPotential(LammpsPotential):
         Args:
             param_file (str): The file storing the configuration of potentials.
             coeff_file (str): The file storing the coefficients of potentials.
+            **kwargs: keywords that can be added in the future.
 
         Return:
             SNAPotential.
