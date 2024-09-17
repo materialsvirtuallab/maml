@@ -26,6 +26,7 @@ class PotentialMixin:
                 each single structure case.
             train_stresses (list): List of DFT-calculated (6, ) virial stresses of
                 each structure in structures list.
+            **kwargs: optional keywords that can be added in the future.
         """
         raise NotImplementedError
 

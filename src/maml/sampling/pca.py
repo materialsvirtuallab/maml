@@ -1,3 +1,5 @@
+"""This file contains the PCA implementation."""
+
 from __future__ import annotations
 
 import logging
