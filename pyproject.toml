@@ -67,6 +67,7 @@ where = ["src"]
             "describers/data/*.json",
             "describers/data/megnet_models/*",
             "describers/data/m3gnet_models/matbench_mp_e_form/0/m3gnet/*",
+            "apps/pes/params/*.json",
         ]
 
 [tool.black]
