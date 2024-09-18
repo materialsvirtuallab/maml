@@ -216,7 +216,7 @@ class Operator:
         return self.rep
 
 
-def _my_power(x: float, n: int) -> float:
+def _my_power(x: float, n: float) -> float:
     return pow(x, n)
 
 

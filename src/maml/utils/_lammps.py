@@ -283,7 +283,7 @@ def _get_atomic_mass(element_or_specie: str) -> float:  # type: ignore
     try:
         return Element(element_or_specie).atomic_mass  # type: ignore
     except Exception:
-        return Species.from_string(element_or_specie).element.atomic_mass
+        return Species.from_str(element_or_specie).element.atomic_mass
 
 
 def _get_charge(element_or_specie: str | Element | Species) -> float:  # type: ignore

@@ -1,6 +1,6 @@
 pymatgen==2024.9.17.1
-scikit-learn==1.5.1
+scikit-learn==1.5.2
 h5py==3.11.0
 joblib==1.4.2
-tqdm==4.66.4
+tqdm==4.66.5
 pymongo==4.8.0
