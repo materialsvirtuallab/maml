@@ -109,12 +109,11 @@ lint.select = [
   "YTT",  # flake8-2020
 ]
 lint.ignore = [
-  "RET504",   # assignment before `return` statement
-  "D103",    # docstring is missing
   "B023",    # Function definition does not bind loop variable
   "B028",    # No explicit stacklevel keyword argument found
   "B904",    # Within an except clause, raise exceptions with ...
   "C408",    # unnecessary-collection-call
+  "D103",    # docstring is missing
   "D105",    # Missing docstring in magic method
   "D205",    # 1 blank line required between summary line and description
   "D212",    # Multi-line docstring summary should start at the first line
@@ -124,8 +123,10 @@ lint.ignore = [
   "PLR",     # pylint refactor
   "PLW2901", # Outer for loop variable overwritten by inner assignment target
   "PT013",   # pytest-incorrect-pytest-import
+  "RET504",  # assignment before `return` statement
   "RUF012",  # Disable checks for mutable class args. This is a non-problem.
   "SIM105",  # Use contextlib.suppress(OSError) instead of try-except-pass
+  "SIM108",  # Use ternary operator instead of `if`-`else`-block
 ]
 lint.pydocstyle.convention = "google"
 lint.isort.required-imports = ["from __future__ import annotations"]
