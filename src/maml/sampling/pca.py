@@ -2,6 +2,7 @@
 This module implements PCA (Principal Component Analysis) sampling techniques
 for the MAML framework.
 """
+
 from __future__ import annotations
 
 import logging
