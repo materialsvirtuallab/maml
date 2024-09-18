@@ -109,6 +109,7 @@ lint.select = [
   "YTT",  # flake8-2020
 ]
 lint.ignore = [
+  "D103",    # docstring is missing
   "B023",    # Function definition does not bind loop variable
   "B028",    # No explicit stacklevel keyword argument found
   "B904",    # Within an except clause, raise exceptions with ...
