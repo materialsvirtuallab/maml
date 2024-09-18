@@ -59,6 +59,7 @@ class GAPotential(LammpsPotential):
                 elements arranged in order [xx, yy, zz, xy, yz, xz].
 
         Returns:
+            outputs: a proper format storing structure, energy, forces, virial_stress.
         """
         full_virial_stress = [
             virial_stress[0],
@@ -137,6 +138,7 @@ class GAPotential(LammpsPotential):
 
         Args:
             filename (str): The configuration file to be read.
+            predict (bool): whether it is the prediction mode or not.
         """
         type_convert = {"R": np.float32, "I": np.int64, "S": np.str_}
         data_pool = []
