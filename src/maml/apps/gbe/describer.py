@@ -266,8 +266,8 @@ def get_elemental_feature(
         rester = MPRester(mp_api)
     else:
         raise MPRestError("Please provide API key to access Materials Project")
-    bulk = rester.get_data(db_entry["material_id"])
-    bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])
+    bulk = rester.materials.search(material_ids=[db_entry["material_id"]])[0]
+    bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])  # type: ignore
     if bulk:
         f_dict[preset.bdensity.str_name] = bulk[0]["density"]
         f_dict[preset.G.str_name] = bulk[0]["elasticity"]["G_VRH"]
