@@ -10,14 +10,11 @@ from ._m3gnet import M3GNetSite, M3GNetStructure
 from ._matminer import wrap_matminer_describer
 from ._megnet import MEGNetSite, MEGNetStructure
 from ._rdf import RadialDistributionFunction
-from ._site import BispectrumCoefficients, BPSymmetryFunctions, SiteElementProperty, SmoothOverlapAtomicPosition
-from ._structure import (
-    CoulombEigenSpectrum,
-    CoulombMatrix,
-    DistinctSiteProperty,
-    RandomizedCoulombMatrix,
-    SortedCoulombMatrix,
-)
+from ._site import (BispectrumCoefficients, BPSymmetryFunctions,
+                    SiteElementProperty, SmoothOverlapAtomicPosition)
+from ._structure import (CoulombEigenSpectrum, CoulombMatrix,
+                         DistinctSiteProperty, RandomizedCoulombMatrix,
+                         SortedCoulombMatrix)
 
 __all__ = [
     "BispectrumCoefficients",
