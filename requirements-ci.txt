@@ -1,7 +1,7 @@
 pytest
 pytest-cov
 coveralls
-mypy
+mypy==1.10.1
 pydocstyle
 black
 ruff
