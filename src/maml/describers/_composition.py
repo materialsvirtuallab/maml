@@ -28,7 +28,7 @@ for length in [2, 3, 4, 8, 16, 32]:
 
 
 try:
-    from matminer.featurizers.composition import (  # noqa
+    from matminer.featurizers.composition import (
         ElementProperty as MatminerElementProperty,
     )
 
