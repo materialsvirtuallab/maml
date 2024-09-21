@@ -142,7 +142,7 @@ class ElementStats(BaseDescriber):
             data.append(self.element_properties[i])
             weights.append(j)
 
-        data = list(zip(*data))
+        data = list(zip(*data, strict=False))
         features = []
         for stat in self.stats_func:
             for d in data:
