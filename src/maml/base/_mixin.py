@@ -52,10 +52,10 @@ class TargetScalerMixin:
             return super().train(objs, targets, val_objs, val_targets, **kwargs)  # type: ignore
 
         num_atoms = [len(i) for i in objs]
-        targets = [self.target_scaler.transform(i, j) for i, j in zip(targets, num_atoms, strict=False)]
+        targets = [self.target_scaler.transform(i, j) for i, j in zip(targets, num_atoms)]
         if val_objs is not None and val_targets is not None:
             num_val_atoms = [len(i) for i in val_objs]
-            val_targets = [self.target_scaler.transform(i, j) for i, j in zip(val_targets, num_val_atoms, strict=False)]
+            val_targets = [self.target_scaler.transform(i, j) for i, j in zip(val_targets, num_val_atoms)]
         super().train(objs, targets, val_objs, val_targets, **kwargs)  # type: ignore
         return self  # type: ignore
 
@@ -66,4 +66,4 @@ class TargetScalerMixin:
         """
         preds = super().predict_objs(objs)  # type: ignore
         ns = [len(i) for i in objs]
-        return np.array([self.target_scaler.inverse_transform(i, j) for i, j in zip(preds, ns, strict=False)])
+        return np.array([self.target_scaler.inverse_transform(i, j) for i, j in zip(preds, ns)])
