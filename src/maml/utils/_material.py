@@ -17,6 +17,6 @@ def to_composition(obj: Composition | Molecule | Structure | str) -> Composition
     """
     if isinstance(obj, str):
         return Composition(obj)
-    if isinstance(obj,(Structure, Molecule)):
+    if isinstance(obj, (Structure, Molecule)):
         return obj.composition
     return obj
