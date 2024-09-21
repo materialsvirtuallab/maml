@@ -57,7 +57,7 @@ def wrap_matminer_describer(
         obj = obj_conversion(obj)
         results = wrapped_class.featurize(self, obj)
         labels = wrapped_class.feature_labels(self)
-        return pd.DataFrame({i: [j] for i, j in zip(labels, results, strict=False)})
+        return pd.DataFrame({i: [j] for i, j in zip(labels, results)})
 
     @classmethod  # type: ignore
     def from_preset(cls, name: str, **kwargs):  # type: ignore

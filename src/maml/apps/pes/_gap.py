@@ -58,8 +58,7 @@ class GAPotential(LammpsPotential):
             virial_stress (list): stress should has 6 distinct
                 elements arranged in order [xx, yy, zz, xy, yz, xz].
 
-        Returns:
-            outputs: a proper format storing structure, energy, forces, virial_stress.
+        Returns: a proper format storing structure, energy, forces, virial_stress.
         """
         full_virial_stress = [
             virial_stress[0],

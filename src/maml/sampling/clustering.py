@@ -76,7 +76,7 @@ class BirchClustering(BaseEstimator, TransformerMixin):
             f"BirchClustering with threshold_init={self.threshold_init} and n={self.n} "
             f"gives {len(set(model.subcluster_labels_))} clusters.",
         )
-        label_centers = dict(zip(model.subcluster_labels_, model.subcluster_centers_, strict=False))
+        label_centers = dict(zip(model.subcluster_labels_, model.subcluster_centers_))
         return {
             "labels": labels,
             "label_centers": label_centers,

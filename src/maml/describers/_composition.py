@@ -28,7 +28,7 @@ for length in [2, 3, 4, 8, 16, 32]:
 
 
 try:
-    from matminer.featurizers.composition import (  # noqa
+    from matminer.featurizers.composition import (
         ElementProperty as MatminerElementProperty,
     )
 
@@ -142,7 +142,7 @@ class ElementStats(BaseDescriber):
             data.append(self.element_properties[i])
             weights.append(j)
 
-        data = list(zip(*data, strict=False))
+        data = list(zip(*data))
         features = []
         for stat in self.stats_func:
             for d in data:
@@ -273,7 +273,7 @@ class ElementStats(BaseDescriber):
 
         transformed_values = m.fit_transform(value_np_array)
 
-        for key, value_list in zip(p_keys, transformed_values, strict=False):
+        for key, value_list in zip(p_keys, transformed_values):
             element_properties[key] = value_list.tolist()
         return element_properties, property_names
 

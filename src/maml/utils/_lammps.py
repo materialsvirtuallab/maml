@@ -246,7 +246,7 @@ def write_data_from_structure(
 
     ph = f"{{:.{significant_figures}f}}"
 
-    for bound, d in zip(bounds, "xyz", strict=False):
+    for bound, d in zip(bounds, "xyz"):
         line = " ".join([ph.format(i) for i in bound] + [f"{d}{i}" for i in ["lo", "hi"]])
         lines.append(line)
     if tilt is not None:
@@ -259,7 +259,7 @@ def write_data_from_structure(
     lines.append("\nAtoms\n")
 
     new_coords = symmop.operate_multi(structure.cart_coords)
-    for i, (site, coords) in enumerate(zip(structure.sites, new_coords, strict=False)):
+    for i, (site, coords) in enumerate(zip(structure.sites, new_coords)):
         charge = _get_charge(site.specie)
         line = "{} {} " + " ".join([ph] * 4)
         index = i + 1
