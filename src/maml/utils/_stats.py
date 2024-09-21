@@ -309,9 +309,9 @@ class Stats:
         assert abs(sum(weights) - 1) < 1e-3
 
         if p == 0:
-            return np.prod([i**j for i, j in zip(data, weights, strict=False)]).item()
+            return np.prod([i**j for i, j in zip(data, weights)]).item()
 
-        s = np.sum([j * i**p for i, j in zip(data, weights, strict=False)])
+        s = np.sum([j * i**p for i, j in zip(data, weights)])
         return s ** (1.0 / p)
 
     @staticmethod
