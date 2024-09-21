@@ -107,7 +107,7 @@ class StandardScaler(Scaler):
             is_intensive (bool): whether the target is intensive
         Returns: new instance.
         """
-        new_targets = targets if is_intensive else [(i / len(j)) for i, j in zip(targets, structures, strict=False)]
+        new_targets = targets if is_intensive else [(i / len(j)) for i, j in zip(targets, structures)]
         mean = np.mean(new_targets).item()
         std = np.std(new_targets).item()
         return cls(mean, std, is_intensive)
