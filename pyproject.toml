@@ -75,7 +75,7 @@ where = ["src"]
 line-length = 120
 
 [tool.ruff]
-target-version = "3.9"
+target-version = "py39"
 line-length = 160
 lint.select = [
   "B",    # flake8-bugbear
