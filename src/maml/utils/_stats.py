@@ -367,7 +367,7 @@ def _root_moment(data, weights, order) -> float:
     if order > 1:
         mean = np.mean(data)
 
-    moment = sum((i - mean) ** order * j for i, j in zip(data, pmf, strict=False))
+    moment = sum((i - mean) ** order * j for i, j in zip(data, pmf))
 
     # when order is odd, moment can be negative
     sign = -1 if moment < 0 else 1
@@ -446,7 +446,7 @@ def get_full_stats_and_funcs(stats: list) -> tuple[list[str], list]:
             func = getattr(Stats, stat_name)
             args = splits[1:]
             arg_dict = {}
-            for name_dict, arg in zip(STATS_KWARGS[stat_name], args, strict=False):  # type: ignore
+            for name_dict, arg in zip(STATS_KWARGS[stat_name], args):  # type: ignore
                 name = next(iter(name_dict.keys()))
                 value_type = next(iter(name_dict.values()))
                 try:
