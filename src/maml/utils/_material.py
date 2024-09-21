@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Union
 from pymatgen.core import Composition, Molecule, Structure
 
 
@@ -18,6 +17,6 @@ def to_composition(obj: Composition | Molecule | Structure | str) -> Composition
     """
     if isinstance(obj, str):
         return Composition(obj)
-    if isinstance(obj, Union[Structure, Molecule]):
+    if isinstance(obj,(Structure, Molecule)):
         return obj.composition
     return obj
