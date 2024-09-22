@@ -206,7 +206,7 @@ def get_structural_feature(db_entry: dict, features: list | None = None) -> pd.D
     if gb_plane.shape[0] == 4:
         gb_plane = convert_hcp_plane(list(gb_plane))
         rotation_axis = convert_hcp_direction(rotation_axis, lat_type=sg.get_crystal_system())
-    d_gb = bulk_conv.lattice.d_hkl(gb_plane)
+    d_gb = bulk_conv.lattice.d_hkl(gb_plane)  # type: ignore
     d_rot = bulk_conv.lattice.d_hkl(rotation_axis)
     theta = db_entry["rotation_angle"]
     sin_theta = np.sin(theta * np.pi / 180)
