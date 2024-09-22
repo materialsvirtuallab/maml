@@ -72,6 +72,6 @@ class DFT(EnergyModel):
             compat = MaterialsProjectCompatibility()
             vrun = Vasprun("vasprun.xml")
             entry = compat.process_entry(vrun.get_computed_entry())
-            return (entry.energy - sum(elements[el]["energy_per_atom"] * amt for el, amt in el_amt_dict.items())) / len(
+            return (entry.energy - sum(elements[el]["energy_per_atom"] * amt for el, amt in el_amt_dict.items())) / len(  # type: ignore
                 structure
-            )    # type: ignore
+            )
