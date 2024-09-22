@@ -266,7 +266,7 @@ def get_elemental_feature(
         rester = MPRester(mp_api)
     else:
         raise MPRestError("Please provide API key to access Materials Project")
-    bulk = rester.materials.search(material_ids=[db_entry["material_id"]])[0]
+    bulk = rester.materials.search(material_ids=[db_entry["material_id"]])[0]  # type: ignore
     bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])  # type: ignore
     if bulk:
         f_dict[preset.bdensity.str_name] = bulk[0]["density"]
@@ -274,7 +274,7 @@ def get_elemental_feature(
     el = Element(db_entry["pretty_formula"])
     f_dict[preset.ar.str_name] = el.atomic_radius
     f_dict[preset.a0.str_name] = bulk_s.lattice.a
-    f_dict[preset.e_coh.str_name] = rester.get_cohesive_energy(db_entry["material_id"])
+    f_dict[preset.e_coh.str_name] = rester.get_cohesive_energy(db_entry["material_id"])  # type: ignore
     f_dict[preset.hb.str_name] = el.brinell_hardness
     f_dict[preset.CLTE.str_name] = el.coefficient_of_linear_thermal_expansion
 
