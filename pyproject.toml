@@ -122,7 +122,7 @@ lint.ignore = [
   "E402",
   "E501",
   "E741",
-  "F281",
+  "F821",
   "PD901",   # pandas-df-variable-name
   "PERF203", # try-except-in-loop
   "PERF401", # manual-list-comprehension (TODO fix these or wait for autofix)
