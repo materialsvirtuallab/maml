@@ -108,6 +108,7 @@ lint.select = [
   "YTT",  # flake8-2020
 ]
 lint.ignore = [
+  "B007",
   "B023",    # Function definition does not bind loop variable
   "B028",    # No explicit stacklevel keyword argument found
   "B904",    # Within an except clause, raise exceptions with ...
@@ -118,8 +119,10 @@ lint.ignore = [
   "D205",    # 1 blank line required between summary line and description
   "D212",    # Multi-line docstring summary should start at the first line
   "D415",
+  "E402",
   "E501",
   "E741",
+  "F281",
   "PD901",   # pandas-df-variable-name
   "PERF203", # try-except-in-loop
   "PERF401", # manual-list-comprehension (TODO fix these or wait for autofix)
@@ -129,6 +132,7 @@ lint.ignore = [
   "RET504",
   "RUF012",  # Disable checks for mutable class args. This is a non-problem.
   "SIM105",  # Use contextlib.suppress(OSError) instead of try-except-pass
+  "W291",
 ]
 lint.pydocstyle.convention = "google"
 lint.isort.required-imports = ["from __future__ import annotations"]
