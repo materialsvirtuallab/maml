@@ -27,5 +27,5 @@ class MaterialsProject(BaseDataSource):
         Returns:
             pandas DataFrame
         """
-        data = self.mpr.materials.search(criteria=criteria, properties=properties)
+        data = self.mpr.materials.search(criteria=criteria, properties=properties)  # type: ignore
         return pd.DataFrame(data)
