@@ -66,7 +66,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
         for k in kwargs:
             if k not in allowed_kwargs:
                 raise TypeError(f"{k} not allowed as kwargs")
-        memory = kwargs.get("memory", None)
+        memory = kwargs.get("memory")
         if isinstance(memory, bool):
             memory = tempfile.mkdtemp()
             logger.info(f"Created temporary directory {memory}")
@@ -80,7 +80,7 @@ class BaseDescriber(BaseEstimator, TransformerMixin, MSONable, metaclass=abc.ABC
             n_jobs = cpu_count()
             logger.info(f"Using {n_jobs} jobs for computation")
         self.n_jobs = n_jobs
-        self.feature_batch = get_feature_batch(kwargs.get("feature_batch", None))
+        self.feature_batch = get_feature_batch(kwargs.get("feature_batch"))
 
     def fit(self, x: Any, y: Any = None) -> BaseDescriber:
         """

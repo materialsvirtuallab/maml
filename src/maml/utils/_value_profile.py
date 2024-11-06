@@ -81,7 +81,7 @@ class LinearProfile(ValueProfile):
             **kwargs: captures anything else.
         """
         self.value_start = value_start
-        rate = kwargs.get("rate", None)
+        rate = kwargs.get("rate")
         if rate is None:
             self.rate = (value_end - self.value_start) / max_steps
         else:
