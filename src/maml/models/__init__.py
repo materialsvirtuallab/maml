@@ -6,4 +6,4 @@ from maml.base import KerasModel, SKLModel
 
 from .dl import MLP, AtomSets, WeightedAverageLayer, WeightedSet2Set
 
-__all__ = ["SKLModel", "KerasModel", "AtomSets", "MLP", "WeightedSet2Set", "WeightedAverageLayer"]
+__all__ = ["MLP", "AtomSets", "KerasModel", "SKLModel", "WeightedAverageLayer", "WeightedSet2Set"]
