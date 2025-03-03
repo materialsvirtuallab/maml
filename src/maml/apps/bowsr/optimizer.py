@@ -392,7 +392,7 @@ class BayesianOptimizer:
 
         def serialize(t) -> tuple:
             """
-            serialize the object.
+            Serialize the object.
 
             Args:
                 t: object

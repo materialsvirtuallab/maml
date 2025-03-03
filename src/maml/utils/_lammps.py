@@ -136,7 +136,7 @@ def stress_matrix_to_list(stress_matrix: np.ndarray, stress_format: str = "VASP"
 
 def stress_list_to_matrix(stress: np.ndarray | list[float], stress_format: str = "VASP") -> np.ndarray:
     """
-    convert a length-6 stress list to stress matrix 3x3.
+    Convert a length-6 stress list to stress matrix 3x3.
 
     Args:
         stress (list of float): list of stress

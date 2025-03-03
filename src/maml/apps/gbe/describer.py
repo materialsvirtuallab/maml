@@ -37,7 +37,7 @@ from maml.base import BaseDescriber
 
 def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
     """
-    four index notion to three index notion for hcp and rhombohedral axis
+    Four index notion to three index notion for hcp and rhombohedral axis
     Args:
         rotation_axis (list): four index notion of axis
         lat_type(str): the
@@ -66,7 +66,7 @@ def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
 
 def convert_hcp_plane(plane: list) -> np.ndarray:
     """
-    four index notion to three index notion for hcp and rhombohedral plane
+    Four index notion to three index notion for hcp and rhombohedral plane
     Args:
         plane (list):  four index notion.
 

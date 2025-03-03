@@ -37,7 +37,7 @@ class ValueProfile:
 
     def get_value(self) -> float:
         """
-        abstract method that returns the current value
+        Abstract method that returns the current value
         Returns: value float.
 
         """
