@@ -20,13 +20,13 @@ else:
     from ._selectors_cvxpy import LassoCP as Lasso  # type: ignore
 
 __all__ = [
-    "DantzigSelector",
-    "AdaptiveLasso",
-    "SCAD",
-    "Lasso",
-    "SIS",
     "ISIS",
-    "L0BrutalForce",
+    "SCAD",
+    "SIS",
+    "AdaptiveLasso",
+    "DantzigSelector",
     "FeatureGenerator",
+    "L0BrutalForce",
+    "Lasso",
     "Operator",
 ]
