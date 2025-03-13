@@ -8,7 +8,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.9]
+        python-version: [3.11]
 
     steps:
     - uses: actions/checkout@v2
@@ -26,15 +26,15 @@ jobs:
     - name: ruff
       run: |
         ruff --version
-        ruff . --ignore D
+        ruff check src --ignore D
 
     - name: black
       run: |
         black --version
-        black --check --diff --color maml
+        black --check --diff --color src
 
     - name: mypy
       run: |
         mypy --version
         rm -rf .mypy_cache
-        mypy maml
+        mypy src
