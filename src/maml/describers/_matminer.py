@@ -65,7 +65,7 @@ def wrap_matminer_describer(
         instance = wrapped_class.from_preset(name)
         sig = signature(wrapped_class.__init__)
         args = list(sig.parameters.keys())[1:]
-        params = {i: None for i in args}
+        params = dict.fromkeys(args)
         params.update(**kwargs)
         instance_new = cls(**params)
         instance_new.__dict__.update(instance.__dict__)
