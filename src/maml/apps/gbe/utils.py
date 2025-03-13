@@ -75,7 +75,7 @@ def update_b0_dict(data_source: list, mp_api: str | None) -> dict:
     for d in data_source:
         if d["pretty_formula"] in b0_dict:
             continue
-        bs = rester.get_structure_by_material_id(d["material_id"])
+        bs = rester.get_structure_by_material_id(d["material_id"])  # type: ignore[attr-defined]
         b0 = get_b0(bs)
         b0_dict.update({d["pretty_formula"]: b0})
     return b0_dict
