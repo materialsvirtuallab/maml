@@ -20,11 +20,11 @@ logger.setLevel(logging.INFO)
 
 
 __all__ = [
-    "DistinctSiteProperty",
+    "CoulombEigenSpectrum",
     "CoulombMatrix",
+    "DistinctSiteProperty",
     "RandomizedCoulombMatrix",
     "SortedCoulombMatrix",
-    "CoulombEigenSpectrum",
 ]
 
 

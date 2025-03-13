@@ -5,7 +5,7 @@ from __future__ import annotations
 
 def deserialize_keras_activation(activation):
     """
-    serialize keras activation.
+    Serialize keras activation.
 
     Args:
         activation (str, dict, or Activation object): activation to serialize
@@ -28,7 +28,7 @@ def deserialize_keras_activation(activation):
 
 def deserialize_keras_optimizer(optimizer):
     """
-    serialize keras activation.
+    Serialize keras activation.
 
     Args:
         optimizer (str, dict, or optimizer object): optimizer to serialize

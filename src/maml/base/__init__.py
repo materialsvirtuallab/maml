@@ -13,14 +13,14 @@ from ._model import BaseModel, KerasModel, SKLModel, is_keras_model, is_sklearn_
 __all__ = [
     "BaseDataSource",
     "BaseDescriber",
-    "SequentialDescriber",
-    "DummyDescriber",
     "BaseModel",
+    "DummyDescriber",
     "KerasModel",
     "SKLModel",
-    "get_feature_batch",
+    "SequentialDescriber",
+    "TargetScalerMixin",
     "describer_type",
+    "get_feature_batch",
     "is_keras_model",
     "is_sklearn_model",
-    "TargetScalerMixin",
 ]

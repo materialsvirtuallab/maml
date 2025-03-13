@@ -23,17 +23,17 @@ from ._nnp import NNPotential
 from ._snap import SNAPotential
 
 __all__ = [
-    "Potential",
-    "GAPotential",
-    "MTPotential",
-    "SNAPotential",
-    "NNPotential",
-    "LMPStaticCalculator",
-    "EnergyForceStress",
-    "SpectralNeighborAnalysis",
-    "ElasticConstant",
-    "LatticeConstant",
-    "NudgedElasticBand",
     "DefectFormation",
+    "ElasticConstant",
+    "EnergyForceStress",
+    "GAPotential",
+    "LMPStaticCalculator",
+    "LatticeConstant",
+    "MTPotential",
+    "NNPotential",
+    "NudgedElasticBand",
+    "Potential",
+    "SNAPotential",
+    "SpectralNeighborAnalysis",
     "get_default_lmp_exe",
 ]
