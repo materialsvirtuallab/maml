@@ -4,3 +4,4 @@ h5py==3.12.1
 joblib==1.4.2
 tqdm==4.67.1
 pymongo==4.11
+mp-api
