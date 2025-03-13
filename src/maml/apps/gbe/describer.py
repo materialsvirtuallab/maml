@@ -60,7 +60,7 @@ def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
 
     # make sure gcd(rotation_axis)==1
     if reduce(gcd, rotation_axis) != 1:
-        rotation_axis = [int(round(x / reduce(gcd, rotation_axis))) for x in rotation_axis]
+        rotation_axis = [round(x / reduce(gcd, rotation_axis)) for x in rotation_axis]
     return np.array(rotation_axis)
 
 
@@ -80,7 +80,7 @@ def convert_hcp_plane(plane: list) -> np.ndarray:
     plane = [u1, v1, w1]
     if reduce(gcd, plane) != 1:
         index = reduce(gcd, plane)
-        plane = [int(round(x / index)) for x in plane]
+        plane = [round(x / index) for x in plane]
     return np.array(plane)
 
 
