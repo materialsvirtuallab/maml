@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from pymatgen.core.periodic_table import _pt_data as pt_data
+from pymatgen.core.periodic_table import _PT_DATA as pt_data
 
 from maml.apps.bowsr.acquisition import lhs_sample
 

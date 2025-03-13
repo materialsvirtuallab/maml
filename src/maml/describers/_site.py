@@ -19,10 +19,10 @@ from maml.base import BaseDescriber, describer_type
 from maml.utils import pool_from, to_composition
 
 __all__ = [
-    "BispectrumCoefficients",
-    "SmoothOverlapAtomicPosition",
     "BPSymmetryFunctions",
+    "BispectrumCoefficients",
     "SiteElementProperty",
+    "SmoothOverlapAtomicPosition",
 ]
 
 

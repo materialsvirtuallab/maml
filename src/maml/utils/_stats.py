@@ -59,7 +59,7 @@ class Stats:
     @staticmethod
     def min(data: list[float], weights: list[float] | None = None) -> float:
         """
-        min of value
+        Min of value
         Args:
             data (list): list of float data
             weights (list): optional weights.
@@ -114,7 +114,7 @@ class Stats:
     @staticmethod
     def mean_absolute_deviation(data: list[float], weights: list[float] | None = None) -> float:
         """
-        mean absolute deviation.
+        Mean absolute deviation.
 
         Args:
             data (list): list of float data
@@ -129,7 +129,7 @@ class Stats:
     @staticmethod
     def mean_absolute_error(data: list[float], weights: list[float] | None = None) -> float:
         """
-        mean absolute error.
+        Mean absolute error.
 
         Args:
             data (list): list of float data
@@ -199,7 +199,7 @@ class Stats:
     @staticmethod
     def inverse_mean(data: list[float], weights: list[float] | None = None) -> float:
         """
-        inverse mean.
+        Inverse mean.
 
         Args:
             data (list): list of float data
@@ -291,7 +291,7 @@ class Stats:
     @staticmethod
     def power_mean(data: list[float], weights: list[float] | None = None, p: int = 1) -> float:
         """
-        power mean https://en.wikipedia.org/wiki/Generalized_mean.
+        Power mean https://en.wikipedia.org/wiki/Generalized_mean.
 
         Args:
             data (list): list of float data
@@ -335,7 +335,7 @@ class Stats:
     @staticmethod
     def harmonic_mean(data: list[float], weights: list[float] | None = None) -> float:
         """
-        harmonic mean of the data.
+        Harmonic mean of the data.
 
         Args:
             data (list): list of float data
