@@ -37,7 +37,7 @@ from maml.base import BaseDescriber
 
 def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
     """
-    four index notion to three index notion for hcp and rhombohedral axis
+    Four index notion to three index notion for hcp and rhombohedral axis
     Args:
         rotation_axis (list): four index notion of axis
         lat_type(str): the
@@ -60,13 +60,13 @@ def convert_hcp_direction(rotation_axis: list, lat_type: str) -> np.ndarray:
 
     # make sure gcd(rotation_axis)==1
     if reduce(gcd, rotation_axis) != 1:
-        rotation_axis = [int(round(x / reduce(gcd, rotation_axis))) for x in rotation_axis]
+        rotation_axis = [round(x / reduce(gcd, rotation_axis)) for x in rotation_axis]
     return np.array(rotation_axis)
 
 
 def convert_hcp_plane(plane: list) -> np.ndarray:
     """
-    four index notion to three index notion for hcp and rhombohedral plane
+    Four index notion to three index notion for hcp and rhombohedral plane
     Args:
         plane (list):  four index notion.
 
@@ -80,7 +80,7 @@ def convert_hcp_plane(plane: list) -> np.ndarray:
     plane = [u1, v1, w1]
     if reduce(gcd, plane) != 1:
         index = reduce(gcd, plane)
-        plane = [int(round(x / index)) for x in plane]
+        plane = [round(x / index) for x in plane]
     return np.array(plane)
 
 
@@ -206,7 +206,7 @@ def get_structural_feature(db_entry: dict, features: list | None = None) -> pd.D
     if gb_plane.shape[0] == 4:
         gb_plane = convert_hcp_plane(list(gb_plane))
         rotation_axis = convert_hcp_direction(rotation_axis, lat_type=sg.get_crystal_system())
-    d_gb = bulk_conv.lattice.d_hkl(gb_plane)
+    d_gb = bulk_conv.lattice.d_hkl(gb_plane)  # type: ignore[arg-type]
     d_rot = bulk_conv.lattice.d_hkl(rotation_axis)
     theta = db_entry["rotation_angle"]
     sin_theta = np.sin(theta * np.pi / 180)
@@ -266,15 +266,15 @@ def get_elemental_feature(
         rester = MPRester(mp_api)
     else:
         raise MPRestError("Please provide API key to access Materials Project")
-    bulk = rester.materials.search(material_ids=[db_entry["material_id"]])[0]
-    bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])  # type: ignore
+    bulk = rester.materials.search(material_ids=[db_entry["material_id"]])[0]  # type: ignore[attr-defined]
+    bulk_s = rester.get_structure_by_material_id(db_entry["material_id"])  # type: ignore[attr-defined]
     if bulk:
         f_dict[preset.bdensity.str_name] = bulk[0]["density"]
         f_dict[preset.G.str_name] = bulk[0]["elasticity"]["G_VRH"]
     el = Element(db_entry["pretty_formula"])
     f_dict[preset.ar.str_name] = el.atomic_radius
     f_dict[preset.a0.str_name] = bulk_s.lattice.a
-    f_dict[preset.e_coh.str_name] = rester.get_cohesive_energy(db_entry["material_id"])
+    f_dict[preset.e_coh.str_name] = rester.get_cohesive_energy(db_entry["material_id"])  # type: ignore[attr-defined]
     f_dict[preset.hb.str_name] = el.brinell_hardness
     f_dict[preset.CLTE.str_name] = el.coefficient_of_linear_thermal_expansion
 

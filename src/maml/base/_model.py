@@ -336,7 +336,7 @@ class KerasModel(BaseModel, KerasMixin):
     @staticmethod
     def _get_validation_data(val_features, val_targets, **val_kwargs):
         """
-        construct validation data, the default is just returning a list of
+        Construct validation data, the default is just returning a list of
         val_features and val_targets.
         """
         return val_features, val_targets

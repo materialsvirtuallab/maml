@@ -6,4 +6,4 @@ from ._atomsets import AtomSets
 from ._layers import WeightedAverageLayer, WeightedSet2Set
 from ._mlp import MLP
 
-__all__ = ["WeightedAverageLayer", "WeightedSet2Set", "AtomSets", "MLP"]
+__all__ = ["MLP", "AtomSets", "WeightedAverageLayer", "WeightedSet2Set"]

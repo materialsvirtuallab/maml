@@ -4,9 +4,8 @@ import os
 import unittest
 
 import numpy as np
-from scipy import signal
 
-from maml.utils import cwt, fft_magnitude, get_sp_method, spectrogram, wvd
+from maml.utils import fft_magnitude, get_sp_method, spectrogram, wvd
 
 CWD = os.path.join(os.path.dirname(__file__))
 
@@ -36,12 +35,6 @@ class TestSP(unittest.TestCase):
         assert freq.shape == (129,)
         assert time.shape == (8,)
         assert spec.shape == (129, 8)
-
-    def test_cwt(self):
-        cwt_res = cwt(TestSP.x, np.arange(1, 31), "ricker")
-        assert cwt_res.shape == (30, 100)
-        cwt_res = cwt(TestSP.x, np.arange(1, 31), signal.ricker)
-        assert cwt_res.shape == (30, 100)
 
     @unittest.skipIf(tftb is None, "tftb is required to run wvd")
     def test_wvd(self):

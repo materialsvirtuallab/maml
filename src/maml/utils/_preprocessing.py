@@ -136,7 +136,7 @@ class DummyScaler(MSONable):
     @staticmethod
     def inverse_transform(transformed_target: float, n: int = 1) -> float:
         """
-        return as it is
+        Return as it is
         Args:
             transformed_target (float): transformed target
             n (int): number of atoms

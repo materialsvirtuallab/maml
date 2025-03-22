@@ -299,7 +299,7 @@ class DantzigSelector(BaseSelector):
             der[max_ind] = np.sign(vec[max_ind])
             return -x.T.dot(x).dot(der)
 
-        return NonlinearConstraint(_constraint, -np.infty, self.lambd * self.sigma, jac=_jac)
+        return NonlinearConstraint(_constraint, -np.inf, self.lambd * self.sigma, jac=_jac)
 
 
 class PenalizedLeastSquares(BaseSelector):
