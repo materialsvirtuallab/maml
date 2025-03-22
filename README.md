@@ -58,7 +58,7 @@ conda install -c conda-forge/label/cf202003 lammps
 
 The SNAP potential comes with this lammps installation. The GAP package for GAP and MLIP package for MTP are needed to run the corresponding potentials. For fitting NNP potential, the `n2p2` package is needed.
 
-Install all the libraries from requirement.txt file::
+Install all the libraries from requirements.txt file::
 
 ```bash
 pip install -r requirements.txt
