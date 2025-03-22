@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pandas as pd
-from pymatgen.ext.matproj import MPRester
+from mp_api.client import MPRester
 
 from maml.base import BaseDataSource
 
@@ -27,5 +27,6 @@ class MaterialsProject(BaseDataSource):
         Returns:
             pandas DataFrame
         """
-        data = self.mpr.materials.search(criteria=criteria, properties=properties)  # type: ignore[attr-defined]
+        data = self.mpr.materials.summary.search(**criteria, fields=properties)  # type: ignore[attr-defined]
+        data = [{k: v for k, v in dict(d).items() if k in properties} for d in data]
         return pd.DataFrame(data)

@@ -46,6 +46,7 @@ dependencies = [
     "numpy",
     "scipy",
     "pymatgen",
+    "mp-api"
 ]
 version = "2024.6.13"
 
