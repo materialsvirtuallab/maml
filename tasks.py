@@ -18,7 +18,7 @@ from monty.os import cd
 
 
 @task
-def make_doc(ctx):
+def make_docs(ctx):
     """
     Generate API documentation + run Sphinx.
 
@@ -62,7 +62,7 @@ def make_doc(ctx):
 
 
 @task
-def update_doc(ctx):
+def update_docs(ctx):
     """
     Update the web documentation.
 
@@ -70,7 +70,7 @@ def update_doc(ctx):
     """
     ctx.run("cp README.rst docs/")
     ctx.run("cp api-docs-source/conf.py docs/conf.py")
-    make_doc(ctx)
+    make_docs(ctx)
     ctx.run("git add .")
     ctx.run('git commit -a -m "Update docs"')
     ctx.run("git push")
@@ -111,7 +111,7 @@ def release(ctx, version=datetime.datetime.now().strftime("%Y.%-m.%-d"), notest=
     toks = desc.split("\n")
     desc = "\n".join(toks[:-1]).strip()
     if not nodoc:
-        make_doc(ctx)
+        make_docs(ctx)
         ctx.run("git add .")
         ctx.run('git commit -a -m "Update docs"')
         ctx.run("git push")
