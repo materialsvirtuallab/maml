@@ -47,19 +47,6 @@ def spectrogram(z: np.ndarray, return_time_freq: bool = False) -> tuple | np.nda
     return s
 
 
-def cwt(z: np.ndarray, widths: np.ndarray, wavelet: str | Callable = "morlet2", **kwargs) -> np.ndarray:
-    """
-    The scalogram of the signal
-    Args:
-        z (np.ndarray): 1D signal array
-        widths (np.ndarray): wavelet widths
-        wavelet (str): wavelet name
-    Returns: 2D scalogram.
-    """
-    wavelet_func = getattr(signal, wavelet) if isinstance(wavelet, str) else wavelet
-    return np.absolute(signal.cwt(z, wavelet_func, widths=widths, **kwargs))
-
-
 @requires(tftb is not None, "Requires installation of tftb package")
 def wvd(z: np.ndarray, return_all: bool = False) -> tuple | np.ndarray:
     """
@@ -81,7 +68,7 @@ def wvd(z: np.ndarray, return_all: bool = False) -> tuple | np.ndarray:
     return res
 
 
-AVAILABLE_SP_METHODS = {"fft_magnitude": fft_magnitude, "spectrogram": spectrogram, "cwt": cwt, "wvd": wvd}
+AVAILABLE_SP_METHODS = {"fft_magnitude": fft_magnitude, "spectrogram": spectrogram, "wvd": wvd}
 
 
 def get_sp_method(sp_method: str | Callable) -> Callable:  # type: ignore

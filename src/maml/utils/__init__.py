@@ -17,7 +17,7 @@ from ._lammps import (
 )
 from ._material import to_composition
 from ._preprocessing import DummyScaler, Scaler, StandardScaler
-from ._signal_processing import cwt, fft_magnitude, get_sp_method, spectrogram, wvd
+from ._signal_processing import fft_magnitude, get_sp_method, spectrogram, wvd
 from ._stats import STATS_KWARGS, Stats, get_full_stats_and_funcs, stats_list_conversion
 from ._tempfile import MultiScratchDir
 from ._value_profile import ConstantValue, LinearProfile, ValueProfile
