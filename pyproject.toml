@@ -61,6 +61,7 @@ dev = [
     "coveralls>=4.0.1",
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
+    "tensorflow>=2.18.1",
 ]
 lint = [
     "mypy>=1.15.0",
