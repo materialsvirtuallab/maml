@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides basic LAMMPS calculator classes."""
+
 from __future__ import annotations
 
 import abc

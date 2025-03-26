@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides NNP interatomic potential class."""
+
 from __future__ import annotations
 
 import itertools

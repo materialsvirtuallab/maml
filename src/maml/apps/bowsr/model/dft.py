@@ -54,7 +54,9 @@ class DFT(EnergyModel):
         with ScratchDir("."):
             static.write_input(".")
             with subprocess.Popen(
-                [self.vasp_exe], stdout=subprocess.PIPE, stderr=subprocess.PIPE  # type: ignore
+                [self.vasp_exe],  # type:ignore[list-item]
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,  # type: ignore
             ) as p_exe:
                 stdout, stderr = p_exe.communicate()
                 rc = p_exe.returncode
