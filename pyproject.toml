@@ -46,7 +46,8 @@ dependencies = [
     "numpy",
     "scipy",
     "pymatgen",
-    "mp-api"
+    "mp-api",
+    "scikit-learn>=1.6.1",
 ]
 version = "2024.6.13"
 
