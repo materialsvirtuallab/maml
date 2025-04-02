@@ -48,12 +48,12 @@ dependencies = [
     "pymatgen",
     "mp-api"
 ]
-version = "2024.6.13"
+version = "2025.2.25"
 
 [project.optional-dependencies]
 symbolic = ["cvxpy"]
 deep = ["tensorflow>=2"]
-deep_gpu = ["tensorflow-gpu>=2"]
+# deep_gpu = ["tensorflow-gpu>=2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -167,3 +167,8 @@ fase,rute,reson,titels,ges,scalr,strat,struc,hda,nin,ons,pres,kno,loos,lamda,lew
 """
 skip = "pymatgen/analysis/aflow_prototypes.json"
 check-filenames = true
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+]
