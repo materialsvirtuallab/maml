@@ -49,7 +49,7 @@ dependencies = [
     "mp-api",
     "scikit-learn>=1.6.1",
 ]
-version = "2025.4.1"
+version = "2025.4.2"
 
 [project.optional-dependencies]
 symbolic = ["cvxpy"]
