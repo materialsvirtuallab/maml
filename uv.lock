@@ -1056,7 +1056,7 @@ wheels = [
 
 [[package]]
 name = "maml"
-version = "2025.4.3"
+version = "2025.4.1"
 source = { editable = "." }
 dependencies = [
     { name = "mp-api" },
@@ -1088,6 +1088,7 @@ lint = [
     { name = "ruff" },
 ]
 maintain = [
+    { name = "docutils" },
     { name = "invoke" },
     { name = "myst-parser" },
     { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -1121,6 +1122,7 @@ lint = [
     { name = "ruff", specifier = ">=0.11.2" },
 ]
 maintain = [
+    { name = "docutils", specifier = ">=0.21.2" },
     { name = "invoke", specifier = ">=2.2.0" },
     { name = "myst-parser", specifier = ">=4.0.1" },
     { name = "sphinx", specifier = ">=8.1.3" },

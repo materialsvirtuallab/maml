@@ -49,7 +49,7 @@ dependencies = [
     "mp-api",
     "scikit-learn>=1.6.1",
 ]
-version = "2025.4.3"
+version = "2025.4.1"
 
 [project.optional-dependencies]
 symbolic = ["cvxpy"]
@@ -70,6 +70,7 @@ lint = [
     "ruff>=0.11.2",
 ]
 maintain = [
+    "docutils>=0.21.2",
     "invoke>=2.2.0",
     "myst-parser>=4.0.1",
     "sphinx>=8.1.3",
