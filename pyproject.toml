@@ -49,7 +49,7 @@ dependencies = [
     "mp-api",
     "scikit-learn>=1.6.1",
 ]
-version = "2025.2.25"
+version = "2025.4.1"
 
 [project.optional-dependencies]
 symbolic = ["cvxpy"]
@@ -182,4 +182,3 @@ fase,rute,reson,titels,ges,scalr,strat,struc,hda,nin,ons,pres,kno,loos,lamda,lew
 """
 skip = "pymatgen/analysis/aflow_prototypes.json"
 check-filenames = true
-

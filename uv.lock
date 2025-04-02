@@ -1011,7 +1011,7 @@ wheels = [
 
 [[package]]
 name = "maml"
-version = "2025.2.25"
+version = "2025.4.1"
 source = { editable = "." }
 dependencies = [
     { name = "mp-api" },
