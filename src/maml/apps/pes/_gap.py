@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This module provides SOAP-GAP interatomic potential class."""
+
 from __future__ import annotations
 
 import os
@@ -254,7 +255,7 @@ class GAPotential(LammpsPotential):
                 sparse_method (str): Method to perform clustering in sparsification.
                     Default to 'cur_points'.
 
-                sparse_jitter (float): Intrisic error of atomic/bond energy,
+                sparse_jitter (float): Intrinsic error of atomic/bond energy,
                     used to regularise the sparse covariance matrix.
                     Default to 1e-8.
                 e0 (float): Atomic energy value to be subtracted from energies

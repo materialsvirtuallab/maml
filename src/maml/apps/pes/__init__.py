@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """This package contains PotentialMixin classes representing Interatomic Potentials."""
+
 from __future__ import annotations
 
 from ._base import Potential, PotentialMixin

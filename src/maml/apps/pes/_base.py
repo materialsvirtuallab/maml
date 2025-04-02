@@ -1,6 +1,7 @@
 # Copyright (c) Materials Virtual Lab
 # Distributed under the terms of the BSD License.
 """Base classes for potentials."""
+
 from __future__ import annotations
 
 import abc

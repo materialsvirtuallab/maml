@@ -325,7 +325,8 @@ class BPSymmetryFunctions(BaseDescriber):
             for specie in elements:
                 distances = np.array([nn_distance for _, nn_distance in temp_dict[specie]])[:, None, None]
                 g2 = np.sum(
-                    np.exp(-self.r_etas * (distances - self.r_shift) ** 2) * self._fc(distances), axis=0  # type: ignore
+                    np.exp(-self.r_etas * (distances - self.r_shift) ** 2) * self._fc(distances),  # type:ignore[arg-type]
+                    axis=0,  # type: ignore
                 )
                 site_symmfuncs.extend(g2.ravel().tolist())
 
@@ -406,7 +407,8 @@ class SiteElementProperty(BaseDescriber):
         return z_values, weights
 
     def transform_one(
-        self, obj: str | Composition | Structure | Molecule  # type: ignore
+        self,
+        obj: str | Composition | Structure | Molecule,  # type: ignore
     ) -> list[np.ndarray] | np.ndarray:
         """
         Transform one object to features.

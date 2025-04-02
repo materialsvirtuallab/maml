@@ -2,6 +2,7 @@
 # Distributed under the terms of the BSD License.
 
 """Define abstract base classes."""
+
 from __future__ import annotations
 
 from ._data import BaseDataSource
