@@ -290,7 +290,7 @@ class DantzigSelector(BaseSelector):
         """
 
         def _constraint(beta):
-            return np.linalg.norm(x.T @ (y - x @ beta), np.infty)
+            return np.linalg.norm(x.T @ (y - x @ beta), np.inf)
 
         def _jac(beta):
             vec = x.T @ (y - x @ beta)
