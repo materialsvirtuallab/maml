@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
-from pymatgen.core.periodic_table import _PT_DATA as pt_data
+from pymatgen.core.periodic_table import Element
 
 from maml.apps.bowsr.acquisition import lhs_sample
 
@@ -157,7 +157,8 @@ class TargetSpace:
         element_wise_wyckoff_bounds = {
             frozenset({el: 1}.items()): bound for el, bound in element_wise_wyckoff_bounds.items()
         }
-        element_wise_wyckoff_bounds.update({frozenset({el: 1}): 0.2 for el in pt_data if el not in included_elements})
+        element_wise_wyckoff_bounds.update({frozenset({el.symbol: 1}): 0.2 for el in Element
+                                            if el.symbol not in included_elements})
 
         for wp in self.wps:
             frozen_key = frozenset(wp.site.species.as_dict().items())
