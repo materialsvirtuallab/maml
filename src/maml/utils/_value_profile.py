@@ -26,7 +26,7 @@ class ValueProfile:
         """
         self.step = 0
         if max_steps is None:
-            max_steps = np.infty  # type: ignore
+            max_steps = np.inf  # type: ignore
         self.max_steps = max_steps
 
     def increment_step(self):
@@ -86,7 +86,7 @@ class LinearProfile(ValueProfile):
             self.rate = (value_end - self.value_start) / max_steps
         else:
             self.rate = rate
-            max_steps = np.infty  # type: ignore
+            max_steps = np.inf  # type: ignore
         super().__init__(max_steps=max_steps, **kwargs)
 
     def get_value(self) -> float:
