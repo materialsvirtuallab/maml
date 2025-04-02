@@ -31,15 +31,15 @@ class TargetSpace:
     """
 
     def __init__(
-        self,
-        target_func: Callable,
-        wps: list[WyckoffPerturbation],
-        abc_dim: int,
-        angles_dim: int,
-        relax_coords: bool,
-        relax_lattice: bool,
-        scaler: StandardScaler | DummyScaler,
-        random_state: RandomState,
+            self,
+            target_func: Callable,
+            wps: list[WyckoffPerturbation],
+            abc_dim: int,
+            angles_dim: int,
+            relax_coords: bool,
+            relax_lattice: bool,
+            scaler: StandardScaler | DummyScaler,
+            random_state: RandomState,
     ):
         """
         Args:
@@ -145,7 +145,7 @@ class TargetSpace:
         return lhs_sample(n_intervals, self.bounds, self.random_state)
 
     def set_bounds(
-        self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: dict | None = None
+            self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: dict | None = None
     ) -> None:
         """
         Set the bound value of wyckoff perturbation and
