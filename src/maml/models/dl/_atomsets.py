@@ -359,7 +359,7 @@ class AtomSets(KerasModel):
         predict_generator = self._get_data_generator(features, [0] * len(features), is_shuffle=False, **kwargs)
         predicted = []
         batch = iter(predict_generator)
-        for i in range(len(predict_generator)):
+        for _i in range(len(predict_generator)):
             batch = next(batch)
             predicted.append(self.model.predict(batch[0])[0])  # type: ignore
         return np.concatenate(predicted, axis=0)
