@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import unittest
-import numpy as np
+
 from monty.tempfile import ScratchDir
 
 from maml.base import KerasModel, SKLModel, is_keras_model, is_sklearn_model
@@ -30,6 +30,7 @@ class TestBaseModel(unittest.TestCase):
         assert not is_keras_model(model)
 
     def test_keras_model(self):
+        import numpy as np
         import tensorflow as tf
 
         model = KerasModel(model=tf.keras.Sequential([tf.keras.layers.Dense(1, input_dim=2)]))
