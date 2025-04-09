@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+import numpy as np
 
 from monty.tempfile import ScratchDir
 
@@ -20,17 +21,17 @@ class TestBaseModel(unittest.TestCase):
         with ScratchDir("."):
             model.save("test_model.sav")
             model.fit([[1, 2], [3, 4]], [6, 14])
-            self.assertAlmostEqual(model.predict_objs([[4, 5]])[0], 18)
+            x = np.array([[4, 5]])
+            self.assertAlmostEqual(model.predict_objs(x)[0], 18)
             model.load("test_model.sav")
-            self.assertAlmostEqual(model.predict_objs([[4, 5]])[0], 9)
+            self.assertAlmostEqual(model.predict_objs(x)[0], 9)
             model2 = SKLModel.from_file("test_model.sav")
-            self.assertAlmostEqual(model2.predict_objs([[4, 5]])[0], 9)
+            self.assertAlmostEqual(model2.predict_objs(x)[0], 9)
             self.assertAlmostEqual(model2.evaluate([[4, 8], [8, 5]], [12, 13]), 1.0)
         assert is_sklearn_model(model)
         assert not is_keras_model(model)
 
     def test_keras_model(self):
-        import numpy as np
         import tensorflow as tf
 
         model = KerasModel(model=tf.keras.Sequential([tf.keras.layers.Dense(1, input_dim=2)]))
@@ -40,8 +41,9 @@ class TestBaseModel(unittest.TestCase):
         y = np.array([3, 7]).reshape((-1, 1))
         model.fit(x, y)
         model.train(x, y)
+        x_test = np.array([[4, 5]])
         model.model.set_weights([np.array([[1.0], [1.0]]), np.array([0])])
-        self.assertAlmostEqual(model.predict_objs([[4, 5]])[0], 9)
+        self.assertAlmostEqual(model.predict_objs(np.array([[4, 5]]))[0], 9)
 
         with ScratchDir("."):
             model.save("test_model.sav")
