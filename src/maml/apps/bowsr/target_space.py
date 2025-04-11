@@ -31,15 +31,15 @@ class TargetSpace:
     """
 
     def __init__(
-            self,
-            target_func: Callable,
-            wps: list[WyckoffPerturbation],
-            abc_dim: int,
-            angles_dim: int,
-            relax_coords: bool,
-            relax_lattice: bool,
-            scaler: StandardScaler | DummyScaler,
-            random_state: RandomState,
+        self,
+        target_func: Callable,
+        wps: list[WyckoffPerturbation],
+        abc_dim: int,
+        angles_dim: int,
+        relax_coords: bool,
+        relax_lattice: bool,
+        scaler: StandardScaler | DummyScaler,
+        random_state: RandomState,
     ):
         """
         Args:
@@ -145,7 +145,7 @@ class TargetSpace:
         return lhs_sample(n_intervals, self.bounds, self.random_state)
 
     def set_bounds(
-            self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: dict | None = None
+        self, abc_bound: float = 1.2, angles_bound: float = 5, element_wise_wyckoff_bounds: dict | None = None
     ) -> None:
         """
         Set the bound value of wyckoff perturbation and
@@ -157,8 +157,9 @@ class TargetSpace:
         element_wise_wyckoff_bounds = {
             frozenset({el: 1}.items()): bound for el, bound in element_wise_wyckoff_bounds.items()
         }
-        element_wise_wyckoff_bounds.update({frozenset({el.symbol: 1}): 0.2 for el in Element
-                                            if el.symbol not in included_elements})
+        element_wise_wyckoff_bounds.update(
+            {frozenset({el.symbol: 1}): 0.2 for el in Element if el.symbol not in included_elements}
+        )
 
         for wp in self.wps:
             frozen_key = frozenset(wp.site.species.as_dict().items())

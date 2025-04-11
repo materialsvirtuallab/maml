@@ -224,7 +224,7 @@ class WeightedSet2Set(Layer):
         Returns: sequence of tuples output shapes
 
         """
-        feature_shape, index_shape = input_shape
+        feature_shape, index_shape, _ = input_shape
         return feature_shape[0], None, 2 * self.n_hidden
 
     def call(self, inputs):

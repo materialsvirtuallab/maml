@@ -108,7 +108,7 @@ class BaseModel:
         Returns:
             List of output objects.
         """
-        return self.model.predict(features, **kwargs)  # type: ignore
+        return self.model.predict(np.array(features), **kwargs)  # type: ignore
 
     def predict_objs(self, objs: list | np.ndarray) -> np.ndarray:
         """
