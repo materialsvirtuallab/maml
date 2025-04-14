@@ -35,7 +35,7 @@ class TestBaseModel(unittest.TestCase):
         import tensorflow as tf
 
         model = KerasModel(model=tf.keras.Sequential([tf.keras.layers.Dense(1, input_dim=2)]))
-        model.model.compile("adam", "mse")
+        model.model.compile("adam", tf.keras.losses.MeanSquaredError())
 
         x = np.array([[1, 2], [3, 4]])
         y = np.array([3, 7]).reshape((-1, 1))
