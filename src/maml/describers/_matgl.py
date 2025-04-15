@@ -12,7 +12,6 @@ from maml.base import BaseDescriber, describer_type
 if TYPE_CHECKING:
     from pymatgen.core import Molecule, Structure
 
-# DEFAULT_MODEL = Path(__file__).parent / "data/m3gnet_models/matbench_mp_e_form/0/m3gnet/"
 DEFAULT_MODEL = "M3GNet-MP-2018.6.1-Eform"
 
 
@@ -30,8 +29,8 @@ class MatGLStructure(BaseDescriber):
 
         Args:
             model_path (str): m3gnet models path. If no path is provided,
-                the models will be M3GNet formation energy model on figshare:
-                https://figshare.com/articles/software/m3gnet_property_model_weights/20099465
+                the models will be M3GNet formation energy model on MatGL repo:
+                https://github.com/materialsvirtuallab/matgl/tree/main/pretrained_models/M3GNet-MP-2018.6.1-Eform
                 Please refer to the M3GNet paper:
                 https://doi.org/10.1038/s43588-022-00349-3.
             **kwargs: Pass through to BaseDescriber.
@@ -59,7 +58,7 @@ class MatGLStructure(BaseDescriber):
 
 @describer_type("site")
 class MatGLSite(BaseDescriber):
-    """Use M3GNet pre-trained models as featurizer to get atomic features."""
+    """Use MatGL pre-trained models as featurizer to get atomic features."""
 
     def __init__(
         self,
@@ -72,8 +71,8 @@ class MatGLSite(BaseDescriber):
 
         Args:
             model_path (str): m3gnet models path. If no path is provided,
-                the models will be M3GNet formation energy model on figshare:
-                https://figshare.com/articles/software/m3gnet_property_model_weights/20099465
+                the models will be M3GNet formation energy model on MatGL repo:
+                https://github.com/materialsvirtuallab/matgl/tree/main/pretrained_models/M3GNet-MP-2018.6.1-Eform
                 Please refer to the M3GNet paper:
                 https://doi.org/10.1038/s43588-022-00349-3.
             output_layers: List of names for the layer of GNN as output. Choose from "embedding", "gc_1", "gc_2",...,
