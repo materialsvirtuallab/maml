@@ -5,7 +5,7 @@ from __future__ import annotations
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from maml.describers import M3GNetStructure
+from maml.describers import M3GNetStructure, MatGLStructure
 
 from .clustering import BirchClustering
 from .pca import PrincipalComponentAnalysis
@@ -21,7 +21,7 @@ class DIRECTSampler(Pipeline):
 
     def __init__(
         self,
-        structure_encoder="M3GNet",
+        structure_encoder="MatGL",
         scaler="StandardScaler",
         pca="PrincipalComponentAnalysis",
         weighting_PCs=True,
@@ -42,7 +42,13 @@ class DIRECTSampler(Pipeline):
         select_k_from_clusters: Straitified sampling of k structures from
             each cluster.
         """
-        self.structure_encoder = M3GNetStructure() if structure_encoder == "M3GNet" else structure_encoder
+        if structure_encoder == "MatGL":
+            self.structure_encoder = MatGLStructure()
+        elif structure_encoder == "M3GNet":
+            self.structure_encoder = M3GNetStructure()
+        else:
+            self.structure_encoder = structure_encoder
+
         self.scaler = StandardScaler() if scaler == "StandardScaler" else scaler
         self.pca = (
             PrincipalComponentAnalysis(weighting_PCs=weighting_PCs) if pca == "PrincipalComponentAnalysis" else pca
