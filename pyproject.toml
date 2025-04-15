@@ -48,6 +48,7 @@ dependencies = [
     "pymatgen",
     "mp-api",
     "scikit-learn>=1.6.1",
+    "matgl"
 ]
 version = "2025.4.3"
 
@@ -63,6 +64,7 @@ dev = [
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
     "tensorflow>=2.18.1",
+    "matgl>=1.2.5",
     "pre-commit>=4.2.0",
 ]
 lint = [
