@@ -8,7 +8,6 @@ from math import gcd
 import numpy as np
 import pandas as pd
 from monty.json import MSONable
-from pymatgen.core.interface import GrainBoundary
 from pymatgen.analysis.local_env import (
     BrunnerNN_real,
     BrunnerNN_reciprocal,
@@ -27,6 +26,7 @@ from pymatgen.analysis.local_env import (
     VoronoiNN,
 )
 from pymatgen.core import Element, Structure
+from pymatgen.core.interface import GrainBoundary
 from pymatgen.ext.matproj import MPRester, MPRestError
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
