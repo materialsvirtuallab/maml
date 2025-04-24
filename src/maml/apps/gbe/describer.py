@@ -8,7 +8,7 @@ from math import gcd
 import numpy as np
 import pandas as pd
 from monty.json import MSONable
-from pymatgen.analysis.gb.grain import GrainBoundary
+from pymatgen.core.interface import GrainBoundary
 from pymatgen.analysis.local_env import (
     BrunnerNN_real,
     BrunnerNN_reciprocal,
