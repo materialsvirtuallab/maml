@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 DEFAULT_MODEL = "M3GNet-MP-2018.6.1-Eform"
 
 
-
 @describer_type("structure")
 class MatGLStructure(BaseDescriber):
     """Use M3GNet pre-trained models as featurizer to get Structural features."""
