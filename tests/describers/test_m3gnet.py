@@ -14,9 +14,10 @@ except ImportError:
     M3GNet = None
 
 from maml.describers import M3GNetStructure, M3GNetSite
+from packaging import version
 
-
-@unittest.skipIf(M3GNet is None, "M3GNet package is required.")
+@unittest.skipIf(M3GNet is None and version.parse(tf.__version__) > version.parse("2.9.0"),
+                 f"Test skipped because TensorFlow version {tf.__version__} is > 2.9.0")
 class M3GNetTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
