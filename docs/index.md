@@ -81,7 +81,7 @@ pip install -r requirements.txt
 
 # Usage
 
-Many Jupyter notebooks are available on usage. See [notebooks](/notebooks). We also have a tool and tutorial lecture
+Many Jupyter notebooks are available on usage. See [notebooks](https://github.com/materialsvirtuallab/maml/tree/master/notebooks). We also have a tool and tutorial lecture
 at [nanoHUB](https://nanohub.org/resources/maml).
 
 # API documentation
