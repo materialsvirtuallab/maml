@@ -114,5 +114,5 @@ class MatGLSite(BaseDescriber):
 
         if isinstance(self.return_type, dict):
             return atom_fea_dict
-        
+
         return pd.DataFrame(np.concatenate(list(atom_fea_dict.values()), axis=1))
